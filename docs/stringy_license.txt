@@ -1,0 +1,7 @@
+From the web page at http://luarocks.org/modules/brentp/stringy
+
+License
+MIT/X11
+
+Homepage
+http://github.com/brentp/lua-stringy
