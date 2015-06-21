@@ -192,11 +192,15 @@ function communicationAdd(channel, player, line)
 	end
 end
 
-function communicationReview(fileName, text)
+function communicationReview(channel, text)
 	local text = string.strip(text:lower())
 	local output = {}
 	local channelLines = {}
-	local file = io.open(GetInfo(67) .. "communication/" .. fileName .. ".txt", "rb")
+	local fileName = string.format("%scommunication/%s.txt", GetInfo(67), channel)
+	if not os.isFile(fileName) then
+		return CallPlugin(screenReader, "sayNote", string.format("The log file for channel '%s' hasn't been created yet. It will be created when a message to the channel has been received.", channel))
+	end
+	local file = io.open(fileName, "rb")
 	for line in file:read("*all"):gmatch("[^\r\n]+") do
 		line = string.strip(line)
 		if line ~= "" then
