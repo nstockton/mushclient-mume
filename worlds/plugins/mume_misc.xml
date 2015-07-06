@@ -34,7 +34,7 @@
   <trigger
    enabled="y"
    group="mume_misc"
-   match="^(?P&lt;tag&gt;NAME|DESCRIPTION|PROMPT|TELL|SAY|NARRATE|PRAY|EMOTE|ENEMY):(?P&lt;line&gt;.*):(?P=tag)$"
+   match="^(?P&lt;tag&gt;NAME|DESCRIPTION|PROMPT|TELL|SAY|NARRATE|PRAY|EMOTE):(?P&lt;line&gt;.*):(?P=tag)$"
    name="remove_proxy_tags"
    omit_from_output="y"
    regexp="y"
