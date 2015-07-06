@@ -34,7 +34,7 @@
   <trigger
    enabled="y"
    group="mume_sounds"
-   match="^ENEMY:\*.+(?P&lt;player&gt;Orc|Troll|Man|Woman|Elf|Half-Elf|Dwarf|Hobbit|Bear|Numenorean|Númenórean)\*.*?(?P&lt;action&gt;standing|sitting|resting|sleeping|fighting|riding|nocks a missile|begins some strange|arrived|leaves).+?((?P&lt;direction&gt;north|south|east|west|up|down|above|below|hiding place).*)?:ENEMY$"
+   match="^ENEMY:\*.+(?P&lt;player&gt;Orc|Troll|Man|Woman|Elf|Half-Elf|Dwarf|Hobbit|Bear|Numenorean|Númenórean)\*:ENEMY.*?(?P&lt;action&gt;standing|sitting|resting|sleeping|fighting|riding|nocks a missile|begins some strange|arrived|leaves).+?((?P&lt;direction&gt;north|south|east|west|up|down|above|below|hiding place).*)?$"
    name="pk_action_sounds"
    regexp="y"
    send_to="12"
