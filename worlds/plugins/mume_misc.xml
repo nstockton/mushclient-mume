@@ -47,6 +47,19 @@
   <trigger
    enabled="y"
    group="mume_misc"
+   match="^ENEMY:(?P&lt;first&gt;.+):ENEMY(?P&lt;second&gt;.*)$"
+   name="remove_enemy_tag"
+   omit_from_output="y"
+   regexp="y"
+   keep_evaluating="y"
+   send_to="12"
+   sequence="80"
+  >
+  <send>CallPlugin(screenReader, "sayNote", "*%&lt;first&gt;*%&lt;second&gt;")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
    match="You have been idle, and are pulled into a void."
    name="no_void"
    sequence="100"
