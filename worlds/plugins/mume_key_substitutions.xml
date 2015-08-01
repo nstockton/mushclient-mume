@@ -39,7 +39,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a jade-encrusted key - archeddoor under hatch, Lorien (USE DECAY)")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - archeddoor under hatch, Lorien (USE DECAY)")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -49,7 +49,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a jewel-encrusted key - jewelleddoor, Balrog rings key")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - jewelleddoor, Balrog rings key")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -59,7 +59,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a key attached to a vine-rope - Ingrove gate key")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - Ingrove gate key")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -69,7 +69,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a large flint key - exit from aisle in Moria")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - exit from aisle in Moria")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -79,7 +79,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a copper key - grate, pipeweed smugglers")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - grate, pipeweed smugglers")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -89,7 +89,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a crude metal key - Filthy or Brolg")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - Filthy or Brolg")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -99,7 +99,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", ""a darkly stained metal key - irondoor, Guardian")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - irondoor, Guardian")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -109,7 +109,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a decayed iron key - sconce treasure room at BW")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - sconce treasure room at BW")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -119,7 +119,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a decayed ironkey - sconce, BW treasury")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - sconce, BW treasury")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -129,7 +129,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a large key - wall, Old Wight")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - wall, Old Wight")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -139,7 +139,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a metal and stone key - cinderblock + tapestry, Eregion")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - cinderblock + tapestry, Eregion")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -149,7 +149,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a metal key - either oakendoor at Necro or Tharbad chief")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - either oakendoor at Necro or Tharbad chief")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -159,7 +159,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a mithril key - mithrildoor, Balrog rings (TIME/ZONE DECAY)")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - mithrildoor, Balrog rings (TIME/ZONE DECAY)")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -169,7 +169,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a polished copper key - door + irondoor, DT")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - door + irondoor, DT")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -179,7 +179,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a rigid metal key - trapdoor, GH Old Ruins")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - trapdoor, GH Old Ruins")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -189,7 +189,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a rusted iron key - orcs dungeon, Dunland")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - orcs dungeon, Dunland")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -199,7 +199,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a rusted key - Cryptdoor, Old Wight")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - Cryptdoor, Old Wight")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -209,7 +209,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a shining key - archeddoors, Muranog's treasury")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - archeddoors, Muranog's treasury")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -219,7 +219,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a shop key - shops, Tharbad")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - shops, Tharbad")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -229,7 +229,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a silvery key - door, GC room")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - door, GC room")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -239,7 +239,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a simple metal key - cover, BM mines")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - cover, BM mines")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -249,7 +249,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a skull key - burialtrap, near Hillmen")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - burialtrap, near Hillmen")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -259,7 +259,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a slightly bent iron key - jade bracelet chest")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - jade bracelet chest")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -269,7 +269,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a slimy iron key - vaultdoor, Icedoor")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - vaultdoor, Icedoor")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -279,7 +279,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a slimy metal key - 3 irondoors in Shaghosh area")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - 3 irondoors in Shaghosh area")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -289,7 +289,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a small brass key - brassdoor, thorns/hedge tower")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - brassdoor, thorns/hedge tower")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -299,7 +299,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a small copper key - granite, Unqalome")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - granite, Unqalome")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -309,7 +309,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a small iron key - either chest at overseer or illusionist")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - either chest at overseer or illusionist")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -319,7 +319,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a small key carved from ebony - board + grating at Necro")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - board + grating at Necro")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -329,7 +329,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a twisted iron key - irondoor, entrance to BW (Rentable/USE DECAY)")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - irondoor, entrance to BW (Rentable/USE DECAY)")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -339,7 +339,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a twisted root - wall, Ferny")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - wall, Ferny")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -349,7 +349,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a very rusty key - gate, nobleman east of Tharbad")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - gate, nobleman east of Tharbad")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -359,7 +359,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a wooden key - secret, treevillage (Rentable)")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - secret, treevillage (Rentable)")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -369,7 +369,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "an ancient dwarven key - flagstone, circlet chest (USE DECAY)")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - flagstone, circlet chest (USE DECAY)")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -379,7 +379,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a small twisted root - wall, Ferny")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - wall, Ferny")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -389,7 +389,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a small rusted iron key - metaldoor, Dunland Orcs")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - metaldoor, Dunland Orcs")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -399,7 +399,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a small silver key - either MA upgrade or blackdoor at Sage")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - either MA upgrade or blackdoor at Sage")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -409,7 +409,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a small steel key - slab, Unqalome")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - slab, Unqalome")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -419,7 +419,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a small stone key - stonelatch, Bulag's treasury")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - stonelatch, Bulag's treasury")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -429,7 +429,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a square stone key - force, Amon Othar")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - force, Amon Othar")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -439,7 +439,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "an ancient key - stoneslab, lww smugglers")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - stoneslab, lww smugglers")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -449,7 +449,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "an ancient silver key - OiE Book")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - OiE Book")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -459,7 +459,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "an ebony key - 1 of 2 doors up from knight in rdell")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - 1 of 2 doors up from knight in rdell")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -469,7 +469,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a small key of elven make - ELF CAMP SOUTH OF RD")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - ELF CAMP SOUTH OF RD")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -479,7 +479,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "an engraved silver ring - crypt near WC")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - crypt near WC")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -489,7 +489,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "The key of metal has a small loop at its top, which makes it easier to wear on a keyring. Some ridges have been cut into its base. - oakendoor at Necro")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - oakendoor at Necro")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -499,7 +499,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "an engraved stone key - irondoor to overseer")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - irondoor to overseer")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -509,7 +509,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "You notice 'My Cottage' has been inscribed on the key. - Tharbad Chief")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - Tharbad Chief")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -519,7 +519,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a Fornost city key - Fornost Gates (RENTABLE)")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - Fornost Gates (RENTABLE)")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -529,7 +529,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a Jail key - jaildoor, Bree (RENTABLE)")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - jaildoor, Bree (RENTABLE)")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -539,7 +539,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a stone key - pillars, mattock armoury")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - pillars, mattock armoury")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -549,7 +549,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a tarnished metal key - doors in VT")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - doors in VT")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -559,7 +559,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a tarnished silver key - Battle-standard quest from Brolg")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - Battle-standard quest from Brolg")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -569,7 +569,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a tinted brass key - door, gilded ghost")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - door, gilded ghost")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -579,7 +579,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a tiny bronze key - Marbledoor, outcast")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - Marbledoor, outcast")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -589,7 +589,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "an icy key - all doors, Balrog treasury (TIME/ZONE DECAY)")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - all doors, Balrog treasury (TIME/ZONE DECAY)")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -599,7 +599,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "an intricate steel key - Umuk's chest (bda) (TIME/ZONE DECAY)")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - Umuk's chest (bda) (TIME/ZONE DECAY)")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -609,7 +609,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "an iron key - rockface (not the one at ooc)")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - rockface (not the one at ooc)")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -619,7 +619,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a bent bone key - stonedoor, silver bracer")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - stonedoor, silver bracer")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -629,7 +629,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "an old bronze key - Wolfgate, irondoors, NOC")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - Wolfgate, irondoors, NOC")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -639,7 +639,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a big metal key - oakendoor, Rohir tower")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - oakendoor, Rohir tower")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -649,7 +649,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "an old iron key - rockdoor, GC")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - rockdoor, GC")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -659,7 +659,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a big stonekey - stonedoor, BBT")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - stonedoor, BBT")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -669,7 +669,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a black and silver key - slab, Old Wight")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - slab, Old Wight")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -679,7 +679,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a black bone key - door, Nagrorh")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - door, Nagrorh")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -689,7 +689,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a dirty key - trapdoor, bandit leader")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - trapdoor, bandit leader")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -699,7 +699,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a dirty stone key - floor/ceiling, 2h-axe Eregion")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - floor/ceiling, 2h-axe Eregion")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -709,7 +709,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a tiny copper key - WAREHOUSE, Tharbad")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - WAREHOUSE, Tharbad")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -719,7 +719,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a fragile stone key - stonedoor, Unqalome")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - stonedoor, Unqalome")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -729,7 +729,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a tiny silver key - 1 of 2 doors up from knight in Rdell")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - 1 of 2 doors up from knight in Rdell")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -739,7 +739,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a glass key - flagstone, DK")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - flagstone, DK")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -749,7 +749,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a tiny silvery key - branchtop, Lorien")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - branchtop, Lorien")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -759,7 +759,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a granite key inlaid with wood  - chest, Eregion 2 statues")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - chest, Eregion 2 statues")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -769,7 +769,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a tiny stone key - stonedoor + prisondoor Barbaras")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - stonedoor + prisondoor Barbaras")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -779,7 +779,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a tiny stonekey - stonedoor+prisondoor, Barbaras")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - stonedoor+prisondoor, Barbaras")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -789,7 +789,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "an old key - chest, lord's treasury")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - chest, lord's treasury")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -799,7 +799,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "an old metallic key - BM mines chest")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - BM mines chest")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -809,7 +809,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "an old ornate key - sarcophagus, Dunland vellum")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - sarcophagus, Dunland vellum")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -819,7 +819,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a black key - portcullis, LB fort")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - portcullis, LB fort")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -829,7 +829,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a black metal key - rock, ABR")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - rock, ABR")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -839,7 +839,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a black stone key - panels at great wheels")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - panels at great wheels")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -849,7 +849,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a blood-stained key - rack, OOC")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - rack, OOC")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -859,7 +859,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a bloody key - door/gorydoor, Mezagor")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - door/gorydoor, Mezagor")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -869,7 +869,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a great bone key - trapdoor, Balrog rings key")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - trapdoor, Balrog rings key")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -879,7 +879,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a green iron key - prisondoor, NOC vellum place")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - prisondoor, NOC vellum place")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -889,7 +889,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a green key - halldoor, Eregion")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - halldoor, Eregion")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -899,7 +899,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a heavy iron key - door, Drain pipe")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - door, Drain pipe")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -909,7 +909,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a heavy steel key - stonedoor/rockface, OOC")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - stonedoor/rockface, OOC")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -919,7 +919,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a blue steel-key - minedoor, Dunland mines")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - minedoor, Dunland mines")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -929,7 +929,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a brass key - metaldoor, bandit leader")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - metaldoor, bandit leader")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -939,7 +939,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a bright steel key - grille behind panels (wheels)")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - grille behind panels (wheels)")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -949,7 +949,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a castle key - irondoor, Malardils castle")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - irondoor, Malardils castle")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -959,7 +959,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a chained silver key - joist, A Master treasury")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - joist, A Master treasury")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -969,7 +969,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "a huge iron key  - steeldoor/leaddoor, Shaghosh")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%0 - steeldoor/leaddoor, Shaghosh")</send>
   </trigger>
 </triggers>
 
