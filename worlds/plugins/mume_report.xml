@@ -139,7 +139,7 @@ end
 end
 
 function tnl(xp, tp)
-	local output = string.format("%.0fK XP and %s TP to reach the next level.", xp/1000, tp)
+	local output = string.format("%.3fK XP and %s TP to reach the next level.", xp / 1000, tp)
 	CallPlugin(screenReader, "sayNote", "You need "..output)
 	if will_report_tnl then
 		Send("emote needs "..output)
