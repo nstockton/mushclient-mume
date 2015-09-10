@@ -36,6 +36,7 @@
    group="mume_sounds"
    match="^ENEMY:\*.+(?P&lt;player&gt;Orc|Troll|Man|Woman|Elf|Half-Elf|Dwarf|Hobbit|Bear|Numenorean|Númenórean)\*:ENEMY.*?(?P&lt;action&gt;standing|sitting|resting|sleeping|fighting|riding|nocks a missile|begins some strange|arrived|leaves).+?((?P&lt;direction&gt;north|south|east|west|up|down|above|below|hiding place).*)?$"
    name="pk_action_sounds"
+   omit_from_output="y"
    regexp="y"
    send_to="12"
    sequence="100"
