@@ -435,6 +435,7 @@
 </printing>
 
 <!-- plugins -->
+<include name="remove_ctrl_g.xml" plugin="y" />
 <include name="output_functions.xml" plugin="y" />
 <include name="mume_path_walker.xml" plugin="y" />
 <include name="mume_time.xml" plugin="y" />
