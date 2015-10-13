@@ -160,6 +160,7 @@ IGNORE_LIST = {
 	["Celebrindal"] = true,
 	["Ciryariel"] = true,
 	["Clint"] = true,
+	["Curundil"] = true,
 	["Daegil"] = true,
 	["Ecthelion"] = true,
 	["Elrond"] = true,
@@ -171,6 +172,7 @@ IGNORE_LIST = {
 	["Huor"] = true,
 	["Nagrorh"] = true,
 	["Nordri"] = true,
+	["Sarion"] = true,
 	["Sauron"] = true
 }
 
