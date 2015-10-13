@@ -75,9 +75,10 @@
   <trigger
    enabled="y"
    group="mume_time"
-   match="The deepening gloom announces another sunset outside."
+   match="^The deepening gloom announces another sunset(?: outside)?\."
    name="sync_event5"
    send_to="12"
+   regexp="y"
    sequence="100"
   >
   <send>sync_event("dusk")</send>
