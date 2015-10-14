@@ -61,6 +61,7 @@ ffi.cdef[[
 	int __stdcall SA_IsRunning(void);
 ]]
 
+local DOLACCESS_NONE = 0
 local DOLACCESS_SPEAK = 1
 local DOLACCESS_MUTE = 141
 
@@ -83,7 +84,7 @@ local function dolphin_running()
 	if not dolphin_api then
 		return False
 	end
-	return dolphin_api.DolAccess_GetSystem() ~= 0
+	return dolphin_api.DolAccess_GetSystem() ~= DOLACCESS_NONE
 end
 
 local function dolphin_say(text, interrupt)
@@ -209,7 +210,7 @@ end
 
 function tts_toggle(name, line, wildcards)
 	tts_enabled = not tts_enabled
-	say("Speech " .. tts_enabled and "on" or "off", true)
+	say(string.format("Speech %s.", tts_enabled and "on" or "off"), true)
 end
 
 function OnPluginTabComplete(word)
