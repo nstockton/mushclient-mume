@@ -122,11 +122,11 @@ end
 Accelerator("alt +0", "Line_Get 10")
 Accelerator("ctrl+alt+enter","toggleinterrupt")
 Accelerator("ctrl+shift+space","select")
-Accelerator("ctrl+shift+r","nextline")
-Accelerator("ctrl+shift+c","curline")
-Accelerator("ctrl+shift+g","prevline")
-Accelerator("ctrl+shift+n","endline")
-Accelerator("ctrl+shift+h","topline")
+Accelerator("ctrl+shift+n", "nextline")
+Accelerator("ctrl+shift+t", "curline")
+Accelerator("ctrl+shift+h", "prevline")
+Accelerator("ctrl+shift+s", "endline")
+Accelerator("ctrl+shift+d", "topline")
 
 function selectscr()
 	if selecting == 0 or selecting == nil then
