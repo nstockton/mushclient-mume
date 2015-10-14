@@ -34,9 +34,10 @@
   <trigger
    enabled="y"
    group="mume_time"
-   match="The day has begun."
+   match="^(?:It seems as if )?[Tt]he day has begun\.$"
    name="sync_event1"
    send_to="12"
+   regexp="y"
    sequence="100"
   >
   <send>sync_event("dawn", 1)</send>
@@ -75,7 +76,7 @@
   <trigger
    enabled="y"
    group="mume_time"
-   match="^The deepening gloom announces another sunset(?: outside)?\."
+   match="^The deepening gloom announces another sunset(?: outside)?\.$"
    name="sync_event5"
    send_to="12"
    regexp="y"
