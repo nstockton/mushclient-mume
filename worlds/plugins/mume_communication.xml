@@ -169,6 +169,7 @@ IGNORE_LIST = {
 	["Galadriel"] = true,
 	["Gramps"] = true,
 	["Grinder"] = true,
+	["Haldir"] = true,
 	["Huor"] = true,
 	["Nagrorh"] = true,
 	["Nordri"] = true,
