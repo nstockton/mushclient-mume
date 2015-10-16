@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <!DOCTYPE muclient>
-<!-- Saved on Sunday, September 09, 2012, 9:57 AM -->
-<!-- MuClient version 4.81 -->
+<!-- Saved on Thursday, October 15, 2015, 7:44 PM -->
+<!-- MuClient version 4.98 -->
 <!-- Written by Nick Gammon -->
 <!-- Home Page: http://www.mushclient.com/ -->
 <muclient>
 <world
-   muclient_version="4.81"
+   muclient_version="4.98"
    world_file_version="15"
-   date_saved="2012-09-09 09:57:50"
+   date_saved="2015-10-15 19:44:26"
 
    auto_log_file_name="%F%N\logs\%Y-%m-%d (%I_%M_%S %p).log"
    auto_say_override_prefix="-"
@@ -69,7 +69,6 @@
    log_notes="y"
    log_output="y"
    log_raw="y"
-   lower_case_tab_completion="n"
    max_output_lines="5000"
    mud_can_change_link_colour="y"
    mud_can_change_options="y"
@@ -78,6 +77,7 @@
    output_font_height="9"
    output_font_weight="400"
    paste_delay_per_lines="1"
+   play_sounds_in_background="y"
    pixel_offset="1"
    port="4000"
    proxy_port="1080"
@@ -95,6 +95,8 @@
    timestamp_input_back_colour="black"
    timestamp_notes_back_colour="black"
    timestamp_output_back_colour="black"
+   tool_tip_visible_time="5000"
+   tool_tip_start_time="400"
    treeview_triggers="y"
    treeview_aliases="y"
    treeview_timers="y"
@@ -115,36 +117,36 @@
 <!-- triggers -->
 
 <triggers
-   muclient_version="4.81"
+   muclient_version="4.98"
    world_file_version="15"
-   date_saved="2012-09-09 09:57:50"
+   date_saved="2015-10-15 19:44:26"
   >
 </triggers>
 
 <!-- aliases -->
 
 <aliases
-   muclient_version="4.81"
+   muclient_version="4.98"
    world_file_version="15"
-   date_saved="2012-09-09 09:57:50"
+   date_saved="2015-10-15 19:44:26"
   >
 </aliases>
 
 <!-- timers -->
 
 <timers
-   muclient_version="4.81"
+   muclient_version="4.98"
    world_file_version="15"
-   date_saved="2012-09-09 09:57:50"
+   date_saved="2015-10-15 19:44:26"
   >
 </timers>
 
 <!-- macros -->
 
 <macros
-   muclient_version="4.81"
+   muclient_version="4.98"
    world_file_version="15"
-   date_saved="2012-09-09 09:57:50"
+   date_saved="2015-10-15 19:44:26"
   >
 
   <macro name="up" type="send_now" >
@@ -236,18 +238,18 @@
 <!-- variables -->
 
 <variables
-   muclient_version="4.81"
+   muclient_version="4.98"
    world_file_version="15"
-   date_saved="2012-09-09 09:57:50"
+   date_saved="2015-10-15 19:44:26"
   >
 </variables>
 
 <!-- colours -->
 
 <colours
-   muclient_version="4.81"
+   muclient_version="4.98"
    world_file_version="15"
-   date_saved="2012-09-09 09:57:50"
+   date_saved="2015-10-15 19:44:26"
   >
 
 <ansi>
@@ -302,9 +304,9 @@
 <!-- keypad -->
 
 <keypad
-   muclient_version="4.81"
+   muclient_version="4.98"
    world_file_version="15"
-   date_saved="2012-09-09 09:57:50"
+   date_saved="2015-10-15 19:44:26"
   >
 
   <key name="0" >
@@ -408,9 +410,9 @@
 <!-- printing -->
 
 <printing
-   muclient_version="4.81"
+   muclient_version="4.98"
    world_file_version="15"
-   date_saved="2012-09-09 09:57:50"
+   date_saved="2015-10-15 19:44:26"
   >
 
 <ansi>
@@ -435,8 +437,8 @@
 </printing>
 
 <!-- plugins -->
+<include name="config_manager.xml" plugin="y" />
 <include name="remove_ctrl_g.xml" plugin="y" />
-<include name="output_functions.xml" plugin="y" />
 <include name="mume_path_walker.xml" plugin="y" />
 <include name="mume_time.xml" plugin="y" />
 <include name="mume_secrets_database.xml" plugin="y" />
@@ -455,4 +457,6 @@
 <include name="repeat_command.xml" plugin="y" />
 <include name="mume_grouping.xml" plugin="y" />
 <include name="mume_macros.xml" plugin="y" />
+<include name="omit_blank_lines.xml" plugin="y" />
+<include name="output_functions.xml" plugin="y" />
 </muclient>

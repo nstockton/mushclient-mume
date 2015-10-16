@@ -33,13 +33,27 @@
 
 <script>
 <![CDATA[
-Accelerator("Alt+C", "north")
-Accelerator("Alt+T", "south")
-Accelerator("Alt+N", "east")
-Accelerator("Alt+H", "west")
-Accelerator("Alt+G", "up")
-Accelerator("Alt+R", "down")
-Accelerator("Alt+S", "room_name")
+config = "d19a2f0a604c96b7318aa67f"
+
+local return_code, keyboard_layout = CallPlugin(config, "get", "keyboard_layout")
+if keyboard_layout == "dvorak" then
+	Accelerator("Alt+C", "north")
+	Accelerator("Alt+T", "south")
+	Accelerator("Alt+N", "east")
+	Accelerator("Alt+H", "west")
+	Accelerator("Alt+G", "up")
+	Accelerator("Alt+R", "down")
+	Accelerator("Alt+S", "room_name")
+else
+	Accelerator("Alt+I", "north")
+	Accelerator("Alt+K", "south")
+	Accelerator("Alt+L", "east")
+	Accelerator("Alt+J", "west")
+	Accelerator("Alt+U", "up")
+	Accelerator("Alt+O", "down")
+	Accelerator("Alt+;", "room_name")
+end
+
 Accelerator("ctrl+shift+M", "assist")
 Accelerator("ctrl+shift+B", "bash")
 
