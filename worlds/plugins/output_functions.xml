@@ -215,7 +215,7 @@ function prev_line()
 		CallPlugin(screenReader, "say", "No output.", true)
 		return
 	end
-	if current_line <= 1 then
+	if current_line - 1 <= 1 then
 		CallPlugin(screenReader, "say", "top", true)
 	else
 		current_line = current_line - 1
