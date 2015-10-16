@@ -16,7 +16,6 @@
    id="925cdd0331023d9f0b8f05a7"
    language="Lua"
    purpose="Automatically speak using screen reader APIs."
-   save_state="y"
    date_written="2015-05-06 18:12:34"
    requires="4.60"
    version="1.0"
