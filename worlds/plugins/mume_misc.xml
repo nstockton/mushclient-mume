@@ -55,7 +55,7 @@
    send_to="12"
    sequence="80"
   >
-  <send>CallPlugin(screenReader, "sayNote", "*%&lt;first&gt;*%&lt;second&gt;")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%&lt;first&gt;%&lt;second&gt;")</send>
   </trigger>
   <trigger
    enabled="y"
