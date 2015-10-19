@@ -38,6 +38,7 @@
    name="pk_action_sounds"
    omit_from_output="y"
    regexp="y"
+   keep_evaluating="y"
    send_to="12"
    sequence="100"
   >
