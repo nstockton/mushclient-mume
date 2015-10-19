@@ -67,6 +67,8 @@ local DOLACCESS_MUTE = 141
 local CP_1252 = 1252
 local CP_UTF8 = 65001
 
+local ERROR_NO_UNICODE_TRANSLATION = 1113
+
 local IS_32_BIT = ffi.abi("32bit")
 
 local tts_enabled = true
@@ -78,6 +80,8 @@ local SIZE_OF_WCHAR = ffi.sizeof("wchar_t")
 local nvda_api = IS_32_BIT and ffi.load("screen_reader_dlls/nvdaControllerClient32.dll") or ffi.load("screen_reader_dlls/nvdaControllerClient64.dll")
 local sa_api = IS_32_BIT and ffi.load("screen_reader_dlls/SAAPI32.dll") or ffi.load("screen_reader_dlls/SAAPI64.dll")
 local dolphin_api = IS_32_BIT and ffi.load("screen_reader_dlls/dolapi32.dll")
+
+local codepage = CP_1252
 
 local function dolphin_running()
 	if not dolphin_api then
@@ -167,8 +171,13 @@ function say(text, interrupt)
 	if text:find("^%s*$") then
 		return
 	end
-	local widestr = ffiNew("wchar_t[?]", 1024)
-	ffiC.MultiByteToWideChar(CP_UTF8, 0, text, #text, widestr, 1024)
+	local widestr = ffiNew("wchar_t[?]", 4096)
+	ffiC.MultiByteToWideChar(codepage, 0, text, #text, widestr, 4096)
+	if ffi.errno(0) == ERROR_NO_UNICODE_TRANSLATION then
+		codepage = CP_UTF8
+		widestr = ffiNew("wchar_t[?]", 4096)
+		ffiC.MultiByteToWideChar(codepage, 0, text, #text, widestr, 4096)
+	end
 	if nvda_running() then
 		nvda_say(widestr, interrupt)
 	elseif sa_running() then
