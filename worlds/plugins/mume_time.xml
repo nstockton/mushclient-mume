@@ -99,7 +99,7 @@
   <trigger
    enabled="y"
    group="mume_time"
-   match="^(?P<hour>[1-9]|1[0-2])?(?P<am_pm>[ap]m)?( on )?\w+, the (?P<day>\d+)[snrt][tdh] of (?P<month>\w+), Year (?P<year>\d{4}) of the Third Age\.$"
+   match="^(?:(?:It is )?(?P<hour>[1-9]|1[0-2])(?P<am_pm>[ap]m)(?: on ))?\w+\, the (?P<day>\d+)(?:st|[nr]d|th) of (?P<month>\w+)\, [yY]ear (?P<year>\d{4,4}) of the Third Age\.$"
    name="parse_time"
    send_to="12"
    regexp="y"
