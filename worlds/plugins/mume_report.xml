@@ -34,6 +34,27 @@
   <trigger
    enabled="y"
    group="mume_report"
+   match="^points_capture\: (?P&lt;points&gt;[HM]P|MV) (?P&lt;current&gt;\d+|xxx)/(?P&lt;max&gt;\d+|xxx)$"
+   name="capture_points"
+   omit_from_log="y"
+   omit_from_output="y"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+if "%&lt;max&gt;" == "xxx" then
+	CallPlugin(screenReader, "sayNote", "Unavailable while fighting.")
+elseif "%&lt;max&gt;" == "0" then
+	CallPlugin(screenReader, "sayNote", string.format("Character doesn't have %ss.", "%&lt;points&gt;"))
+else
+	CallPlugin(screenReader, "sayNote", string.format("%s/%s [%.0f%%%] %ss.", "%&lt;current&gt;", "%&lt;max&gt;", "%&lt;current&gt;" / "%&lt;max&gt;" * 100, "%&lt;points&gt;"))
+end
+  </send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_report"
    match="^tnlreport\: (?P&lt;xp&gt;\d+) (?P&lt;tp&gt;\d+)$"
    name="capture_tnl"
    omit_from_log="y"
@@ -47,7 +68,7 @@
   <trigger
    enabled="y"
    group="mume_report"
-   match="^(?P&lt;hp&gt;\d+)/(?P&lt;max_hp&gt;\d+) hits(, (?P&lt;mana&gt;\d+)/(?P&lt;max_mana&gt;\d+) mana,)? and (?P&lt;mv&gt;\d+)/(?P&lt;max_mv&gt;\d+) moves\.$"
+   match="^(?P&lt;hp&gt;\d+)/(?P&lt;max_hp&gt;\d+) hits(?:\, (?P&lt;mana&gt;\d+)/(?P&lt;max_mana&gt;\d+) mana\,)? and (?P&lt;mv&gt;\d+)/(?P&lt;max_mv&gt;\d+) moves\.$"
    name="capture_score"
    omit_from_log="y"
    omit_from_output="y"
@@ -62,6 +83,33 @@
 <!--  Aliases  -->
 
 <aliases>
+  <alias
+   name="display_hps"
+   match="hp"
+   enabled="y"
+   group="mume_report"
+   sequence="100"
+  >
+  <send>info points_capture: HP %%z/%%Z</send>
+  </alias>
+  <alias
+   name="display_mps"
+   match="mp"
+   enabled="y"
+   group="mume_report"
+   sequence="100"
+  >
+  <send>info points_capture: MP %%e/%%E</send>
+  </alias>
+  <alias
+   name="display_mvs"
+   match="mv"
+   enabled="y"
+   group="mume_report"
+   sequence="100"
+  >
+  <send>info points_capture: MV %%j/%%J</send>
+  </alias>
   <alias
    name="report_full"
    match="rpf"
@@ -100,7 +148,7 @@ rptnl</send>
    group="mume_report"
    sequence="100"
   >
-  <send>info tnlreport: %X %T</send>
+  <send>info tnlreport: %%X %%T</send>
   </alias>
 </aliases>
 
@@ -125,24 +173,24 @@ end
 
 function score(hp, max_hp, mana, max_mana, mv, max_mv)
 	local points = {}
-	table.insert(points, string.format("HP: %s/%s [%.0f%%]", hp, max_hp, hp/max_hp*100))
-	if max_mana~="" and max_mana or nil then
-		table.insert(points, string.format("Mana: %s/%s [%.0f%%]", mana, max_mana, mana/max_mana*100))
+	table.insert(points, string.format("HP: %s/%s [%.0f%%]", hp, max_hp, hp / max_hp * 100))
+	if max_mana ~= "" and max_mana or nil then
+		table.insert(points, string.format("Mana: %s/%s [%.0f%%]", mana, max_mana, mana / max_mana * 100))
 end
-	table.insert(points, string.format("Moves: %s/%s [%.0f%%].", mv, max_mv, mv/max_mv*100))
+	table.insert(points, string.format("Moves: %s/%s [%.0f%%].", mv, max_mv, mv / max_mv * 100))
 	local output = table.concat(points, ", ")
 	CallPlugin(screenReader, "sayNote", output)
 	if will_report_score then
-		Send("emote reports:  "..output)
+		Send("emote reports: ", output)
 		will_report_score = false
 	end
 end
 
 function tnl(xp, tp)
 	local output = string.format("%.3fK XP and %s TP to reach the next level.", xp / 1000, tp)
-	CallPlugin(screenReader, "sayNote", "You need "..output)
+	CallPlugin(screenReader, "sayNote", string.format("You need %s", output))
 	if will_report_tnl then
-		Send("emote needs "..output)
+		Send("emote needs ", output)
 		will_report_tnl = false
 	end
 end
