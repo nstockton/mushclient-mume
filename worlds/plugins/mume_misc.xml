@@ -34,6 +34,45 @@
   <trigger
    enabled="y"
    group="mume_misc"
+   match="^(?:You grasp the corpse and start dragging it\.|You are already dragging it\!)$"
+   name="auto_drag_next"
+   omit_from_output="y"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+if auto_drag then
+	auto_drag_counter = auto_drag_counter + 1
+	Send(string.format("drag %s.corpse", auto_drag_counter))
+else
+	CallPlugin(screenReader, "sayNote", "%0")
+end
+  </send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="^You do not see anything like that\.$"
+   name="auto_drag_complete"
+   omit_from_output="y"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+if auto_drag then
+	CallPlugin(screenReader, "sayNote", "Now dragging all corpses.")
+	auto_drag_counter = 1
+	auto_drag = false
+else
+	CallPlugin(screenReader, "sayNote", "%0")
+end
+  </send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
    match="^(?P&lt;tag&gt;NAME|DESCRIPTION|PROMPT|TELL|SAY|NARRATE|PRAY|EMOTE):(?P&lt;line&gt;.*):(?P=tag)$"
    name="remove_proxy_tags"
    omit_from_output="y"
@@ -134,6 +173,85 @@ Send("change wordwrap off")</send>
 
 <aliases>
   <alias
+   name="drag_all"
+   match="dragall"
+   enabled="y"
+   group="mume_misc"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+auto_drag = true
+auto_drag_counter = 1
+Send("drag 1.corpse")
+  </send>
+  </alias>
+  <alias
+   name="butcher_corpses"
+   match="^bc(?:\s*(?P&lt;digit&gt;\d+))?$"
+   enabled="y"
+   group="mume_misc"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>Send(string.format("butcher %s.corpse", "%&lt;digit&gt;" ~= "" and "%&lt;digit&gt;" or "1"))</send>
+  </alias>
+  <alias
+   name="money_info"
+   match="money"
+   enabled="y"
+   group="mume_misc"
+   sequence="100"
+  >
+  <send>info %%r</send>
+  </alias>
+  <alias
+   name="affected_by_info"
+   match="affect"
+   enabled="y"
+   group="mume_misc"
+   sequence="100"
+  >
+  <send>info %%f</send>
+  </alias>
+  <alias
+   name="alignment_info"
+   match="align"
+   enabled="y"
+   group="mume_misc"
+   sequence="100"
+  >
+  <send>info %%q</send>
+  </alias>
+  <alias
+   name="citizen_list_info"
+   match="citizen"
+   enabled="y"
+   group="mume_misc"
+   sequence="100"
+  >
+  <send>info %%c</send>
+  </alias>
+  <alias
+   name="weight_carried_info"
+   match="weight"
+   enabled="y"
+   group="mume_misc"
+   sequence="100"
+  >
+  <send>info %%C, %%F</send>
+  </alias>
+  <alias
+   name="look_in"
+   match="li *"
+   enabled="y"
+   group="mume_misc"
+   sequence="100"
+  >
+  <send>look in %1</send>
+  </alias>
+  <alias
    name="switch_cloak_from_pouch"
    match="cpouch"
    enabled="y"
@@ -214,6 +332,8 @@ put boots backpack</send>
 <script>
 <![CDATA[
 screenReader = "925cdd0331023d9f0b8f05a7"
+auto_drag = false
+auto_drag_counter = 1
 
 ]]>
 </script>
