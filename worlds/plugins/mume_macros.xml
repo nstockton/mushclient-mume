@@ -33,6 +33,7 @@
 
 <script>
 <![CDATA[
+screenReader = "925cdd0331023d9f0b8f05a7"
 config = "d19a2f0a604c96b7318aa67f"
 
 local return_code, keyboard_layout = CallPlugin(config, "get", "keyboard_layout")
@@ -56,6 +57,7 @@ end
 
 Accelerator("ctrl+shift+M", "assist")
 Accelerator("ctrl+shift+B", "bash")
+AcceleratorTo ("ctrl+U", "SelectCommand(); PasteCommand(''); CallPlugin(screenReader, 'say', 'Cleared')", sendto.script)
 
 ]]>
 </script>
