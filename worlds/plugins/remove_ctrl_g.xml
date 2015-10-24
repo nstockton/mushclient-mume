@@ -28,28 +28,12 @@
 
 <include name="constants.lua"/>
 
-<!--  Aliases  -->
-
-<aliases>
-  <alias
-   name="do_nothing"
-   match="do_nothing_alias"
-   enabled="y"
-   group="remove_ctrl_g"
-   omit_from_log="y"
-   send_to="12"
-   sequence="100"
-  >
-  <send></send>
-  </alias>
-</aliases>
-
 <!--  Script  -->
 
 
 <script>
 <![CDATA[
-Accelerator("ctrl+G", "do_nothing_alias")
+AcceleratorTo ("ctrl+G", "--", sendto.script)
 
 ]]>
 </script>
