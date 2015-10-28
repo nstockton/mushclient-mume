@@ -72,7 +72,7 @@ end
   <trigger
    enabled="y"
    group="mume_sounds"
-   match="^You (?:feel a hidden presence|smell blood)\.$"
+   match="^You (?:feel a hidden presence\.|smell blood\.|have found .+?\!)$"
    name="Hidden_sound"
    regexp="y"
    send_to="12"
