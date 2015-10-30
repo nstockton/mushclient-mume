@@ -53,7 +53,21 @@
    send_to="12"
    sequence="100"
   >
-  <send>shortenIsCasting("%&lt;castor&gt;")</send>
+  <send>	CallPlugin(screenReader, "sayNote", "%&lt;castor&gt; is casting!", true)
+  </send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_castor_spell_translator"
+   match="^(?P&lt;target&gt;.+?) seems to be blinded\!$"
+   name="shorten_blinded_message"
+   omit_from_output="y"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>	CallPlugin(screenReader, "sayNote", "blinded %&lt;target&gt;!", true)
+  </send>
   </trigger>
 </triggers>
 
@@ -141,11 +155,6 @@ function translate(castor, spell)
 	end
 	local line = string.format("%s casts %s!", castor, spell)
 	CallPlugin(screenReader, "sayNote", line, true)
-end
-
-function shortenIsCasting(castor)
-	local line = string.format("%s is casting!", castor)
-	CallPlugin(screenReader, "sayNote", line)
 end
 
 ]]>
