@@ -168,7 +168,7 @@ local function we_silence()
 end
 
 function say(text, interrupt)
-	if text:find("^%s*$") then
+	if not text or text:find("^%s*$") then
 		return
 	end
 	local widestr = ffiNew("wchar_t[?]", 4096)
