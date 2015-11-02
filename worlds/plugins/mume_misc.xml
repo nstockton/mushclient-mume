@@ -77,9 +77,8 @@ end
    name="remove_proxy_tags"
    omit_from_output="y"
    regexp="y"
-   keep_evaluating="y"
    send_to="12"
-   sequence="80"
+   sequence="100"
   >
   <send>CallPlugin(screenReader, "sayNote", "%&lt;line&gt;")</send>
   </trigger>
@@ -90,11 +89,22 @@ end
    name="remove_enemy_tag"
    omit_from_output="y"
    regexp="y"
-   keep_evaluating="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>CallPlugin(screenReader, "sayNote", "%&lt;first&gt;%&lt;second&gt;")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="^ENEMY.+?:ENEMY (?:utters the word[s]? \'[a-z ]+\'|begins some strange incantations\.\.\.|seems to be blinded\!)$"
+   name="remove_enemy_tag_exception"
+   omit_from_output="y"
+   regexp="y"
    send_to="12"
    sequence="80"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%&lt;first&gt;%&lt;second&gt;")</send>
+  <send>-- We're handling the text substitution in another plugin.</send>
   </trigger>
   <trigger
    enabled="y"
