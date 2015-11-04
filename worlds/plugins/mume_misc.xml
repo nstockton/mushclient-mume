@@ -109,6 +109,24 @@ end
   <trigger
    enabled="y"
    group="mume_misc"
+   match="^Is playing from \*\.(?P&lt;alpha2&gt;[a-z]{2,2})\.$"
+   name="translate_country_codes"
+   omit_from_output="y"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+if country_codes["%&lt;alpha2&gt;"] then
+	CallPlugin(screenReader, "sayNote", string.format("%0 (%s)", country_codes["%&lt;alpha2&gt;"]))
+else
+	CallPlugin(screenReader, "sayNote", "%0")
+end
+  </send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
    match="You have been idle, and are pulled into a void."
    name="no_void"
    sequence="100"
@@ -341,6 +359,18 @@ put boots backpack</send>
 
 <script>
 <![CDATA[
+require("mystdlib")
+json = require("dkjson")
+COUNTRY_CODES_FILE = string.format("%sdatabases\\country_codes.json", GetInfo(67))
+
+if os.isFile(COUNTRY_CODES_FILE) then
+	fileObj = io.open(COUNTRY_CODES_FILE, "rb")
+	country_codes = json.decode(fileObj:read("*all"), 1, nil)
+	fileObj:close()
+else
+	country_codes = {}
+end
+
 screenReader = "925cdd0331023d9f0b8f05a7"
 auto_drag = false
 auto_drag_counter = 1

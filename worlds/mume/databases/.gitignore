@@ -2,5 +2,6 @@
 *
 # Except this file
 !config.json.sample
+!country_codes.json
 !secret_exits.json.sample
 !.gitignore
