@@ -85,14 +85,14 @@ end
   <trigger
    enabled="y"
    group="mume_misc"
-   match="^ENEMY:(?P&lt;first&gt;.+):ENEMY(?P&lt;second&gt;.*)$"
+   match="^(?P&lt;first&gt;.*)ENEMY:(?P&lt;second&gt;.+):ENEMY(?P&lt;third&gt;.*)$"
    name="remove_enemy_tag"
    omit_from_output="y"
    regexp="y"
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%&lt;first&gt;%&lt;second&gt;")</send>
+  <send>CallPlugin(screenReader, "sayNote", "%&lt;first&gt;%&lt;second&gt;%&lt;third&gt;")</send>
   </trigger>
   <trigger
    enabled="y"
