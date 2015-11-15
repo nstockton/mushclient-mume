@@ -179,7 +179,7 @@ if "%&lt;am_pm&gt;" ~= "" then sync_precise(tonumber("%&lt;hour&gt;"), 30, "%&lt
 <script>
 <![CDATA[
 screenReader = "925cdd0331023d9f0b8f05a7"
-init_timer = math.floor(utils.timer() * 1000)
+init_timer = math.floor(utils.timer())
 months = {
 	{name="Afteryule", dawn=8, dusk=18, season="Early-Winter"},
 	{name="Solmath", dawn=9, dusk=17, season="Winter"},
@@ -211,15 +211,10 @@ current_month_name = ""
 current_hour = 0
 current_day = 0
 current_year = 0
-current_time = ""
-current_state = ""
-next_state = ""
-till_next_state = ""
 difference = 0
-secs_to_midnight = 0
 
 function timer()
-	return math.floor(utils.timer() * 1000) - init_timer
+	return math.floor(utils.timer()) - init_timer
 end
 
 function time_tick()
@@ -273,7 +268,7 @@ function sync_precise(hours, minutes, am_pm)
 	hours = hours or 12
 	minutes = minutes or 0
 	am_pm = am_pm or "am"
-	difference = timer() - minutes * 1000
+	difference = timer() - minutes
 	if hours==12 and am_pm=="am" then
 		current_hour = 24
 	elseif hours==12 and am_pm=="pm" then
@@ -294,7 +289,11 @@ function sync_event(dawn_dusk, hours)
 	reset_timer(false)
 end
 
-function time_left()
+function time_check(action)
+	local current_time = ""
+	local current_state = ""
+	local next_state = ""
+	local till_next_state = ""
 	if current_month == 0 then
 		current_month = 1
 	end
@@ -317,81 +316,42 @@ function time_left()
 		next_state = "DAY"
 		till_next_state = "1"
 	end
-end
-
-function time_left_precise()
-	time_left()
-	local seconds = 60 - math.floor((timer() - difference) / 1000) % 60
-	if seconds > 59 then
-		till_next_state = till_next_state..":00"
-	elseif seconds < 10 then
-		till_next_state = tostring(tonumber(string.match(till_next_state, "[^:]*"))-1)..":0"..tostring(seconds)
-	else
-		till_next_state = tostring(tonumber(string.match(till_next_state, "[^:]*"))-1)..":"..tostring(seconds)
-	end
-end
-
-function time_am_pm()
-	if current_hour < 12 then
-		current_time = tostring(current_hour).." am"
-	elseif current_hour>12 and current_hour<24 then
-		current_time = tostring(current_hour - 12).." pm"
-	elseif current_hour == 12 then
-		current_time = "12 pm"
-	else
-		current_time = "12 am"
-	end
-end
-
-function time_am_pm_precise()
-	local seconds = math.floor((timer() - difference) / 1000) % 60
-	local seconds_pretty = seconds<10 and "0" or ""
-	local hours_pretty = current_hour<10 and "0" or ""
-	if current_hour < 12 then
-		current_time = tostring(current_hour)..":"..seconds_pretty..tostring(seconds).." am"
-	elseif current_hour>12 and current_hour<24 then
-		current_time = tostring(current_hour-12)..":"..seconds_pretty..tostring(seconds).." pm"
-	elseif current_hour == 12 then
-		current_time = tostring(current_hour)..":"..seconds_pretty..tostring(seconds).." pm"
-	else
-		current_time = tostring(current_hour-12)..":"..seconds_pretty..tostring(seconds).." am"
-	end
-	secs_to_midnight = (24*60) - ((current_hour*60)+seconds)
-end
-
-function time_season()
-	local in_mume_days = (((math.floor((current_month-1)/3)*3 + 3)-current_month)*30) + (30-current_day) + (1 - math.floor(current_hour/24))
-	local in_mume_days_pretty = in_mume_days~=1 and "s" or ""
-	local in_rl_hours = math.floor(in_mume_days*24 / 60)
-	local in_rl_hours_pretty = in_rl_hours~=1 and "s" or ""
-	return string.sub(months[current_month].season, -6).." ends in "..tostring(in_mume_days).." mume day"..in_mume_days_pretty.." or "..tostring(in_rl_hours).." real-life hour"..in_rl_hours_pretty.."."
-end
-
-function time_winter()
-	local in_mume_days = ((12-current_month)*30) + (30-current_day) + (1 - math.floor(current_hour/24))
-	local in_rl_days = math.floor(math.floor(in_mume_days*24 / 60)/24)
-	local in_rl_days_pretty = in_rl_days~=1 and "s" or ""
-	local in_rl_hours = math.floor(in_mume_days*24 / 60) % 24
-	local in_rl_hours_pretty = in_rl_hours~=1 and "s" or ""
-	return "Next winter starts in "..tostring(in_rl_days).." real-life day"..in_rl_days_pretty.." and "..tostring(in_rl_hours).." hour"..in_rl_hours_pretty.."."
-end
-
-function time_check(action)
-	time_left()
 	if difference == 0 then
-		time_am_pm()
+		if current_hour == 12 then
+			current_time = "12 pm"
+		elseif current_hour >= 24 then
+			current_time = "12 am"
+		elseif current_hour < 12 then
+			current_time = string.format("%d am", current_hour)
+		elseif current_hour > 12 then
+			current_time = string.format("%d pm", current_hour - 12)
+		end
 	else
-		time_am_pm_precise()
+		local mume_hour = current_hour
+		local mume_minutes = (timer() - difference) % 60
+		if mume_hour == 12 then
+			current_time = string.format("12:%s%d pm", mume_minutes < 10 and "0" or "", mume_minutes)
+		elseif mume_hour >= 24 then
+			current_time = string.format("12:%s%d am", mume_minutes < 10 and "0" or "", mume_minutes)
+		elseif mume_hour < 12 then
+			current_time = string.format("%d:%s%d am", mume_hour, mume_minutes < 10 and "0" or "", mume_minutes)
+		elseif mume_hour > 12 then
+			current_time = string.format("%d:%s%d pm", mume_hour - 12, mume_minutes < 10 and "0" or "", mume_minutes)
+		end
 	end
-	local till_next_state_pretty = till_next_state~="1" and "s." or "!"
 	local output = "Game time "..current_time..":    Dawn: "..tostring(months[current_month].dawn).." am, Dusk: "..tostring(months[current_month].dusk-12).." pm."
 	if action then
 		return Send(action.." "..output)
 	end
-	output = output.."\nIt is currently "..current_state..", in "..current_month_name..", ("..months[current_month].season..").\n"
-	output = output.."Time left until "..next_state.." is less than "..till_next_state.." tick"..till_next_state_pretty.."\n"
-	output = output..time_season().."\n"
-	output = output..time_winter()
+	local next_season_in_mume_days = (((math.floor((current_month - 1) / 3) * 3 + 3) - current_month) * 30) + (30 - current_day) + (1 - math.floor(current_hour / 24))
+	local next_season_in_rl_hours = math.floor(next_season_in_mume_days * 24 / 60)
+	local next_winter_in_mume_days = ((12 - current_month) * 30) + (30 - current_day) + (1 - math.floor(current_hour / 24))
+	local next_winter_in_rl_days = math.floor(math.floor(next_winter_in_mume_days * 24 / 60) / 24)
+	local next_winter_in_rl_hours = math.floor(next_winter_in_mume_days * 24 / 60) % 24
+	output = string.format("%s\nIt is currently %s, in %s, (%s).", output, current_state, current_month_name, months[current_month].season)
+	output = string.format("%s\nTime left until %s is less than %s tick%s", output, next_state, till_next_state, till_next_state ~= "1" and "s." or "!")
+	output = string.format("%s\n%s ends in %d mume day%s or %d real-life hour%s.", output, string.sub(months[current_month].season, -6), next_season_in_mume_days, next_season_in_mume_days ~= 1 and "s" or "", next_season_in_rl_hours, next_season_in_rl_hours ~= 1 and "s" or "")
+	output = string.format("%s\nNext winter starts in %d real-life day%s and %d hour%s.", output, next_winter_in_rl_days, next_winter_in_rl_days ~= 1 and "s" or "", next_winter_in_rl_hours, next_winter_in_rl_hours ~= 1 and "s" or "")
 	CallPlugin(screenReader, "sayNote", output)
 end
 
