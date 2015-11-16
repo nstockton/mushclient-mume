@@ -34,7 +34,7 @@
   <trigger
    enabled="y"
    group="mume_spell_timers"
-   match="^(?:A blue transparent wall slowly appears around you|Your magic armour is revitalized)\.$"
+   match="^(?:A blue transparent wall slowly appears around you|Your magic armour is revitalised)\.$"
    name="armour_up"
    regexp="y"
    send_to="12"
