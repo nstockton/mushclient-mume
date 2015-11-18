@@ -73,7 +73,7 @@ end
   <trigger
    enabled="y"
    group="mume_misc"
-   match="^(?P&lt;tag&gt;NAME|DESCRIPTION|PROMPT|TELL|SAY|NARRATE|PRAY|EMOTE):(?P&lt;line&gt;.*):(?P=tag)$"
+   match="^(?P&lt;tag&gt;NAME|DESCRIPTION|TELL|SAY|NARRATE|PRAY|EMOTE):(?P&lt;line&gt;.*):(?P=tag)$"
    name="remove_proxy_tags"
    omit_from_output="y"
    regexp="y"
@@ -81,6 +81,34 @@ end
    sequence="100"
   >
   <send>CallPlugin(screenReader, "sayNote", "%&lt;line&gt;")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="^PROMPT:(?P&lt;prompt&gt;(?P&lt;light&gt;[\@\*\!\)o])?(?P&lt;terrain&gt;[\#\(\[\+\.\%fO\~UW\:\=\&lt;])?(?P&lt;weather&gt;[\*\'\&quot;\~\=\-]{1,2})?(?P&lt;movement_flags&gt; [RrSsCcW]{1,4})?(?P&lt;hp&gt; HP\:\w+)?(?P&lt;mp&gt; Mana\:\w+)?(?P&lt;mv&gt; Move\:\w+)?(?P&lt;mount&gt; Mount\:\w+)?(?P&lt;fighting&gt; [^\:]+\:\w+)?(?P&lt;buffer&gt; [^\:]+\:\w+)?.*?&gt;):PROMPT$"
+   name="handle_prompt"
+   omit_from_output="y"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+local flags = string.strip(string.format("%s%s%s%s", string.match("%&lt;movement_flags&gt;", "[S]") and "Sneaking " or string.match("%&lt;movement_flags&gt;", "[s]") and "NoSneak " or "", string.match("%&lt;movement_flags&gt;", "[W]") and "Swimming " or "", string.match("%&lt;movement_flags&gt;", "[C]") and "Climbing " or string.match("%&lt;movement_flags&gt;", "[c]") and "Climbing safely " or "", string.match("%&lt;movement_flags&gt;", "[R]") and "Riding " or string.match("%&lt;movement_flags&gt;", "[r]") and "Ridden " or ""))
+last_prompt = {
+	["light"] = LIGHT_SYMBOLS["%&lt;light&gt;"] or "Unknown light",
+	["terrain"] = TERRAIN_SYMBOLS["%&lt;terrain&gt;"] or "Unknown terrain",
+	["flags"] = flags ~= "" and flags or "No movement flags",
+	["sneak"] = string.match("%&lt;movement_flags&gt;", "[S]") and "Sneaking" or string.match("%&lt;movement_flags&gt;", "[s]") and "NoSneak" or "Off",
+	["hp"] = string.split("%&lt;hp&gt;", ":")[2] or "Healthy",
+	["mp"] = string.split("%&lt;mp&gt;", ":")[2] or "Full",
+	["mv"] = string.format("%s %s", string.split("%&lt;mv&gt;", ":")[2] or "Rested", string.match("%&lt;movement_flags&gt;", "[R]") and (string.split("%&lt;mount&gt;", ":")[2] or "Rested") or "Not riding"),
+	["fighting"] = string.format("%s %s", string.split("%&lt;fighting&gt;", ":")[2] or "Unknown", "%&lt;fighting&gt;" ~= "" and string.strip(string.split("%&lt;fighting&gt;", ":")[1]) or "Not fighting"),
+	["buffer"] = string.format("%s %s", string.split("%&lt;buffer&gt;", ":")[2] or "Unknown", "%&lt;buffer&gt;" ~= "" and string.strip(string.split("%&lt;buffer&gt;", ":")[1]) or "No buffer")
+}
+if show_prompt then
+	Note("%&lt;prompt&gt;")
+end
+  </send>
   </trigger>
   <trigger
    enabled="y"
@@ -161,10 +189,20 @@ train all</send>
    enabled="y"
    group="mume_misc"
    match="Prompt set to None."
-   name="always_show_points_in_prompt"
+   name="always_show_prompt"
    sequence="100"
   >
-  <send>change prompt points</send>
+  <send>change prompt all</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="^(?:Prompt set to All|Your prompt will display twiddlers when you are busy)\.$"
+   name="keep_twiddlers_off"
+   sequence="100"
+   regexp="y"
+  >
+  <send>change prompt twiddlers</send>
   </trigger>
   <trigger
    enabled="y"
@@ -193,13 +231,24 @@ SendPkt(string.char(255, 253, 1))
 Send("change compact on")
 Send("change spam off")
 Send("change brief on")
-Send("change wordwrap off")</send>
+Send("change wordwrap off")
+Send("change prompt all")</send>
   </trigger>
 </triggers>
 
 <!--  Aliases  -->
 
 <aliases>
+  <alias
+   name="show_prompt"
+   match="showprompt"
+   enabled="y"
+   group="mume_misc"
+   send_to="12"
+   sequence="100"
+  >
+  <send>toggle_show_prompt()</send>
+  </alias>
   <alias
    name="drag_all"
    match="dragall"
@@ -371,9 +420,53 @@ else
 	country_codes = {}
 end
 
+TERRAIN_SYMBOLS = {
+	[":"] = "brush",
+	["O"] = "cavern",
+	["#"] = "city",
+	["."] = "field",
+	["f"] = "forest",
+	["("] = "hills",
+	["["] = "indoors",
+	["<"] = "mountains",
+	["W"] = "rapids",
+	["+"] = "road",
+	["%"] = "shallow water",
+	["="] = "tunnel",
+	["U"] = "under water",
+	["~"] = "water"
+}
+
+LIGHT_SYMBOLS = {
+	["@"] = "lit at",
+	["*"] = "sun light",
+	["!"] = "artificial light",
+	[")"] = "moon light",
+	["o"] = "darkness"
+}
+
 screenReader = "925cdd0331023d9f0b8f05a7"
+config = "d19a2f0a604c96b7318aa67f"
+return_code, show_prompt = CallPlugin(config, "get", "show_prompt")
 auto_drag = false
 auto_drag_counter = 1
+last_prompt = nil
+
+function toggle_show_prompt()
+	show_prompt = not show_prompt
+	CallPlugin(config, "set", "show_prompt", show_prompt)
+	CallPlugin(screenReader, "sayNote", string.format("Show prompt %s.", show_prompt and "on" or "off"), true)
+end
+
+function speak_prompt(key)
+	if not last_prompt then
+		CallPlugin(screenReader, "say", "No prompt", true)
+	elseif not last_prompt[key] then
+		CallPlugin(screenReader, "say", "Unknown", true)
+	else
+		CallPlugin(screenReader, "say", last_prompt[key], true)
+	end
+end
 
 ]]>
 </script>
