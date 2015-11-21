@@ -34,7 +34,7 @@
   <trigger
    enabled="y"
    group="mume_grouping"
-   match="^(?P&lt;player&gt;\w+) picks up a (?:pony|dales-pony|horse|warhorse|pack horse|trained horse|horse of the Rohirrim|brown donkey|mountain mule|hungry warg|brown wolf)(?: \(\w\))?\'s reins and starts riding (?:him|her|it)\.$"
+   match="^(?P&lt;player&gt;\w+)(?: \(\w+\))? picks up a (?:pony|dales-pony|horse|warhorse|pack horse|trained horse|horse of the Rohirrim|brown donkey|mountain mule|hungry warg|brown wolf)(?: \(\w+\))?\'s reins and starts riding (?:him|her|it)\.$"
    name="autoride"
    regexp="y"
    send_to="12"
@@ -45,7 +45,7 @@
   <trigger
    enabled="y"
    group="mume_grouping"
-   match="^(?P&lt;player&gt;\w+) panics\, and attempts to flee\.$"
+   match="^(?P&lt;player&gt;\w+)(?: \(\w+\))? panics\, and attempts to flee\.$"
    name="leader_flees"
    regexp="y"
    send_to="12"
@@ -56,7 +56,7 @@
   <trigger
    enabled="y"
    group="mume_grouping"
-   match="^(?P&lt;player&gt;\w+) reaches up and tries to climb the ladder\.$"
+   match="^(?P&lt;player&gt;\w+)(?: \(\w+\))? reaches up and tries to climb the ladder\.$"
    name="follow_leader_flets"
    regexp="y"
    send_to="12"
@@ -94,7 +94,7 @@ end</send>
   </trigger>
   <trigger
    name="autogroup1"
-   match="^(?P&lt;player&gt;\w+) (?:\(\w+\) )?raises (?:his|her|its) (?:hand|paw)\.$"
+   match="^(?P&lt;player&gt;\w+)(?: \(\w+\))? raises (?:his|her|its) (?:hand|paw)\.$"
    enabled="y"
    group="mume_grouping"
    regexp="y"
@@ -105,7 +105,7 @@ end</send>
   </trigger>
   <trigger
    name="autogroup2"
-   match="^(?P&lt;player&gt;\w+) (?:\(\w+\) )?is (?:a group leader\!|in another group already\.)$"
+   match="^(?P&lt;player&gt;\w+)(?: \(\w+\))? is (?:a group leader\!|in another group already\.)$"
    enabled="y"
    group="mume_grouping"
    regexp="y"
@@ -117,7 +117,7 @@ end</send>
   <trigger
    enabled="y"
    group="mume_grouping"
-   match="^(?:\w+ transfers group leadership to you\.|You leave the group\.|Group disbanded\.|What group\?\!|You are no longer a member of the group\!|You can\'t group with yourself\.)$"
+   match="^(?:\w+(?: \(\w+\))? transfers group leadership to you\.|You leave the group\.|Group disbanded\.|What group\?\!|You are no longer a member of the group\!|You can\'t group with yourself\.)$"
    name="undefine_leader1"
    regexp="y"
    send_to="12"
@@ -128,7 +128,7 @@ end</send>
   <trigger
    enabled="y"
    group="mume_grouping"
-   match="^(?P&lt;player&gt;\w+) disbands (?:his|her) group\.$"
+   match="^(?P&lt;player&gt;\w+)(?: \(\w+\))? disbands (?:his|her) group\.$"
    name="undefine_leader2"
    regexp="y"
    send_to="12"
@@ -139,7 +139,7 @@ end</send>
   <trigger
    enabled="y"
    group="mume_grouping"
-   match="^You are now a member of (?P&lt;player&gt;\w+)\'s group\.$"
+   match="^You are now a member of (?P&lt;player&gt;\w+)(?: \(\w+\))?\'s group\.$"
    name="define_leader1"
    regexp="y"
    send_to="12"
@@ -150,7 +150,7 @@ end</send>
   <trigger
    enabled="y"
    group="mume_grouping"
-   match="^You transfer group leadership to (?P&lt;player&gt;\w+)\.$"
+   match="^You transfer group leadership to (?P&lt;player&gt;\w+)(?: \(\w+\))?\.$"
    name="define_leader2"
    regexp="y"
    send_to="12"
@@ -172,7 +172,7 @@ end</send>
   <trigger
    enabled="y"
    group="mume_grouping"
-   match="^(?P&lt;player&gt;\w+) dismounts from a (?:pony|dales-pony|horse|warhorse|pack horse|trained horse|horse of the Rohirrim|brown donkey|mountain mule|hungry warg|brown wolf)(?: \(\w\))?\, and stops riding (?:him|her|it)\.$"
+   match="^(?P&lt;player&gt;\w+)(?: \(\w+\))? dismounts from a (?:pony|dales-pony|horse|warhorse|pack horse|trained horse|horse of the Rohirrim|brown donkey|mountain mule|hungry warg|brown wolf)(?: \(\w+\))?\, and stops riding (?:him|her|it)\.$"
    name="autolead"
    regexp="y"
    send_to="12"
