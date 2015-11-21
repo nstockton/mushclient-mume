@@ -97,8 +97,9 @@ if keyboard_layout == "dvorak" then
 	AcceleratorTo("alt+A", "CallPlugin(mume_misc, 'speak_prompt', 'mv')", sendto.script)
 	AcceleratorTo("alt+;", "CallPlugin(mume_misc, 'speak_prompt', 'light')", sendto.script)
 	AcceleratorTo("alt+Q", "CallPlugin(mume_misc, 'speak_prompt', 'terrain')", sendto.script)
-	AcceleratorTo("alt+J", "CallPlugin(mume_misc, 'speak_prompt', 'flags')", sendto.script)
-	AcceleratorTo("alt+K", "CallPlugin(mume_misc, 'speak_prompt', 'sneak')", sendto.script)
+	AcceleratorTo("alt+J", "CallPlugin(mume_misc, 'speak_prompt', 'last_fought')", sendto.script)
+	AcceleratorTo("alt+K", "CallPlugin(mume_misc, 'speak_prompt', 'flags')", sendto.script)
+	AcceleratorTo("alt+X", "CallPlugin(mume_misc, 'speak_prompt', 'sneak')", sendto.script)
 	AcceleratorTo("alt+P", "repeat_last_command()", sendto.script)
 else
 	Accelerator("Alt+I", "north")
@@ -115,8 +116,9 @@ else
 	AcceleratorTo("alt+A", "CallPlugin(mume_misc, 'speak_prompt', 'mv')", sendto.script)
 	AcceleratorTo("alt+Z", "CallPlugin(mume_misc, 'speak_prompt', 'light')", sendto.script)
 	AcceleratorTo("alt+X", "CallPlugin(mume_misc, 'speak_prompt', 'terrain')", sendto.script)
-	AcceleratorTo("alt+C", "CallPlugin(mume_misc, 'speak_prompt', 'flags')", sendto.script)
-	AcceleratorTo("alt+V", "CallPlugin(mume_misc, 'speak_prompt', 'sneak')", sendto.script)
+	AcceleratorTo("alt+C", "CallPlugin(mume_misc, 'speak_prompt', 'last_fought')", sendto.script)
+	AcceleratorTo("alt+V", "CallPlugin(mume_misc, 'speak_prompt', 'flags')", sendto.script)
+	AcceleratorTo("alt+B", "CallPlugin(mume_misc, 'speak_prompt', 'sneak')", sendto.script)
 	AcceleratorTo("alt+R", "repeat_last_command()", sendto.script)
 end
 
