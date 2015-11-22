@@ -103,9 +103,11 @@ last_prompt = {
 	["mp"] = string.split("%&lt;mp&gt;", ":")[2] or "Full",
 	["mv"] = string.format("%s %s", string.split("%&lt;mv&gt;", ":")[2] or "Rested", string.match("%&lt;movement_flags&gt;", "[R]") and (string.split("%&lt;mount&gt;", ":")[2] or "Rested") or "Not riding"),
 	["fighting"] = string.format("%s %s", string.split("%&lt;fighting&gt;", ":")[2] or "Unknown", "%&lt;fighting&gt;" ~= "" and string.strip(string.split("%&lt;fighting&gt;", ":")[1]) or "Not fighting"),
-	["last_fought"] = last_prompt and last_prompt["fighting"] ~= "Unknown Not fighting" and string.format("%s last fought", last_prompt["fighting"]) or "Unknown last fought",
 	["buffer"] = string.format("%s %s", string.split("%&lt;buffer&gt;", ":")[2] or "Unknown", "%&lt;buffer&gt;" ~= "" and string.strip(string.split("%&lt;buffer&gt;", ":")[1]) or "No buffer")
 }
+if last_prompt["fighting"] ~= "Unknown Not fighting" then
+	last_fought = string.format("%s last fought", last_prompt["fighting"])
+end
 if show_prompt then
 	Note("%&lt;prompt&gt;")
 end
@@ -462,6 +464,7 @@ return_code, show_prompt = CallPlugin(config, "get", "show_prompt")
 auto_drag = false
 auto_drag_counter = 1
 last_prompt = nil
+last_fought = "Unknown last fought"
 
 function toggle_show_prompt()
 	show_prompt = not show_prompt
@@ -472,6 +475,8 @@ end
 function speak_prompt(key)
 	if not last_prompt then
 		CallPlugin(screenReader, "say", "No prompt", true)
+	elseif key == "last_fought" then
+		CallPlugin(screenReader, "say", last_fought, true)
 	elseif not last_prompt[key] then
 		CallPlugin(screenReader, "say", "Unknown", true)
 	else
