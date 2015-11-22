@@ -66,9 +66,10 @@ Send("info XPCOUNTER: %x %t %X %T.")</send>
   <trigger
    enabled="y"
    group="mume_xp_counter"
-   match="You receive your share of experience."
+   match="^(?:You receive your share of experience|As the roots stop moving, they collapse into a large heap, completely blocking the exit down)\.$"
    name="gained_xp"
    omit_from_output="y"
+   regexp="y"
    send_to="13"
    sequence="100"
   >
