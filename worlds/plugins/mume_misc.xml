@@ -251,6 +251,16 @@ Send("change prompt all")</send>
   <send>toggle_show_prompt()</send>
   </alias>
   <alias
+   name="show_level"
+   match="lev"
+   enabled="y"
+   group="mume_misc"
+   send_to="12"
+   sequence="100"
+  >
+  <send>Send("info %l")</send>
+  </alias>
+  <alias
    name="drag_all"
    match="dragall"
    enabled="y"
