@@ -46,7 +46,7 @@
   <trigger
    enabled="y"
    group="mume_misc"
-   match="^|A great\, dark spider burdens your movement wrapping you layer after layer\!$"
+   match="^A great\, dark spider burdens your movement wrapping you layer after layer\!$"
    name="bm_spiders2"
    omit_from_output="y"
    regexp="y"
