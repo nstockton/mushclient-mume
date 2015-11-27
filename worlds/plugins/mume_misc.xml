@@ -34,6 +34,65 @@
   <trigger
    enabled="y"
    group="mume_misc"
+   match="^A great\, dark spider quickly begins to weave a tight\, sticky web around your body\!$"
+   name="bm_spiders1"
+   omit_from_output="y"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>CallPlugin(screenReader, "sayNote", "Flee if solo!", true)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="^|A great\, dark spider burdens your movement wrapping you layer after layer\!$"
+   name="bm_spiders2"
+   omit_from_output="y"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>CallPlugin(screenReader, "sayNote", "Flee if grouped!", true)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="^You stagger for your balance as a great\, dark spider wraps the sticky cords faster and faster around you\!$"
+   name="bm_spiders3"
+   omit_from_output="y"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>CallPlugin(screenReader, "sayNote", "Narrate for help!", true)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="^After some struggle you remove the last web on you\.$"
+   name="bm_spiders4"
+   omit_from_output="y"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>CallPlugin(screenReader, "sayNote", "Web removed!", true)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="^There is an old street\-lamp on the border of the street\.$"
+   name="gag_street_lamps"
+   omit_from_output="y"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
    match="^(?:You grasp the corpse and start dragging it\.|You are already dragging it\!)$"
    name="auto_drag_next"
    omit_from_output="y"
