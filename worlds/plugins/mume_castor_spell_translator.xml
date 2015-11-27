@@ -86,13 +86,13 @@
    enabled="y"
    group="mume_castor_spell_translator"
    match="^Nothing seems to happen\.$"
-   name="shorten_fail_casting_message"
+   name="shorten_fail_message"
    omit_from_output="y"
    regexp="y"
    send_to="12"
    sequence="100"
   >
-  <send>	CallPlugin(screenReader, "sayNote", "Failed cast!", casting_interrupt == true)
+  <send>	CallPlugin(screenReader, "sayNote", "Nothing happens!", casting_interrupt == true)
   </send>
   </trigger>
 </triggers>
