@@ -80,7 +80,7 @@
   <trigger
    enabled="y"
    group="mume_spell_timers"
-   match="^(?:You feel protected|Your protection is revitalized)\.$"
+   match="^(?:You feel protected|Your protection is revitalised)\.$"
    name="shield_up"
    regexp="y"
    send_to="12"
