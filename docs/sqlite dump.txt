@@ -1,0 +1,2 @@
+sqlite3 mushclient_prefs.sqlite .dump >mushclient_prefs.txt
+sqlite3 newmushclient_prefs.sqlite <mushclient_prefs.txt
