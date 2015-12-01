@@ -16,3 +16,6 @@ luac.out
 # Precompiled Headers
 *.gch
 *.pch
+
+# Misc Files
+mushclient_prefs.sqlite
