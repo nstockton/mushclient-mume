@@ -175,6 +175,18 @@ end
   <trigger
    enabled="y"
    group="mume_misc"
+   match="^(?:ENEMY:)?(?P&lt;player&gt;.+?)(?::ENEMY)? joins (?:ENEMY:)?(?P&lt;tank&gt;.+?)(?::ENEMY)?'s fight\.$"
+   name="shorten_assists"
+   omit_from_output="y"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>CallPlugin(screenReader, "sayNote", "%&lt;player&gt; assists %&lt;tank&gt;!")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
    match="^(?P&lt;first&gt;.*)ENEMY:(?P&lt;second&gt;.+):ENEMY(?P&lt;third&gt;.*)$"
    name="remove_enemy_tag"
    omit_from_output="y"
@@ -195,6 +207,18 @@ end
    sequence="80"
   >
   <send>-- We're handling the text substitution in another plugin.</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="^(?:ENEMY:)?(?P&lt;someone&gt;.+?)(?::ENEMY)? leaves (?P&lt;direction&gt;north|east|south|west|up|down)\.$"
+   name="shorten_leaves_message"
+   omit_from_output="y"
+   regexp="y"
+   send_to="12"
+   sequence="80"
+  >
+  <send>CallPlugin(screenReader, "sayNote", "%&lt;direction&gt; %&lt;someone&gt;")</send>
   </trigger>
   <trigger
    enabled="y"
