@@ -34,67 +34,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="Some small cloves are lying here"
-   omit_from_output="y"
-   send_to="12"
-   sequence="100"
-  >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - [Cloves, 2/500]")</send>
-  </trigger>
-  <trigger
-   enabled="y"
-   group="mume_herb_substitutions"
-   match="Some delicious wild strawberries grow on the ground"
-   omit_from_output="y"
-   send_to="12"
-   sequence="100"
-  >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - [Strawberries, 20/10]")</send>
-  </trigger>
-  <trigger
-   enabled="y"
-   group="mume_herb_substitutions"
-   match="Some orange-red blossoms grow amid grey-green foliage"
-   omit_from_output="y"
-   send_to="12"
-   sequence="100"
-  >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - [Poppy (Moon), 10/4000]")</send>
-  </trigger>
-  <trigger
-   enabled="y"
-   group="mume_herb_substitutions"
-   match="A detached white rose is lying here"
-   omit_from_output="y"
-   send_to="12"
-   sequence="100"
-  >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - [White rose, 2/50, nosell]")</send>
-  </trigger>
-  <trigger
-   enabled="y"
-   group="mume_herb_substitutions"
-   match="A blooming water-lily floats on the surface of the water"
-   omit_from_output="y"
-   send_to="12"
-   sequence="100"
-  >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - [Water-lily, 10/150]")</send>
-  </trigger>
-  <trigger
-   enabled="y"
-   group="mume_herb_substitutions"
-   match="A small flower grows here, with a purple bloom and wide leaves"
-   omit_from_output="y"
-   send_to="12"
-   sequence="100"
-  >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - [Cardamom, 10/900]")</send>
-  </trigger>
-  <trigger
-   enabled="y"
-   group="mume_herb_substitutions"
-   match="Prickly, white-stemmed plants, with blue flower heads grow in abundance"
+   match="Prickly, white-stemned plants, with blue flower heads grow in abundance."
    omit_from_output="y"
    send_to="12"
    sequence="100"
@@ -104,7 +44,87 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="Yellow flowers, with grey-green foliage, grow in clusters here"
+   match="A short plant, with lance-shaped leaves, waves its purple petals in the breeze."
+   omit_from_output="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>CallPlugin(screenReader, "sayNote", "%0 - [Coneflower]")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_herb_substitutions"
+   match="Some small cloves are lying here."
+   omit_from_output="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>CallPlugin(screenReader, "sayNote", "%0 - [Cloves, 2/500]")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_herb_substitutions"
+   match="Some delicious wild strawberries grow on the ground."
+   omit_from_output="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>CallPlugin(screenReader, "sayNote", "%0 - [Strawberries, 20/10]")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_herb_substitutions"
+   match="Some orange-red blossoms grow amid grey-green foliage."
+   omit_from_output="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>CallPlugin(screenReader, "sayNote", "%0 - [Poppy (Moon), 10/4000]")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_herb_substitutions"
+   match="A detached white rose is lying here."
+   omit_from_output="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>CallPlugin(screenReader, "sayNote", "%0 - [White rose, 2/50, nosell]")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_herb_substitutions"
+   match="A blooming water-lily floats on the surface of the water."
+   omit_from_output="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>CallPlugin(screenReader, "sayNote", "%0 - [Water-lily, 10/150]")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_herb_substitutions"
+   match="A small flower grows here, with a purple bloom and wide leaves."
+   omit_from_output="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>CallPlugin(screenReader, "sayNote", "%0 - [Cardamom, 10/900]")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_herb_substitutions"
+   match="Prickly, white-stemmed plants, with blue flower heads grow in abundance."
+   omit_from_output="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>CallPlugin(screenReader, "sayNote", "%0 - [Thistles, 10/1, nosell]")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_herb_substitutions"
+   match="Yellow flowers, with grey-green foliage, grow in clusters here."
    omit_from_output="y"
    send_to="12"
    sequence="100"
@@ -114,8 +134,9 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="A tall silvery plant grows here, surrounded by mist."
+   match="^(?:A tall silvery plant grows here\, surrounded by mist|A sad\-looking misty plant is lying on the ground\, its stem broken off)\.$"
    omit_from_output="y"
+   regexp="y"
    send_to="12"
    sequence="100"
   >
@@ -124,7 +145,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="A small cluster of clover grows here"
+   match="A small cluster of clover grows here."
    omit_from_output="y"
    send_to="12"
    sequence="100"
@@ -134,7 +155,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="A detached red rose is lying here"
+   match="A detached red rose is lying here."
    omit_from_output="y"
    send_to="12"
    sequence="100"
@@ -144,7 +165,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="A grouping of soft pink flowers radiates a sweet fragrance"
+   match="A grouping of soft pink flowers radiates a sweet fragrance."
    omit_from_output="y"
    send_to="12"
    sequence="100"
@@ -154,7 +175,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="A band of small flowers is lying here"
+   match="A band of small flowers is lying here."
    omit_from_output="y"
    send_to="12"
    sequence="100"
@@ -164,7 +185,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="A tall plant grows here, with grey-green leaves and grey flowers"
+   match="A tall plant grows here, with grey-green leaves and grey flowers."
    omit_from_output="y"
    send_to="12"
    sequence="100"
@@ -174,7 +195,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="A sturdy plant grows to a height of almost a yard"
+   match="A sturdy plant grows to a height of almost a yard."
    omit_from_output="y"
    send_to="12"
    sequence="100"
@@ -184,7 +205,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="A dark green, foul-smelling shrub grows to about a foot in height"
+   match="A dark green, foul-smelling shrub grows to about a foot in height."
    omit_from_output="y"
    send_to="12"
    sequence="100"
@@ -194,7 +215,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="A large shrub grows here, filling the air with a heavy scent"
+   match="A large shrub grows here, filling the air with a heavy scent."
    omit_from_output="y"
    send_to="12"
    sequence="100"
@@ -204,7 +225,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="A long brown bean, emitting a pleasant scent, is here"
+   match="A long brown bean, emitting a pleasant scent, is here."
    omit_from_output="y"
    send_to="12"
    sequence="100"
@@ -214,7 +235,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="A cluster of dark green, feathery fronds flourishes in the shade"
+   match="A cluster of dark green, feathery fronds flourishes in the shade."
    omit_from_output="y"
    send_to="12"
    sequence="100"
@@ -224,7 +245,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="A large shrub grows here, its branches loosely spreading"
+   match="A large shrub grows here, its branches loosely spreading."
    omit_from_output="y"
    send_to="12"
    sequence="100"
@@ -234,7 +255,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="A small plant grows here, with long, pointed leaves and flowers at its top"
+   match="A small plant grows here, with long, pointed leaves and flowers at its top."
    omit_from_output="y"
    send_to="12"
    sequence="100"
@@ -244,7 +265,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="A large thorny branched shrub is growing here"
+   match="A large thorny branched shrub is growing here."
    omit_from_output="y"
    send_to="12"
    sequence="100"
@@ -254,7 +275,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="A small tincture of oil has been placed on the ground"
+   match="A small tincture of oil has been placed on the ground."
    omit_from_output="y"
    send_to="12"
    sequence="100"
@@ -264,7 +285,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="Clusters of slender stems and tall leaves thrive in the mud and shallows"
+   match="Clusters of slender stems and tall leaves thrive in the mud and shallows."
    omit_from_output="y"
    send_to="12"
    sequence="100"
@@ -274,7 +295,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="A man's-waist high evergreen shrub grows here, with bright green branches"
+   match="A man's-waist high evergreen shrub grows here, with bright green branches."
    omit_from_output="y"
    send_to="12"
    sequence="100"
@@ -284,7 +305,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="A cluster of white star-shaped forget-me-nots fluorish here in reminiscence"
+   match="A cluster of white star-shaped forget-me-nots fluorish here in reminiscence."
    omit_from_output="y"
    send_to="12"
    sequence="100"
@@ -294,7 +315,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="Delicate golden blooms adorn the ground like a cascade of stars"
+   match="Delicate golden blooms adorn the ground like a cascade of stars."
    omit_from_output="y"
    send_to="12"
    sequence="100"
@@ -304,7 +325,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="A short evergreen plant, with slightly bluish needles, grows here"
+   match="A short evergreen plant, with slightly bluish needles, grows here."
    omit_from_output="y"
    send_to="12"
    sequence="100"
@@ -314,7 +335,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="A shrub with maple-like leaves is growing here"
+   match="A shrub with maple-like leaves is growing here."
    omit_from_output="y"
    send_to="12"
    sequence="100"
@@ -324,7 +345,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="A slender plant, with white flowers at the top, grows here"
+   match="A slender plant, with white flowers at the top, grows here."
    omit_from_output="y"
    send_to="12"
    sequence="100"
@@ -334,7 +355,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="An orchid of light violet petals blossoms nearby"
+   match="An orchid of light violet petals blossoms nearby."
    omit_from_output="y"
    send_to="12"
    sequence="100"
@@ -344,7 +365,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="A bushy plant grows here, with tall clusters of yellow flowers"
+   match="A bushy plant grows here, with tall clusters of yellow flowers."
    omit_from_output="y"
    send_to="12"
    sequence="100"
@@ -354,7 +375,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="A slender plant grows here, a single cluster of flowers atop its narrow stem"
+   match="A slender plant grows here, a single cluster of flowers atop its narrow stem."
    omit_from_output="y"
    send_to="12"
    sequence="100"
@@ -364,7 +385,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="A small, sickly green mushroom grows here"
+   match="A small, sickly green mushroom grows here."
    omit_from_output="y"
    send_to="12"
    sequence="100"
@@ -374,7 +395,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="A woody evergreen plant grows here, with many stems reaching upward"
+   match="A woody evergreen plant grows here, with many stems reaching upward."
    omit_from_output="y"
    send_to="12"
    sequence="100"
@@ -384,7 +405,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="A bright green holly bush is growing here"
+   match="A bright green holly bush is growing here."
    omit_from_output="y"
    send_to="12"
    sequence="100"
@@ -394,7 +415,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="A small pile of pungent red powder lies here"
+   match="A small pile of pungent red powder lies here."
    omit_from_output="y"
    send_to="12"
    sequence="100"
@@ -404,7 +425,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="Several blooms of snow-white and palest green cover the ground"
+   match="Several blooms of snow-white and palest green cover the ground."
    omit_from_output="y"
    send_to="12"
    sequence="100"
@@ -414,7 +435,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="A low shrub with bright green, oblong leaves is growing here"
+   match="A low shrub with bright green, oblong leaves is growing here."
    omit_from_output="y"
    send_to="12"
    sequence="100"
@@ -424,7 +445,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="A thin, hairy plant, with small, oval leaves, grows here"
+   match="A thin, hairy plant, with small, oval leaves, grows here."
    omit_from_output="y"
    send_to="12"
    sequence="100"
@@ -444,7 +465,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="A patch of moss grows here on a wet, flat stone"
+   match="A patch of moss grows here on a wet, flat stone."
    omit_from_output="y"
    send_to="12"
    sequence="100"
@@ -454,7 +475,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="A large shrub covered with dark violet berries grows here"
+   match="A large shrub covered with dark violet berries grows here."
    omit_from_output="y"
    send_to="12"
    sequence="100"
@@ -464,7 +485,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="A bag of cinnamon lies here"
+   match="A bag of cinnamon lies here."
    omit_from_output="y"
    send_to="12"
    sequence="100"
@@ -474,7 +495,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="A flowering plant grows here, its fern-like foliage dancing in the breeze"
+   match="A flowering plant grows here, its fern-like foliage dancing in the breeze."
    omit_from_output="y"
    send_to="12"
    sequence="100"
@@ -484,7 +505,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="A waist-high evergreen shrub grows here, with thick, reaching branches"
+   match="A waist-high evergreen shrub grows here, with thick, reaching branches."
    omit_from_output="y"
    send_to="12"
    sequence="100"
@@ -494,7 +515,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="A small evergreen plant grows here, its woody stems reaching two feet"
+   match="A small evergreen plant grows here, its woody stems reaching two feet."
    omit_from_output="y"
    send_to="12"
    sequence="100"
@@ -504,7 +525,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="A tall, stately, dome-topped tree grows here"
+   match="A tall, stately, dome-topped tree grows here."
    omit_from_output="y"
    send_to="12"
    sequence="100"
@@ -514,7 +535,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="A low, many-branched shrub covers the ground here"
+   match="A low, many-branched shrub covers the ground here."
    omit_from_output="y"
    send_to="12"
    sequence="100"
@@ -524,7 +545,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="A tall plant with a perfectly smooth stem gracefully marks the landscape"
+   match="A tall plant with a perfectly smooth stem gracefully marks the landscape."
    omit_from_output="y"
    send_to="12"
    sequence="100"
@@ -534,7 +555,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="A small and tough weed grows here"
+   match="A small and tough weed grows here."
    omit_from_output="y"
    send_to="12"
    sequence="100"
@@ -544,7 +565,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="A dense carpet of blue flowers dip their heads in the breeze"
+   match="A dense carpet of blue flowers dip their heads in the breeze."
    omit_from_output="y"
    send_to="12"
    sequence="100"
@@ -554,7 +575,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="A clean fragrance drifts up from a thick clump of leaves"
+   match="A clean fragrance drifts up from a thick clump of leaves."
    omit_from_output="y"
    send_to="12"
    sequence="100"
@@ -564,7 +585,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="Some plump of juicy grapes are growing here"
+   match="Some plump of juicy grapes are growing here."
    omit_from_output="y"
    send_to="12"
    sequence="100"
@@ -574,7 +595,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="A bright red mushroom is growing here"
+   match="A bright red mushroom is growing here."
    omit_from_output="y"
    send_to="12"
    sequence="100"
@@ -584,7 +605,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="Some dried mauve petals can be found here"
+   match="Some dried mauve petals can be found here."
    omit_from_output="y"
    send_to="12"
    sequence="100"
@@ -594,7 +615,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="A holly bush with dark green leaves is growing here"
+   match="A holly bush with dark green leaves is growing here."
    omit_from_output="y"
    send_to="12"
    sequence="100"
@@ -604,7 +625,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="A slender plant grows here, with clusters of tiny pink flowers"
+   match="A slender plant grows here, with clusters of tiny pink flowers."
    omit_from_output="y"
    send_to="12"
    sequence="100"
@@ -614,7 +635,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="A beautiful, ivory coloured rose with a tint of crimson is blossoming here"
+   match="A beautiful, ivory coloured rose with a tint of crimson is blossoming here."
    omit_from_output="y"
    send_to="12"
    sequence="100"
