@@ -27,7 +27,6 @@ Other scripts can speak stuff by doing:
 </description>
 </plugin>
 
-<!--  Triggers  -->
 <aliases>
   <alias
    match="sapi on"
@@ -40,7 +39,6 @@ Other scripts can speak stuff by doing:
    group="speech"
   >
   </alias>
-
   <alias
    match="sapi off"
    enabled="n"
@@ -52,8 +50,7 @@ Other scripts can speak stuff by doing:
    group="speech"
   >
   </alias>
-    
- <alias
+     <alias
    match="sapi skip"
    enabled="n"
    omit_from_log="y"
@@ -63,80 +60,72 @@ Other scripts can speak stuff by doing:
    group="speech"
   >
   </alias>
-    
-</aliases>
-
-<triggers>
-</triggers>
+    </aliases>
 
 <!--  Script  -->
-
 
 <script>
 <![CDATA[
 
 -- turn on speaking
 function speak_on (name, line, wildcards)
-  speak = true
-  talk:Speak ("Sapi auto speak now on.", 1)
+	speak = true
+	talk:Speak ("Sapi auto speak now on.", 1)
 end -- function speak_on
 
 -- turn off speaking
 function speak_off (name, line, wildcards)
-  speak = false
-  talk:Speak ("Sapi auto speak now off.",1)
+	speak = false
+	talk:Speak ("Sapi auto speak now off.",1)
 end -- function speak_off
 
 -- skip a sentence
 function speak_skip (name, line, wildcards)
-  talk:Skip ("Sentence", 1)
+	talk:Skip ("Sentence", 1)
 end -- function speak_skip
 
 -- installation
 function OnPluginInstall ()
-
-  -- load Lua COM
-  require "luacom"
-  
-  -- Instantiate a SAPI voice obejct
-  talk = assert (luacom.CreateObject ("SAPI.SpVoice"), "cannot open SAPI")
-  
-  -- Method call
-  talk:Speak ("SAPI Plug-in installed and is ready.", 1)
-
-  speak = true
-  EnableGroup ("speech", true)
-  
+	-- load Lua COM
+	require "luacom"
+	-- Instantiate a SAPI voice obejct
+	talk = assert (luacom.CreateObject ("SAPI.SpVoice"), "cannot open SAPI")
+	-- Method call
+	talk:Speak ("SAPI Plug-in installed and is ready.", 1)
+	speak = true
+	EnableGroup ("speech", true)
 end -- function OnPluginInstall
 
 -- here to draw the screen
 function OnPluginScreendraw (t, log, line)
-
-  -- check loaded
-  if not talk then
-    return
-  end -- if not installed
-
-  if (t == 0 or t == 1) and speak then
-     talk:Speak (line, 1)
-  end -- if
-  
-end -- function
+	-- check loaded
+	if not talk then
+		return
+	end -- if not installed
+	if (t == 0 or t == 1) and speak then
+		talk:Speak (line, 1)
+	end -- if
+  end -- function
   
 -- Speak from other scripts
 -- eg. CallPlugin ("463242566069ebfd1b379ec1", "say", "What to say")
-
-function say (what)
-
-  -- check loaded
-  if not talk then
-    return false  -- failure
-  end -- if not installed
-
-  talk:Speak (what, 1)
-  
-  return true  -- OK
+function say(text, interrupt)
+	-- check loaded
+	if not talk then
+		return false  -- failure
+	end -- if not installed
+	talk:Speak (text or "", interrupt and interrupt ~= 0 and 3 or 1)
+	return true  -- OK
 end -- function say
+
+function silence()
+	-- check loaded
+	if not talk then
+		return false  -- failure
+	end -- if not installed
+	talk:Speak ("", 3)
+	return true  -- OK
+end -- function silence
 
 ]]>
 </script>
