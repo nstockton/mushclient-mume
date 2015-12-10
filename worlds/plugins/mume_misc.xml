@@ -34,6 +34,17 @@
   <trigger
    enabled="y"
    group="mume_misc"
+   match="^A citizen mercenary (?:\(\w+\) )?(?:snuffs|lights) a lantern\.$"
+   name="omit_merc_lanterns"
+   omit_from_output="y"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
    match="^A great\, dark spider quickly begins to weave a tight\, sticky web around your body\!$"
    name="bm_spiders1"
    omit_from_output="y"
