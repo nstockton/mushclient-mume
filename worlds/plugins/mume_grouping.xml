@@ -222,7 +222,7 @@ end</send>
    send_to="12"
    sequence="100"
   >
-  <send>local name = string.strip("%&lt;name&gt;")
+  <send>local name = string.capitalize(string.strip("%&lt;name&gt;"))
 if name == "clear" then
 	leader = nil
 	CallPlugin(screenReader, "sayNote", "Leader cleared.")
