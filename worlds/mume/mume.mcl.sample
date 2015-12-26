@@ -24,7 +24,7 @@
    script_editor="notepad"
    script_editor_argument="%file"
    script_language="Lua"
-   script_prefix="/"
+   script_prefix="|"
    site="127.0.0.1"
    spam_message="look"
    speed_walk_prefix="##"
