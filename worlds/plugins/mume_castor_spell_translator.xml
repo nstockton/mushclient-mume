@@ -34,7 +34,7 @@
   <trigger
    enabled="y"
    group="mume_castor_spell_translator"
-   match="^(?:ENEMY:)?(?P&lt;castor&gt;.+?)(?::ENEMY)? utters the word[s]? \'(?P&lt;spell&gt;[a-z ]+)\'$"
+   match="^(?P&lt;castor&gt;.+?) utters the word[s]? \'(?P&lt;spell&gt;[a-z ]+)\'$"
    name="translate_spell"
    omit_from_output="y"
    regexp="y"
@@ -46,7 +46,7 @@
   <trigger
    enabled="y"
    group="mume_castor_spell_translator"
-   match="^(?:ENEMY:)?(?P&lt;castor&gt;.+?)(?::ENEMY)? begins some strange incantations\.\.\.$"
+   match="^(?P&lt;castor&gt;.+?) begins some strange incantations\.\.\.$"
    name="shorten_casting_message"
    omit_from_output="y"
    regexp="y"
@@ -59,7 +59,7 @@
   <trigger
    enabled="y"
    group="mume_castor_spell_translator"
-   match="^As you call upon Elbereth\, (?:ENEMY:)?(?P&lt;target&gt;.+?)(?::ENEMY)? shivers in pain\.$"
+   match="^As you call upon Elbereth\, (?P&lt;target&gt;.+?) shivers in pain\.$"
    name="shorten_dispel_message"
    omit_from_output="y"
    regexp="y"
@@ -85,7 +85,7 @@
   <trigger
    enabled="y"
    group="mume_castor_spell_translator"
-   match="^(?:ENEMY:)?(?P&lt;target&gt;.+?)(?::ENEMY)? seems to be blinded\!$"
+   match="^(?P&lt;target&gt;.+?) seems to be blinded\!$"
    name="shorten_blinded_message"
    omit_from_output="y"
    regexp="y"

@@ -49,46 +49,26 @@
   </alias>
 </aliases>
 
-<!--  Triggers  -->
-
-<triggers>
-  <trigger
-   enabled="y"
-   group="mume_path_walker"
-   keep_evaluating="y"
-   match="^NAME:(?P&lt;room_name&gt;[\w ,'-]+):NAME$"
-   name="capture_room_name"
-   omit_from_output="y"
-   regexp="y"
-   send_to="12"
-   sequence="100"
-  >
-  <send>setRoomName("%&lt;room_name&gt;")</send>
-  </trigger>
-  <trigger
-   enabled="y"
-   group="mume_path_walker"
-   match="^Exits\: (.+)"
-   name="analyze_exits"
-   regexp="y"
-   send_to="12"
-   sequence="100"
-  >
-  <send>if pathWalkEnabled then pathWalkNext("%1") end</send>
-  </trigger>
-</triggers>
 
 <script>
 <![CDATA[
 require("mystdlib")
 
 screenReader = "925cdd0331023d9f0b8f05a7"
+xml_parser = "74834d3734b2c8a3a9da4d18"
 roomName = ""
 pathWalkEnabled = false
 lastDirection = ""
 
-function setRoomName(name)
-	roomName = StripANSI(name)
+function OnPluginBroadcast (msg, id, name, text)
+	if id == xml_parser and name == "mume_xml_parser" and msg == 1 then
+		local return_code
+		return_code, roomName = CallPlugin(xml_parser, "get", "name")
+		if pathWalkEnabled then
+			local return_code, exits_line = CallPlugin(xml_parser, "get", "exits")
+			pathWalkNext(exits_line)
+		end
+	end
 end
 
 function pathWalkNext(line)

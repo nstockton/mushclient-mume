@@ -34,11 +34,10 @@
   <trigger
    enabled="y"
    group="mume_sounds"
-   match="^ENEMY:\*.+(?P&lt;player&gt;Orc|Troll|Man|Woman|Elf|Half-Elf|Dwarf|Hobbit|Bear|Numenorean|Númenórean)\*:ENEMY.*?(?P&lt;action&gt;standing|sitting|resting|sleeping|fighting|riding|nocks a missile|begins some strange|arrived|leaves).+?((?P&lt;direction&gt;north|south|east|west|up|down|above|below|hiding place).*)?$"
+   match="^\*.+(?P&lt;player&gt;Orc|Troll|Man|Woman|Elf|Half-Elf|Dwarf|Hobbit|Bear|Numenorean|Númenórean)\*.*?(?P&lt;action&gt;standing|sitting|resting|sleeping|fighting|riding|nocks a missile|begins some strange|arrived|leaves).+?((?P&lt;direction&gt;north|south|east|west|up|down|above|below|hiding place).*)?$"
    name="pk_action_sounds"
-   omit_from_output="y"
+   omit_from_output="n"
    regexp="y"
-   keep_evaluating="y"
    send_to="12"
    sequence="100"
   >
@@ -100,6 +99,13 @@ end
 
 <script>
 <![CDATA[
+xml_parser = "74834d3734b2c8a3a9da4d18"
+
+function OnPluginBroadcast (msg, id, name, text)
+	if id == xml_parser and name == "mume_xml_parser" and msg == 2 and text ~= "" then
+		-- PlaySound(8, string.format("%ssounds/exits/%s.wav", GetInfo(67), text), false, 0, 0)
+	end
+end
 
 function OnPluginInstall()
 	SetOption("play_sounds_in_background", 1)
