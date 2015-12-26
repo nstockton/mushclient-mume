@@ -270,6 +270,23 @@ Send("change prompt all")</send>
 
 <aliases>
   <alias
+   name="send_to_angband"
+   match="/*"
+   enabled="y"
+   group="mume_misc"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+local w = GetWorldById(angband)
+if w then
+	Execute(w, "%1")
+else
+	CallPlugin(screenReader, "sayNote", "Angband not open!")
+end
+  </send>
+  </alias>
+  <alias
    name="show_prompt"
    match="showprompt"
    enabled="y"
@@ -490,6 +507,7 @@ LIGHT_SYMBOLS = {
 screenReader = "925cdd0331023d9f0b8f05a7"
 config = "d19a2f0a604c96b7318aa67f"
 xml_parser = "74834d3734b2c8a3a9da4d18"
+angband = "6ca103daa7e3465230ea22d9"
 return_code, show_prompt = CallPlugin(config, "get", "show_prompt")
 auto_drag = false
 auto_drag_counter = 1
