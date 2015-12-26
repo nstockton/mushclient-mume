@@ -38,9 +38,8 @@
    name="log_emotes"
    omit_from_output="y"
    regexp="y"
-   keep_evaluating="y"
    send_to="12"
-   sequence="100"
+   sequence="80"
   >
   <send>communicationAdd("say", "%&lt;player&gt;", StripANSI("%&lt;line&gt;"))</send>
   </trigger>
@@ -51,11 +50,22 @@
    name="log_channels"
    omit_from_output="y"
    regexp="y"
-   keep_evaluating="y"
+   send_to="12"
+   sequence="80"
+  >
+  <send>communicationAdd(string.lower("%&lt;channel&gt;"), "%&lt;player&gt;", StripANSI("%&lt;line&gt;"))</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_communication"
+   match="^(?P&lt;channel&gt;TELL|SAY|NARRATE|PRAY|EMOTE):(?P&lt;line&gt;.+):(?P=channel)$"
+   name="print_channels"
+   omit_from_output="y"
+   regexp="y"
    send_to="12"
    sequence="100"
   >
-  <send>communicationAdd(string.lower("%&lt;channel&gt;"), "%&lt;player&gt;", StripANSI("%&lt;line&gt;"))</send>
+  <send>CallPlugin(screenReader, "sayNote", StripANSI("%&lt;line&gt;"))</send>
   </trigger>
 </triggers>
 
@@ -180,6 +190,7 @@ IGNORE_LIST = {
 communicationReplyTo = nil
 
 function communicationAdd(channel, player, line)
+	CallPlugin(screenReader, "sayNote", line)
 	if not IGNORE_LIST[player] then
 		if channel == "tell" then
 			if line:match("^.- tells the group '.+'$") then

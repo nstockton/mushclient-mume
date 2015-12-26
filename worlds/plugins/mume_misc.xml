@@ -143,50 +143,7 @@ end
   <trigger
    enabled="y"
    group="mume_misc"
-   match="^(?P&lt;tag&gt;NAME|DESCRIPTION|TELL|SAY|NARRATE|PRAY|EMOTE):(?P&lt;line&gt;.*):(?P=tag)$"
-   name="remove_proxy_tags"
-   omit_from_output="y"
-   regexp="y"
-   send_to="12"
-   sequence="100"
-  >
-  <send>CallPlugin(screenReader, "sayNote", "%&lt;line&gt;")</send>
-  </trigger>
-  <trigger
-   enabled="y"
-   group="mume_misc"
-   match="^PROMPT:(?P&lt;prompt&gt;(?P&lt;light&gt;[\@\*\!\)o])?(?P&lt;terrain&gt;[\#\(\[\+\.\%fO\~UW\:\=\&lt;])?(?P&lt;weather&gt;[\*\'\&quot;\~\=\-]{1,2})?(?P&lt;movement_flags&gt; [RrSsCcW]{1,4})?(?P&lt;hp&gt; HP\:\w+)?(?P&lt;mp&gt; Mana\:\w+)?(?P&lt;mv&gt; Move\:\w+)?(?P&lt;mount&gt; Mount\:\w+)?(?P&lt;fighting&gt; [^\:]+\:\w+)?(?P&lt;buffer&gt; [^\:]+\:\w+)?.*?&gt;):PROMPT$"
-   name="handle_prompt"
-   omit_from_output="y"
-   regexp="y"
-   send_to="12"
-   sequence="100"
-  >
-  <send>
-local flags = string.strip(string.format("%s%s%s%s", string.match("%&lt;movement_flags&gt;", "[S]") and "Sneaking " or string.match("%&lt;movement_flags&gt;", "[s]") and "NoSneak " or "", string.match("%&lt;movement_flags&gt;", "[W]") and "Swimming " or "", string.match("%&lt;movement_flags&gt;", "[C]") and "Climbing " or string.match("%&lt;movement_flags&gt;", "[c]") and "Climbing safely " or "", string.match("%&lt;movement_flags&gt;", "[R]") and "Riding " or string.match("%&lt;movement_flags&gt;", "[r]") and "Ridden " or ""))
-last_prompt = {
-	["light"] = LIGHT_SYMBOLS["%&lt;light&gt;"] or "Unknown light",
-	["terrain"] = TERRAIN_SYMBOLS["%&lt;terrain&gt;"] or "Unknown terrain",
-	["flags"] = flags ~= "" and flags or "No movement flags",
-	["sneak"] = string.match("%&lt;movement_flags&gt;", "[S]") and "Sneaking" or string.match("%&lt;movement_flags&gt;", "[s]") and "NoSneak" or "Off",
-	["hp"] = string.split("%&lt;hp&gt;", ":")[2] or "Healthy",
-	["mp"] = string.split("%&lt;mp&gt;", ":")[2] or "Full",
-	["mv"] = string.format("%s %s", string.split("%&lt;mv&gt;", ":")[2] or "Rested", string.match("%&lt;movement_flags&gt;", "[R]") and (string.split("%&lt;mount&gt;", ":")[2] or "Rested") or "Not riding"),
-	["fighting"] = string.format("%s %s", string.split("%&lt;fighting&gt;", ":")[2] or "Unknown", "%&lt;fighting&gt;" ~= "" and string.strip(string.split("%&lt;fighting&gt;", ":")[1]) or "Not fighting"),
-	["buffer"] = string.format("%s %s", string.split("%&lt;buffer&gt;", ":")[2] or "Unknown", "%&lt;buffer&gt;" ~= "" and string.strip(string.split("%&lt;buffer&gt;", ":")[1]) or "No buffer")
-}
-if last_prompt["fighting"] ~= "Unknown Not fighting" then
-	last_fought = string.format("%s last fought", last_prompt["fighting"])
-end
-if show_prompt then
-	Note("%&lt;prompt&gt;")
-end
-  </send>
-  </trigger>
-  <trigger
-   enabled="y"
-   group="mume_misc"
-   match="^(?:ENEMY:)?(?P&lt;player&gt;.+?)(?::ENEMY)? joins (?:ENEMY:)?(?P&lt;tank&gt;.+?)(?::ENEMY)?'s fight\.$"
+   match="^(?P&lt;player&gt;.+?) joins (?P&lt;tank&gt;.+?)'s fight\.$"
    name="shorten_assists"
    omit_from_output="y"
    regexp="y"
@@ -198,31 +155,7 @@ end
   <trigger
    enabled="y"
    group="mume_misc"
-   match="^(?P&lt;first&gt;.*)ENEMY:(?P&lt;second&gt;.+):ENEMY(?P&lt;third&gt;.*)$"
-   name="remove_enemy_tag"
-   omit_from_output="y"
-   regexp="y"
-   send_to="12"
-   sequence="100"
-  >
-  <send>CallPlugin(screenReader, "sayNote", "%&lt;first&gt;%&lt;second&gt;%&lt;third&gt;")</send>
-  </trigger>
-  <trigger
-   enabled="y"
-   group="mume_misc"
-   match="^ENEMY.+?:ENEMY (?:utters the word[s]? \'[a-z ]+\'|begins some strange incantations\.\.\.|seems to be blinded\!)$"
-   name="remove_enemy_tag_exception"
-   omit_from_output="y"
-   regexp="y"
-   send_to="12"
-   sequence="80"
-  >
-  <send>-- We're handling the text substitution in another plugin.</send>
-  </trigger>
-  <trigger
-   enabled="y"
-   group="mume_misc"
-   match="^(?:ENEMY:)?(?P&lt;someone&gt;.+?)(?::ENEMY)? leaves (?P&lt;direction&gt;north|east|south|west|up|down)\.$"
+   match="^(?P&lt;someone&gt;.+?) leaves (?P&lt;direction&gt;north|east|south|west|up|down)\.$"
    name="shorten_leaves_message"
    omit_from_output="y"
    regexp="y"
@@ -527,6 +460,8 @@ else
 	country_codes = {}
 end
 
+PROMPT_REGEX = rex.new([[^(?P<light>[\@\*\!\)o])?(?P<terrain>[\#\(\[\+\.\%fO\~UW\:\=\<])?(?P<weather>[\*\'\"\~\=\-]{1,2})?(?P<movement_flags> [RrSsCcW]{1,4})?(?P<hp> HP\:\w+)?(?P<mp> Mana\:\w+)?(?P<mv> Move\:\w+)?(?P<mount> Mount\:\w+)?(?P<fighting> [^\:]+\:\w+)?(?P<buffer> [^\:]+\:\w+)?.*?>$]])
+
 TERRAIN_SYMBOLS = {
 	[":"] = "brush",
 	["O"] = "cavern",
@@ -554,11 +489,41 @@ LIGHT_SYMBOLS = {
 
 screenReader = "925cdd0331023d9f0b8f05a7"
 config = "d19a2f0a604c96b7318aa67f"
+xml_parser = "74834d3734b2c8a3a9da4d18"
 return_code, show_prompt = CallPlugin(config, "get", "show_prompt")
 auto_drag = false
 auto_drag_counter = 1
 last_prompt = nil
 last_fought = "Unknown last fought"
+
+function OnPluginBroadcast (msg, id, name, text)
+	if id == xml_parser and name == "mume_xml_parser" and msg == 1 then
+		local return_code, prompt = CallPlugin(xml_parser, "get", "prompt")
+		if not prompt then
+			return
+		elseif show_prompt then
+			Note(prompt)
+		end
+		local starting, ending, match = PROMPT_REGEX:match(prompt)
+		if not match then
+			return
+		end
+		last_prompt = {
+			["light"] = match["light"] and LIGHT_SYMBOLS[match["light"]] or "Unknown light",
+			["terrain"] = match["terrain"] and TERRAIN_SYMBOLS[match["terrain"]] or "Unknown terrain",
+			["flags"] = match["movement_flags"] and string.strip(string.format("%s%s%s%s", string.match(match["movement_flags"], "[S]") and "Sneaking " or string.match(match["movement_flags"], "[s]") and "NoSneak " or "", string.match(match["movement_flags"], "[W]") and "Swimming " or "", string.match(match["movement_flags"], "[C]") and "Climbing " or string.match(match["movement_flags"], "[c]") and "Climbing safely " or "", string.match(match["movement_flags"], "[R]") and "Riding " or string.match(match["movement_flags"], "[r]") and "Ridden " or "")) or "No movement flags",
+			["sneak"] = match["movement_flags"] and (string.match(match["movement_flags"], "[S]") and "Sneaking" or string.match(match["movement_flags"], "[s]") and "NoSneak") or "Off",
+			["hp"] = match["hp"] and string.split(match["hp"], ":")[2] or "Healthy",
+			["mp"] = match["mp"] and string.split(match["mp"], ":")[2] or "Full",
+			["mv"] = string.format("%s %s", match["mv"] and string.split(match["mv"], ":")[2] or "Rested", match["movement_flags"] and string.match(match["movement_flags"], "[R]") and (match["mount"] and string.split(match["mount"], ":")[2] or "Rested") or "Not riding"),
+			["fighting"] = string.format("%s %s", match["fighting"] and string.split(match["fighting"], ":")[2] or "Unknown", match["fighting"] and string.strip(string.split(match["fighting"], ":")[1]) or "Not fighting"),
+			["buffer"] = string.format("%s %s", match["buffer"] and string.split(match["buffer"], ":")[2] or "Unknown", match["buffer"] and string.strip(string.split(match["buffer"], ":")[1]) or "No buffer")
+		}
+		if last_prompt["fighting"] ~= "Unknown Not fighting" then
+			last_fought = string.format("%s last fought", last_prompt["fighting"])
+		end
+	end
+end
 
 function toggle_show_prompt()
 	show_prompt = not show_prompt
