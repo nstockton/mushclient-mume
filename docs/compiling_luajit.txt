@@ -1,0 +1,5 @@
+In the LuaJit source, edit msvcbuild.bat and replace all occurrences of /MD with /MT.
+From the command prompt:
+"C:\Program Files\Microsoft Visual Studio 12.0\VC\vcvarsall.bat" x86
+msvcbuild.bat
+link /nologo /dll /noentry /nodefaultlib /out:lua5.1.dll lua51.lib lua51.exp
