@@ -93,7 +93,15 @@ function OnPluginPacketReceived(packet)
 	local temp_characters = {}
 	local result = {}
 	for byte in packet:gmatch(".") do
-		if not in_sub_option and (not in_esc and not in_iac and not IGNORE_BYTES[byte] or in_iac and byte == IAC) then
+		if in_esc then
+			table.insert(result, byte)
+			if not string.match(byte, "[%d[;]") then
+				in_esc = false
+			end
+		elseif byte == ESC then
+			table.insert(result, byte)
+			in_esc = true
+		elseif not in_sub_option and (not in_iac and not IGNORE_BYTES[byte] or in_iac and byte == IAC) then
 			in_iac = false
 			if reading_tag then
 				if byte == ">" then
@@ -123,13 +131,14 @@ function OnPluginPacketReceived(packet)
 							elseif string.startswith(line, "emote") then
 								table.insert(result, "EMOTE:")
 							elseif string.startswith(line, "prompt") then
+								last_data.prompt = ""
 								xml_mode = XML_PROMPT
 							elseif ignore_next_room then
 								-- Do nothing
 							elseif string.startswith(line, "exits") then
 								xml_mode = XML_EXITS
 							elseif string.startswith(line, "room") then
-								last_data = {name="", description="", dynamic="", exits="", prompt=""}
+								last_data = {name="", description="", dynamic="", exits=""}
 								xml_mode = XML_ROOM
 							elseif string.startswith(line, "movement") then
 								BroadcastPlugin(2, string.match(line, "^movement dir=(%w+)/$") or "")
@@ -187,14 +196,6 @@ function OnPluginPacketReceived(packet)
 		elseif byte == IAC then
 			table.insert(result, byte)
 			in_iac = true
-		elseif in_esc then
-			table.insert(result, byte)
-			if not string.match(byte, "[%d[;]") then
-				in_esc = false
-			end
-		elseif byte == ESC then
-			table.insert(result, byte)
-			in_esc = true
 		end
 	end
 	if not reading_tag then
