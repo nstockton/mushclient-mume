@@ -52,6 +52,18 @@ local XML_REPLACEMENTS = {
 	["&apos;"] = "'",
 	["&quot;"] = '"',
 }
+local TAG_REPLACEMENTS = {
+	["tell"] = "TELL:",
+	["/tell"] = ":TELL",
+	["narrate"] = "NARRATE:",
+	["/narrate"] = ":NARRATE",
+	["pray"] = "PRAY:",
+	["/pray"] = ":PRAY",
+	["say"] = "SAY:",
+	["/say"] = ":SAY",
+	["emote"] = "EMOTE:",
+	["/emote"] = ":EMOTE",
+}
 
 local in_esc = false
 local in_iac = false
@@ -89,117 +101,114 @@ function process_text(data)
 end
 
 function OnPluginPacketReceived(packet)
-	local temp_tag = {}
-	local temp_characters = {}
+	local character_buffer = {}
+	local tag_buffer = {}
 	local result = {}
 	for byte in packet:gmatch(".") do
-		if in_esc then
-			table.insert(result, byte)
-			if not string.match(byte, "[%d[;]") then
-				in_esc = false
+		if not in_sub_option and (not in_iac and not IGNORE_BYTES[byte] or in_iac and byte == IAC) then
+			-- Byte is *not* part of a Telnet or Ansi escape sequence.
+			if byte == IAC then
+				-- Escaped IAC.
+				in_iac = false
 			end
-		elseif byte == ESC then
-			table.insert(result, byte)
-			in_esc = true
-		elseif not in_sub_option and (not in_iac and not IGNORE_BYTES[byte] or in_iac and byte == IAC) then
-			in_iac = false
-			if reading_tag then
-				if byte == ">" then
-					if table.getn(temp_tag) > 0 then
-						local line = table.concat(temp_tag)
-						if xml_mode == XML_NONE then
-							if string.startswith(line, "/xml") then
-								xml_mode = XML_NONE
-							elseif string.startswith(line, "/tell") then
-								table.insert(result, ":TELL")
-							elseif string.startswith(line, "tell") then
-								table.insert(result, "TELL:")
-							elseif string.startswith(line, "/narrate") then
-								table.insert(result, ":NARRATE")
-							elseif string.startswith(line, "narrate") then
-								table.insert(result, "NARRATE:")
-							elseif string.startswith(line, "/pray") then
-								table.insert(result, ":PRAY")
-							elseif string.startswith(line, "pray") then
-								table.insert(result, "PRAY:")
-							elseif string.startswith(line, "/say") then
-								table.insert(result, ":SAY")
-							elseif string.startswith(line, "say") then
-								table.insert(result, "SAY:")
-							elseif string.startswith(line, "/emote") then
-								table.insert(result, ":EMOTE")
-							elseif string.startswith(line, "emote") then
-								table.insert(result, "EMOTE:")
-							elseif string.startswith(line, "prompt") then
-								last_data.prompt = ""
-								xml_mode = XML_PROMPT
-							elseif ignore_next_room then
-								-- Do nothing
-							elseif string.startswith(line, "exits") then
-								xml_mode = XML_EXITS
-							elseif string.startswith(line, "room") then
-								last_data = {name="", description="", dynamic="", exits=""}
-								xml_mode = XML_ROOM
-							elseif string.startswith(line, "movement") then
-								BroadcastPlugin(2, string.match(line, "^movement dir=(%w+)/$") or "")
-							elseif string.startswith(line, "status") then
-								xml_mode = XML_NONE
-							end
-						elseif xml_mode == XML_ROOM then
-							if string.startswith(line, "name") then
-								xml_mode = XML_NAME
-							elseif string.startswith(line, "description") then
-								xml_mode = XML_DESCRIPTION
-							elseif string.startswith(line, "terrain") then
-								xml_mode = XML_TERRAIN
-							elseif string.startswith(line, "/room") then
-								xml_mode = XML_NONE
-							end
-						elseif xml_mode == XML_NAME and string.startswith(line, "/name") then
-							xml_mode = XML_ROOM
-						elseif xml_mode == XML_DESCRIPTION and string.startswith(line, "/description") then
-							xml_mode = XML_ROOM
-						elseif xml_mode == XML_TERRAIN and string.startswith(line, "/terrain") then
-							xml_mode = XML_ROOM
-						elseif xml_mode == XML_EXITS and string.startswith(line, "/exits") then
-							xml_mode = XML_NONE
-						elseif xml_mode == XML_PROMPT and string.startswith(line, "/prompt") then
-							BroadcastPlugin(1, "")
-							ignore_next_room = false
-							xml_mode = XML_NONE
-						end
-						temp_tag = {}
-					end
-					reading_tag = false
-				else
-					table.insert(temp_tag, byte)
+			if byte == ESC then
+				-- Beginning Ansi escape code.
+				table.insert(result, byte)
+				in_esc = true
+			elseif in_esc then
+				-- Byte is part of an Ansi escape code.
+				table.insert(result, byte)
+				if not string.match(byte, "[%d[;]") then
+					-- Byte is the final byte in an Ansi escape code.
+					in_esc = false
 				end
-			else
-				if byte == "<" then
-					table.insert(result, process_text(table.concat(temp_characters)))
-					temp_characters = {}
+			elseif not reading_tag then
+				-- Byte is out side of a tag, or in between opening and closing tags.
+				if byte ~= "<" then
+					-- Add the byte to the character buffer.
+					table.insert(character_buffer, byte)
+				else
+					-- Start of tag.
+					-- Process the bytes in the character buffer, and write them to the result buffer.
+					table.insert(result, process_text(table.concat(character_buffer)))
+					character_buffer = {}
 					reading_tag = true
-				else
-					table.insert(temp_characters, byte)
 				end
+			elseif byte ~= ">" then
+				-- A tag is being parsed, and the end of the tag has *not* been reached yet.
+				table.insert(tag_buffer, byte)
+			else
+				-- End of XML tag.
+				local tag = table.concat(tag_buffer)
+				if xml_mode == XML_NONE then
+					if tag == "/xml" then
+						-- XML mode was turned off by the player.
+						xml_mode = XML_NONE
+					elseif TAG_REPLACEMENTS[tag] then
+						-- Replace the tag with a marked up version for triggering.
+						table.insert(result, TAG_REPLACEMENTS[tag])
+					elseif tag == "prompt" then
+						last_data.prompt = ""
+						xml_mode = XML_PROMPT
+					elseif ignore_next_room then
+						-- The next incoming room data should be ignored. For example if the player is scouting.
+					elseif tag == "exits" then
+						xml_mode = XML_EXITS
+					elseif tag == "room" then
+						last_data = {name="", description="", dynamic="", exits=""}
+						xml_mode = XML_ROOM
+					elseif string.startswith(tag, "movement") then
+						BroadcastPlugin(2, string.match(tag, "^movement dir=(%w+)/$") or "")
+					elseif tag == "status" then
+						xml_mode = XML_NONE
+					end
+				elseif xml_mode == XML_ROOM then
+					if tag == "name" then
+						xml_mode = XML_NAME
+					elseif tag == "description" then
+						xml_mode = XML_DESCRIPTION
+					elseif tag == "terrain" then
+						xml_mode = XML_TERRAIN
+					elseif tag == "/room" then
+						xml_mode = XML_NONE
+					end
+				elseif (xml_mode == XML_NAME and tag == "/name") or (xml_mode == XML_DESCRIPTION and tag == "/description") or (xml_mode == XML_TERRAIN and tag == "/terrain") then
+					xml_mode = XML_ROOM
+				elseif xml_mode == XML_EXITS and tag == "/exits" then
+					xml_mode = XML_NONE
+				elseif xml_mode == XML_PROMPT and tag == "/prompt" then
+					BroadcastPlugin(1, "")
+					ignore_next_room = false
+					xml_mode = XML_NONE
+				end
+				tag_buffer = {}
+				reading_tag = false
 			end
+		elseif byte == IAC then
+			-- unescaped IAC, start of Telnet negotiation.
+			table.insert(result, byte)
+			in_iac = true
 		elseif in_iac then
+			-- Telnet negotiation
 			table.insert(result, byte)
 			if not NEGOTIATION_BYTES[byte] then
+				-- Byte is the last byte in the negotiation sequence.
 				in_iac = false
 				if byte == SB then
+					-- Begin sub-negotiation.
 					in_sub_option = true
 				elseif byte == SE then
+					-- End sub-negotiation
 					in_sub_option = false
 				end
 			end
-		elseif byte == IAC then
+		else
+			-- Byte is ignored or part of a sub-negotiation.
 			table.insert(result, byte)
-			in_iac = true
 		end
 	end
 	if not reading_tag then
-		table.insert(result, process_text(table.concat(temp_characters)))
+		table.insert(result, process_text(table.concat(character_buffer)))
 	end
 	return table.concat(result)
 end
