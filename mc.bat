@@ -8,6 +8,6 @@ if not exist "worlds\mume\mume.mcl" copy /Y worlds\mume\mume.mcl.sample worlds\m
 if not exist "worlds\angband\angband.mcl" copy /Y worlds\angband\angband.mcl.sample worlds\angband\angband.mcl > nul
 start MUSHclient.exe
 cd mapperproxy
-python -B startmapper.py
+python -B startmapper.py raw
 rem Reset the working directory to it's previous value, before this batch script was run.
 popd
