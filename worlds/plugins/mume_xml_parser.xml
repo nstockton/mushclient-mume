@@ -34,6 +34,8 @@ require("mystdlib")
 local IGNORE_BYTES = {["\0"] = true, ["\17"] = true}
 local NEGOTIATION_BYTES = {["\254"] = true, ["\253"] = true, ["\252"] = true, ["\251"] = true}
 local IAC = "\255"
+local GA = "\249"
+local IAC_GA = IAC .. GA
 local SB = "\250"
 local SE = "\240"
 local ESC = "\27"
@@ -72,6 +74,8 @@ local xml_mode = XML_NONE
 local last_data = {name="", description="", dynamic="", exits="", prompt=""}
 local ignore_next_room = false
 local reading_tag = false
+local initial_packet = true
+local last_packet = ""
 
 function get(key)
 	return last_data[key]
@@ -80,7 +84,7 @@ end
 function process_text(data)
 	if data == "" then
 		return ""
-	elseif string.match(data, "You quietly scout ") then
+	elseif data:findpos("You quietly scout ") then
 		ignore_next_room = true
 	end
 	data = string.gsub(tostring(data), "&[^; ]+;", function(str) return XML_REPLACEMENTS[str] or str end)
@@ -101,12 +105,31 @@ function process_text(data)
 end
 
 function OnPluginPacketReceived(packet)
+	last_packet = last_packet .. packet
+	if initial_packet then
+		-- This exception is necessary for displaying the log-in screen before the player types an account/character name.
+		if last_packet:findpos("By what name do you wish to be known?") then
+			last_packet = ""
+			initial_packet = nil
+		end
+		return packet .. IAC_GA
+	elseif last_packet:findpos(IAC_GA) then
+		-- Split the data on the last IAC-GA sequence (I.E. the Mume prompt) in case of data being broken over multiple packets.
+		packet, last_packet = last_packet:match(string.format("(.*%s)(.*)", IAC_GA))
+	elseif last_packet:findpos("\n") then
+		-- This is needed for instances in which Mume doesn't immediately return a prompt after command output, such as when a player attempts to backstab.
+		packet, last_packet = last_packet:match("(.*\n)(.*)")
+	else
+		-- Data is definitely been broken up over multiple packets.
+		-- Return nothing and continue buffering until complete data has been received.
+		return ""
+	end
 	local character_buffer = {}
 	local tag_buffer = {}
 	local result = {}
 	for byte in packet:gmatch(".") do
 		if not in_sub_option and (not in_iac and not IGNORE_BYTES[byte] or in_iac and byte == IAC) then
-			-- Byte is *not* part of a Telnet or Ansi escape sequence.
+			-- Byte is *not* part of a Telnet sequence.
 			if byte == IAC then
 				-- Escaped IAC.
 				in_iac = false
@@ -184,11 +207,14 @@ function OnPluginPacketReceived(packet)
 				tag_buffer = {}
 				reading_tag = false
 			end
-		elseif byte == IAC then
-			-- unescaped IAC, start of Telnet negotiation.
+		elseif not in_iac then
+			-- Byte is IAC, ignored, or part of a sub-negotiation.
 			table.insert(result, byte)
-			in_iac = true
-		elseif in_iac then
+			if byte == IAC then
+				-- unescaped IAC, start of Telnet negotiation.
+				in_iac = true
+			end
+		else
 			-- Telnet negotiation
 			table.insert(result, byte)
 			if not NEGOTIATION_BYTES[byte] then
@@ -202,11 +228,8 @@ function OnPluginPacketReceived(packet)
 					in_sub_option = false
 				end
 			end
-		else
-			-- Byte is ignored or part of a sub-negotiation.
-			table.insert(result, byte)
-		end
-	end
+		end -- else
+	end -- for
 	if not reading_tag then
 		table.insert(result, process_text(table.concat(character_buffer)))
 	end
