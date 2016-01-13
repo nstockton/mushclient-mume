@@ -7,7 +7,7 @@ stringy = require("stringy")
 
 string.count = stringy.count
 string.endswith = stringy.endswith
-string.find = stringy.find
+string.findpos = stringy.find
 string.split = stringy.split
 string.startswith = stringy.startswith
 string.strip = stringy.strip
