@@ -183,6 +183,7 @@ IGNORE_LIST = {
 	["Huor"] = true,
 	["Nagrorh"] = true,
 	["Nordri"] = true,
+	["Orophin"] = true,
 	["Sarion"] = true,
 	["Sauron"] = true
 }
