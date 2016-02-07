@@ -350,6 +350,15 @@ Send("drag 1.corpse")
   <send>info %%f</send>
   </alias>
   <alias
+   name="age_info"
+   match="age"
+   enabled="y"
+   group="mume_misc"
+   sequence="100"
+  >
+  <send>info %%a years, %%N months, and %%n days old. Played for %%P hours realtime.</send>
+  </alias>
+  <alias
    name="alignment_info"
    match="align"
    enabled="y"
