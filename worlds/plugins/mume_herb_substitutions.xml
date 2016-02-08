@@ -34,6 +34,16 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
+   match="A reddish-brown shrub with purplish-pink flowers grows here."
+   omit_from_output="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>CallPlugin(screenReader, "sayNote", "%0 - [Heather]")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_herb_substitutions"
    match="A round tangle with waxy leaves and white berries grows on a branch nearby."
    omit_from_output="y"
    send_to="12"
