@@ -33,7 +33,7 @@
 <aliases>
   <alias
    name="set_repeat_command"
-   match="setrep(?P&lt;command&gt;.*)$"
+   match="^setrep(?P&lt;command&gt;.*)$"
    enabled="y"
    regexp="y"
    group="mume_macros"
