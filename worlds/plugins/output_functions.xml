@@ -140,11 +140,43 @@ else
 	Accelerator("ctrl + shift + h", "topline")
 end
 
+AcceleratorTo("ctrl + shift + c", "copy_key()", sendto.script)
+
 local current_line = 1
 local selecting = false
 local selection_start = 0
 local selected_text = {}
 local modes = {} -- for keyboard states
+
+function copy_key()
+	local lines = GetLinesInBufferCount()
+	if lines <= 1 then
+		CallPlugin(screenReader, "say", "No output.", true)
+		return
+	end
+	if current_line == 0 then
+		current_line = lines
+	end
+	while GetLineInfo(current_line, 1) == "" and current_line > 1 and current_line < GetLinesInBufferCount() do
+		current_line = current_line + 1
+	end
+	local line = GetLineInfo(current_line, 1)
+	if line == "" and GetLineInfo(current_line + 1, 1) then
+		current_line = current_line + 1
+		line = GetLineInfo(current_line, 1)
+	end
+	local normal_key = line:match("^.+ key: '([a-z]+)'$")
+	local identify_key = line:match("^Its magical key is ([a-z]+)[.]$")
+	if normal_key then
+		SetClipboard(normal_key)
+		CallPlugin(screenReader, "say", string.format("%s copied", normal_key), true)
+	elseif identify_key then
+		SetClipboard(identify_key)
+		CallPlugin(screenReader, "say", string.format("%s copied", identify_key), true)
+	else
+		CallPlugin(screenReader, "say", "Key not found", true)
+	end
+end
 
 function selectscr()
 	local lines = GetLinesInBufferCount()
