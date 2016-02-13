@@ -34,7 +34,7 @@
   <trigger
    enabled="y"
    group="mume_report"
-   match="^points_capture\: (?P&lt;points&gt;[HM]P|MV) (?P&lt;current&gt;\d+|xxx)/(?P&lt;max&gt;\d+|xxx)$"
+   match="^points_capture\: (?P&lt;points&gt;[HM]P|MV) (?P&lt;current&gt;[-]?\d+|xxx)/(?P&lt;max&gt;\d+|xxx)$"
    name="capture_points"
    omit_from_log="y"
    omit_from_output="y"
@@ -43,12 +43,14 @@
    sequence="100"
   >
   <send>
-if "%&lt;max&gt;" == "xxx" then
-	CallPlugin(screenReader, "sayNote", "Unavailable while fighting.")
-elseif "%&lt;max&gt;" == "0" then
+local current = tonumber("%&lt;current&gt;")
+local max = tonumber("%&lt;max&gt;")
+if max == nil then
+	CallPlugin(screenReader, "sayNote", "Unavailable.")
+elseif max == 0 then
 	CallPlugin(screenReader, "sayNote", string.format("Character doesn't have %ss.", "%&lt;points&gt;"))
 else
-	CallPlugin(screenReader, "sayNote", string.format("%s/%s [%.0f%%%] %ss.", "%&lt;current&gt;", "%&lt;max&gt;", "%&lt;current&gt;" / "%&lt;max&gt;" * 100, "%&lt;points&gt;"))
+	CallPlugin(screenReader, "sayNote", string.format("%d/%d [%.0f%%%] %ss.", current, max, (current >= 0 and current or 0) / max * 100, "%&lt;points&gt;"))
 end
   </send>
   </trigger>
