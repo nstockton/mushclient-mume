@@ -45,7 +45,7 @@
   <trigger
    enabled="y"
    group="mume_misc"
-   match="^A great\, dark spider quickly begins to weave a tight\, sticky web around your body\!$"
+   match="^A (?:great\, dark|horrible\, dark-green) spider quickly begins to weave a tight\, sticky web around your body\!$"
    name="bm_spiders1"
    omit_from_output="y"
    regexp="y"
@@ -57,7 +57,7 @@
   <trigger
    enabled="y"
    group="mume_misc"
-   match="^A great\, dark spider burdens your movement wrapping you layer after layer\!$"
+   match="^A (?:great\, dark|horrible\, dark-green) spider burdens your movement wrapping you layer after layer\!$"
    name="bm_spiders2"
    omit_from_output="y"
    regexp="y"
@@ -69,7 +69,7 @@
   <trigger
    enabled="y"
    group="mume_misc"
-   match="^You stagger for your balance as a great\, dark spider wraps the sticky cords faster and faster around you\!$"
+   match="^You stagger for your balance as a (?:great\, dark|horrible\, dark-green) spider wraps the sticky cords faster and faster around you\!$"
    name="bm_spiders3"
    omit_from_output="y"
    regexp="y"
