@@ -42,6 +42,17 @@
   >
   <send>xpDisplay()</send>
   </alias>
+  <alias
+   name="display_tps"
+   match="tp"
+   enabled="y"
+   group="mume_xp_counter"
+   omit_from_log="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>Send("info TPCOUNTER: %t %T.")</send>
+  </alias>
 </aliases>
 
 <!--  Triggers  -->
@@ -89,6 +100,19 @@ Send("info XPCOUNTER: %x %t %X %T.")</send>
   <send>xpUpdate(tonumber("%&lt;xp&gt;"), tonumber("%&lt;tp&gt;"), tonumber("%&lt;needed_xp&gt;"), tonumber("%&lt;needed_tp&gt;"))
 xpDisplay()</send>
   </trigger>
+  <trigger
+   enabled="y"
+   group="mume_xp_counter"
+   omit_from_log="y"
+   match="^TPCOUNTER: (?P&lt;tp&gt;\d+) (?P&lt;needed_tp&gt;\d+)\.$"
+   name="parse_tp_info_line"
+   omit_from_output="y"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>tpUpdate(tonumber("%&lt;tp&gt;"), tonumber("%&lt;needed_tp&gt;"))</send>
+  </trigger>
 </triggers>
 
 <!--  Script  -->
@@ -107,10 +131,10 @@ old_xp = 0
 old_tp = 0
 
 function xpUpdate(updated_xp, updated_tp, updated_needed_xp, updated_needed_tp)
-	if old_xp~=0 or nil then
+	if old_xp and old_xp ~= 0 then
 		gained_xp = updated_xp - old_xp
 	end
-	if old_tp~=0 or nil then
+	if old_tp and old_tp ~= 0 then
 		gained_tp = updated_tp - old_tp
 	end
 	session_xp = session_xp + gained_xp
@@ -119,6 +143,16 @@ function xpUpdate(updated_xp, updated_tp, updated_needed_xp, updated_needed_tp)
 	old_tp = updated_tp
 	needed_xp = updated_needed_xp
 	needed_tp = updated_needed_tp
+end
+
+function tpUpdate(updated_tp, updated_needed_tp)
+	if old_tp and old_tp ~= 0 then
+		gained_tp = updated_tp - old_tp
+	end
+	session_tp = session_tp + gained_tp
+	old_tp = updated_tp
+	needed_tp = updated_needed_tp
+	CallPlugin(screenReader, "sayNote", string.format("Gained: %s, Session: %s, Needed: %s, Total: %s", gained_tp, session_tp, needed_tp, updated_tp))
 end
 
 function xpDisplay()
