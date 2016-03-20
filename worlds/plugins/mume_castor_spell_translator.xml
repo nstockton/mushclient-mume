@@ -124,7 +124,7 @@
   <trigger
    enabled="y"
    group="mume_castor_spell_translator"
-   match="^Nothing seems to happen\.$"
+   match="^(?:Nothing seems to happen\.|The cruel light of the sun made you lose your concentration\!)$"
    name="shorten_fail_message"
    omit_from_output="y"
    regexp="y"
@@ -179,6 +179,7 @@ spells = {
 	["hzrzsafh"] = "teleport",
 	["iuoph zuguai"] = "night vision",
 	["judicandus dies"] = "cure light",
+	["judicandus eugzagz"] = "cure disease",
 	["judicandus gzfuajg"] = "cure serious",
 	["judicandus noselacri"] = "cure blindness",
 	["judicandus qfuhuq"] = "cure critic",
