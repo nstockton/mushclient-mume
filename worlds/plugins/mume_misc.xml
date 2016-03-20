@@ -45,6 +45,23 @@
   <trigger
    enabled="y"
    group="mume_misc"
+   match="^    \:                          \*\*     (?P&lt;direction&gt; [NEW]|S[EW])    \*\*                             \:   $"
+   name="auto_move_stakes"
+   omit_from_output="n"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+if auto_move_stakes then
+	move_stakes(REVERSED_STAKES[string.strip("%&lt;direction&gt;")])
+	auto_move_stakes = false
+end
+  </send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
    match="^A (?:great\, dark|horrible\, dark-green) spider quickly begins to weave a tight\, sticky web around your body\!$"
    name="bm_spiders1"
    omit_from_output="y"
@@ -321,6 +338,20 @@ Send("drag 1.corpse")
   </send>
   </alias>
   <alias
+   name="move_stakes"
+   match="movestakes"
+   enabled="y"
+   group="mume_misc"
+   ignore_case="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+auto_move_stakes = true
+Send("look star")
+  </send>
+  </alias>
+  <alias
    name="butcher_corpses"
    match="^bc(?:\s*(?P&lt;digit&gt;\d+))?$"
    enabled="y"
@@ -513,11 +544,20 @@ LIGHT_SYMBOLS = {
 	["o"] = "darkness"
 }
 
+REVERSED_STAKES = {
+	["N"] = "N",
+	["W"] = "E",
+	["SW"] = "SE",
+	["SE"] = "SW",
+	["E"] = "W"
+}
+
 screenReader = "925cdd0331023d9f0b8f05a7"
 config = "d19a2f0a604c96b7318aa67f"
 xml_parser = "74834d3734b2c8a3a9da4d18"
 angband = "6ca103daa7e3465230ea22d9"
 return_code, show_prompt = CallPlugin(config, "get", "show_prompt")
+auto_move_stakes = false
 auto_drag = false
 auto_drag_counter = 1
 last_prompt = nil
@@ -568,6 +608,27 @@ function speak_prompt(key)
 	else
 		CallPlugin(screenReader, "say", last_prompt[key], true)
 	end
+end
+
+function move_stakes(direction)
+	local dir_values = {"N", "E", "SE", "SW", "W"}
+	local dir_total = #dir_values
+	local dir_keys = {}
+	for key, value in pairs(dir_values) do
+		dir_keys[value] = key
+	end
+	if not dir_keys[direction] then
+		CallPlugin(screenReader, "sayNote", string.format("Invalid direction '%s': Must be one of %s.", direction, table.concat(dir_values, ", ")))
+		return
+	end
+	local stakes = {"Forostar", "Orrostar", "Hyarrostar", "Hyarnustar", "Andustar"}
+	local orientation = dir_keys[direction] - 1
+	local stake_counter = 1
+	for i = orientation, orientation + (dir_total - 1) do
+		Send(string.format("move %s %s", stakes[stake_counter], dir_values[i % dir_total + 1]))
+		stake_counter = stake_counter + 1
+	end
+	Send("move Mittalmar centre")
 end
 
 ]]>
