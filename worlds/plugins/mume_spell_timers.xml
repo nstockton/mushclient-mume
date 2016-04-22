@@ -57,6 +57,29 @@
   <trigger
    enabled="y"
    group="mume_spell_timers"
+   match="^Your eyes tingle\.$"
+   name="detect_invisibility_up"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>spellTimerSet("detect invisibility")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_spell_timers"
+   match="^The detect invisible wears off\.$"
+   name="detect_invisibility_down"
+   omit_from_output="y"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>spellTimerUnset("detect invisibility", "%0")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_spell_timers"
    match="^(?:You begin to feel the light of Aman shine upon you|You feel a renewed light shine upon you)\.$"
    name="bless_up"
    regexp="y"
@@ -448,7 +471,7 @@
   <trigger
    enabled="y"
    group="mume_spell_timers"
-   match="^- (?P&lt;spell&gt;armour|bless|shield|strength|shroud|sense life|breath of briskness|sanctuary|protection from evil|detect evil|detect magic|night vision|tiredness|haggardness|lethargy|blindness|battleglory|Orkish draught)$"
+   match="^- (?P&lt;spell&gt;armour|bless|shield|strength|shroud|sense life|breath of briskness|sanctuary|protection from evil|detect evil|detect magic|detect invisibility|night vision|tiredness|haggardness|lethargy|blindness|battleglory|Orkish draught)$"
    name="spell_status"
    omit_from_output="y"
    regexp="y"
