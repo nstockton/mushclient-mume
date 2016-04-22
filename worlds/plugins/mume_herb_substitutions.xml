@@ -645,7 +645,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="A slender plant grows here, with clusters of tiny pink flowers."
+   match="A slender plant grows here, with clusters of tiny pink flowers atop its stem."
    omit_from_output="y"
    send_to="12"
    sequence="100"
