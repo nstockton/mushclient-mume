@@ -85,6 +85,58 @@
   <trigger
    enabled="y"
    group="mume_castor_spell_translator"
+   match="^You spray (?P&lt;target&gt;.+?) with many\-coloured rays of bright light\.$"
+   name="shorten_colour_spray_message"
+   omit_from_output="y"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>	CallPlugin(screenReader, "sayNote", "sprayed %&lt;target&gt;!", casting_interrupt == true)
+  </send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_castor_spell_translator"
+   match="^You burn (?P&lt;target&gt;[^\.]+)\.$"
+   name="shorten_burning_hands_message"
+   omit_from_output="y"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>	CallPlugin(screenReader, "sayNote", "burned %&lt;target&gt;!", casting_interrupt == true)
+  </send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_castor_spell_translator"
+   match="^Your fireball completely envelops (?P&lt;target&gt;.+?) in flames\.$"
+   name="shorten_fireball_message"
+   omit_from_output="y"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>	CallPlugin(screenReader, "sayNote", "fireballed %&lt;target&gt;!", casting_interrupt == true)
+  </send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_castor_spell_translator"
+   match="^The lightning bolt hits (?P&lt;target&gt;.+?) with full impact\.$"
+   name="shorten_lightning_bolt_message"
+   omit_from_output="y"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>	CallPlugin(screenReader, "sayNote", "bolted %&lt;target&gt;!", casting_interrupt == true)
+  </send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_castor_spell_translator"
    match="^(?P&lt;target&gt;.+?) seems to be blinded\!$"
    name="shorten_blinded_message"
    omit_from_output="y"
