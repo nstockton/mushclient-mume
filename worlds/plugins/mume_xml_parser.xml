@@ -72,7 +72,7 @@ local in_iac = false
 local in_sub_option = false
 local xml_mode = XML_NONE
 local last_data = {name="", description="", dynamic="", exits="", prompt=""}
-local ignore_next_room = false
+local scouting = false
 local reading_tag = false
 local initial_packet = true
 local last_packet = ""
@@ -84,11 +84,11 @@ end
 function process_text(data)
 	if data == "" then
 		return ""
-	elseif data:findpos("You quietly scout ") then
-		ignore_next_room = true
 	end
 	data = string.gsub(tostring(data), "&[^; ]+;", function(str) return XML_REPLACEMENTS[str] or str end)
-	if xml_mode == XML_ROOM then
+	if xml_mode == XML_NONE and data:findpos("You quietly scout ") then
+		scouting = true
+	elseif xml_mode == XML_ROOM then
 		-- dynamic description
 		last_data["dynamic"] = string.format("%s%s\n", last_data["dynamic"], data)
 	elseif xml_mode == XML_NAME then
@@ -173,7 +173,7 @@ function OnPluginPacketReceived(packet)
 					elseif tag == "prompt" then
 						last_data.prompt = ""
 						xml_mode = XML_PROMPT
-					elseif ignore_next_room then
+					elseif scouting then
 						-- The next incoming room data should be ignored. For example if the player is scouting.
 					elseif tag == "exits" then
 						xml_mode = XML_EXITS
@@ -182,6 +182,7 @@ function OnPluginPacketReceived(packet)
 						xml_mode = XML_ROOM
 					elseif string.startswith(tag, "movement") then
 						BroadcastPlugin(2, string.match(tag, "^movement dir=(%w+)/$") or "")
+						scouting = false
 					elseif tag == "status" then
 						xml_mode = XML_NONE
 					end
@@ -201,7 +202,7 @@ function OnPluginPacketReceived(packet)
 					xml_mode = XML_NONE
 				elseif xml_mode == XML_PROMPT and tag == "/prompt" then
 					BroadcastPlugin(1, "")
-					ignore_next_room = false
+					scouting = false
 					xml_mode = XML_NONE
 				end
 				tag_buffer = {}
