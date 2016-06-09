@@ -36,7 +36,7 @@
    send_to="12"
    sequence="100"
   >
-<send>pathStart("%1")</send>
+<send>start_walking("%1")</send>
   </alias>
   <alias
    match="pp"
@@ -45,7 +45,7 @@
    send_to="12"
    sequence="100"
   >
-<send>pathStop()</send>
+<send>stop_walking()</send>
   </alias>
 </aliases>
 
@@ -54,164 +54,143 @@
 <![CDATA[
 require("mystdlib")
 
-screenReader = "925cdd0331023d9f0b8f05a7"
+tts = "925cdd0331023d9f0b8f05a7"
 xml_parser = "74834d3734b2c8a3a9da4d18"
-roomName = ""
-pathWalkEnabled = false
-lastDirection = ""
+room_name = ""
+walking = false
+came_from = ""
+reverse_directions = {
+	["north"] = "south",
+	["south"] = "north",
+	["east"] = "west",
+	["west"] = "east",
+	["up"] = "down",
+	["down"] = "up"
+}
 
 function OnPluginBroadcast (msg, id, name, text)
 	if id == xml_parser and name == "mume_xml_parser" and msg == 1 then
 		local return_code
-		return_code, roomName = CallPlugin(xml_parser, "get", "name")
-		if pathWalkEnabled then
+		return_code, room_name = CallPlugin(xml_parser, "get", "name")
+		if walking then
 			local return_code, exits_line = CallPlugin(xml_parser, "get", "exits")
-			pathWalkNext(exits_line)
+			walk_next(exits_line)
 		end
 	end
 end
 
-function pathWalkNext(line)
+function walk_next(line)
 	line = string.gsub(line, "^", "")
-	local directions = {}
-	local directionsSet = {}
-	if string.match(line, "=north=") then
-		if lastDirection ~= "south" then
-			directions[#directions+1] = "north"
-		end
-		table.addToSet(directionsSet, "north")
-	end
-	if string.match(line, "=south=") then
-		if lastDirection ~= "north" then
-			directions[#directions+1] = "south"
-		end
-		table.addToSet(directionsSet, "south")
-	end
-	if string.match(line, "=east=") then
-		if lastDirection ~= "west" then
-			directions[#directions+1] = "east"
-		end
-		table.addToSet(directionsSet, "east")
-	end
-	if string.match(line, "=west=") then
-		if lastDirection ~= "east" then
-			directions[#directions+1] = "west"
-		end
-		table.addToSet(directionsSet, "west")
-	end
-	if string.match(line, "=up=") then
-		if lastDirection ~= "down" then
-			directions[#directions+1] = "up"
-		end
-		table.addToSet(directionsSet, "up")
-	end
-	if string.match(line, "=down=") then
-		if lastDirection ~= "up" then
-			directions[#directions+1] = "down"
-		end
-		table.addToSet(directionsSet, "down")
-	end
-	if #directions == 1 then
-		lastDirection = directions[1]
-		Send(lastDirection)
-	elseif #directions == 0 then
-		if roomName=="The East Road" or roomName=="Inside the Small Village of Frogmorton" or roomName=="Michel Delving" or roomName=="Road to Grey Havens" or roomName=="A Ford on the Way to Tharbad" then
-			pathStart(lastDirection)
-		elseif roomName=="Road to Tharbad" then
-			if lastDirection == "south" then
-				pathStart("east")
-			elseif lastDirection == "west" then
-				pathStart("west")
+	local ways_forward = {}
+	local roads = {}
+	for direction, reversed in pairs(reverse_directions) do
+		if string.match(line, string.format("=%s=", direction)) then
+			if came_from ~= reversed then
+				table.insert(ways_forward, direction)
+			end -- if
+			table.addToSet(roads, direction)
+		end -- if
+	end -- for
+	if table.getn(ways_forward) == 1 then
+		came_from = ways_forward[1]
+		Send(came_from)
+	elseif table.getn(ways_forward) == 0 then
+		if room_name == "The East Road" or room_name == "Inside the Small Village of Frogmorton" or room_name == "Michel Delving" or room_name == "Road to Grey Havens" or room_name == "A Ford on the Way to Tharbad" then
+			start_walking(came_from)
+		elseif room_name == "Road to Tharbad" then
+			if came_from == "south" then
+				start_walking("east")
+			elseif came_from == "west" then
+				start_walking("west")
 			end
 		else
-			pathStop()
-			CallPlugin(screenReader, "sayNote", "End of road reached.")
+			stop_walking()
+			CallPlugin(tts, "sayNote", "End of road reached.")
 		end
 	else
-		if (roomName=="A Fork" or roomName=="Greenholm Junction") and (lastDirection=="east" or lastDirection=="west") then
-			pathStart(lastDirection)
-		elseif roomName == "Waymeet" and (lastDirection=="west" or lastDirection=="north") then
-			if lastDirection == "west" then
-				pathStart("south")
-			elseif lastDirection == "north" then
-				pathStart("east")
+		if (room_name == "A Fork" or room_name == "Greenholm Junction") and (came_from == "east" or came_from == "west") then
+			start_walking(came_from)
+		elseif room_name == "Waymeet" and (came_from == "west" or came_from == "north") then
+			if came_from == "west" then
+				start_walking("south")
+			elseif came_from == "north" then
+				start_walking("east")
 			end
-		elseif roomName == "The Crossroad" and (lastDirection=="south" or lastDirection=="west") then
-			if lastDirection == "south" then
-				pathStart("east")
-			elseif lastDirection == "west" then
-				pathStart("north")
+		elseif room_name == "The Crossroad" and (came_from == "south" or came_from == "west") then
+			if came_from == "south" then
+				start_walking("east")
+			elseif came_from == "west" then
+				start_walking("north")
 			end
-		elseif roomName == "Road to Tharbad" then
-			if table.setContains(directionsSet, "north") and table.setContains(directionsSet, "south") and table.setContains(directionsSet, "west") and lastDirection~="south" and lastDirection~="west" then
-				if lastDirection == "east" then
-					pathStart("south")
-				elseif lastDirection == "north" then
-					pathStart("west")
+		elseif room_name == "Road to Tharbad" then
+			if table.setContains(roads, "north") and table.setContains(roads, "south") and table.setContains(roads, "west") and came_from ~= "south" and came_from ~= "west" then
+				if came_from == "east" then
+					start_walking("south")
+				elseif came_from == "north" then
+					start_walking("west")
 				end
-			elseif table.setContains(directionsSet, "north") and table.setContains(directionsSet, "east") and table.setContains(directionsSet, "south") and lastDirection~="north" then
-				if lastDirection == "south" then
-					pathStart("east")
-				elseif lastDirection == "west" then
-					pathStart("north")
+			elseif table.setContains(roads, "north") and table.setContains(roads, "east") and table.setContains(roads, "south") and came_from ~= "north" then
+				if came_from == "south" then
+					start_walking("east")
+				elseif came_from == "west" then
+					start_walking("north")
 				end
-			elseif table.setContains(directionsSet, "east") and table.setContains(directionsSet, "west") and table.setContains(directionsSet, "south") and lastDirection~="north" then
-				pathStart(lastDirection)
+			elseif table.setContains(roads, "east") and table.setContains(roads, "west") and table.setContains(roads, "south") and came_from ~= "north" then
+				start_walking(came_from)
 			end
-		elseif roomName == "Greenway" then
-			if table.setContains(directionsSet, "north") and table.setContains(directionsSet, "south") and table.setContains(directionsSet, "west") and lastDirection~="east" then
-				pathStart(lastDirection)
-			elseif table.setContains(directionsSet, "north") and table.setContains(directionsSet, "east") and table.setContains(directionsSet, "west") then
-				if lastDirection == "west" then
-					pathStart("north")
-				elseif lastDirection=="east" or lastDirection=="south" then
-					pathStart("east")
+		elseif room_name == "Greenway" then
+			if table.setContains(roads, "north") and table.setContains(roads, "south") and table.setContains(roads, "west") and came_from ~= "east" then
+				start_walking(came_from)
+			elseif table.setContains(roads, "north") and table.setContains(roads, "east") and table.setContains(roads, "west") then
+				if came_from == "west" then
+					start_walking("north")
+				elseif came_from == "east" or came_from == "south" then
+					start_walking("east")
 				end
 			end
-		elseif roomName == "The East Road" then
-			if table.setContains(directionsSet, "east") and table.setContains(directionsSet, "west") and table.setContains(directionsSet, "south") and lastDirection~="north" then
-				pathStart(lastDirection)
-			elseif table.setContains(directionsSet, "east") and table.setContains(directionsSet, "south") and table.setContains(directionsSet, "north") and lastDirection~="south" then
-				if lastDirection == "north" then
-					pathStart("east")
-				elseif lastDirection == "west" then
-					pathStart("south")
+		elseif room_name == "The East Road" then
+			if table.setContains(roads, "east") and table.setContains(roads, "west") and table.setContains(roads, "south") and came_from ~= "north" then
+				start_walking(came_from)
+			elseif table.setContains(roads, "east") and table.setContains(roads, "south") and table.setContains(roads, "north") and came_from ~= "south" then
+				if came_from == "north" then
+					start_walking("east")
+				elseif came_from == "west" then
+					start_walking("south")
 				end
-			elseif table.setContains(directionsSet, "west") and table.setContains(directionsSet, "north") and table.setContains(directionsSet, "south") and lastDirection~="north" then
-				if lastDirection == "east" then
-					pathStart("north")
-				elseif lastDirection == "south" then
-					pathStart("west")
+			elseif table.setContains(roads, "west") and table.setContains(roads, "north") and table.setContains(roads, "south") and came_from ~= "north" then
+				if came_from == "east" then
+					start_walking("north")
+				elseif came_from == "south" then
+					start_walking("west")
 				end
 			end
 		else
-			pathStop()
-			CallPlugin(screenReader, "sayNote", "Junction reached.")
+			stop_walking()
+			CallPlugin(tts, "sayNote", "Junction reached.")
 		end
 	end
 end
 
-function pathStart(line)
-	local dirs = {"north", "south", "east", "west", "up", "down"}
+function start_walking(line)
 	local direction = nil
-	for i, v in ipairs(dirs) do
-		if line~="" and string.sub(v, 1, string.len(line))==line then
-			direction = v
+	for dir, reversed in pairs(reverse_directions) do
+		if line ~= "" and string.sub(dir, 1, string.len(line)) == line then
+			direction = dir
 			break
 		end
 	end
 	if direction then
-		pathWalkEnabled = true
-		lastDirection = direction
-		Send(lastDirection)
+		walking = true
+		came_from = direction
+		Send(came_from)
 	else 
-		CallPlugin(screenReader, "sayNote", "Invalid starting direction")
+		CallPlugin(tts, "sayNote", "Invalid starting direction")
 	end
 end
 
-function pathStop()
-	pathWalkEnabled = false
-	CallPlugin(screenReader, "sayNote", "Path Walker Disabled.")
+function stop_walking()
+	walking = false
+	CallPlugin(tts, "sayNote", "Path Walker Disabled.")
 end
 
 ]]>
