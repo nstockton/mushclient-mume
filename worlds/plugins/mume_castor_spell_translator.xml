@@ -144,6 +144,19 @@ Note("bolted %&lt;target&gt;!")
   <trigger
    enabled="y"
    group="mume_castor_spell_translator"
+   match="The earth trembles beneath your feet!"
+   name="shorten_earth_quake_message"
+   omit_from_output="y"
+   send_to="14"
+   sequence="100"
+  >
+  <send>CallPlugin(TTS, "silence")
+Note("Quake!")
+  </send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_castor_spell_translator"
    match="^(?P&lt;target&gt;.+?) seems to be blinded\!$"
    name="shorten_blinded_message"
    omit_from_output="y"
