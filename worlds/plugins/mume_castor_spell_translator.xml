@@ -53,9 +53,7 @@
    send_to="14"
    sequence="100"
   >
-  <send>CallPlugin(TTS, "silence")
-Note("%&lt;castor&gt; is casting!")
-  </send>
+  <send>shorten("%&lt;castor&gt; casting!")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -67,9 +65,7 @@ Note("%&lt;castor&gt; is casting!")
    send_to="14"
    sequence="100"
   >
-  <send>CallPlugin(TTS, "silence")
-Note("Dispelled %&lt;target&gt;!")
-  </send>
+  <send>shorten("Dispelled %&lt;target&gt;!")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -81,9 +77,7 @@ Note("Dispelled %&lt;target&gt;!")
    send_to="14"
    sequence="100"
   >
-  <send>CallPlugin(TTS, "silence")
-Note("feared!")
-  </send>
+  <send>shorten("Feared!")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -95,9 +89,7 @@ Note("feared!")
    send_to="14"
    sequence="100"
   >
-  <send>CallPlugin(TTS, "silence")
-Note("sprayed %&lt;target&gt;!")
-  </send>
+  <send>shorten("Sprayed %&lt;target&gt;!")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -109,9 +101,7 @@ Note("sprayed %&lt;target&gt;!")
    send_to="14"
    sequence="100"
   >
-  <send>CallPlugin(TTS, "silence")
-Note("burned %&lt;target&gt;!")
-  </send>
+  <send>shorten("Burned %&lt;target&gt;!")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -123,9 +113,7 @@ Note("burned %&lt;target&gt;!")
    send_to="14"
    sequence="100"
   >
-  <send>CallPlugin(TTS, "silence")
-Note("fireballed %&lt;target&gt;!")
-  </send>
+  <send>shorten("Fireballed %&lt;target&gt;!")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -137,9 +125,7 @@ Note("fireballed %&lt;target&gt;!")
    send_to="14"
    sequence="100"
   >
-  <send>CallPlugin(TTS, "silence")
-Note("bolted %&lt;target&gt;!")
-  </send>
+  <send>shorten("Bolted %&lt;target&gt;!")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -150,9 +136,7 @@ Note("bolted %&lt;target&gt;!")
    send_to="14"
    sequence="100"
   >
-  <send>CallPlugin(TTS, "silence")
-Note("Quake!")
-  </send>
+  <send>shorten("Quake!")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -164,9 +148,7 @@ Note("Quake!")
    send_to="14"
    sequence="100"
   >
-  <send>CallPlugin(TTS, "silence")
-Note("blinded %&lt;target&gt;!")
-  </send>
+  <send>shorten("Blinded %&lt;target&gt;!")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -178,9 +160,7 @@ Note("blinded %&lt;target&gt;!")
    send_to="14"
    sequence="100"
   >
-  <send>CallPlugin(TTS, "silence")
-Note("Already blinded!")
-  </send>
+  <send>shorten("Already blinded!")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -192,9 +172,7 @@ Note("Already blinded!")
    send_to="14"
    sequence="100"
   >
-  <send>CallPlugin(TTS, "silence")
-Note("Interrupted!")
-  </send>
+  <send>shorten("Interrupted!")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -206,9 +184,7 @@ Note("Interrupted!")
    send_to="14"
    sequence="100"
   >
-  <send>CallPlugin(TTS, "silence")
-Note("Nothing happens!")
-  </send>
+  <send>shorten("Nothing happens!")</send>
   </trigger>
 </triggers>
 
@@ -306,6 +282,13 @@ function toggle_casting_interrupt()
 	casting_interrupt = not casting_interrupt
 	CallPlugin(CONFIG, "set", "casting_interrupt", casting_interrupt)
 	CallPlugin(TTS, "say", string.format("Speech interrupt for spell casting %s.", casting_interrupt and "on" or "off"), true)
+end
+
+function shorten(message)
+	if casting_interrupt then
+		CallPlugin(TTS, "silence")
+	end
+	Note(message)
 end
 
 ]]>
