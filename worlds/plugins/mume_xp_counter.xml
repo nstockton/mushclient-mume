@@ -61,7 +61,6 @@
   <trigger
    enabled="y"
    group="mume_xp_counter"
-   keep_evaluating="y"
    match="^(?:You are dead\! Sorry\.\.|Reconnecting|Welcome to the land of Middle-earth\. May your visit here be\.\.\. interesting)\.$"
    name="reset"
    regexp="y"
@@ -94,7 +93,7 @@ Send("info XPCOUNTER: %x %t %X %T.")</send>
    name="parse_xp_info_line"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>xpUpdate(tonumber("%&lt;xp&gt;"), tonumber("%&lt;tp&gt;"), tonumber("%&lt;needed_xp&gt;"), tonumber("%&lt;needed_tp&gt;"))
@@ -108,7 +107,7 @@ xpDisplay()</send>
    name="parse_tp_info_line"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>tpUpdate(tonumber("%&lt;tp&gt;"), tonumber("%&lt;needed_tp&gt;"))</send>
@@ -120,7 +119,6 @@ xpDisplay()</send>
 
 <script>
 <![CDATA[
-screenReader = "925cdd0331023d9f0b8f05a7"
 gained_xp = 0
 gained_tp = 0
 session_xp = 0
@@ -152,13 +150,13 @@ function tpUpdate(updated_tp, updated_needed_tp)
 	session_tp = session_tp + gained_tp
 	old_tp = updated_tp
 	needed_tp = updated_needed_tp
-	CallPlugin(screenReader, "sayNote", string.format("Gained: %s, Session: %s, Needed: %s, Total: %s", gained_tp, session_tp, needed_tp, updated_tp))
+	Note(string.format("Gained: %s, Session: %s, Needed: %s, Total: %s", gained_tp, session_tp, needed_tp, updated_tp))
 end
 
 function xpDisplay()
-	CallPlugin(screenReader, "sayNote", "--> Gained  xp: "..tostring(gained_xp).."\t\ttp: "..tostring(gained_tp))
-	CallPlugin(screenReader, "sayNote", "--> Session xp: "..tostring(session_xp).."\t\ttp: "..tostring(session_tp))
-	CallPlugin(screenReader, "sayNote", "--> Needed  xp: "..tostring(needed_xp).."\t\ttp: "..tostring(needed_tp))
+	Note("--> Gained  xp: "..tostring(gained_xp).."\t\ttp: "..tostring(gained_tp))
+	Note("--> Session xp: "..tostring(session_xp).."\t\ttp: "..tostring(session_tp))
+	Note("--> Needed  xp: "..tostring(needed_xp).."\t\ttp: "..tostring(needed_tp))
 end
 
 ]]>

@@ -196,9 +196,9 @@ end</send>
   >
   <send>local message = string.strip("%&lt;message&gt;")
 if not leader then
-	CallPlugin(screenReader, "sayNote", NO_LEADER_MESSAGE)
+	Note(NO_LEADER_MESSAGE)
 elseif not message then
-	CallPlugin(screenReader, "sayNote", string.format("Tell %s what?", leader))
+	Note(string.format("Tell %s what?", leader))
 else
 	Send(string.format("tell %s %s", leader, message))
 end</send>
@@ -225,14 +225,14 @@ end</send>
   <send>local name = string.capitalize(string.strip("%&lt;name&gt;"))
 if name == "clear" then
 	leader = nil
-	CallPlugin(screenReader, "sayNote", "Leader cleared.")
+	Note("Leader cleared.")
 elseif name ~= "" then
 	leader = name
-	CallPlugin(screenReader, "sayNote", string.format("Setting leader to %s.", leader))
+	Note(string.format("Setting leader to %s.", leader))
 elseif leader then
-	CallPlugin(screenReader, "sayNote", string.format("Your leader is %s.", leader))
+	Note(string.format("Your leader is %s.", leader))
 else
-	CallPlugin(screenReader, "sayNote", NO_LEADER_MESSAGE)
+	Note(NO_LEADER_MESSAGE)
 end</send>
   </alias>
   <alias
@@ -302,8 +302,6 @@ end</send>
 <![CDATA[
 require("mystdlib")
 
-screenReader = "925cdd0331023d9f0b8f05a7"
-
 NO_LEADER_MESSAGE = "Leader undefined."
 auto_ride = true
 auto_group = false
@@ -311,21 +309,21 @@ leader = nil
 
 function actionLeader(action)
 	if not action then
-		CallPlugin(screenReader, "sayNote", "Do what to leader?")
+		Note("Do what to leader?")
 	elseif leader then
 		Send(string.format("%s %s", action, leader))
 	else
-		CallPlugin(screenReader, "sayNote", NO_LEADER_MESSAGE)
+		Note(NO_LEADER_MESSAGE)
 	end
 end
 
 function toggle(setting)
 	if setting == "autoride" then
 		auto_ride = auto_ride ~= true
-		CallPlugin(screenReader, "sayNote", string.format("Auto ride %s.", auto_ride and "enabled" or "disabled"))
+		Note(string.format("Auto ride %s.", auto_ride and "enabled" or "disabled"))
 	elseif setting == "autogroup" then
 		auto_group = auto_group ~= true
-		CallPlugin(screenReader, "sayNote", string.format("Auto group %s.", auto_group and "enabled" or "disabled"))
+		Note(string.format("Auto group %s.", auto_group and "enabled" or "disabled"))
 	end
 end
 

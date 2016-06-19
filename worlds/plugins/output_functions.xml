@@ -112,8 +112,8 @@ sequence="100">
 
 <script>
 <![CDATA[
-screenReader = "925cdd0331023d9f0b8f05a7"
-config = "d19a2f0a604c96b7318aa67f"
+TTS = "925cdd0331023d9f0b8f05a7"
+CONFIG = "d19a2f0a604c96b7318aa67f"
 
 Accelerator("ctrl + alt + enter", "toggleinterrupt")
 Accelerator("ctrl + shift + space", "select")
@@ -124,7 +124,7 @@ for i = 1, 9 do
 	Accelerator(string.format("alt + %d", i), string.format("Line_Get %d", i))
 end
 
-local return_code, keyboard_layout = CallPlugin(config, "get", "keyboard_layout")
+local return_code, keyboard_layout = CallPlugin(CONFIG, "get", "keyboard_layout")
 if keyboard_layout == "dvorak" then
 	Accelerator("ctrl + shift + n", "nextline")
 	Accelerator("ctrl + shift + t", "curline")
@@ -151,7 +151,7 @@ local modes = {} -- for keyboard states
 function copy_key()
 	local lines = GetLinesInBufferCount()
 	if lines <= 1 then
-		CallPlugin(screenReader, "say", "No output.", true)
+		CallPlugin(TTS, "say", "No output.", true)
 		return
 	end
 	if current_line == 0 then
@@ -169,30 +169,30 @@ function copy_key()
 	local identify_key = line:match("^Its magical key is ([a-z]+)[.]$")
 	if normal_key then
 		SetClipboard(normal_key)
-		CallPlugin(screenReader, "say", string.format("%s copied", normal_key), true)
+		CallPlugin(TTS, "say", string.format("%s copied", normal_key), true)
 	elseif identify_key then
 		SetClipboard(identify_key)
-		CallPlugin(screenReader, "say", string.format("%s copied", identify_key), true)
+		CallPlugin(TTS, "say", string.format("%s copied", identify_key), true)
 	else
-		CallPlugin(screenReader, "say", "Key not found", true)
+		CallPlugin(TTS, "say", "Key not found", true)
 	end
 end
 
 function selectscr()
 	local lines = GetLinesInBufferCount()
 	if lines <= 1 then
-		CallPlugin(screenReader, "say", "No output.", true)
+		CallPlugin(TTS, "say", "No output.", true)
 		selecting = false
 		selected_text = {}
 		return
 	end
 	if not selecting then
 		selecting = true
-		CallPlugin(screenReader, "say", "selection start.", true)
+		CallPlugin(TTS, "say", "selection start.", true)
 		selected_text = {}
 		selection_start = current_line
 	else
-		CallPlugin(screenReader, "say", "Selection coppied.", true)
+		CallPlugin(TTS, "say", "Selection coppied.", true)
 		for i = selection_start, current_line do
 			table.insert(selected_text, GetLineInfo(i, 1))
 		end
@@ -203,16 +203,16 @@ function selectscr()
 end
 
 function interrupt_toggle()
-	local return_code, interrupt = CallPlugin(config, "get", "interrupt_on_enter")
+	local return_code, interrupt = CallPlugin(CONFIG, "get", "interrupt_on_enter")
 	interrupt = not interrupt
-	CallPlugin(config, "set", "interrupt_on_enter", interrupt)
-	CallPlugin(screenReader, "sayNote", string.format("interrupt on enter %s.", interrupt and "on" or "off"))
+	CallPlugin(CONFIG, "set", "interrupt_on_enter", interrupt)
+	Note(string.format("interrupt on enter %s.", interrupt and "on" or "off"))
 end
 
 function LineGet(name, line, wildcards)
 	local lines = GetLinesInBufferCount()
 	if lines <= 1 then
-		CallPlugin(screenReader, "say", "No output.", true)
+		CallPlugin(TTS, "say", "No output.", true)
 		return
 	end
 	local line_number = wildcards[1]
@@ -220,35 +220,35 @@ function LineGet(name, line, wildcards)
 	local timeout = 0.4 -- in seconds
 	if not modes[line_number] or os.clock() - modes[line_number].start_time >= timeout then
 		modes[line_number] = {start_time = os.clock(), times_pressed = 1}
-		CallPlugin(screenReader, "say", line, true)
+		CallPlugin(TTS, "say", line, true)
 	else
 		modes[line_number].start_time = os.clock()
 		modes[line_number].times_pressed = modes[line_number].times_pressed + 1
 		if modes[line_number].times_pressed == 2 then
 			SetClipboard(line)
-			CallPlugin(screenReader, "say", "copied.", true)
+			CallPlugin(TTS, "say", "copied.", true)
 		else
 			PasteCommand(line)
-			CallPlugin(screenReader, "say", "pasted.", true)
+			CallPlugin(TTS, "say", "pasted.", true)
 		end
 	end
 end
 
 function OnPluginCommandEntered(command)
-	local return_code, interrupt = CallPlugin(config, "get", "interrupt_on_enter")
+	local return_code, interrupt = CallPlugin(CONFIG, "get", "interrupt_on_enter")
 	if interrupt then
-		CallPlugin(screenReader, "silence")
+		CallPlugin(TTS, "silence")
 	end
 end
 
 function prev_line()
 	local lines = GetLinesInBufferCount()
 	if lines <= 1 then
-		CallPlugin(screenReader, "say", "No output.", true)
+		CallPlugin(TTS, "say", "No output.", true)
 		return
 	end
 	if current_line - 1 <= 1 then
-		CallPlugin(screenReader, "say", "top", true)
+		CallPlugin(TTS, "say", "top", true)
 	else
 		current_line = current_line - 1
 		while GetLineInfo(current_line, 1) == "" and current_line > 1 and current_line < GetLinesInBufferCount() do
@@ -259,14 +259,14 @@ function prev_line()
 			current_line = current_line + 1
 			line = GetLineInfo(current_line, 1)
 		end
-		CallPlugin(screenReader, "say", line, true)
+		CallPlugin(TTS, "say", line, true)
 	end
 end
 
 function cur_line()
 	local lines = GetLinesInBufferCount()
 	if lines <= 1 then
-		CallPlugin(screenReader, "say", "No output.", true)
+		CallPlugin(TTS, "say", "No output.", true)
 		return
 	end
 	if current_line == 0 then
@@ -280,17 +280,17 @@ function cur_line()
 		current_line = current_line + 1
 		line = GetLineInfo(current_line, 1)
 	end
-	CallPlugin(screenReader, "say", line, true)
+	CallPlugin(TTS, "say", line, true)
 end
 
 function next_line()
 	local lines = GetLinesInBufferCount()
 	if lines <= 1 then
-		CallPlugin(screenReader, "say", "No output.", true)
+		CallPlugin(TTS, "say", "No output.", true)
 		return
 	end
 	if current_line + 1 >= lines then
-		CallPlugin(screenReader, "say", "bottom", true)
+		CallPlugin(TTS, "say", "bottom", true)
 	else
 		current_line = current_line + 1
 		while GetLineInfo(current_line, 1) == "" and current_line > 1 and current_line < GetLinesInBufferCount() do
@@ -301,14 +301,14 @@ function next_line()
 			current_line = current_line - 1
 			line = GetLineInfo(current_line, 1)
 		end
-		CallPlugin(screenReader, "say", line, true)
+		CallPlugin(TTS, "say", line, true)
 	end
 end
 
 function end_line()
 	local lines = GetLinesInBufferCount()
 	if lines <= 1 then
-		CallPlugin(screenReader, "say", "No output.", true)
+		CallPlugin(TTS, "say", "No output.", true)
 		return
 	end
 	current_line = lines
@@ -320,13 +320,13 @@ function end_line()
 		current_line = current_line + 1
 		line = GetLineInfo(current_line, 1)
 	end
-	CallPlugin(screenReader, "say", line, true)
+	CallPlugin(TTS, "say", line, true)
 end
 
 function top_line()
 	local lines = GetLinesInBufferCount()
 	if lines <= 1 then
-		CallPlugin(screenReader, "say", "No output.", true)
+		CallPlugin(TTS, "say", "No output.", true)
 		return
 	end
 	current_line = 1
@@ -338,7 +338,7 @@ function top_line()
 		current_line = current_line - 1
 		line = GetLineInfo(current_line, 1)
 	end
-	CallPlugin(screenReader, "say", line, true)
+	CallPlugin(TTS, "say", line, true)
 end
 
 ]]>

@@ -38,7 +38,7 @@
    name="translate_spell"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>translate("%&lt;castor&gt;", "%&lt;spell&gt;")</send>
@@ -50,10 +50,11 @@
    name="shorten_casting_message"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
-  <send>	CallPlugin(screenReader, "sayNote", "%&lt;castor&gt; is casting!", casting_interrupt == true)
+  <send>CallPlugin(TTS, "silence")
+Note("%&lt;castor&gt; is casting!")
   </send>
   </trigger>
   <trigger
@@ -63,10 +64,11 @@
    name="shorten_dispel_message"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
-  <send>	CallPlugin(screenReader, "sayNote", "Dispelled %&lt;target&gt;!", casting_interrupt == true)
+  <send>CallPlugin(TTS, "silence")
+Note("Dispelled %&lt;target&gt;!")
   </send>
   </trigger>
   <trigger
@@ -76,10 +78,11 @@
    name="shorten_fear_message"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
-  <send>	CallPlugin(screenReader, "sayNote", "feared!", casting_interrupt == true)
+  <send>CallPlugin(TTS, "silence")
+Note("feared!")
   </send>
   </trigger>
   <trigger
@@ -89,10 +92,11 @@
    name="shorten_colour_spray_message"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
-  <send>	CallPlugin(screenReader, "sayNote", "sprayed %&lt;target&gt;!", casting_interrupt == true)
+  <send>CallPlugin(TTS, "silence")
+Note("sprayed %&lt;target&gt;!")
   </send>
   </trigger>
   <trigger
@@ -102,10 +106,11 @@
    name="shorten_burning_hands_message"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
-  <send>	CallPlugin(screenReader, "sayNote", "burned %&lt;target&gt;!", casting_interrupt == true)
+  <send>CallPlugin(TTS, "silence")
+Note("burned %&lt;target&gt;!")
   </send>
   </trigger>
   <trigger
@@ -115,10 +120,11 @@
    name="shorten_fireball_message"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
-  <send>	CallPlugin(screenReader, "sayNote", "fireballed %&lt;target&gt;!", casting_interrupt == true)
+  <send>CallPlugin(TTS, "silence")
+Note("fireballed %&lt;target&gt;!")
   </send>
   </trigger>
   <trigger
@@ -128,10 +134,11 @@
    name="shorten_lightning_bolt_message"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
-  <send>	CallPlugin(screenReader, "sayNote", "bolted %&lt;target&gt;!", casting_interrupt == true)
+  <send>CallPlugin(TTS, "silence")
+Note("bolted %&lt;target&gt;!")
   </send>
   </trigger>
   <trigger
@@ -141,10 +148,11 @@
    name="shorten_blinded_message"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
-  <send>	CallPlugin(screenReader, "sayNote", "blinded %&lt;target&gt;!", casting_interrupt == true)
+  <send>CallPlugin(TTS, "silence")
+Note("blinded %&lt;target&gt;!")
   </send>
   </trigger>
   <trigger
@@ -154,10 +162,11 @@
    name="already_blinded_message"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
-  <send>	CallPlugin(screenReader, "sayNote", "Already blinded!", casting_interrupt == true)
+  <send>CallPlugin(TTS, "silence")
+Note("Already blinded!")
   </send>
   </trigger>
   <trigger
@@ -167,10 +176,11 @@
    name="casting_interrupted"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
-  <send>	CallPlugin(screenReader, "sayNote", "Interrupted!", casting_interrupt == true)
+  <send>CallPlugin(TTS, "silence")
+Note("Interrupted!")
   </send>
   </trigger>
   <trigger
@@ -180,10 +190,11 @@
    name="shorten_fail_message"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
-  <send>	CallPlugin(screenReader, "sayNote", "Nothing happens!", casting_interrupt == true)
+  <send>CallPlugin(TTS, "silence")
+Note("Nothing happens!")
   </send>
   </trigger>
 </triggers>
@@ -193,9 +204,9 @@
 
 <script>
 <![CDATA[
-screenReader = "925cdd0331023d9f0b8f05a7"
-config = "d19a2f0a604c96b7318aa67f"
-return_code, casting_interrupt = CallPlugin(config, "get", "casting_interrupt")
+TTS = "925cdd0331023d9f0b8f05a7"
+CONFIG = "d19a2f0a604c96b7318aa67f"
+return_code, casting_interrupt = CallPlugin(CONFIG, "get", "casting_interrupt")
 
 spells = {
 	["abrawajf"] = "armour",
@@ -274,13 +285,14 @@ function translate(castor, spell)
 		spell = spells[spell]
 	end
 	local line = string.format("%s casts %s!", castor, spell)
-	CallPlugin(screenReader, "sayNote", line, casting_interrupt == true)
+	CallPlugin(TTS, "silence")
+	Note(line)
 end
 
 function toggle_casting_interrupt()
 	casting_interrupt = not casting_interrupt
-	CallPlugin(config, "set", "casting_interrupt", casting_interrupt)
-	CallPlugin(screenReader, "say", string.format("Speech interrupt for spell casting %s.", casting_interrupt and "on" or "off"), true)
+	CallPlugin(CONFIG, "set", "casting_interrupt", casting_interrupt)
+	CallPlugin(TTS, "say", string.format("Speech interrupt for spell casting %s.", casting_interrupt and "on" or "off"), true)
 end
 
 ]]>

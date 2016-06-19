@@ -121,7 +121,6 @@ if "%&lt;am_pm&gt;" ~= "" then sync_precise(tonumber("%&lt;hour&gt;"), 30, "%&lt
   <trigger
    enabled="y"
    group="mume_time"
-   keep_evaluating="y"
    match="^(Reconnecting|Welcome to the land of Middle-earth\. May your visit here be\.\.\. interesting)\.$"
    name="auto_type_time"
    send_to="13"
@@ -178,7 +177,6 @@ if "%&lt;am_pm&gt;" ~= "" then sync_precise(tonumber("%&lt;hour&gt;"), 30, "%&lt
 
 <script>
 <![CDATA[
-screenReader = "925cdd0331023d9f0b8f05a7"
 init_timer = math.floor(utils.timer())
 months = {
 	{name="Afteryule", dawn=8, dusk=18, season="Early-Winter"},
@@ -240,7 +238,7 @@ function time_tick()
 		if current_month == 1 then
 			current_year = current_year + 1
 		end
-		CallPlugin(screenReader, "sayNote", string.format("%s has begun with the month of %s.", months[current_month].season, current_month_name))
+		Note(string.format("%s has begun with the month of %s.", months[current_month].season, current_month_name))
 	end -- if
 end
 
@@ -357,7 +355,7 @@ function time_check(action)
 	output = string.format("%s\nTime left until %s is less than %s tick%s", output, next_state, till_next_state, till_next_state ~= "1" and "s." or "!")
 	output = string.format("%s\n%s ends in %d mume day%s or %d real-life hour%s.", output, string.sub(months[current_month].season, -6), next_season_in_mume_days, next_season_in_mume_days ~= 1 and "s" or "", next_season_in_rl_hours, next_season_in_rl_hours ~= 1 and "s" or "")
 	output = string.format("%s\nNext winter starts in %d real-life day%s and %d hour%s.", output, next_winter_in_rl_days, next_winter_in_rl_days ~= 1 and "s" or "", next_winter_in_rl_hours, next_winter_in_rl_hours ~= 1 and "s" or "")
-	CallPlugin(screenReader, "sayNote", output)
+	Note(output)
 end
 
 ]]>

@@ -38,7 +38,6 @@
    name="omit_merc_lanterns"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
    sequence="100"
   >
   </trigger>
@@ -47,7 +46,6 @@
    group="mume_misc"
    match="^    \:                          \*\*     (?P&lt;direction&gt; [NEW]|S[EW])    \*\*                             \:   $"
    name="auto_move_stakes"
-   omit_from_output="n"
    regexp="y"
    send_to="12"
    sequence="100"
@@ -66,10 +64,12 @@ end
    name="bm_spiders1"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "Flee if solo!", true)</send>
+  <send>CallPlugin(TTS, "silence")
+Note("Flee if solo!")
+  </send>
   </trigger>
   <trigger
    enabled="y"
@@ -78,10 +78,12 @@ end
    name="bm_spiders2"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "Flee if grouped!", true)</send>
+  <send>CallPlugin(TTS, "silence")
+Note("Flee if grouped!")
+  </send>
   </trigger>
   <trigger
    enabled="y"
@@ -90,10 +92,12 @@ end
    name="bm_spiders3"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "Narrate for help!", true)</send>
+  <send>CallPlugin(TTS, "silence")
+Note("Narrate for help!")
+  </send>
   </trigger>
   <trigger
    enabled="y"
@@ -102,10 +106,12 @@ end
    name="bm_spiders4"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "Web removed!", true)</send>
+  <send>CallPlugin(TTS, "silence")
+Note("Web removed!")
+  </send>
   </trigger>
   <trigger
    enabled="y"
@@ -114,7 +120,6 @@ end
    name="gag_street_lamps"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
    sequence="100"
   >
   </trigger>
@@ -125,7 +130,7 @@ end
    name="auto_drag_next"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>
@@ -133,7 +138,7 @@ if auto_drag then
 	auto_drag_counter = auto_drag_counter + 1
 	Send(string.format("drag %s.corpse", auto_drag_counter))
 else
-	CallPlugin(screenReader, "sayNote", "%0")
+	Note("%0")
 end
   </send>
   </trigger>
@@ -144,16 +149,16 @@ end
    name="auto_drag_complete"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>
 if auto_drag then
-	CallPlugin(screenReader, "sayNote", "Now dragging all corpses.")
+	Note("Now dragging all corpses.")
 	auto_drag_counter = 1
 	auto_drag = false
 else
-	CallPlugin(screenReader, "sayNote", "%0")
+	Note("%0")
 end
   </send>
   </trigger>
@@ -164,10 +169,10 @@ end
    name="shorten_assists"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%&lt;player&gt; assists %&lt;tank&gt;!")</send>
+  <send>%&lt;player&gt; assists %&lt;tank&gt;!</send>
   </trigger>
   <trigger
    enabled="y"
@@ -176,10 +181,10 @@ end
    name="shorten_leaves_message"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="2"
    sequence="80"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%&lt;direction&gt; %&lt;someone&gt;")</send>
+  <send>%&lt;direction&gt; %&lt;someone&gt;</send>
   </trigger>
   <trigger
    enabled="y"
@@ -188,14 +193,14 @@ end
    name="translate_country_codes"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>
 if country_codes["%&lt;alpha2&gt;"] then
-	CallPlugin(screenReader, "sayNote", string.format("%0 (%s)", country_codes["%&lt;alpha2&gt;"]))
+	Note(string.format("%0 (%s)", country_codes["%&lt;alpha2&gt;"]))
 else
-	CallPlugin(screenReader, "sayNote", "%0")
+	Note("%0")
 end
   </send>
   </trigger>
@@ -264,7 +269,6 @@ train all</send>
   <trigger
    enabled="y"
    group="mume_misc"
-   keep_evaluating="y"
    match="^(Welcome to the land of Middle\-earth\. May your visit here be\.\.\. interesting\.|Reconnecting\.)$"
    name="do_stuff_after_login"
    regexp="y"
@@ -299,7 +303,7 @@ local w = GetWorldById(angband)
 if w then
 	Execute(w, "%1")
 else
-	CallPlugin(screenReader, "sayNote", "Angband not open!")
+	Note("Angband not open!")
 end
   </send>
   </alias>
@@ -552,11 +556,11 @@ REVERSED_STAKES = {
 	["E"] = "W"
 }
 
-screenReader = "925cdd0331023d9f0b8f05a7"
-config = "d19a2f0a604c96b7318aa67f"
+TTS = "925cdd0331023d9f0b8f05a7"
+CONFIG = "d19a2f0a604c96b7318aa67f"
 xml_parser = "74834d3734b2c8a3a9da4d18"
 angband = "6ca103daa7e3465230ea22d9"
-return_code, show_prompt = CallPlugin(config, "get", "show_prompt")
+return_code, show_prompt = CallPlugin(CONFIG, "get", "show_prompt")
 auto_move_stakes = false
 auto_drag = false
 auto_drag_counter = 1
@@ -594,19 +598,20 @@ end
 
 function toggle_show_prompt()
 	show_prompt = not show_prompt
-	CallPlugin(config, "set", "show_prompt", show_prompt)
-	CallPlugin(screenReader, "sayNote", string.format("Show prompt %s.", show_prompt and "on" or "off"), true)
+	CallPlugin(CONFIG, "set", "show_prompt", show_prompt)
+	Note(string.format("Show prompt %s.", show_prompt and "on" or "off"))
 end
 
 function speak_prompt(key)
+	CallPlugin(TTS, "silence")
 	if not last_prompt then
-		CallPlugin(screenReader, "say", "No prompt", true)
+		CallPlugin(TTS, "say", "No prompt")
 	elseif key == "last_fought" then
-		CallPlugin(screenReader, "say", last_fought, true)
+		CallPlugin(TTS, "say", last_fought)
 	elseif not last_prompt[key] then
-		CallPlugin(screenReader, "say", "Unknown", true)
+		CallPlugin(TTS, "say", "Unknown")
 	else
-		CallPlugin(screenReader, "say", last_prompt[key], true)
+		CallPlugin(TTS, "say", last_prompt[key])
 	end
 end
 
@@ -618,7 +623,7 @@ function move_stakes(direction)
 		dir_keys[value] = key
 	end
 	if not dir_keys[direction] then
-		CallPlugin(screenReader, "sayNote", string.format("Invalid direction '%s': Must be one of %s.", direction, table.concat(dir_values, ", ")))
+		Note(string.format("Invalid direction '%s': Must be one of %s.", direction, table.concat(dir_values, ", ")))
 		return
 	end
 	local stakes = {"Forostar", "Orrostar", "Hyarrostar", "Hyarnustar", "Andustar"}

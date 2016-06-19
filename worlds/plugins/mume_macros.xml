@@ -49,8 +49,7 @@
 
 <script>
 <![CDATA[
-screenReader = "925cdd0331023d9f0b8f05a7"
-config = "d19a2f0a604c96b7318aa67f"
+CONFIG = "d19a2f0a604c96b7318aa67f"
 mume_misc = "ad20dd80cbd7c2fea78ce15c"
 mume_castor_spell_translator = "8b4e5dd676d8477dc5f14376"
 repeat_command = nil
@@ -59,16 +58,16 @@ function set_repeat(command)
 	command = Trim(command)
 	if command == "" then
 		if repeat_command then
-			CallPlugin(screenReader, "sayNote", string.format("'%s' is repeated.", repeat_command))
+			Note(string.format("'%s' is repeated.", repeat_command))
 		else
-			CallPlugin(screenReader, "sayNote", "Repeat command not set.")
+			Note("Repeat command not set.")
 		end
 	elseif command == "clear" then
 		repeat_command = nil
-		CallPlugin(screenReader, "sayNote", "Cleared.")
+		Note("Cleared.")
 	else
 		repeat_command = command
-		CallPlugin(screenReader, "sayNote", string.format("'%s' now repeated.", repeat_command))
+		Note(string.format("'%s' now repeated.", repeat_command))
 	end
 end
 
@@ -77,11 +76,11 @@ function repeat_last_command()
 	if command then
 		Execute(command)
 	else
-		CallPlugin(screenReader, "sayNote", "No repeat command.")
+		Note("No repeat command.")
 	end
 end
 
-local return_code, keyboard_layout = CallPlugin(config, "get", "keyboard_layout")
+local return_code, keyboard_layout = CallPlugin(CONFIG, "get", "keyboard_layout")
 if keyboard_layout == "dvorak" then
 	Accelerator("Alt+C", "north")
 	Accelerator("Alt+T", "south")

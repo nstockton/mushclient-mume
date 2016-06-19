@@ -463,42 +463,40 @@ put all.arrow quiver</send>
 
 <script>
 <![CDATA[
-
-screenReader = "925cdd0331023d9f0b8f05a7"
 targeting = nil
 
 function setTarget(target)
 	if target == "CLEAR" then
 		targeting = nil
-		CallPlugin(screenReader, "sayNote", "Target cleared.")
+		Note("Target cleared.")
 	elseif target == "AGAIN" then
 		if targeting then
-			CallPlugin(screenReader, "sayNote", string.format("Targeting %s again!", targeting))
+			Note(string.format("Targeting %s again!", targeting))
 			Send(string.format("label %s t", targeting))
 		else
-			CallPlugin(screenReader, "sayNote", "Target is undefined! Can not target again.")
+			Note("Target is undefined! Can not target again.")
 		end
 	elseif target == "t" then
-		CallPlugin(screenReader, "sayNote", "Target now t!")
+		Note("Target now t!")
 		targeting = "t"
 	elseif target and target~="" then
 		targeting = target
-		CallPlugin(screenReader, "sayNote", string.format("Target now %s!", target))
+		Note(string.format("Target now %s!", target))
 		Send(string.format("label %s t", target))
 	elseif targeting then
-		CallPlugin(screenReader, "sayNote", string.format("Targeting %s!", targeting))
+		Note(string.format("Targeting %s!", targeting))
 	else
-		CallPlugin(screenReader, "sayNote", "Target undefined.")
+		Note("Target undefined.")
 	end
 end
 
 function doTarget(action)
 	if not action or action=="" then
-		CallPlugin(screenReader, "sayNote", "No action given to do to target.")
+		Note("No action given to do to target.")
 	elseif targeting then
 		Send(string.format("%s %s", action, targeting))
 	else
-		CallPlugin(screenReader, "sayNote", "Target undefined.")
+		Note("Target undefined.")
 	end
 end
 

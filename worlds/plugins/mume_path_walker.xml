@@ -54,12 +54,8 @@
 <![CDATA[
 require("mystdlib")
 
-tts = "925cdd0331023d9f0b8f05a7"
-xml_parser = "74834d3734b2c8a3a9da4d18"
-room_name = ""
-walking = false
-came_from = ""
-reverse_directions = {
+XML_PARSER = "74834d3734b2c8a3a9da4d18"
+REVERSE_DIRECTIONS = {
 	["north"] = "south",
 	["south"] = "north",
 	["east"] = "west",
@@ -68,12 +64,16 @@ reverse_directions = {
 	["down"] = "up"
 }
 
+room_name = ""
+walking = false
+came_from = ""
+
 function OnPluginBroadcast (msg, id, name, text)
-	if id == xml_parser and name == "mume_xml_parser" and msg == 1 then
+	if id == XML_PARSER and name == "mume_XML_PARSER" and msg == 1 then
 		local return_code
-		return_code, room_name = CallPlugin(xml_parser, "get", "name")
+		return_code, room_name = CallPlugin(XML_PARSER, "get", "name")
 		if walking then
-			local return_code, exits_line = CallPlugin(xml_parser, "get", "exits")
+			local return_code, exits_line = CallPlugin(XML_PARSER, "get", "exits")
 			walk_next(exits_line)
 		end
 	end
@@ -83,7 +83,7 @@ function walk_next(line)
 	line = string.gsub(line, "^", "")
 	local ways_forward = {}
 	local roads = {}
-	for direction, reversed in pairs(reverse_directions) do
+	for direction, reversed in pairs(REVERSE_DIRECTIONS) do
 		if string.match(line, string.format("=%s=", direction)) then
 			if came_from ~= reversed then
 				table.insert(ways_forward, direction)
@@ -105,7 +105,7 @@ function walk_next(line)
 			end
 		else
 			stop_walking()
-			CallPlugin(tts, "sayNote", "End of road reached.")
+			Note("End of road reached.")
 		end
 	else
 		if (room_name == "A Fork" or room_name == "Greenholm Junction") and (came_from == "east" or came_from == "west") then
@@ -166,14 +166,14 @@ function walk_next(line)
 			end
 		else
 			stop_walking()
-			CallPlugin(tts, "sayNote", "Junction reached.")
+			Note("Junction reached.")
 		end
 	end
 end
 
 function start_walking(line)
 	local direction = nil
-	for dir, reversed in pairs(reverse_directions) do
+	for dir, reversed in pairs(REVERSE_DIRECTIONS) do
 		if line ~= "" and string.sub(dir, 1, string.len(line)) == line then
 			direction = dir
 			break
@@ -184,13 +184,13 @@ function start_walking(line)
 		came_from = direction
 		Send(came_from)
 	else 
-		CallPlugin(tts, "sayNote", "Invalid starting direction")
+		Note("Invalid starting direction")
 	end
 end
 
 function stop_walking()
 	walking = false
-	CallPlugin(tts, "sayNote", "Path Walker Disabled.")
+	Note("Path Walker Disabled.")
 end
 
 ]]>

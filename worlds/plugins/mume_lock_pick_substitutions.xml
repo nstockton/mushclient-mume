@@ -36,86 +36,85 @@
    group="mume_lock_pick_substitutions"
    match="A couple of lockpicks have a small bump near the tip."
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 (master assassin)")</send>
+  <send>%0 (master assassin)</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_lock_pick_substitutions"
    match="Two of the lockpicks have shallow notches on them."
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 (assassin guildmaster)")</send>
+  <send>%0 (assassin guildmaster)</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_lock_pick_substitutions"
    match="The lockpicks are extremely well tempered."
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 (blue mountains)")</send>
+  <send>%0 (blue mountains)</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_lock_pick_substitutions"
    match="Several of the picks have long, smooth grooves along their length."
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 (cut-throat)")</send>
+  <send>%0 (cut-throat)</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_lock_pick_substitutions"
    match="There is a strange lockpick, with a sharp protrusion on one side, in the set."
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 (kraksh)")</send>
+  <send>%0 (kraksh)</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_lock_pick_substitutions"
    match="The lockpicks feel oddly light in your hand."
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 (grey-cloaked man)")</send>
+  <send>%0 (grey-cloaked man)</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_lock_pick_substitutions"
    match="The edges of most picks have been carefully sharpened."
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 (angdil)")</send>
+  <send>%0 (angdil)</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_lock_pick_substitutions"
    match="A finely shaped lockpick has been engraved with a white hand."
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 (saruman)")</send>
+  <send>%0 (saruman)</send>
   </trigger>
 </triggers>
 
 <script>
 <![CDATA[
-screenReader = "925cdd0331023d9f0b8f05a7"
 
 ]]>
 </script>

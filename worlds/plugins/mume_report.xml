@@ -39,18 +39,18 @@
    omit_from_log="y"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>
 local current = tonumber("%&lt;current&gt;")
 local max = tonumber("%&lt;max&gt;")
 if max == nil then
-	CallPlugin(screenReader, "sayNote", "Unavailable.")
+	Note("Unavailable.")
 elseif max == 0 then
-	CallPlugin(screenReader, "sayNote", string.format("Character doesn't have %ss.", "%&lt;points&gt;"))
+	Note(string.format("Character doesn't have %ss.", "%&lt;points&gt;"))
 else
-	CallPlugin(screenReader, "sayNote", string.format("%d/%d [%.0f%%%] %ss.", current, max, (current >= 0 and current or 0) / max * 100, "%&lt;points&gt;"))
+	Note(string.format("%d/%d [%.0f%%%] %ss.", current, max, (current >= 0 and current or 0) / max * 100, "%&lt;points&gt;"))
 end
   </send>
   </trigger>
@@ -62,7 +62,7 @@ end
    omit_from_log="y"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>tnl("%&lt;xp&gt;", "%&lt;tp&gt;")</send>
@@ -75,7 +75,7 @@ end
    omit_from_log="y"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>score("%&lt;hp&gt;", "%&lt;max_hp&gt;", "%&lt;mana&gt;", "%&lt;max_mana&gt;", "%&lt;mv&gt;", "%&lt;max_mv&gt;")</send>
@@ -159,7 +159,6 @@ rptnl</send>
 
 <script>
 <![CDATA[
-screenReader = "925cdd0331023d9f0b8f05a7"
 will_report_score = false
 will_report_tnl = false
 
@@ -181,7 +180,7 @@ function score(hp, max_hp, mana, max_mana, mv, max_mv)
 end
 	table.insert(points, string.format("Moves: %s/%s [%.0f%%].", mv, max_mv, mv / max_mv * 100))
 	local output = table.concat(points, ", ")
-	CallPlugin(screenReader, "sayNote", output)
+	Note(output)
 	if will_report_score then
 		Send("emote reports: ", output)
 		will_report_score = false
@@ -190,7 +189,7 @@ end
 
 function tnl(xp, tp)
 	local output = string.format("%.3fK XP and %s TP to reach the next level.", xp / 1000, tp)
-	CallPlugin(screenReader, "sayNote", string.format("You need %s", output))
+	Note(string.format("You need %s", output))
 	if will_report_tnl then
 		Send("emote needs ", output)
 		will_report_tnl = false

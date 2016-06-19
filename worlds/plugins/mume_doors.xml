@@ -99,17 +99,17 @@ end
   <send>
 if "%&lt;name&gt;" == "" then
 	if door_name == "" then
-		CallPlugin(TTS, "sayNote", "Door undefined.")
+		Note("Door undefined.")
 	else
-		CallPlugin(TTS, "sayNote", string.format("%s is set.", door_name))
+		Note(string.format("%s is set.", door_name))
 	end
 else
 	if string.sub("clear", 1, #"%&lt;name&gt;") == string.lower("%&lt;name&gt;") then
 		door_name = ""
-		CallPlugin(TTS, "sayNote", "Door cleared.")
+		Note("Door cleared.")
 	else
 		door_name = "%&lt;name&gt;"
-		CallPlugin(TTS, "sayNote", "%&lt;name&gt; set.")
+		Note("%&lt;name&gt; set.")
 	end
 end
   </send>
@@ -126,7 +126,7 @@ end
   >
   <send>
 auto_open = auto_open ~= true
-CallPlugin(TTS, "sayNote", string.format("Auto open doors %s.", auto_open and "yes" or "no"))
+Note(string.format("Auto open doors %s.", auto_open and "yes" or "no"))
   </send>
   </alias>
 </aliases>
@@ -136,7 +136,6 @@ CallPlugin(TTS, "sayNote", string.format("Auto open doors %s.", auto_open and "y
 
 <script>
 <![CDATA[
-TTS = "925cdd0331023d9f0b8f05a7"
 DOOR_ACTIONS = {
 	["b"] = "bash",
 	["c"] = "close",
