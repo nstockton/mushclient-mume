@@ -49,7 +49,7 @@
    name="armour_down"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>spellTimerUnset("armour", "%0")</send>
@@ -72,7 +72,7 @@
    name="detect_invisibility_down"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>spellTimerUnset("detect invisibility", "%0")</send>
@@ -95,7 +95,7 @@
    name="bless_down"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>spellTimerUnset("bless", "%0")</send>
@@ -118,7 +118,7 @@
    name="shield_down"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>spellTimerUnset("shield", "%0")</send>
@@ -141,7 +141,7 @@
    name="strength_down"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>spellTimerUnset("strength", "%0")</send>
@@ -164,7 +164,7 @@
    name="shroud_down"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>spellTimerUnset("shroud", "%0")</send>
@@ -187,7 +187,7 @@
    name="sense_life_down"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>spellTimerUnset("sense life", "%0")</send>
@@ -210,7 +210,7 @@
    name="breath_of_briskness_down"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>spellTimerUnset("breath of briskness", "%0")</send>
@@ -233,7 +233,7 @@
    name="sanctuary_down"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>spellTimerUnset("sanctuary", "%0")</send>
@@ -256,7 +256,7 @@
    name="protection_from_evil_down"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>spellTimerUnset("protection from evil", "%0")</send>
@@ -279,7 +279,7 @@
    name="detect_evil_down"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>spellTimerUnset("detect evil", "%0")</send>
@@ -302,7 +302,7 @@
    name="detect_magic_down"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>spellTimerUnset("detect magic", "%0")</send>
@@ -325,7 +325,7 @@
    name="night_vision_down"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>spellTimerUnset("night vision", "%0")</send>
@@ -348,7 +348,7 @@
    name="tiredness_down"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>spellTimerUnset("tiredness", "%0")</send>
@@ -371,7 +371,7 @@
    name="haggardness_down"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>spellTimerUnset("haggardness", "%0")</send>
@@ -394,7 +394,7 @@
    name="lethargy_down"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>spellTimerUnset("lethargy", "%0")</send>
@@ -417,7 +417,7 @@
    name="blindness_down"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>spellTimerUnset("blindness", "%0")</send>
@@ -440,7 +440,7 @@
    name="battleglory_down"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>spellTimerUnset("battleglory", "%0")</send>
@@ -463,7 +463,7 @@
    name="orkish_draught_down"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>spellTimerUnset("orkish draught", "%0")</send>
@@ -475,7 +475,7 @@
    name="spell_status"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>spellTimerStatus("%&lt;spell&gt;")</send>
@@ -487,7 +487,6 @@
 
 <script>
 <![CDATA[
-screenReader = "925cdd0331023d9f0b8f05a7"
 spellTimers = {}
 
 function spellTimerSet(spell)
@@ -501,14 +500,14 @@ function spellTimerStatus(spell)
 		local minutesPretty = minutes ~= 1 and "s" or ""
 		local seconds = math.floor((currentTime - spellTimers[spell]) % 60)
 		local secondsPretty = seconds ~= 1 and "s" or ""
-		CallPlugin(screenReader, "sayNote", string.format("%s up for %d minute%s, %d second%s.", spell, minutes, minutesPretty, seconds, secondsPretty))
+		Note(string.format("%s up for %d minute%s, %d second%s.", spell, minutes, minutesPretty, seconds, secondsPretty))
 	else
-		CallPlugin(screenReader, "sayNote", spell)
+		Note(spell)
 	end
 end
 
 function spellTimerUnset(spell, line)
-	CallPlugin(screenReader, "sayNote", line)
+	Note(line)
 	if spellTimers[spell] then
 		spellTimerStatus(spell)
 		spellTimers[spell] = nil

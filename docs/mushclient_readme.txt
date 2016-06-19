@@ -1,7 +1,7 @@
-MUSHclient version 4.99
+MUSHclient version 5.01
 =======================
 
-Friday, 28th August 2015
+Friday, 5 February 2016
 
 
 Author: Nick Gammon

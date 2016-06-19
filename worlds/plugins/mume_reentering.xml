@@ -56,10 +56,10 @@
    name="Shorten_panic_message"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "Panic!")</send>
+  <send>Panic!</send>
   </trigger>
   <trigger
    enabled="y"
@@ -68,12 +68,12 @@
    name="fleeing"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>fled_direction = "%&lt;direction&gt;"
-Note("Fled ", fled_direction, "!")
-CallPlugin(screenReader, "say", fled_direction.."!", true)
+CallPlugin(TTS, "silence")
+Note(string.format("%s!", fled_direction))
 </send>
   </trigger>
   <trigger
@@ -82,12 +82,11 @@ CallPlugin(screenReader, "say", fled_direction.."!", true)
    match="You failed to escape the fight!"
    name="fail_escape"
    omit_from_output="y"
-   regexp="n"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
-  <send>Note("Failed escape!")
-CallPlugin(screenReader, "say", "Failed!", true)
+  <send>CallPlugin(TTS, "silence")
+Note("Failed!")
 </send>
   </trigger>
   <trigger
@@ -96,13 +95,10 @@ CallPlugin(screenReader, "say", "Failed!", true)
    match="You successfully escaped the fight!"
    name="successful_escape"
    omit_from_output="y"
-   regexp="n"
    send_to="12"
    sequence="100"
   >
-  <send>Note("Successful escape!")
-CallPlugin(screenReader, "silence")
-</send>
+  <send>CallPlugin(TTS, "silence")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -110,13 +106,12 @@ CallPlugin(screenReader, "silence")
    match="You feel stealthy again."
    name="stealthy_again"
    omit_from_output="y"
-   regexp="n"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
-  <send>Note("Stealthy again!")
-CallPlugin(screenReader, "say", "Stealthy!", true)
-</send>
+  <send>CallPlugin(TTS, "silence")
+Note("Stealthy!")
+  </send>
   </trigger>
 </triggers>
 
@@ -206,9 +201,8 @@ fled_direction = "west"</send>
 
 <script>
 <![CDATA[
-screenReader = "925cdd0331023d9f0b8f05a7"
-fled_direction = ""
-directions = {
+TTS = "925cdd0331023d9f0b8f05a7"
+REVERSE_DIRECTIONS = {
 	north="south",
 	south="north",
 	east="west",
@@ -217,9 +211,11 @@ directions = {
 	down="up",
 }
 
+fled_direction = ""
+
 function reenter()
-	if directions[fled_direction] then
-		Send(directions[fled_direction])
+	if REVERSE_DIRECTIONS[fled_direction] then
+		Send(REVERSE_DIRECTIONS[fled_direction])
 	end
 	fled_direction = ""
 end

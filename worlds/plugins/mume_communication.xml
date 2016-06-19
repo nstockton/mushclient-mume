@@ -38,7 +38,7 @@
    name="log_emotes"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="80"
   >
   <send>communicationAdd("say", "%&lt;player&gt;", StripANSI("%&lt;line&gt;"))</send>
@@ -50,7 +50,7 @@
    name="log_channels"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="80"
   >
   <send>communicationAdd(string.lower("%&lt;channel&gt;"), "%&lt;player&gt;", StripANSI("%&lt;line&gt;"))</send>
@@ -62,10 +62,10 @@
    name="print_channels"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", StripANSI("%&lt;line&gt;"))</send>
+  <send>Note(StripANSI("%&lt;line&gt;"))</send>
   </trigger>
 </triggers>
 
@@ -147,7 +147,7 @@
   <send>if communicationReplyTo then
 	Send("tell " .. communicationReplyTo .. " %1")
 else
-	CallPlugin(screenReader, "sayNote", "No one to reply to.")
+	Note("No one to reply to.")
 end</send>
   </alias>
 </aliases>
@@ -158,8 +158,6 @@ end</send>
 <script>
 <![CDATA[
 require("mystdlib")
-
-screenReader = "925cdd0331023d9f0b8f05a7"
 
 IGNORE_LIST = {
 	["Aldereon"] = true,
@@ -191,7 +189,7 @@ IGNORE_LIST = {
 communicationReplyTo = nil
 
 function communicationAdd(channel, player, line)
-	CallPlugin(screenReader, "sayNote", line)
+	Note(line)
 	if not IGNORE_LIST[player] then
 		if channel == "tell" then
 			if line:match("^.- tells the group '.+'$") then
@@ -213,7 +211,7 @@ function communicationReview(channel, text)
 	local channelLines = {}
 	local fileName = string.format("%scommunication/%s.txt", GetInfo(67), channel)
 	if not os.isFile(fileName) then
-		return CallPlugin(screenReader, "sayNote", string.format("The log file for channel '%s' hasn't been created yet. It will be created when a message to the channel has been received.", channel))
+		return Note(string.format("The log file for channel '%s' hasn't been created yet. It will be created when a message to the channel has been received.", channel))
 	end
 	local file = io.open(fileName, "rb")
 	for line in file:read("*all"):gmatch("[^\r\n]+") do
@@ -248,7 +246,7 @@ function communicationReview(channel, text)
 		-- Truncate the output if it exceeds 500 lines.
 		output = table.slice(output, -500)
 	end
-	CallPlugin(screenReader, "sayNote", table.concat(output, "\n"))
+	Note(table.concat(output, "\n"))
 end
 
 ]]>

@@ -36,946 +36,945 @@
    group="mume_key_substitutions"
    match="a jade-encrusted key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - archeddoor under hatch, Lorien (USE DECAY)")</send>
+  <send>%0 - archeddoor under hatch, Lorien (USE DECAY)</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a jewel-encrusted key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - jewelleddoor, Balrog rings key")</send>
+  <send>%0 - jewelleddoor, Balrog rings key</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a key attached to a vine-rope"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - Ingrove gate key")</send>
+  <send>%0 - Ingrove gate key</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a large flint key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - exit from aisle in Moria")</send>
+  <send>%0 - exit from aisle in Moria</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a copper key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - grate, pipeweed smugglers")</send>
+  <send>%0 - grate, pipeweed smugglers</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a crude metal key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - Filthy or Brolg")</send>
+  <send>%0 - Filthy or Brolg</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a darkly stained metal key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - irondoor, Guardian")</send>
+  <send>%0 - irondoor, Guardian</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a decayed iron key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - sconce treasure room at BW")</send>
+  <send>%0 - sconce treasure room at BW</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a decayed ironkey"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - sconce, BW treasury")</send>
+  <send>%0 - sconce, BW treasury</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a large key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - wall, Old Wight")</send>
+  <send>%0 - wall, Old Wight</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a metal and stone key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - cinderblock + tapestry, Eregion")</send>
+  <send>%0 - cinderblock + tapestry, Eregion</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a metal key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - either oakendoor at Necro or Tharbad chief")</send>
+  <send>%0 - either oakendoor at Necro or Tharbad chief</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a mithril key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - mithrildoor, Balrog rings (TIME/ZONE DECAY)")</send>
+  <send>%0 - mithrildoor, Balrog rings (TIME/ZONE DECAY)</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a polished copper key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - door + irondoor, DT")</send>
+  <send>%0 - door + irondoor, DT</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a rigid metal key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - trapdoor, GH Old Ruins")</send>
+  <send>%0 - trapdoor, GH Old Ruins</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a rusted iron key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - orcs dungeon, Dunland")</send>
+  <send>%0 - orcs dungeon, Dunland</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a rusted key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - Cryptdoor, Old Wight")</send>
+  <send>%0 - Cryptdoor, Old Wight</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a shining key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - archeddoors, Muranog's treasury")</send>
+  <send>%0 - archeddoors, Muranog's treasury</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a shop key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - shops, Tharbad")</send>
+  <send>%0 - shops, Tharbad</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a silvery key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - door, GC room")</send>
+  <send>%0 - door, GC room</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a simple metal key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - cover, BM mines")</send>
+  <send>%0 - cover, BM mines</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a skull key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - burialtrap, near Hillmen")</send>
+  <send>%0 - burialtrap, near Hillmen</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a slightly bent iron key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - jade bracelet chest")</send>
+  <send>%0 - jade bracelet chest</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a slimy iron key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - vaultdoor, Icedoor")</send>
+  <send>%0 - vaultdoor, Icedoor</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a slimy metal key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - 3 irondoors in Shaghosh area")</send>
+  <send>%0 - 3 irondoors in Shaghosh area</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a small brass key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - brassdoor, thorns/hedge tower")</send>
+  <send>%0 - brassdoor, thorns/hedge tower</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a small copper key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - granite, Unqalome")</send>
+  <send>%0 - granite, Unqalome</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a small iron key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - either chest at overseer or illusionist")</send>
+  <send>%0 - either chest at overseer or illusionist</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a small key carved from ebony"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - board + grating at Necro")</send>
+  <send>%0 - board + grating at Necro</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a twisted iron key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - irondoor, entrance to BW (Rentable/USE DECAY)")</send>
+  <send>%0 - irondoor, entrance to BW (Rentable/USE DECAY)</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a twisted root"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - wall, Ferny")</send>
+  <send>%0 - wall, Ferny</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a very rusty key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - gate, nobleman east of Tharbad")</send>
+  <send>%0 - gate, nobleman east of Tharbad</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a wooden key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - secret, treevillage (Rentable)")</send>
+  <send>%0 - secret, treevillage (Rentable)</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="an ancient dwarven key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - flagstone, circlet chest (USE DECAY)")</send>
+  <send>%0 - flagstone, circlet chest (USE DECAY)</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a small twisted root"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - wall, Ferny")</send>
+  <send>%0 - wall, Ferny</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a small rusted iron key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - metaldoor, Dunland Orcs")</send>
+  <send>%0 - metaldoor, Dunland Orcs</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a small silver key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - either MA upgrade or blackdoor at Sage")</send>
+  <send>%0 - either MA upgrade or blackdoor at Sage</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a small steel key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - slab, Unqalome")</send>
+  <send>%0 - slab, Unqalome</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a small stone key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - stonelatch, Bulag's treasury")</send>
+  <send>%0 - stonelatch, Bulag's treasury</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a square stone key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - force, Amon Othar")</send>
+  <send>%0 - force, Amon Othar</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="an ancient key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - stoneslab, lww smugglers")</send>
+  <send>%0 - stoneslab, lww smugglers</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="an ancient silver key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - OiE Book")</send>
+  <send>%0 - OiE Book</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="an ebony key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - 1 of 2 doors up from knight in rdell")</send>
+  <send>%0 - 1 of 2 doors up from knight in rdell</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a small key of elven make"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - ELF CAMP SOUTH OF RD")</send>
+  <send>%0 - ELF CAMP SOUTH OF RD</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="an engraved silver ring"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - crypt near WC")</send>
+  <send>%0 - crypt near WC</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="The key of metal has a small loop at its top, which makes it easier to wear on a keyring. Some ridges have been cut into its base."
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - oakendoor at Necro")</send>
+  <send>%0 - oakendoor at Necro</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="an engraved stone key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - irondoor to overseer")</send>
+  <send>%0 - irondoor to overseer</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="You notice 'My Cottage' has been inscribed on the key."
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - Tharbad Chief")</send>
+  <send>%0 - Tharbad Chief</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a Fornost city key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - Fornost Gates (RENTABLE)")</send>
+  <send>%0 - Fornost Gates (RENTABLE)</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a Jail key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - jaildoor, Bree (RENTABLE)")</send>
+  <send>%0 - jaildoor, Bree (RENTABLE)</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a stone key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - pillars, mattock armoury")</send>
+  <send>%0 - pillars, mattock armoury</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a tarnished metal key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - doors in VT")</send>
+  <send>%0 - doors in VT</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a tarnished silver key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - Battle-standard quest from Brolg")</send>
+  <send>%0 - Battle-standard quest from Brolg</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a tinted brass key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - door, gilded ghost")</send>
+  <send>%0 - door, gilded ghost</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a tiny bronze key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - Marbledoor, outcast")</send>
+  <send>%0 - Marbledoor, outcast</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="an icy key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - all doors, Balrog treasury (TIME/ZONE DECAY)")</send>
+  <send>%0 - all doors, Balrog treasury (TIME/ZONE DECAY)</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="an intricate steel key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - Umuk's chest (bda) (TIME/ZONE DECAY)")</send>
+  <send>%0 - Umuk's chest (bda) (TIME/ZONE DECAY)</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="an iron key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - rockface (not the one at ooc)")</send>
+  <send>%0 - rockface (not the one at ooc)</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a bent bone key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - stonedoor, silver bracer")</send>
+  <send>%0 - stonedoor, silver bracer</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="an old bronze key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - Wolfgate, irondoors, NOC")</send>
+  <send>%0 - Wolfgate, irondoors, NOC</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a big metal key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - oakendoor, Rohir tower")</send>
+  <send>%0 - oakendoor, Rohir tower</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="an old iron key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - rockdoor, GC")</send>
+  <send>%0 - rockdoor, GC</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a big stonekey"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - stonedoor, BBT")</send>
+  <send>%0 - stonedoor, BBT</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a black and silver key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - slab, Old Wight")</send>
+  <send>%0 - slab, Old Wight</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a black bone key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - door, Nagrorh")</send>
+  <send>%0 - door, Nagrorh</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a dirty key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - trapdoor, bandit leader")</send>
+  <send>%0 - trapdoor, bandit leader</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a dirty stone key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - floor/ceiling, 2h-axe Eregion")</send>
+  <send>%0 - floor/ceiling, 2h-axe Eregion</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a tiny copper key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - WAREHOUSE, Tharbad")</send>
+  <send>%0 - WAREHOUSE, Tharbad</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a fragile stone key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - stonedoor, Unqalome")</send>
+  <send>%0 - stonedoor, Unqalome</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a tiny silver key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - 1 of 2 doors up from knight in Rdell")</send>
+  <send>%0 - 1 of 2 doors up from knight in Rdell</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a glass key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - flagstone, DK")</send>
+  <send>%0 - flagstone, DK</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a tiny silvery key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - branchtop, Lorien")</send>
+  <send>%0 - branchtop, Lorien</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a granite key inlaid with wood"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - chest, Eregion 2 statues")</send>
+  <send>%0 - chest, Eregion 2 statues</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a tiny stone key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - stonedoor + prisondoor Barbaras")</send>
+  <send>%0 - stonedoor + prisondoor Barbaras</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a tiny stonekey"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - stonedoor+prisondoor, Barbaras")</send>
+  <send>%0 - stonedoor+prisondoor, Barbaras</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="an old key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - chest, lord's treasury")</send>
+  <send>%0 - chest, lord's treasury</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="an old metallic key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - BM mines chest")</send>
+  <send>%0 - BM mines chest</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="an old ornate key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - sarcophagus, Dunland vellum")</send>
+  <send>%0 - sarcophagus, Dunland vellum</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a black key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - portcullis, LB fort")</send>
+  <send>%0 - portcullis, LB fort</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a black metal key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - rock, ABR")</send>
+  <send>%0 - rock, ABR</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a black stone key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - panels at great wheels")</send>
+  <send>%0 - panels at great wheels</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a blood-stained key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - rack, OOC")</send>
+  <send>%0 - rack, OOC</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a bloody key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - door/gorydoor, Mezagor")</send>
+  <send>%0 - door/gorydoor, Mezagor</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a great bone key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - trapdoor, Balrog rings key")</send>
+  <send>%0 - trapdoor, Balrog rings key</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a green iron key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - prisondoor, NOC vellum place")</send>
+  <send>%0 - prisondoor, NOC vellum place</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a green key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - halldoor, Eregion")</send>
+  <send>%0 - halldoor, Eregion</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a heavy iron key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - door, Drain pipe")</send>
+  <send>%0 - door, Drain pipe</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a heavy steel key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - stonedoor/rockface, OOC")</send>
+  <send>%0 - stonedoor/rockface, OOC</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a blue steel-key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - minedoor, Dunland mines")</send>
+  <send>%0 - minedoor, Dunland mines</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a brass key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - metaldoor, bandit leader")</send>
+  <send>%0 - metaldoor, bandit leader</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a bright steel key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - grille behind panels (wheels)")</send>
+  <send>%0 - grille behind panels (wheels)</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a castle key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - irondoor, Malardils castle")</send>
+  <send>%0 - irondoor, Malardils castle</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a chained silver key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - joist, A Master treasury")</send>
+  <send>%0 - joist, A Master treasury</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_key_substitutions"
    match="a huge iron key"
    omit_from_output="y"
-   send_to="12"
+   send_to="2"
    sequence="100"
   >
-  <send>CallPlugin(screenReader, "sayNote", "%0 - steeldoor/leaddoor, Shaghosh")</send>
+  <send>%0 - steeldoor/leaddoor, Shaghosh</send>
   </trigger>
 </triggers>
 
 <script>
 <![CDATA[
-screenReader = "925cdd0331023d9f0b8f05a7"
 
 ]]>
 </script>
