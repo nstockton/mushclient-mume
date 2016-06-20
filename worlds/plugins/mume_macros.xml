@@ -49,6 +49,7 @@
 
 <script>
 <![CDATA[
+TTS = "925cdd0331023d9f0b8f05a7"
 CONFIG = "d19a2f0a604c96b7318aa67f"
 mume_misc = "ad20dd80cbd7c2fea78ce15c"
 mume_castor_spell_translator = "8b4e5dd676d8477dc5f14376"
@@ -139,7 +140,7 @@ end
 
 Accelerator("ctrl+shift+M", "assist")
 Accelerator("ctrl+shift+B", "bash")
-AcceleratorTo ("ctrl+U", "SelectCommand(); PasteCommand(''); CallPlugin(screenReader, 'say', 'Cleared')", sendto.script)
+AcceleratorTo ("ctrl+U", "SelectCommand(); PasteCommand(''); CallPlugin(TTS, 'say', 'Cleared')", sendto.script)
 	AcceleratorTo("ctrl+I", "CallPlugin(mume_castor_spell_translator, 'toggle_casting_interrupt')", sendto.script)
 
 ]]>
