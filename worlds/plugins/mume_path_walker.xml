@@ -69,7 +69,7 @@ walking = false
 came_from = ""
 
 function OnPluginBroadcast (msg, id, name, text)
-	if id == XML_PARSER and name == "mume_XML_PARSER" and msg == 1 then
+	if id == XML_PARSER and name == "mume_xml_parser" and msg == 1 then
 		local return_code
 		return_code, room_name = CallPlugin(XML_PARSER, "get", "name")
 		if walking then

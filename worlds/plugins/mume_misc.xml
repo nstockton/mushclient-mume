@@ -291,23 +291,6 @@ Send("change prompt all")</send>
 
 <aliases>
   <alias
-   name="send_to_angband"
-   match="/*"
-   enabled="y"
-   group="mume_misc"
-   send_to="12"
-   sequence="100"
-  >
-  <send>
-local w = GetWorldById(angband)
-if w then
-	Execute(w, "%1")
-else
-	Note("Angband not open!")
-end
-  </send>
-  </alias>
-  <alias
    name="show_prompt"
    match="showprompt"
    enabled="y"
@@ -558,8 +541,7 @@ REVERSED_STAKES = {
 
 TTS = "925cdd0331023d9f0b8f05a7"
 CONFIG = "d19a2f0a604c96b7318aa67f"
-xml_parser = "74834d3734b2c8a3a9da4d18"
-angband = "6ca103daa7e3465230ea22d9"
+XML_PARSER = "74834d3734b2c8a3a9da4d18"
 return_code, show_prompt = CallPlugin(CONFIG, "get", "show_prompt")
 auto_move_stakes = false
 auto_drag = false
@@ -568,8 +550,8 @@ last_prompt = nil
 last_fought = "Unknown last fought"
 
 function OnPluginBroadcast (msg, id, name, text)
-	if id == xml_parser and name == "mume_xml_parser" and msg == 1 then
-		local return_code, prompt = CallPlugin(xml_parser, "get", "prompt")
+	if id == XML_PARSER and name == "mume_xml_parser" and msg == 1 then
+		local return_code, prompt = CallPlugin(XML_PARSER, "get", "prompt")
 		if not prompt then
 			return
 		elseif show_prompt then
