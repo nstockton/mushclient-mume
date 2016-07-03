@@ -189,7 +189,7 @@ end
   <trigger
    enabled="y"
    group="mume_misc"
-   match="^Is playing from \*\.(?P&lt;alpha2&gt;[a-z]{2,2})\.$"
+   match="^(?:Last login [1]?\d hour[s]? ago|Is playing) from \*\.(?P&lt;alpha2&gt;[a-z]{2,2})\.$"
    name="translate_country_codes"
    omit_from_output="y"
    regexp="y"
