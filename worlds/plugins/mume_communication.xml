@@ -138,14 +138,15 @@
   </alias>
   <alias
    name="reply"
-   match="rep *"
+   match="^rep(?:l|ly)? (?P&lt;message&gt;.+)$"
    enabled="y"
    group="mume_communication"
+   regexp="y"
    send_to="12"
    sequence="100"
   >
   <send>if communicationReplyTo then
-	Send("tell " .. communicationReplyTo .. " %1")
+	Send("tell " .. communicationReplyTo .. " %&lt;message&gt;")
 else
 	Note("No one to reply to.")
 end</send>
