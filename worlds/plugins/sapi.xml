@@ -3,7 +3,7 @@
 
 <muclient>
 <plugin
-   name="Text_To_Speech"
+   name="SAPI"
    author="Nick Gammon"
    id="463242566069ebfd1b379ec1"
    language="Lua"
@@ -16,9 +16,7 @@
 <description trim="y">
 Type:
 
- sapi on    --> turn on speaking (the default)
- sapi off   --> turn off speaking of MUD output
- sapi skip  --> skips one sentence in output stream
+ sapi   --> Toggle the automatic speaking of incoming text from the Mud.
 
 Other scripts can speak stuff by doing:
 
@@ -29,35 +27,14 @@ Other scripts can speak stuff by doing:
 
 <aliases>
   <alias
-   match="sapi on"
+   match="sapi"
    enabled="n"
    omit_from_command_history="y"
    omit_from_log="y"
    omit_from_output="y"
-   script="speak_on"
+   script="sapi_toggle"
    sequence="100"
-   group="speech"
-  >
-  </alias>
-  <alias
-   match="sapi off"
-   enabled="n"
-   omit_from_command_history="y"
-   omit_from_log="y"
-   omit_from_output="y"
-   script="speak_off"
-   sequence="100"
-   group="speech"
-  >
-  </alias>
-     <alias
-   match="sapi skip"
-   enabled="n"
-   omit_from_log="y"
-   omit_from_output="y"
-   script="speak_skip"
-   sequence="100"
-   group="speech"
+   group="sapi_speech"
   >
   </alias>
     </aliases>
@@ -66,68 +43,134 @@ Other scripts can speak stuff by doing:
 
 <script>
 <![CDATA[
+-- Speak Flags:
+-- The default speak settings are:
+-- *Speak the given text string synchronously 
+-- *Not purge pending speak requests 
+-- *Parse the text as XML only if the first character is a left-angle-bracket (<) 
+-- *Not persist global XML state changes across speak calls 
+-- *Not expand punctuation characters into words.
+SPF_DEFAULT = 0 -- Specifies that the default settings should be used.
+SPF_ASYNC = 1 -- Specifies that the Speak call should be asynchronous. That is, it will return immediately after the speak request is queued.
+SPF_PURGEBEFORESPEAK = 2 -- Purges all pending speak requests prior to this speak call.
+SPF_IS_FILENAME = 4 -- The string passed to ISpVoice:Speak is a file name, and the file text should be spoken.
+SPF_IS_XML = 8 -- The input text will be parsed for XML markup.
+SPF_IS_NOT_XML = 16 -- The input text will not be parsed for XML markup.
+SPF_PERSIST_XML = 32 -- Global state changes in the XML markup will persist across speak calls.
+-- Normalizer flags:
+SPF_NLP_SPEAK_PUNC = 64 -- Punctuation characters should be expanded into words (e.g. "This is a sentence." would become "This is a sentence period").
+-- XML format flags:
+SPF_PARSE_SAPI = 128 -- Force XML parsing As MS SAPI.
+SPF_PARSE_SSML = 256 -- Force XML parsing As W3C SSML.
+SPF_PARSE_AUTODETECT = 0 -- The TTS XML format is auto-detected. This is the default if none of these TTS XML format values are present in the bit-field.
 
--- turn on speaking
-function speak_on (name, line, wildcards)
-	speak = true
-	talk:Speak ("Sapi auto speak now on.", 1)
-end -- function speak_on
+sapi_voice = nil
+auto_speak = false
 
--- turn off speaking
-function speak_off (name, line, wildcards)
-	speak = false
-	talk:Speak ("Sapi auto speak now off.",1)
-end -- function speak_off
-
--- skip a sentence
-function speak_skip (name, line, wildcards)
-	talk:Skip ("Sentence", 1)
-end -- function speak_skip
-
--- installation
-function OnPluginInstall ()
-	-- load Lua COM
+function OnPluginInstall()
+	-- load Lua COM.
 	require "luacom"
-	-- Instantiate a SAPI voice obejct
-	talk = assert (luacom.CreateObject ("SAPI.SpVoice"), "cannot open SAPI")
-	-- Method call
-	talk:Speak ("SAPI Plug-in installed and is ready.", 1)
-	speak = true
-	EnableGroup ("speech", true)
+	-- Instantiate a SAPI voice object.
+	sapi_voice = assert (luacom.CreateObject("SAPI.SpVoice"), "cannot open SAPI")
+	AcceleratorTo("ESC", "silence()", sendto.script)
+	EnableGroup("sapi_speech", true)
 end -- function OnPluginInstall
 
--- here to draw the screen
-function OnPluginScreendraw (t, log, line)
-	-- check loaded
-	if not talk then
-		return
-	end -- if not installed
-	if (t == 0 or t == 1) and speak then
-		talk:Speak (line, 1)
-	end -- if
-  end -- function
-  
--- Speak from other scripts
--- eg. CallPlugin ("463242566069ebfd1b379ec1", "say", "What to say")
 function say(text, interrupt)
-	-- check loaded
-	if not talk then
-		return false  -- failure
+	-- Check loaded.
+	if not sapi_voice then
+		return false -- failure
 	end -- if not installed
-	talk:Speak (text or "", interrupt and interrupt ~= 0 and 3 or 1)
-	return true  -- OK
+	sapi_voice:Speak(text or "", interrupt and interrupt ~= 0 and bit.bor(SPF_ASYNC, SPF_PURGEBEFORESPEAK, SPF_IS_NOT_XML) or bit.bor(SPF_ASYNC, SPF_IS_NOT_XML))
+	return true -- OK
 end -- function say
 
 function silence()
-	-- check loaded
-	if not talk then
-		return false  -- failure
+	-- Check loaded.
+	if not sapi_voice then
+		return false -- failure
 	end -- if not installed
-	talk:Speak ("", 3)
-	return true  -- OK
+	sapi_voice:Speak("", bit.bor(SPF_ASYNC, SPF_PURGEBEFORESPEAK, SPF_IS_NOT_XML))
+	return true -- OK
 end -- function silence
+
+function skip_sentence(name, line, wildcards)
+	-- Check loaded.
+	if not sapi_voice then
+		return false -- failure
+	end -- if not installed
+	sapi_voice:Skip("Sentence", 1)
+	return true -- OK
+end -- function skip_sentence
+
+function speaking()
+	-- Check loaded.
+	if not sapi_voice then
+		return false -- failure
+	end -- if not installed
+	return sapi_voice.Status.RunningState ~= 1
+end -- function speaking
+
+function set_voice(search)
+	-- Check loaded.
+	if not sapi_voice then
+		return false -- failure
+	elseif search then
+		search = search:lower()
+	end -- if
+	voices = luacom.GetEnumerator(sapi_voice:GetVoices())
+	voice = voices:Next()
+	while voice do
+		local name = voice:GetDescription()
+		if not search or search:find("^%s*$") then
+			search = name
+		end -- if
+		if string.find(name:lower(), search) then
+			-- SAPI needs to be re-initialized in order for the correct sampling rate for the new TTS engine to be used.
+			sapi_voice = nil
+			collectgarbage()
+			sapi_voice = assert (luacom.CreateObject("SAPI.SpVoice"), "cannot open SAPI")
+			sapi_voice:setVoice(voice)
+			Note(string.format("Switched to voice %s.", name))
+			break
+		end -- if
+		voice = voices:Next()
+	end -- while
+	return true -- OK
+end -- function set_voice
+
+function get_voices()
+	-- Check loaded.
+	if not sapi_voice then
+		return false -- failure
+	end -- if
+	voices = luacom.GetEnumerator(sapi_voice:GetVoices())
+	voice = voices:Next()
+	while voice do
+		Note(voice:GetDescription())
+		voice = voices:Next()
+	end -- while
+	return true -- OK
+end -- function get_voices
+
+function sapi_toggle(name, line, wildcards)
+	auto_speak = not auto_speak
+	say(string.format("SAPI Speech %s.", auto_speak and "on" or "off"), true)
+end -- function sapi_toggle
+
+function OnPluginScreendraw(line_type, log, line)
+	if auto_speak and line_type < 2 then
+		say(line)
+	end
+end
+
+function OnPluginTabComplete(word)
+	if auto_speak then
+		say(word, true)
+	end
+end
 
 ]]>
 </script>
-
+  
 </muclient>
