@@ -192,7 +192,9 @@ communicationReplyTo = nil
 function communicationAdd(channel, player, line)
 	Note(line)
 	if not IGNORE_LIST[player] then
-		if channel == "tell" then
+		if channel == "say" then
+			PlaySound(10, GetInfo(67) .. "sounds/says.wav", False, 0, 0)
+		elseif channel == "tell" then
 			if line:match("^.- tells the group '.+'$") then
 				communicationReplyTo = "group"
 			else
