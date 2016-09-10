@@ -116,7 +116,7 @@ Note("Web removed!")
   <trigger
    enabled="y"
    group="mume_misc"
-   match="^There is an old street\-lamp on the border of the street\.$"
+   match="^(?:There is an old street\-lamp on the border of the street|A finely crafted crystal lamp is here|A finely crafted crystal lamp is hanging from a tree branch)\.$"
    name="gag_street_lamps"
    omit_from_output="y"
    regexp="y"
