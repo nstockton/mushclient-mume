@@ -165,7 +165,7 @@
   <trigger
    enabled="y"
    group="mume_castor_spell_translator"
-   match="^Aye\! You cannot concentrate any more\.\.\.$"
+   match="^Argh\! You cannot concentrate any more\.\.\.$"
    name="casting_interrupted"
    omit_from_output="y"
    regexp="y"
