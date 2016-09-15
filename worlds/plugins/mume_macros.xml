@@ -51,8 +51,9 @@
 <![CDATA[
 TTS = "925cdd0331023d9f0b8f05a7"
 CONFIG = "d19a2f0a604c96b7318aa67f"
-mume_misc = "ad20dd80cbd7c2fea78ce15c"
-mume_castor_spell_translator = "8b4e5dd676d8477dc5f14376"
+MUME_MISC = "ad20dd80cbd7c2fea78ce15c"
+MUME_CASTOR_SPELL_TRANSLATOR = "8b4e5dd676d8477dc5f14376"
+MUME_SOUNDS = "32821ab3fa17b04a8ab4c420"
 repeat_command = nil
 
 function set_repeat(command)
@@ -98,16 +99,16 @@ if keyboard_layout == "dvorak" then
 	Accelerator("Alt+S", "roomname")
 	Accelerator("Alt+B", "flee")
 	Accelerator("Alt+M", "v")
-	AcceleratorTo("alt+I", "CallPlugin(mume_misc, 'speak_prompt', 'buffer')", sendto.script)
-	AcceleratorTo("alt+U", "CallPlugin(mume_misc, 'speak_prompt', 'fighting')", sendto.script)
-	AcceleratorTo("alt+E", "CallPlugin(mume_misc, 'speak_prompt', 'hp')", sendto.script)
-	AcceleratorTo("alt+O", "CallPlugin(mume_misc, 'speak_prompt', 'mp')", sendto.script)
-	AcceleratorTo("alt+A", "CallPlugin(mume_misc, 'speak_prompt', 'mv')", sendto.script)
-	AcceleratorTo("alt+;", "CallPlugin(mume_misc, 'speak_prompt', 'light')", sendto.script)
-	AcceleratorTo("alt+Q", "CallPlugin(mume_misc, 'speak_prompt', 'terrain')", sendto.script)
-	AcceleratorTo("alt+J", "CallPlugin(mume_misc, 'speak_prompt', 'last_fought')", sendto.script)
-	AcceleratorTo("alt+K", "CallPlugin(mume_misc, 'speak_prompt', 'flags')", sendto.script)
-	AcceleratorTo("alt+X", "CallPlugin(mume_misc, 'speak_prompt', 'sneak')", sendto.script)
+	AcceleratorTo("alt+I", "CallPlugin(MUME_MISC, 'speak_prompt', 'buffer')", sendto.script)
+	AcceleratorTo("alt+U", "CallPlugin(MUME_MISC, 'speak_prompt', 'fighting')", sendto.script)
+	AcceleratorTo("alt+E", "CallPlugin(MUME_MISC, 'speak_prompt', 'hp')", sendto.script)
+	AcceleratorTo("alt+O", "CallPlugin(MUME_MISC, 'speak_prompt', 'mp')", sendto.script)
+	AcceleratorTo("alt+A", "CallPlugin(MUME_MISC, 'speak_prompt', 'mv')", sendto.script)
+	AcceleratorTo("alt+;", "CallPlugin(MUME_MISC, 'speak_prompt', 'light')", sendto.script)
+	AcceleratorTo("alt+Q", "CallPlugin(MUME_MISC, 'speak_prompt', 'terrain')", sendto.script)
+	AcceleratorTo("alt+J", "CallPlugin(MUME_MISC, 'speak_prompt', 'last_fought')", sendto.script)
+	AcceleratorTo("alt+K", "CallPlugin(MUME_MISC, 'speak_prompt', 'flags')", sendto.script)
+	AcceleratorTo("alt+X", "CallPlugin(MUME_MISC, 'speak_prompt', 'sneak')", sendto.script)
 	AcceleratorTo("alt+P", "repeat_last_command()", sendto.script)
 else
 	Accelerator("Alt+I", "north")
@@ -125,23 +126,26 @@ else
 	Accelerator("Alt+;", "roomname")
 	Accelerator("Alt+N", "flee")
 	Accelerator("Alt+M", "v")
-	AcceleratorTo("alt+G", "CallPlugin(mume_misc, 'speak_prompt', 'buffer')", sendto.script)
-	AcceleratorTo("alt+F", "CallPlugin(mume_misc, 'speak_prompt', 'fighting')", sendto.script)
-	AcceleratorTo("alt+D", "CallPlugin(mume_misc, 'speak_prompt', 'hp')", sendto.script)
-	AcceleratorTo("alt+S", "CallPlugin(mume_misc, 'speak_prompt', 'mp')", sendto.script)
-	AcceleratorTo("alt+A", "CallPlugin(mume_misc, 'speak_prompt', 'mv')", sendto.script)
-	AcceleratorTo("alt+Z", "CallPlugin(mume_misc, 'speak_prompt', 'light')", sendto.script)
-	AcceleratorTo("alt+X", "CallPlugin(mume_misc, 'speak_prompt', 'terrain')", sendto.script)
-	AcceleratorTo("alt+C", "CallPlugin(mume_misc, 'speak_prompt', 'last_fought')", sendto.script)
-	AcceleratorTo("alt+V", "CallPlugin(mume_misc, 'speak_prompt', 'flags')", sendto.script)
-	AcceleratorTo("alt+B", "CallPlugin(mume_misc, 'speak_prompt', 'sneak')", sendto.script)
+	AcceleratorTo("alt+G", "CallPlugin(MUME_MISC, 'speak_prompt', 'buffer')", sendto.script)
+	AcceleratorTo("alt+F", "CallPlugin(MUME_MISC, 'speak_prompt', 'fighting')", sendto.script)
+	AcceleratorTo("alt+D", "CallPlugin(MUME_MISC, 'speak_prompt', 'hp')", sendto.script)
+	AcceleratorTo("alt+S", "CallPlugin(MUME_MISC, 'speak_prompt', 'mp')", sendto.script)
+	AcceleratorTo("alt+A", "CallPlugin(MUME_MISC, 'speak_prompt', 'mv')", sendto.script)
+	AcceleratorTo("alt+Z", "CallPlugin(MUME_MISC, 'speak_prompt', 'light')", sendto.script)
+	AcceleratorTo("alt+X", "CallPlugin(MUME_MISC, 'speak_prompt', 'terrain')", sendto.script)
+	AcceleratorTo("alt+C", "CallPlugin(MUME_MISC, 'speak_prompt', 'last_fought')", sendto.script)
+	AcceleratorTo("alt+V", "CallPlugin(MUME_MISC, 'speak_prompt', 'flags')", sendto.script)
+	AcceleratorTo("alt+B", "CallPlugin(MUME_MISC, 'speak_prompt', 'sneak')", sendto.script)
 	AcceleratorTo("alt+R", "repeat_last_command()", sendto.script)
 end
 
 Accelerator("ctrl+shift+M", "assist")
 Accelerator("ctrl+shift+B", "bash")
 AcceleratorTo ("ctrl+U", "SelectCommand(); PasteCommand(''); CallPlugin(TTS, 'say', 'Cleared')", sendto.script)
-	AcceleratorTo("ctrl+I", "CallPlugin(mume_castor_spell_translator, 'toggle_casting_interrupt')", sendto.script)
+AcceleratorTo("ctrl+I", "CallPlugin(MUME_CASTOR_SPELL_TRANSLATOR, 'toggle_casting_interrupt')", sendto.script)
+AcceleratorTo("F12", "CallPlugin(MUME_SOUNDS, 'adjust_volume', 1)", sendto.script)
+AcceleratorTo("shift+F12", "CallPlugin(MUME_SOUNDS, 'adjust_volume', -1)", sendto.script)
+AcceleratorTo("ctrl+shift+F12", "CallPlugin(MUME_SOUNDS, 'toggle_mute')", sendto.script)
 
 ]]>
 </script>
