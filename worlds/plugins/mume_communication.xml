@@ -159,6 +159,8 @@ end</send>
 <script>
 <![CDATA[
 require("mystdlib")
+MUME_SOUNDS = "32821ab3fa17b04a8ab4c420"
+TYPE_COMMUNICATION = 9
 
 IGNORE_LIST = {
 	["Aldereon"] = true,
@@ -193,14 +195,14 @@ function communicationAdd(channel, player, line)
 	Note(line)
 	if not IGNORE_LIST[player] then
 		if channel == "say" then
-			PlaySound(10, GetInfo(67) .. "sounds/says.wav", False, 0, 0)
+			CallPlugin(MUME_SOUNDS, "play", TYPE_COMMUNICATION, GetInfo(67) .. "sounds/says.wav")
 		elseif channel == "tell" then
 			if line:match("^.- tells the group '.+'$") then
 				communicationReplyTo = "group"
 			else
 				communicationReplyTo = player
 			end
-			PlaySound(10, GetInfo(67) .. "sounds/tells.wav", False, 0, 0)
+			CallPlugin(MUME_SOUNDS, "play", TYPE_COMMUNICATION, GetInfo(67) .. "sounds/tells.wav")
 		end
 		local file = io.open(GetInfo(67) .. "communication/" .. channel .. ".txt", "ab")
 		file:write(line .. "\r\n")
