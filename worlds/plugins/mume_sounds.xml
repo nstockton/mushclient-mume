@@ -277,7 +277,7 @@ end
   <trigger
    enabled="y"
    group="mume_sounds"
-   match="^As you call upon Elbereth\, .+? shivers in pain\.$"
+   match="^(?:As you call upon Elbereth\, .+? shivers in pain|.+? is dissolved by your goodness)\.$"
    name="dispel_evil_target"
    omit_from_output="y"
    regexp="y"
@@ -360,7 +360,30 @@ end
   <trigger
    enabled="y"
    group="mume_sounds"
-   match="^.+? swiftly dodges your attempt to shoot \w+\.$"
+   match="^.+? seems to be blinded\!$"
+   name="blind_target"
+   omit_from_output="y"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_SPELL_ATTACK, GetInfo(67).."sounds/spells/blind_target.wav")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
+   match="Your victim is already blind."
+   name="already_blind_target"
+   omit_from_output="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_SPELL_ATTACK, GetInfo(67).."sounds/spells/already_blind_target.wav")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
+   match="^(?:.+? swiftly dodges your attempt to shoot \w+|You try to shoot [^\,]+\, but \w+ parries successfully|Your attempt to shoot .+? fails)\.$"
    name="fail_shoot_target"
    omit_from_output="y"
    regexp="y"
@@ -372,7 +395,7 @@ end
   <trigger
    enabled="y"
    group="mume_sounds"
-   match="^You (?:strongly )?shoot [^\.]+\.$"
+   match="^You (?:lightly |strongly )?shoot [^\.]+\.$"
    name="shoot_target"
    omit_from_output="y"
    regexp="y"
