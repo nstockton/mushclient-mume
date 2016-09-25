@@ -93,6 +93,18 @@ end
   <trigger
    enabled="y"
    group="mume_sounds"
+   match="^(?:Cirdan the Shipwright is standing here \(glowing\)|Elrond the Master of Rivendell is standing here \(glowing\)|A (?:citizen[\- ])?mercenary (?:(?:leaves|has arrived) from [^\.]+|is here\, (?:looking|waiting) for a job))\.$"
+   name="misc_alert"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_ALERT, GetInfo(67).."sounds/misc_alert.wav")
+</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
    match="^(?:A blue transparent wall slowly appears around you|Your magic armour is revitalised)\.$"
    name="armour_up"
    regexp="y"
