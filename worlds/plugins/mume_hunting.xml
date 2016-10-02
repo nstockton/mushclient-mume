@@ -233,15 +233,6 @@ flee</send>
   <send>tt *man*</send>
   </alias>
   <alias
-   name="reveal_thorough"
-   match="rt"
-   enabled="y"
-   group="mume_hunting"
-   sequence="100"
-  >
-  <send>reveal thorough</send>
-  </alias>
-  <alias
    name="target_troll"
    match="ttr"
    enabled="y"
@@ -448,6 +439,15 @@ get all.arrow
 put all.arrow quiver</send>
   </alias>
   <alias
+   name="reveal_all"
+   match="ra"
+   enabled="y"
+   group="mume_hunting"
+   sequence="100"
+  >
+  <send>reveal all</send>
+  </alias>
+  <alias
    name="reveal_quick"
    match="rq"
    enabled="y"
@@ -455,6 +455,15 @@ put all.arrow quiver</send>
    sequence="100"
   >
   <send>reveal quick</send>
+  </alias>
+  <alias
+   name="reveal_thorough"
+   match="rt"
+   enabled="y"
+   group="mume_hunting"
+   sequence="100"
+  >
+  <send>reveal thorough</send>
   </alias>
 </aliases>
 
