@@ -57,7 +57,7 @@ end
   <trigger
    enabled="y"
    group="mume_report"
-   match="^tnlreport\: (?P&lt;xp&gt;\d+) (?P&lt;tp&gt;\d+)$"
+   match="^tnlreport\: (?P&lt;xp&gt;\d+) (?P&lt;tp&gt;\d+) (?P&lt;level&gt;\d+)$"
    name="capture_tnl"
    omit_from_log="y"
    omit_from_output="y"
@@ -65,7 +65,7 @@ end
    send_to="14"
    sequence="100"
   >
-  <send>tnl("%&lt;xp&gt;", "%&lt;tp&gt;")</send>
+  <send>tnl("%&lt;xp&gt;", "%&lt;tp&gt;", "%&lt;level&gt;")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -150,7 +150,7 @@ rptnl</send>
    group="mume_report"
    sequence="100"
   >
-  <send>info tnlreport: %%X %%T</send>
+  <send>info tnlreport: %%X %%T %%l</send>
   </alias>
 </aliases>
 
@@ -169,7 +169,7 @@ end
 
 function tnl_report()
 	will_report_tnl = true
-	Send("info tnlreport: %X %T")
+	Send("info tnlreport: %X %T %l")
 end
 
 function score(hp, max_hp, mana, max_mana, mv, max_mv)
@@ -187,8 +187,8 @@ end
 	end
 end
 
-function tnl(xp, tp)
-	local output = string.format("%.3fK XP and %s TP to reach the next level.", xp / 1000, tp)
+function tnl(xp, tp, level)
+	local output = string.format("%.3fK XP and %s TP to reach level %s.", xp / 1000, tp, level + 1)
 	Note(string.format("You need %s", output))
 	if will_report_tnl then
 		Send("emote needs ", output)
