@@ -301,6 +301,20 @@ Send("change prompt all")</send>
 
 <aliases>
   <alias
+   name="get_new_unique_id"
+   match="newid"
+   enabled="y"
+   group="mume_misc"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+local new_id = GetUniqueID()
+SetClipboard(new_id)
+Note(string.format("%s copied to clipboard.", new_id))
+  </send>
+  </alias>
+  <alias
    name="show_prompt"
    match="showprompt"
    enabled="y"
