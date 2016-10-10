@@ -66,6 +66,8 @@ local TAG_REPLACEMENTS = {
 	["emote"] = "EMOTE:",
 	["/emote"] = ":EMOTE",
 }
+local BROADCAST_PROMPT = 1
+local BROADCAST_MOVEMENT = 2
 
 local in_esc = false
 local in_iac = false
@@ -181,7 +183,7 @@ function OnPluginPacketReceived(packet)
 						last_data = {name="", description="", dynamic="", exits=""}
 						xml_mode = XML_ROOM
 					elseif string.startswith(tag, "movement") then
-						BroadcastPlugin(2, string.match(tag, "^movement dir=(%w+)/$") or "")
+						BroadcastPlugin(BROADCAST_MOVEMENT, string.match(tag, "^movement dir=(%w+)/$") or "")
 						scouting = false
 					elseif tag == "status" then
 						xml_mode = XML_NONE
@@ -201,7 +203,7 @@ function OnPluginPacketReceived(packet)
 				elseif xml_mode == XML_EXITS and tag == "/exits" then
 					xml_mode = XML_NONE
 				elseif xml_mode == XML_PROMPT and tag == "/prompt" then
-					BroadcastPlugin(1, "")
+					BroadcastPlugin(BROADCAST_PROMPT, last_data["prompt"])
 					scouting = false
 					xml_mode = XML_NONE
 				end
