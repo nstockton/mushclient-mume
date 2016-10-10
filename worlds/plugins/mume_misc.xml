@@ -566,6 +566,8 @@ REVERSED_STAKES = {
 TTS = "925cdd0331023d9f0b8f05a7"
 CONFIG = "d19a2f0a604c96b7318aa67f"
 XML_PARSER = "74834d3734b2c8a3a9da4d18"
+BROADCAST_PROMPT = 1
+
 return_code, show_prompt = CallPlugin(CONFIG, "get", "show_prompt")
 auto_move_stakes = false
 auto_drag = false
@@ -574,14 +576,13 @@ last_prompt = nil
 last_fought = "Unknown last fought"
 
 function OnPluginBroadcast (msg, id, name, text)
-	if id == XML_PARSER and name == "mume_xml_parser" and msg == 1 then
-		local return_code, prompt = CallPlugin(XML_PARSER, "get", "prompt")
-		if not prompt then
+	if id == XML_PARSER and name == "mume_xml_parser" and msg == BROADCAST_PROMPT then
+		if not text then
 			return
 		elseif show_prompt then
-			Note(prompt)
+			Note(text)
 		end
-		local starting, ending, match = PROMPT_REGEX:match(prompt)
+		local starting, ending, match = PROMPT_REGEX:match(text)
 		if not match then
 			return
 		end
