@@ -40,7 +40,15 @@
    send_to="12"
    sequence="100"
   >
-  <send>if "%&lt;player&gt;"==leader and auto_ride then Send("ride") end</send>
+  <send>
+if "%&lt;player&gt;" == leader and auto_ride then
+	if leader_zblammed then
+		leader_zblammed = false
+	else
+		Send("ride")
+	end
+end
+  </send>
   </trigger>
   <trigger
    enabled="y"
@@ -67,16 +75,15 @@
   <trigger
    enabled="y"
    group="mume_grouping"
-   match="^ZBLAM\! A (?P&lt;mount&gt;pony|dales-pony|horse|warhorse|pack horse|trained horse|horse of the Rohirrim|brown donkey|mountain mule|hungry warg|brown wolf)(?P&lt;label&gt; \(\w+\))? doesn\'t want you riding (?:him|her|it) anymore\.$"
+   match="^ZBLAM\! A (?P&lt;mount&gt;pony|dales-pony|horse|warhorse|pack horse|trained horse|horse of the Rohirrim|brown donkey|mountain mule|hungry warg|brown wolf) (?:\((?P&lt;label&gt;\w+)\) )?doesn\'t want you riding (?:him|her|it) anymore\.$"
    name="autoremount"
    regexp="y"
    send_to="12"
    sequence="100"
   >
   <send>local mount = "%&lt;mount&gt;"
-local label = "%&lt;label&gt;"~="" and "%&lt;label&gt;" or nil
-if label then
-	mount = string.match(label, "[^)( ]+")
+if "%&lt;label&gt;" ~= "" then
+	mount = "%&lt;label&gt;"
 elseif string.match(mount, "Rohirrim") then
 	mount = "rohirrim"
 elseif string.match(mount, "donkey") then
@@ -88,9 +95,23 @@ else
 end
 if auto_ride then
 	Send("stand")
-	Send("lead "..mount)
-	Send("ride "..mount)
+	Send("ride ", mount)
 end</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_grouping"
+   match="^ZBLAM\! A (?:pony|dales-pony|horse|warhorse|pack horse|trained horse|horse of the Rohirrim|brown donkey|mountain mule|hungry warg|brown wolf) (?:\(\w+\) )?sends (?P&lt;player&gt;\w+) (?:\(\w+\) )?flying\!$"
+   name="player_zblammed"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+if "%&lt;player&gt;" == leader and auto_ride then
+	leader_zblammed = true
+end
+  </send>
   </trigger>
   <trigger
    name="autogroup1"
@@ -178,7 +199,11 @@ end</send>
    send_to="12"
    sequence="100"
   >
-  <send>if "%&lt;player&gt;"==leader and auto_ride then Send("lead") end</send>
+  <send>
+if "%&lt;player&gt;" == leader and auto_ride and not leader_zblammed then
+	Send("lead")
+end
+</send>
   </trigger>
 </triggers>
 
@@ -306,6 +331,7 @@ NO_LEADER_MESSAGE = "Leader undefined."
 auto_ride = true
 auto_group = false
 leader = nil
+leader_zblammed = false
 
 function actionLeader(action)
 	if not action then
