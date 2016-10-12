@@ -60,6 +60,23 @@ end
   <trigger
    enabled="y"
    group="mume_misc"
+   match="^Several glyphs have been carved into the oaken rod\. Some symbols are larger and more finely detailed than the others\: a (?P&lt;first&gt;[^\,]+)\, a (?P&lt;second&gt;[^\,]+)\, and a (?P&lt;third&gt;[^\.]+)\.$"
+   name="auto_open_mystical"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+if GLYPHS["%&lt;first&gt;"] and GLYPHS["%&lt;second&gt;"] and GLYPHS["%&lt;third&gt;"] then
+	Send("put rod ", GLYPHS["%&lt;first&gt;"])
+	Send("put rod ", GLYPHS["%&lt;second&gt;"])
+	Send("put rod ", GLYPHS["%&lt;third&gt;"])
+end
+  </send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
    match="^A (?:great\, dark|horrible\, dark-green) spider quickly begins to weave a tight\, sticky web around your body\!$"
    name="bm_spiders1"
    omit_from_output="y"
@@ -561,6 +578,16 @@ REVERSED_STAKES = {
 	["SW"] = "SE",
 	["SE"] = "SW",
 	["E"] = "W"
+}
+
+GLYPHS = {
+	["sprig of mistletoe"] = "wedding",
+	["tree"] = "hunt",
+	["flame"] = "battle",
+	["cloud"] = "river",
+	["star"] = "mountain",
+	["harp"] = "feast",
+	["crown"] = "funeral"
 }
 
 TTS = "925cdd0331023d9f0b8f05a7"
