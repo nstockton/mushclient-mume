@@ -45,6 +45,7 @@
   <send>
 local current = tonumber("%&lt;current&gt;")
 local max = tonumber("%&lt;max&gt;")
+CallPlugin(TTS, "silence")
 if max == nil then
 	Note("Unavailable.")
 elseif max == 0 then
@@ -159,6 +160,8 @@ rptnl</send>
 
 <script>
 <![CDATA[
+TTS = "925cdd0331023d9f0b8f05a7"
+
 will_report_score = false
 will_report_tnl = false
 
