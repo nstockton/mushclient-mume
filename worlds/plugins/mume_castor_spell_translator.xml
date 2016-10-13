@@ -41,7 +41,7 @@
    send_to="14"
    sequence="100"
   >
-  <send>translate("%&lt;castor&gt;", "%&lt;spell&gt;")</send>
+  <send>note_interrupt(string.format("%s casts %s!", "%&lt;castor&gt;", SPELLS["%&lt;spell&gt;"] or "%&lt;spell&gt;"))</send>
   </trigger>
   <trigger
    enabled="y"
@@ -53,7 +53,7 @@
    send_to="14"
    sequence="100"
   >
-  <send>shorten("%&lt;castor&gt; casting!")</send>
+  <send>note_interrupt("%&lt;castor&gt; casting!")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -65,7 +65,7 @@
    send_to="14"
    sequence="100"
   >
-  <send>shorten("Dispelled %&lt;target&gt;!")</send>
+  <send>note_interrupt("Dispelled %&lt;target&gt;!")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -77,7 +77,7 @@
    send_to="14"
    sequence="100"
   >
-  <send>shorten("Feared!")</send>
+  <send>note_interrupt("Feared!")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -89,7 +89,7 @@
    send_to="14"
    sequence="100"
   >
-  <send>shorten("Sprayed %&lt;target&gt;!")</send>
+  <send>note_interrupt("Sprayed %&lt;target&gt;!")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -101,7 +101,7 @@
    send_to="14"
    sequence="100"
   >
-  <send>shorten("Burned %&lt;target&gt;!")</send>
+  <send>note_interrupt("Burned %&lt;target&gt;!")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -113,7 +113,7 @@
    send_to="14"
    sequence="100"
   >
-  <send>shorten("Fireballed %&lt;target&gt;!")</send>
+  <send>note_interrupt("Fireballed %&lt;target&gt;!")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -125,7 +125,7 @@
    send_to="14"
    sequence="100"
   >
-  <send>shorten("Bolted %&lt;target&gt;!")</send>
+  <send>note_interrupt("Bolted %&lt;target&gt;!")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -136,7 +136,7 @@
    send_to="14"
    sequence="100"
   >
-  <send>shorten("Quake!")</send>
+  <send>note_interrupt("Quake!")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -148,31 +148,31 @@
    send_to="14"
    sequence="100"
   >
-  <send>shorten("Blinded %&lt;target&gt;!")</send>
+  <send>note_interrupt("Blinded %&lt;target&gt;!")</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_castor_spell_translator"
-   match="^Your victim is already blind\.$"
+   match="Your victim is already blind."
    name="already_blinded_message"
    omit_from_output="y"
-   regexp="y"
+   regexp="n"
    send_to="14"
    sequence="100"
   >
-  <send>shorten("Already blinded!")</send>
+  <send>note_interrupt("Already blinded!")</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_castor_spell_translator"
-   match="^Argh\! You cannot concentrate any more\.\.\.$"
+   match="Argh! You cannot concentrate any more..."
    name="casting_interrupted"
    omit_from_output="y"
-   regexp="y"
+   regexp="n"
    send_to="14"
    sequence="100"
   >
-  <send>shorten("Interrupted!")</send>
+  <send>note_interrupt("Interrupted!")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -184,7 +184,7 @@
    send_to="14"
    sequence="100"
   >
-  <send>shorten("Nothing happens!")</send>
+  <send>note_interrupt("Nothing happens!")</send>
   </trigger>
 </triggers>
 
@@ -195,9 +195,8 @@
 <![CDATA[
 TTS = "925cdd0331023d9f0b8f05a7"
 CONFIG = "d19a2f0a604c96b7318aa67f"
-return_code, casting_interrupt = CallPlugin(CONFIG, "get", "casting_interrupt")
 
-spells = {
+SPELLS = {
 	["abrawajf"] = "armour",
 	["bfzahp ay bfugtizgg"] = "breath of briskness",
 	["bfzat eaaf"] = "break door",
@@ -269,14 +268,7 @@ spells = {
 	["zabrahpdjatz"] = "earthquake",
 }
 
-function translate(castor, spell)
-	if spells[spell] then
-		spell = spells[spell]
-	end
-	local line = string.format("%s casts %s!", castor, spell)
-	CallPlugin(TTS, "silence")
-	Note(line)
-end
+return_code, casting_interrupt = CallPlugin(CONFIG, "get", "casting_interrupt")
 
 function toggle_casting_interrupt()
 	casting_interrupt = not casting_interrupt
@@ -284,7 +276,7 @@ function toggle_casting_interrupt()
 	CallPlugin(TTS, "say", string.format("Speech interrupt for spell casting %s.", casting_interrupt and "on" or "off"), true)
 end
 
-function shorten(message)
+function note_interrupt(message)
 	if casting_interrupt then
 		CallPlugin(TTS, "silence")
 	end
