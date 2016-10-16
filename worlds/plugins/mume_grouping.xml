@@ -150,7 +150,9 @@ end
   >
   <send>
 if auto_group then
-	Send("tell %&lt;player&gt; You are in another group already.  If you wish to join, please 'group self' and 'raise' again.")
+	Send("tell %&lt;player&gt; Auto-tell: You are in another group already. If you wish to join, please 'group self' and 'raise' again.")
+else
+	Send("tell %&lt;player&gt; Auto-tell: I was unable to add you to my group. If you wish to join, please 'group self'.")
 end
   </send>
   </trigger>
@@ -244,7 +246,7 @@ end
   >
   <send>
 local name = string.capitalize(string.strip("%&lt;name&gt;"))
-if name == "clear" then
+if name == "Clear" then
 	leader = nil
 	Note("Leader cleared.")
 elseif name ~= "" then
