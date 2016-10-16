@@ -59,7 +59,11 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>if "%&lt;player&gt;" == leader then Tell("\a") end</send>
+  <send>
+if "%&lt;player&gt;" == leader then
+	Tell("\a")
+end
+  </send>
   </trigger>
   <trigger
    enabled="y"
@@ -70,7 +74,11 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>if "%&lt;player&gt;"==leader and auto_ride then Send("climb ladder") end</send>
+  <send>
+if "%&lt;player&gt;"==leader and auto_ride then
+	Send("climb ladder")
+end
+  </send>
   </trigger>
   <trigger
    enabled="y"
@@ -81,22 +89,25 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>local mount = "%&lt;mount&gt;"
+  <send>
+local mount = "%&lt;mount&gt;"
 if "%&lt;label&gt;" ~= "" then
 	mount = "%&lt;label&gt;"
-elseif string.match(mount, "Rohirrim") then
+elseif mount:findpos("Rohirrim") then
 	mount = "rohirrim"
-elseif string.match(mount, "donkey") then
+elseif mount:findpos("donkey") then
 	mount = "donkey"
-elseif string.match(mount, "mule") then
+elseif mount:findpos("mule") then
 	mount = "mule"
 else
+	-- Use the first word in the string (hungry for hungry warg, pack for pack horse, etc).
 	mount = string.match(mount, "%S+")
 end
 if auto_ride then
 	Send("stand")
 	Send("ride ", mount)
-end</send>
+end
+  </send>
   </trigger>
   <trigger
    enabled="y"
@@ -122,7 +133,11 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>if auto_group then Send("group %&lt;player&gt;") end</send>
+  <send>
+if auto_group then
+	Send("group %&lt;player&gt;")
+end
+  </send>
   </trigger>
   <trigger
    name="autogroup2"
@@ -133,7 +148,11 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>if auto_group then Send("tell %&lt;player&gt; You are in another group already.  If you wish to join, please 'group self' and 'raise' again.") end</send>
+  <send>
+if auto_group then
+	Send("tell %&lt;player&gt; You are in another group already.  If you wish to join, please 'group self' and 'raise' again.")
+end
+  </send>
   </trigger>
   <trigger
    enabled="y"
@@ -155,7 +174,11 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>if "%&lt;player&gt;" == leader then leader = nil end</send>
+  <send>
+if "%&lt;player&gt;" == leader then
+	leader = nil
+end
+  </send>
   </trigger>
   <trigger
    enabled="y"
@@ -182,7 +205,7 @@ end
   <trigger
    enabled="y"
    group="mume_grouping"
-   match="^     (?P&lt;player&gt;\w+) \(Head of group\)$"
+   match="^[ ]{5}(?P&lt;player&gt;\w+) \(Head of group\)$"
    name="define_leader3"
    regexp="y"
    send_to="12"
@@ -211,34 +234,6 @@ end
 
 <aliases>
   <alias
-   name="tell_leader_message"
-   match="^lt(?P&lt;message&gt; .+)?$"
-   enabled="y"
-   group="mume_grouping"
-   regexp="y"
-   send_to="12"
-   sequence="100"
-  >
-  <send>local message = string.strip("%&lt;message&gt;")
-if not leader then
-	Note(NO_LEADER_MESSAGE)
-elseif not message then
-	Note(string.format("Tell %s what?", leader))
-else
-	Send(string.format("tell %s %s", leader, message))
-end</send>
-  </alias>
-  <alias
-   name="protect_leader"
-   match="lp"
-   enabled="y"
-   group="mume_grouping"
-   send_to="12"
-   sequence="100"
-  >
-  <send>actionLeader("protect")</send>
-  </alias>
-  <alias
    name="define_leader"
    match="^leader(?P&lt;name&gt; \w+)?$"
    enabled="y"
@@ -247,18 +242,20 @@ end</send>
    send_to="12"
    sequence="100"
   >
-  <send>local name = string.capitalize(string.strip("%&lt;name&gt;"))
+  <send>
+local name = string.capitalize(string.strip("%&lt;name&gt;"))
 if name == "clear" then
 	leader = nil
 	Note("Leader cleared.")
 elseif name ~= "" then
 	leader = name
-	Note(string.format("Setting leader to %s.", leader))
+	Note("Setting leader to ", leader, ".")
 elseif leader then
-	Note(string.format("Your leader is %s.", leader))
+	Note("Your leader is ", leader, ".")
 else
 	Note(NO_LEADER_MESSAGE)
-end</send>
+end
+  </send>
   </alias>
   <alias
    name="follow_self"
@@ -268,6 +265,16 @@ end</send>
    sequence="100"
   >
   <send>follow self</send>
+  </alias>
+  <alias
+   name="toggle_autogroup"
+   match="autogroup"
+   enabled="y"
+   group="mume_grouping"
+   send_to="12"
+   sequence="100"
+  >
+  <send>toggle("autogroup")</send>
   </alias>
   <alias
    name="toggle_autoride"
@@ -280,6 +287,36 @@ end</send>
   <send>toggle("autoride")</send>
   </alias>
   <alias
+   name="tell_leader_message"
+   match="^lt(?P&lt;message&gt; .+)?$"
+   enabled="y"
+   group="mume_grouping"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+local message = string.strip("%&lt;message&gt;")
+if not leader then
+	Note(NO_LEADER_MESSAGE)
+elseif not message then
+	Note(string.format("Tell %s what?", leader))
+else
+	Send(string.format("tell %s %s", leader, message))
+end
+  </send>
+  </alias>
+  <alias
+   name="protect_leader"
+   match="lp"
+   enabled="y"
+   group="mume_grouping"
+   send_to="12"
+   sequence="100"
+  >
+  <send>do_leader("protect")</send>
+  </alias>
+  <alias
    name="whois_leader"
    match="lw"
    enabled="y"
@@ -287,7 +324,7 @@ end</send>
    send_to="12"
    sequence="100"
   >
-  <send>actionLeader("whois")</send>
+  <send>do_leader("whois")</send>
   </alias>
   <alias
    name="rescue_leader"
@@ -297,7 +334,7 @@ end</send>
    send_to="12"
    sequence="100"
   >
-  <send>actionLeader("rescue")</send>
+  <send>do_leader("rescue")</send>
   </alias>
   <alias
    name="follow_leader"
@@ -307,17 +344,7 @@ end</send>
    send_to="12"
    sequence="100"
   >
-  <send>actionLeader("follow")</send>
-  </alias>
-  <alias
-   name="toggle_autogroup"
-   match="autogroup"
-   enabled="y"
-   group="mume_grouping"
-   send_to="12"
-   sequence="100"
-  >
-  <send>toggle("autogroup")</send>
+  <send>do_leader("follow")</send>
   </alias>
 </aliases>
 
@@ -333,7 +360,7 @@ auto_group = false
 leader = nil
 leader_zblammed = false
 
-function actionLeader(action)
+function do_leader(action)
 	if not action then
 		Note("Do what to leader?")
 	elseif leader then
@@ -345,10 +372,10 @@ end
 
 function toggle(setting)
 	if setting == "autoride" then
-		auto_ride = auto_ride ~= true
+		auto_ride = not auto_ride
 		Note(string.format("Auto ride %s.", auto_ride and "enabled" or "disabled"))
 	elseif setting == "autogroup" then
-		auto_group = auto_group ~= true
+		auto_group = not auto_group
 		Note(string.format("Auto group %s.", auto_group and "enabled" or "disabled"))
 	end
 end
