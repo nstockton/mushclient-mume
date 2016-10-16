@@ -79,10 +79,10 @@ end
   <send>
 local action = DOOR_ACTIONS[string.lower("%&lt;action&gt;")]
 local direction = string.lower("%&lt;direction&gt;")
-if door_name ~= "" then
-	Send(string.format("%s %s %s", action, door_name, direction))
-else
+if door_name == "" then
 	Send(string.format("secretaction %s %s", action, direction))
+else
+	Send(string.format("%s %s %s", action, door_name, direction))
 end
   </send>
   </alias>
@@ -97,19 +97,20 @@ end
    sequence="100"
   >
   <send>
-if "%&lt;name&gt;" == "" then
+local text = string.lower(string.strip("%&lt;name&gt;"))
+if text == "" then
 	if door_name == "" then
 		Note("Door undefined.")
 	else
-		Note(string.format("%s is set.", door_name))
+		Note(door_name, " is set.")
 	end
 else
-	if string.sub("clear", 1, #"%&lt;name&gt;") == string.lower("%&lt;name&gt;") then
+	if text == "clear" then
 		door_name = ""
 		Note("Door cleared.")
 	else
-		door_name = "%&lt;name&gt;"
-		Note("%&lt;name&gt; set.")
+		door_name = text
+		Note(text, " set.")
 	end
 end
   </send>
@@ -119,14 +120,14 @@ end
    match="autoopen"
    enabled="y"
    group="mume_doors"
-   regexp="y"
+   regexp="n"
    ignore_case="y"
    send_to="12"
    sequence="100"
   >
   <send>
-auto_open = auto_open ~= true
-Note(string.format("Auto open doors %s.", auto_open and "yes" or "no"))
+auto_open = not auto_open
+Note(string.format("Auto open doors %s.", auto_open and "on" or "off"))
   </send>
   </alias>
 </aliases>
@@ -136,6 +137,8 @@ Note(string.format("Auto open doors %s.", auto_open and "yes" or "no"))
 
 <script>
 <![CDATA[
+require("mystdlib")
+
 DOOR_ACTIONS = {
 	["b"] = "bash",
 	["c"] = "close",
