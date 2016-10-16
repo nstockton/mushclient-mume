@@ -24,10 +24,6 @@
 </plugin>
 
 
-<!--  Get our standard constants -->
-
-<include name="constants.lua"/>
-
 <!--  Triggers  -->
 
 <triggers>
@@ -112,11 +108,5 @@
   <send>%0 (saruman)</send>
   </trigger>
 </triggers>
-
-<script>
-<![CDATA[
-
-]]>
-</script>
 
 </muclient>
