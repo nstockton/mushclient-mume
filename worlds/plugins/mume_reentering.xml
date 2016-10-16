@@ -71,10 +71,11 @@
    send_to="14"
    sequence="100"
   >
-  <send>fled_direction = "%&lt;direction&gt;"
+  <send>
+fled_direction = "%&lt;direction&gt;"
 CallPlugin(TTS, "silence")
-Note(string.format("%s!", fled_direction))
-</send>
+Note(fled_direction, "!")
+  </send>
   </trigger>
   <trigger
    enabled="y"
@@ -85,9 +86,10 @@ Note(string.format("%s!", fled_direction))
    send_to="14"
    sequence="100"
   >
-  <send>CallPlugin(TTS, "silence")
+  <send>
+CallPlugin(TTS, "silence")
 Note("Failed!")
-</send>
+  </send>
   </trigger>
   <trigger
    enabled="y"
@@ -98,7 +100,10 @@ Note("Failed!")
    send_to="12"
    sequence="100"
   >
-  <send>CallPlugin(TTS, "silence")</send>
+  <send>
+fled_direction = nil
+CallPlugin(TTS, "silence")
+  </send>
   </trigger>
   <trigger
    enabled="y"
@@ -109,7 +114,8 @@ Note("Failed!")
    send_to="14"
    sequence="100"
   >
-  <send>CallPlugin(TTS, "silence")
+  <send>
+CallPlugin(TTS, "silence")
 Note("Stealthy!")
   </send>
   </trigger>
@@ -119,48 +125,58 @@ Note("Stealthy!")
 
 <aliases>
   <alias
-   name="escape_south"
-   match="ss"
+   name="escape_north"
+   match="nn"
    enabled="y"
    group="mume_reentering"
-   send_to="12"
    sequence="100"
   >
-  <send>Send("escape south")
-fled_direction = "south"</send>
-  </alias>
-  <alias
-   name="escape_down"
-   match="dd"
-   enabled="y"
-   group="mume_reentering"
-   send_to="12"
-   sequence="100"
-  >
-  <send>Send("escape down")
-fled_direction = "down"</send>
+  <send>escape north</send>
   </alias>
   <alias
    name="escape_east"
    match="ee"
    enabled="y"
    group="mume_reentering"
-   send_to="12"
    sequence="100"
   >
-  <send>Send("escape east")
-fled_direction = "east"</send>
+  <send>escape east</send>
   </alias>
   <alias
-   name="escape_north"
-   match="nn"
+   name="escape_south"
+   match="ss"
    enabled="y"
    group="mume_reentering"
-   send_to="12"
    sequence="100"
   >
-  <send>Send("escape north")
-fled_direction = "north"</send>
+  <send>escape south</send>
+  </alias>
+  <alias
+   name="escape_west"
+   match="ww"
+   enabled="y"
+   group="mume_reentering"
+   sequence="100"
+  >
+  <send>escape west</send>
+  </alias>
+  <alias
+   name="escape_up"
+   match="uu"
+   enabled="y"
+   group="mume_reentering"
+   sequence="100"
+  >
+  <send>escape up</send>
+  </alias>
+  <alias
+   name="escape_down"
+   match="dd"
+   enabled="y"
+   group="mume_reentering"
+   sequence="100"
+  >
+  <send>escape down</send>
   </alias>
   <alias
    name="reenter_room"
@@ -172,28 +188,6 @@ fled_direction = "north"</send>
   >
   <send>reenter()</send>
   </alias>
-  <alias
-   name="escape_up"
-   match="uu"
-   enabled="y"
-   group="mume_reentering"
-   send_to="12"
-   sequence="100"
-  >
-  <send>Send("escape up")
-fled_direction = "up"</send>
-  </alias>
-  <alias
-   name="escape_west"
-   match="ww"
-   enabled="y"
-   group="mume_reentering"
-   send_to="12"
-   sequence="100"
-  >
-  <send>Send("escape west")
-fled_direction = "west"</send>
-  </alias>
 </aliases>
 
 <!--  Script  -->
@@ -203,21 +197,21 @@ fled_direction = "west"</send>
 <![CDATA[
 TTS = "925cdd0331023d9f0b8f05a7"
 REVERSE_DIRECTIONS = {
-	north="south",
-	south="north",
-	east="west",
-	west="east",
-	up="down",
-	down="up",
+	["north"] = "south",
+	["east"] = "west",
+	["south"] = "north",
+	["west"] = "east",
+	["up"] = "down",
+	["down"] = "up"
 }
 
-fled_direction = ""
+fled_direction = nil
 
 function reenter()
 	if REVERSE_DIRECTIONS[fled_direction] then
 		Send(REVERSE_DIRECTIONS[fled_direction])
+		fled_direction = nil
 	end
-	fled_direction = ""
 end
 
 ]]>
