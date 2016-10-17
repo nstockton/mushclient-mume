@@ -40,7 +40,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>xpDisplay()</send>
+  <send>xp_display()</send>
   </alias>
   <alias
    name="display_tps"
@@ -67,20 +67,20 @@
    send_to="12"
    sequence="100"
   >
-  <send>session_xp = 0
+  <send>
+session_xp = 0
 session_tp = 0
 old_xp = 0
 old_tp = 0
-Send("info XPCOUNTER: %x %t %X %T.")</send>
+Send("info XPCOUNTER: %x %t %X %T.")
+  </send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_xp_counter"
-   match="^(?:You receive your share of experience|As the roots stop moving, they collapse into a large heap, completely blocking the exit down)\.$"
+   match="You receive your share of experience."
    name="gained_xp"
    omit_from_output="y"
-   regexp="y"
-   send_to="13"
    sequence="100"
   >
   <send>info XPCOUNTER: %x %t %X %T.</send>
@@ -89,28 +89,43 @@ Send("info XPCOUNTER: %x %t %X %T.")</send>
    enabled="y"
    group="mume_xp_counter"
    omit_from_log="y"
-   match="^XPCOUNTER: (?P&lt;xp&gt;\d+) (?P&lt;tp&gt;\d+) (?P&lt;needed_xp&gt;\d+) (?P&lt;needed_tp&gt;\d+)\.$"
+   match="^XPCOUNTER\: (?P&lt;xp&gt;\d+) (?P&lt;tp&gt;\d+) (?P&lt;needed_xp&gt;\d+) (?P&lt;needed_tp&gt;\d+)\.$"
    name="parse_xp_info_line"
    omit_from_output="y"
    regexp="y"
    send_to="14"
    sequence="100"
   >
-  <send>xpUpdate(tonumber("%&lt;xp&gt;"), tonumber("%&lt;tp&gt;"), tonumber("%&lt;needed_xp&gt;"), tonumber("%&lt;needed_tp&gt;"))
-xpDisplay()</send>
+  <send>
+gained_xp = tonumber("%&lt;xp&gt;") - old_xp
+gained_tp = tonumber("%&lt;tp&gt;") - old_tp
+session_xp = session_xp + gained_xp
+session_tp = session_tp + gained_tp
+old_xp = tonumber("%&lt;xp&gt;")
+old_tp = tonumber("%&lt;tp&gt;")
+needed_xp = tonumber("%&lt;needed_xp&gt;")
+needed_tp = tonumber("%&lt;needed_tp&gt;")
+xp_display()
+  </send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_xp_counter"
    omit_from_log="y"
-   match="^TPCOUNTER: (?P&lt;tp&gt;\d+) (?P&lt;needed_tp&gt;\d+)\.$"
+   match="^TPCOUNTER\: (?P&lt;tp&gt;\d+) (?P&lt;needed_tp&gt;\d+)\.$"
    name="parse_tp_info_line"
    omit_from_output="y"
    regexp="y"
    send_to="14"
    sequence="100"
   >
-  <send>tpUpdate(tonumber("%&lt;tp&gt;"), tonumber("%&lt;needed_tp&gt;"))</send>
+  <send>
+gained_tp = tonumber("%&lt;tp&gt;") - old_tp
+session_tp = session_tp + gained_tp
+old_tp = tonumber("%&lt;tp&gt;")
+needed_tp = tonumber("%&lt;needed_tp&gt;")
+Note(string.format("Gained: %s, Session: %s, Needed: %s, Total: %&lt;tp&gt;", gained_tp, session_tp, needed_tp))
+  </send>
   </trigger>
 </triggers>
 
@@ -119,44 +134,19 @@ xpDisplay()</send>
 
 <script>
 <![CDATA[
-gained_xp = 0
-gained_tp = 0
-session_xp = 0
-session_tp = 0
-needed_xp = 0
-needed_tp = 0
-old_xp = 0
-old_tp = 0
+local gained_xp = 0
+local gained_tp = 0
+local session_xp = 0
+local session_tp = 0
+local needed_xp = 0
+local needed_tp = 0
+local old_xp = 0
+local old_tp = 0
 
-function xpUpdate(updated_xp, updated_tp, updated_needed_xp, updated_needed_tp)
-	if old_xp and old_xp ~= 0 then
-		gained_xp = updated_xp - old_xp
-	end
-	if old_tp and old_tp ~= 0 then
-		gained_tp = updated_tp - old_tp
-	end
-	session_xp = session_xp + gained_xp
-	session_tp = session_tp + gained_tp
-	old_xp = updated_xp
-	old_tp = updated_tp
-	needed_xp = updated_needed_xp
-	needed_tp = updated_needed_tp
-end
-
-function tpUpdate(updated_tp, updated_needed_tp)
-	if old_tp and old_tp ~= 0 then
-		gained_tp = updated_tp - old_tp
-	end
-	session_tp = session_tp + gained_tp
-	old_tp = updated_tp
-	needed_tp = updated_needed_tp
-	Note(string.format("Gained: %s, Session: %s, Needed: %s, Total: %s", gained_tp, session_tp, needed_tp, updated_tp))
-end
-
-function xpDisplay()
-	Note("--> Gained  xp: "..tostring(gained_xp).."\t\ttp: "..tostring(gained_tp))
-	Note("--> Session xp: "..tostring(session_xp).."\t\ttp: "..tostring(session_tp))
-	Note("--> Needed  xp: "..tostring(needed_xp).."\t\ttp: "..tostring(needed_tp))
+function xp_display()
+	Note("Gained XP: ", tostring(gained_xp), ", TP: ", tostring(gained_tp))
+	Note("Session XP: ", tostring(session_xp), ", TP: ", tostring(session_tp))
+	Note("Needed XP: ", tostring(needed_xp), ", TP: ", tostring(needed_tp))
 end
 
 ]]>
