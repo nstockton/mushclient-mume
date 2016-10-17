@@ -34,7 +34,7 @@
   <trigger
    enabled="y"
    group="mume_castor_spell_translator"
-   match="^(?P&lt;castor&gt;.+?) utters the word[s]? \'(?P&lt;spell&gt;[a-z ]+)\'$"
+   match="^(?P&lt;castor&gt;[^\']+?) utters the word[s]? \'(?P&lt;spell&gt;[a-z ]+)\'$"
    name="translate_spell"
    omit_from_output="y"
    regexp="y"
@@ -46,7 +46,7 @@
   <trigger
    enabled="y"
    group="mume_castor_spell_translator"
-   match="^(?P&lt;castor&gt;.+?) begins some strange incantations\.\.\.$"
+   match="^(?P&lt;castor&gt;[^\.]+?) begins some strange incantations\.\.\.$"
    name="shorten_casting_message"
    omit_from_output="y"
    regexp="y"
@@ -58,7 +58,7 @@
   <trigger
    enabled="y"
    group="mume_castor_spell_translator"
-   match="^As you call upon Elbereth\, (?P&lt;target&gt;.+?) shivers in pain\.$"
+   match="^As you call upon Elbereth\, (?P&lt;target&gt;[^\.]+?) shivers in pain\.$"
    name="shorten_dispel_message"
    omit_from_output="y"
    regexp="y"
@@ -70,10 +70,9 @@
   <trigger
    enabled="y"
    group="mume_castor_spell_translator"
-   match="^You raise your hand and an icy wind starts to blow through the room\.$"
+   match="You raise your hand and an icy wind starts to blow through the room."
    name="shorten_fear_message"
    omit_from_output="y"
-   regexp="y"
    send_to="14"
    sequence="100"
   >
@@ -82,7 +81,7 @@
   <trigger
    enabled="y"
    group="mume_castor_spell_translator"
-   match="^You spray (?P&lt;target&gt;.+?) with many\-coloured rays of bright light\.$"
+   match="^You spray (?P&lt;target&gt;[^\.]+?) with many\-coloured rays of bright light\.$"
    name="shorten_colour_spray_message"
    omit_from_output="y"
    regexp="y"
@@ -106,7 +105,7 @@
   <trigger
    enabled="y"
    group="mume_castor_spell_translator"
-   match="^Your fireball completely envelops (?P&lt;target&gt;.+?) in flames\.$"
+   match="^Your fireball completely envelops (?P&lt;target&gt;[^\.]+?) in flames\.$"
    name="shorten_fireball_message"
    omit_from_output="y"
    regexp="y"
@@ -118,7 +117,7 @@
   <trigger
    enabled="y"
    group="mume_castor_spell_translator"
-   match="^The lightning bolt hits (?P&lt;target&gt;.+?) with full impact\.$"
+   match="^The lightning bolt hits (?P&lt;target&gt;[^\.]+?) with full impact\.$"
    name="shorten_lightning_bolt_message"
    omit_from_output="y"
    regexp="y"
@@ -141,7 +140,7 @@
   <trigger
    enabled="y"
    group="mume_castor_spell_translator"
-   match="^(?P&lt;target&gt;.+?) seems to be blinded\!$"
+   match="^(?P&lt;target&gt;[^\!]+?) seems to be blinded\!$"
    name="shorten_blinded_message"
    omit_from_output="y"
    regexp="y"
