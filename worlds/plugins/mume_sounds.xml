@@ -135,7 +135,7 @@ end
   <trigger
    enabled="y"
    group="mume_sounds"
-   match="^(?:You begin to feel the light of Aman shine upon you|You feel a renewed light shine upon you)\.$"
+   match="^You (?:begin to feel the light of Aman|feel a renewed light) shine upon you\.$"
    name="bless_up"
    regexp="y"
    send_to="12"
@@ -157,7 +157,7 @@ end
   <trigger
    enabled="y"
    group="mume_sounds"
-   match="^(?:You feel protected|Your protection is revitalised)\.$"
+   match="^You(?: feel protected|r protection is revitalised)\.$"
    name="shield_up"
    regexp="y"
    send_to="12"
@@ -201,7 +201,7 @@ end
   <trigger
    enabled="y"
    group="mume_sounds"
-   match="^(?:You feel your awareness improve|Your awareness is refreshed)\.$"
+   match="^You(?: feel your awareness improve|r awareness is refreshed)\.$"
    name="sense_life_up"
    regexp="y"
    send_to="12"
