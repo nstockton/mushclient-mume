@@ -40,88 +40,79 @@
    send_to="12"
    sequence="100"
   >
-  <send>spellTimerSet("armour")</send>
+  <send>spell_timer_set("armour")</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_spell_timers"
-   match="^You feel less protected\.$"
+   match="You feel less protected."
    name="armour_down"
-   omit_from_output="y"
-   regexp="y"
-   send_to="14"
-   sequence="100"
-  >
-  <send>spellTimerUnset("armour", "%0")</send>
-  </trigger>
-  <trigger
-   enabled="y"
-   group="mume_spell_timers"
-   match="^Your eyes tingle\.$"
-   name="detect_invisibility_up"
-   regexp="y"
    send_to="12"
    sequence="100"
   >
-  <send>spellTimerSet("detect invisibility")</send>
+  <send>spell_timer_unset("armour")</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_spell_timers"
-   match="^The detect invisible wears off\.$"
-   name="detect_invisibility_down"
-   omit_from_output="y"
-   regexp="y"
-   send_to="14"
+   match="Your eyes tingle."
+   name="detect_invisibility_up"
+   send_to="12"
    sequence="100"
   >
-  <send>spellTimerUnset("detect invisibility", "%0")</send>
+  <send>spell_timer_set("detect invisibility")</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_spell_timers"
-   match="^(?:You begin to feel the light of Aman shine upon you|You feel a renewed light shine upon you)\.$"
+   match="The detect invisible wears off."
+   name="detect_invisibility_down"
+   send_to="12"
+   sequence="100"
+  >
+  <send>spell_timer_unset("detect invisibility")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_spell_timers"
+   match="^You (?:begin to feel the light of Aman|feel a renewed light) shine upon you\.$"
    name="bless_up"
    regexp="y"
    send_to="12"
    sequence="100"
   >
-  <send>spellTimerSet("bless")</send>
+  <send>spell_timer_set("bless")</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_spell_timers"
-   match="^The light of Aman fades away from you\.$"
+   match="The light of Aman fades away from you."
    name="bless_down"
-   omit_from_output="y"
-   regexp="y"
-   send_to="14"
+   send_to="12"
    sequence="100"
   >
-  <send>spellTimerUnset("bless", "%0")</send>
+  <send>spell_timer_unset("bless")</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_spell_timers"
-   match="^(?:You feel protected|Your protection is revitalised)\.$"
+   match="^You(?: feel protected|r protection is revitalised)\.$"
    name="shield_up"
    regexp="y"
    send_to="12"
    sequence="100"
   >
-  <send>spellTimerSet("shield")</send>
+  <send>spell_timer_set("shield")</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_spell_timers"
-   match="^Your magical shield wears off\.$"
+   match="Your magical shield wears off."
    name="shield_down"
-   omit_from_output="y"
-   regexp="y"
-   send_to="14"
+   send_to="12"
    sequence="100"
   >
-  <send>spellTimerUnset("shield", "%0")</send>
+  <send>spell_timer_unset("shield")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -132,19 +123,17 @@
    send_to="12"
    sequence="100"
   >
-  <send>spellTimerSet("strength")</send>
+  <send>spell_timer_set("strength")</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_spell_timers"
-   match="^You feel weaker\.$"
+   match="You feel weaker."
    name="strength_down"
-   omit_from_output="y"
-   regexp="y"
-   send_to="14"
+   send_to="12"
    sequence="100"
   >
-  <send>spellTimerUnset("strength", "%0")</send>
+  <send>spell_timer_unset("strength")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -155,42 +144,38 @@
    send_to="12"
    sequence="100"
   >
-  <send>spellTimerSet("shroud")</send>
+  <send>spell_timer_set("shroud")</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_spell_timers"
-   match="^You feel yourself exposed\.$"
+   match="You feel yourself exposed."
    name="shroud_down"
-   omit_from_output="y"
-   regexp="y"
-   send_to="14"
+   send_to="12"
    sequence="100"
   >
-  <send>spellTimerUnset("shroud", "%0")</send>
+  <send>spell_timer_unset("shroud")</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_spell_timers"
-   match="^(?:You feel your awareness improve|Your awareness is refreshed)\.$"
+   match="^You(?: feel your awareness improve|r awareness is refreshed)\.$"
    name="sense_life_up"
    regexp="y"
    send_to="12"
    sequence="100"
   >
-  <send>spellTimerSet("sense life")</send>
+  <send>spell_timer_set("sense life")</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_spell_timers"
-   match="^You feel less aware of your surroundings\.$"
+   match="You feel less aware of your surroundings."
    name="sense_life_down"
-   omit_from_output="y"
-   regexp="y"
-   send_to="14"
+   send_to="12"
    sequence="100"
   >
-  <send>spellTimerUnset("sense life", "%0")</send>
+  <send>spell_timer_unset("sense life")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -201,19 +186,17 @@
    send_to="12"
    sequence="100"
   >
-  <send>spellTimerSet("breath of briskness")</send>
+  <send>spell_timer_set("breath of briskness")</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_spell_timers"
-   match="^Your legs feel heavier\.$"
+   match="Your legs feel heavier."
    name="breath_of_briskness_down"
-   omit_from_output="y"
-   regexp="y"
-   send_to="14"
+   send_to="12"
    sequence="100"
   >
-  <send>spellTimerUnset("breath of briskness", "%0")</send>
+  <send>spell_timer_unset("breath of briskness")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -224,261 +207,233 @@
    send_to="12"
    sequence="100"
   >
-  <send>spellTimerSet("sanctuary")</send>
+  <send>spell_timer_set("sanctuary")</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_spell_timers"
-   match="^The white aura around your body fades\.$"
+   match="The white aura around your body fades."
    name="sanctuary_down"
-   omit_from_output="y"
-   regexp="y"
-   send_to="14"
+   send_to="12"
    sequence="100"
   >
-  <send>spellTimerUnset("sanctuary", "%0")</send>
+  <send>spell_timer_unset("sanctuary")</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_spell_timers"
-   match="^(?:You have a righteous feeling\!|You feel a renewed righteousness\.)$"
+   match="^You (?:have a righteous feeling\!|feel a renewed righteousness\.)$"
    name="protection_from_evil_up"
    regexp="y"
    send_to="12"
    sequence="100"
   >
-  <send>spellTimerSet("protection from evil")</send>
+  <send>spell_timer_set("protection from evil")</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_spell_timers"
-   match="^You feel less righteous\.$"
+   match="You feel less righteous."
    name="protection_from_evil_down"
-   omit_from_output="y"
-   regexp="y"
-   send_to="14"
+   send_to="12"
    sequence="100"
   >
-  <send>spellTimerUnset("protection from evil", "%0")</send>
+  <send>spell_timer_unset("protection from evil")</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_spell_timers"
-   match="^(?:You feel aware of all that is foul and evil|Your awareness of evil is refreshed)\.$"
+   match="^You(?: feel aware of all that is foul and evil|r awareness of evil is refreshed)\.$"
    name="detect_evil_up"
    regexp="y"
    send_to="12"
    sequence="100"
   >
-  <send>spellTimerSet("detect evil")</send>
+  <send>spell_timer_set("detect evil")</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_spell_timers"
-   match="^You sense the red in your vision disappear\.$"
+   match="You sense the red in your vision disappear."
    name="detect_evil_down"
-   omit_from_output="y"
-   regexp="y"
-   send_to="14"
+   send_to="12"
    sequence="100"
   >
-  <send>spellTimerUnset("detect evil", "%0")</send>
+  <send>spell_timer_unset("detect evil")</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_spell_timers"
-   match="^(?:You become sensitive of magical auras|Your awareness of magical auras is renewed)\.$"
+   match="^You(?: become sensitive of magical auras|r awareness of magical auras is renewed)\.$"
    name="detect_magic_up"
    regexp="y"
    send_to="12"
    sequence="100"
   >
-  <send>spellTimerSet("detect magic")</send>
+  <send>spell_timer_set("detect magic")</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_spell_timers"
-   match="^Your perception of magical auras wears off\.$"
+   match="Your perception of magical auras wears off."
    name="detect_magic_down"
-   omit_from_output="y"
-   regexp="y"
-   send_to="14"
+   send_to="12"
    sequence="100"
   >
-  <send>spellTimerUnset("detect magic", "%0")</send>
+  <send>spell_timer_unset("detect magic")</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_spell_timers"
-   match="^(?:Your eyes tingle|Your night vision is refreshed)\.$"
+   match="^Your (?:eyes tingle|night vision is refreshed)\.$"
    name="night_vision_up"
    regexp="y"
    send_to="12"
    sequence="100"
   >
-  <send>spellTimerSet("night vision")</send>
+  <send>spell_timer_set("night vision")</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_spell_timers"
-   match="^Your vision blurs\.$"
+   match="Your vision blurs."
    name="night_vision_down"
-   omit_from_output="y"
-   regexp="y"
-   send_to="14"
+   send_to="12"
    sequence="100"
   >
-  <send>spellTimerUnset("night vision", "%0")</send>
+  <send>spell_timer_unset("night vision")</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_spell_timers"
-   match="^You feel your muscles relax and your pulse slow as the strength that welled within you subsides\.$"
+   match="You feel your muscles relax and your pulse slow as the strength that welled within you subsides."
    name="tiredness_up"
-   regexp="y"
    send_to="12"
    sequence="100"
   >
-  <send>spellTimerSet("tiredness")</send>
+  <send>spell_timer_set("tiredness")</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_spell_timers"
-   match="^You feel your muscles regain some of their former energy\.$"
+   match="You feel your muscles regain some of their former energy."
    name="tiredness_down"
-   omit_from_output="y"
-   regexp="y"
-   send_to="14"
+   send_to="12"
    sequence="100"
   >
-  <send>spellTimerUnset("tiredness", "%0")</send>
+  <send>spell_timer_unset("tiredness")</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_spell_timers"
-   match="^You feel a sudden flash of dizziness causing you to pause before getting your directional bearings back\.$"
+   match="You feel a sudden flash of dizziness causing you to pause before getting your directional bearings back."
    name="haggardness_up"
-   regexp="y"
    send_to="12"
    sequence="100"
   >
-  <send>spellTimerSet("haggardness")</send>
+  <send>spell_timer_set("haggardness")</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_spell_timers"
-   match="^You feel steadier now\.$"
+   match="You feel steadier now."
    name="haggardness_down"
-   omit_from_output="y"
-   regexp="y"
-   send_to="14"
+   send_to="12"
    sequence="100"
   >
-  <send>spellTimerUnset("haggardness", "%0")</send>
+  <send>spell_timer_unset("haggardness")</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_spell_timers"
-   match="^You feel a sudden loss of energy as the power that once mingled with your own has now vanished\.$"
+   match="You feel a sudden loss of energy as the power that once mingled with your own has now vanished."
    name="lethargy_up"
-   regexp="y"
    send_to="12"
    sequence="100"
   >
-  <send>spellTimerSet("lethargy")</send>
+  <send>spell_timer_set("lethargy")</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_spell_timers"
-   match="^You feel your magic energy coming back to you\.$"
+   match="You feel your magic energy coming back to you."
    name="lethargy_down"
-   omit_from_output="y"
-   regexp="y"
-   send_to="14"
+   send_to="12"
    sequence="100"
   >
-  <send>spellTimerUnset("lethargy", "%0")</send>
+  <send>spell_timer_unset("lethargy")</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_spell_timers"
-   match="^You have been blinded\!$"
+   match="You have been blinded!"
    name="blindness_up"
-   regexp="y"
    send_to="12"
    sequence="100"
   >
-  <send>spellTimerSet("blindness")</send>
+  <send>spell_timer_set("blindness")</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_spell_timers"
-   match="^You feel a cloak of blindness dissolve\.$"
+   match="You feel a cloak of blindness dissolve."
    name="blindness_down"
-   omit_from_output="y"
-   regexp="y"
-   send_to="14"
+   send_to="12"
    sequence="100"
   >
-  <send>spellTimerUnset("blindness", "%0")</send>
+  <send>spell_timer_unset("blindness")</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_spell_timers"
-   match="^Hearing the horn blow\, you feel your urge to battle increase\!$"
+   match="Hearing the horn blow, you feel your urge to battle increase!"
    name="battleglory_up"
-   regexp="y"
    send_to="12"
    sequence="100"
   >
-  <send>spellTimerSet("battleglory")</send>
+  <send>spell_timer_set("battleglory")</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_spell_timers"
-   match="^You feel your newfound strength leaving you again\.$"
+   match="You feel your newfound strength leaving you again."
    name="battleglory_down"
-   omit_from_output="y"
-   regexp="y"
-   send_to="14"
-   sequence="100"
-  >
-  <send>spellTimerUnset("battleglory", "%0")</send>
-  </trigger>
-  <trigger
-   enabled="y"
-   group="mume_spell_timers"
-   match="^The draught burns down your throat, and a fiery feeling fills your limbs\.$"
-   name="orkish_draught_up"
-   regexp="y"
    send_to="12"
    sequence="100"
   >
-  <send>spellTimerSet("orkish draught")</send>
+  <send>spell_timer_unset("battleglory")</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_spell_timers"
-   match="^As the warmth of the draught recedes from your limbs, you feel less energetic\.$"
-   name="orkish_draught_down"
-   omit_from_output="y"
-   regexp="y"
-   send_to="14"
+   match="The draught burns down your throat, and a fiery feeling fills your limbs."
+   name="orkish_draught_up"
+   send_to="12"
    sequence="100"
   >
-  <send>spellTimerUnset("orkish draught", "%0")</send>
+  <send>spell_timer_set("orkish draught")</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_spell_timers"
-   match="^- (?P&lt;spell&gt;armour|bless|shield|strength|shroud|sense life|breath of briskness|sanctuary|protection from evil|detect evil|detect magic|detect invisibility|night vision|tiredness|haggardness|lethargy|blindness|battleglory|Orkish draught)$"
+   match="As the warmth of the draught recedes from your limbs, you feel less energetic."
+   name="orkish_draught_down"
+   send_to="12"
+   sequence="100"
+  >
+  <send>spell_timer_unset("orkish draught")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_spell_timers"
+   match="^\- (?P&lt;spell&gt;armour|bless|shield|strength|shroud|sense life|breath of briskness|sanctuary|protection from evil|detect evil|detect magic|detect invisibility|night vision|tiredness|haggardness|lethargy|blindness|battleglory|Orkish draught)$"
    name="spell_status"
    omit_from_output="y"
    regexp="y"
    send_to="14"
    sequence="100"
   >
-  <send>spellTimerStatus("%&lt;spell&gt;")</send>
+  <send>spell_timer_status("%&lt;spell&gt;")</send>
   </trigger>
 </triggers>
 
@@ -487,30 +442,29 @@
 
 <script>
 <![CDATA[
-spellTimers = {}
+local spell_timers = {}
 
-function spellTimerSet(spell)
-	spellTimers[spell] = os.time()
+function spell_timer_set(spell)
+	spell_timers[spell] = os.time()
 end
 
-function spellTimerStatus(spell)
-	if spellTimers[spell] then
-		local currentTime = os.time()
-		local minutes = math.floor((currentTime - spellTimers[spell]) / 60)
-		local minutesPretty = minutes ~= 1 and "s" or ""
-		local seconds = math.floor((currentTime - spellTimers[spell]) % 60)
-		local secondsPretty = seconds ~= 1 and "s" or ""
-		Note(string.format("%s up for %d minute%s, %d second%s.", spell, minutes, minutesPretty, seconds, secondsPretty))
+function spell_timer_status(spell)
+	if spell_timers[spell] then
+		local current_time = os.time()
+		local minutes = math.floor((currentTime - spell_timers[spell]) / 60)
+		local minutes_pretty = minutes ~= 1 and "s" or ""
+		local seconds = math.floor((currentTime - spell_timers[spell]) % 60)
+		local seconds_pretty = seconds ~= 1 and "s" or ""
+		Note(string.format("%s up for %d minute%s, %d second%s.", spell, minutes, minutes_pretty, seconds, seconds_pretty))
 	else
 		Note(spell)
 	end
 end
 
-function spellTimerUnset(spell, line)
-	Note(line)
-	if spellTimers[spell] then
-		spellTimerStatus(spell)
-		spellTimers[spell] = nil
+function spell_timer_unset(spell)
+	if spell_timers[spell] then
+		spell_timer_status(spell)
+		spell_timers[spell] = nil
 	end
 end
 
