@@ -36,7 +36,7 @@
    send_to="12"
    sequence="100"
   >
-<send>start_walking("%1")</send>
+  <send>start_walking("%1")</send>
   </alias>
   <alias
    match="pp"
@@ -45,7 +45,7 @@
    send_to="12"
    sequence="100"
   >
-<send>stop_walking()</send>
+  <send>stop_walking()</send>
   </alias>
 </aliases>
 
@@ -55,26 +55,27 @@
 require("mystdlib")
 
 XML_PARSER = "74834d3734b2c8a3a9da4d18"
+BROADCAST_EXITS = 3
+BROADCAST_NAME = 4
 REVERSE_DIRECTIONS = {
 	["north"] = "south",
-	["south"] = "north",
 	["east"] = "west",
+	["south"] = "north",
 	["west"] = "east",
 	["up"] = "down",
 	["down"] = "up"
 }
 
-room_name = ""
+room_name = nil
+came_from = nil
 walking = false
-came_from = ""
 
 function OnPluginBroadcast (msg, id, name, text)
-	if id == XML_PARSER and name == "mume_xml_parser" and msg == 1 then
-		local return_code
-		return_code, room_name = CallPlugin(XML_PARSER, "get", "name")
-		if walking then
-			local return_code, exits_line = CallPlugin(XML_PARSER, "get", "exits")
-			walk_next(exits_line)
+	if walking and id == XML_PARSER and name == "mume_xml_parser" and text ~= "" then
+		if msg == BROADCAST_NAME then
+			room_name = text
+		elseif msg == BROADCAST_EXITS then
+			walk_next(text)
 		end
 	end
 end
@@ -174,7 +175,7 @@ end
 function start_walking(line)
 	local direction = nil
 	for dir, reversed in pairs(REVERSE_DIRECTIONS) do
-		if line ~= "" and string.sub(dir, 1, string.len(line)) == line then
+		if line ~= "" and string.startswith(dir, line) then
 			direction = dir
 			break
 		end

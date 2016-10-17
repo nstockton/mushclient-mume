@@ -68,6 +68,8 @@ local TAG_REPLACEMENTS = {
 }
 local BROADCAST_PROMPT = 1
 local BROADCAST_MOVEMENT = 2
+local BROADCAST_EXITS = 3
+local BROADCAST_NAME = 4
 
 local in_esc = false
 local in_iac = false
@@ -198,9 +200,13 @@ function OnPluginPacketReceived(packet)
 					elseif tag == "/room" then
 						xml_mode = XML_NONE
 					end
-				elseif (xml_mode == XML_NAME and tag == "/name") or (xml_mode == XML_DESCRIPTION and tag == "/description") or (xml_mode == XML_TERRAIN and tag == "/terrain") then
+				elseif (xml_mode == XML_DESCRIPTION and tag == "/description") or (xml_mode == XML_TERRAIN and tag == "/terrain") then
+					xml_mode = XML_ROOM
+				elseif xml_mode == XML_NAME and tag == "/name" then
+					BroadcastPlugin(BROADCAST_NAME, last_data["name"])
 					xml_mode = XML_ROOM
 				elseif xml_mode == XML_EXITS and tag == "/exits" then
+					BroadcastPlugin(BROADCAST_EXITS, last_data["exits"])
 					xml_mode = XML_NONE
 				elseif xml_mode == XML_PROMPT and tag == "/prompt" then
 					BroadcastPlugin(BROADCAST_PROMPT, last_data["prompt"])
