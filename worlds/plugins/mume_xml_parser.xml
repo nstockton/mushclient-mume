@@ -64,7 +64,7 @@ local TAG_REPLACEMENTS = {
 	["say"] = "SAY:",
 	["/say"] = ":SAY",
 	["emote"] = "EMOTE:",
-	["/emote"] = ":EMOTE",
+	["/emote"] = ":EMOTE"
 }
 local BROADCAST_PROMPT = 1
 local BROADCAST_MOVEMENT = 2
@@ -89,7 +89,7 @@ function process_text(data)
 	if data == "" then
 		return ""
 	end
-	data = string.gsub(tostring(data), "&[^; ]+;", function(str) return XML_REPLACEMENTS[str] or str end)
+	data = string.gsub(data, "&[^; ]+;", XML_REPLACEMENTS)
 	if xml_mode == XML_NONE and data:findpos("You quietly scout ") then
 		scouting = true
 	elseif xml_mode == XML_ROOM then
@@ -111,10 +111,10 @@ end
 function OnPluginPacketReceived(packet)
 	last_packet = last_packet .. packet
 	if initial_packet then
-		-- This exception is necessary for displaying the log-in screen before the player types an account/character name.
+		-- This is necessary for displaying the log-in screen before the player types an account/character name.
 		if last_packet:findpos("By what name do you wish to be known?") then
 			last_packet = ""
-			initial_packet = nil
+			initial_packet = false
 		end
 		return packet .. IAC_GA
 	elseif last_packet:findpos(IAC_GA) then
@@ -182,7 +182,7 @@ function OnPluginPacketReceived(packet)
 					elseif tag == "exits" then
 						xml_mode = XML_EXITS
 					elseif tag == "room" then
-						last_data = {name="", description="", dynamic="", exits=""}
+						last_data = {["name"] = "", ["description"] = "", ["dynamic"] = "", ["exits"] = ""}
 						xml_mode = XML_ROOM
 					elseif string.startswith(tag, "movement") then
 						BroadcastPlugin(BROADCAST_MOVEMENT, string.match(tag, "^movement dir=(%w+)/$") or "")
