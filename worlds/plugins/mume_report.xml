@@ -34,7 +34,7 @@
   <trigger
    enabled="y"
    group="mume_report"
-   match="^points_capture\: (?P&lt;points&gt;[HM]P|MV) (?P&lt;current&gt;[-]?\d+|xxx)/(?P&lt;max&gt;\d+|xxx)$"
+   match="^points_capture\: (?P&lt;points&gt;[HM]P|MV) (?P&lt;current&gt;[\-]?\d+|xxx)\/(?P&lt;max&gt;\d+|xxx)$"
    name="capture_points"
    omit_from_log="y"
    omit_from_output="y"
@@ -46,12 +46,12 @@
 local current = tonumber("%&lt;current&gt;")
 local max = tonumber("%&lt;max&gt;")
 CallPlugin(TTS, "silence")
-if max == nil then
+if not max then
 	Note("Unavailable.")
 elseif max == 0 then
-	Note(string.format("Character doesn't have %ss.", "%&lt;points&gt;"))
+	Note("Character doesn't have %&lt;points&gt;s.")
 else
-	Note(string.format("%d/%d [%.0f%%%] %ss.", current, max, (current >= 0 and current or 0) / max * 100, "%&lt;points&gt;"))
+	Note(string.format("%d/%d [%.0f%%%] %&lt;points&gt;s.", current, max, (current >= 0 and current or 0) / max * 100))
 end
   </send>
   </trigger>
@@ -71,7 +71,7 @@ end
   <trigger
    enabled="y"
    group="mume_report"
-   match="^(?P&lt;hp&gt;\d+)/(?P&lt;max_hp&gt;\d+) hits(?:\, (?P&lt;mana&gt;\d+)/(?P&lt;max_mana&gt;\d+) mana\,)? and (?P&lt;mv&gt;\d+)/(?P&lt;max_mv&gt;\d+) moves\.$"
+   match="^(?P&lt;hp&gt;\d+)\/(?P&lt;max_hp&gt;\d+) hits(?:\, (?P&lt;mana&gt;\d+)\/(?P&lt;max_mana&gt;\d+) mana\,)? and (?P&lt;mv&gt;\d+)\/(?P&lt;max_mv&gt;\d+) moves\.$"
    name="capture_score"
    omit_from_log="y"
    omit_from_output="y"
@@ -121,8 +121,10 @@ end
    send_to="10"
    sequence="100"
   >
-  <send>rpscore
-rptnl</send>
+  <send>
+rpscore
+rptnl
+  </send>
   </alias>
   <alias
    name="report_score"
@@ -177,11 +179,11 @@ end
 
 function score(hp, max_hp, mana, max_mana, mv, max_mv)
 	local points = {}
-	table.insert(points, string.format("HP: %s/%s [%.0f%%]", hp, max_hp, hp / max_hp * 100))
-	if max_mana ~= "" and max_mana or nil then
-		table.insert(points, string.format("Mana: %s/%s [%.0f%%]", mana, max_mana, mana / max_mana * 100))
+	table.insert(points, string.format("HP: %s/%s [%.0f%%]", hp, max_hp, (hp >= 0 and hp or 0) / max_hp * 100))
+	if max_mana ~= "" and max_mana then
+		table.insert(points, string.format("Mana: %s/%s [%.0f%%]", mana, max_mana, (mana >= 0 and mana or 0) / max_mana * 100))
 end
-	table.insert(points, string.format("Moves: %s/%s [%.0f%%].", mv, max_mv, mv / max_mv * 100))
+	table.insert(points, string.format("Moves: %s/%s [%.0f%%].", mv, max_mv, (mv >= 0 and mv or 0) / max_mv * 100))
 	local output = table.concat(points, ", ")
 	Note(output)
 	if will_report_score then
