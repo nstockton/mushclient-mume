@@ -126,7 +126,6 @@ end
    group="mume_sounds"
    match="You feel less protected."
    name="armour_down"
-   omit_from_output="y"
    send_to="12"
    sequence="100"
   >
@@ -148,7 +147,6 @@ end
    group="mume_sounds"
    match="The light of Aman fades away from you."
    name="bless_down"
-   omit_from_output="y"
    send_to="12"
    sequence="100"
   >
@@ -170,7 +168,6 @@ end
    group="mume_sounds"
    match="Your magical shield wears off."
    name="shield_down"
-   omit_from_output="y"
    send_to="12"
    sequence="100"
   >
@@ -192,7 +189,6 @@ end
    group="mume_sounds"
    match="You feel weaker."
    name="strength_down"
-   omit_from_output="y"
    send_to="12"
    sequence="100"
   >
@@ -214,7 +210,6 @@ end
    group="mume_sounds"
    match="You feel less aware of your surroundings."
    name="sense_life_down"
-   omit_from_output="y"
    send_to="12"
    sequence="100"
   >
@@ -236,7 +231,6 @@ end
    group="mume_sounds"
    match="Your legs feel heavier."
    name="breath_of_briskness_down"
-   omit_from_output="y"
    send_to="12"
    sequence="100"
   >
@@ -258,7 +252,6 @@ end
    group="mume_sounds"
    match="The white aura around your body fades."
    name="sanctuary_down"
-   omit_from_output="y"
    send_to="12"
    sequence="100"
   >
@@ -279,8 +272,7 @@ end
    group="mume_sounds"
    match="You feel a cloak of blindness dissolve."
    name="blindness_down"
-   omit_from_output="y"
-   send_to="14"
+   send_to="12"
    sequence="100"
   >
   <send>play(TYPE_SPELL_STATUS, GetInfo(67) .. "sounds/spells/blindness_off.wav")</send>
