@@ -48,10 +48,9 @@
    enabled="y"
    group="mume_xp_counter"
    omit_from_log="y"
-   send_to="12"
    sequence="100"
   >
-  <send>Send("info TPCOUNTER: %t %T.")</send>
+  <send>info TPCOUNTER: %t %T.</send>
   </alias>
 </aliases>
 
@@ -61,7 +60,7 @@
   <trigger
    enabled="y"
    group="mume_xp_counter"
-   match="^(?:You are dead\! Sorry\.\.|Reconnecting|Welcome to the land of Middle-earth\. May your visit here be\.\.\. interesting)\.$"
+   match="^(?:You are dead\! Sorry\.\.|Reconnecting|Welcome to the land of Middle\-earth\. May your visit here be\.\.\. interesting)\.$"
    name="reset"
    regexp="y"
    send_to="12"
@@ -97,14 +96,7 @@ Send("info XPCOUNTER: %x %t %X %T.")
    sequence="100"
   >
   <send>
-gained_xp = tonumber("%&lt;xp&gt;") - old_xp
-gained_tp = tonumber("%&lt;tp&gt;") - old_tp
-session_xp = session_xp + gained_xp
-session_tp = session_tp + gained_tp
-old_xp = tonumber("%&lt;xp&gt;")
-old_tp = tonumber("%&lt;tp&gt;")
-needed_xp = tonumber("%&lt;needed_xp&gt;")
-needed_tp = tonumber("%&lt;needed_tp&gt;")
+xp_update(tonumber("%&lt;xp&gt;"), tonumber("%&lt;tp&gt;"), tonumber("%&lt;needed_xp&gt;"), tonumber("%&lt;needed_tp&gt;"))
 xp_display()
   </send>
   </trigger>
@@ -119,13 +111,7 @@ xp_display()
    send_to="14"
    sequence="100"
   >
-  <send>
-gained_tp = tonumber("%&lt;tp&gt;") - old_tp
-session_tp = session_tp + gained_tp
-old_tp = tonumber("%&lt;tp&gt;")
-needed_tp = tonumber("%&lt;needed_tp&gt;")
-Note(string.format("Gained: %s, Session: %s, Needed: %s, Total: %&lt;tp&gt;", gained_tp, session_tp, needed_tp))
-  </send>
+  <send>tp_update(tonumber("%&lt;tp&gt;"), tonumber("%&lt;needed_tp&gt;"))</send>
   </trigger>
 </triggers>
 
@@ -134,14 +120,39 @@ Note(string.format("Gained: %s, Session: %s, Needed: %s, Total: %&lt;tp&gt;", ga
 
 <script>
 <![CDATA[
-local gained_xp = 0
-local gained_tp = 0
-local session_xp = 0
-local session_tp = 0
-local needed_xp = 0
-local needed_tp = 0
-local old_xp = 0
-local old_tp = 0
+gained_xp = 0
+gained_tp = 0
+session_xp = 0
+session_tp = 0
+needed_xp = 0
+needed_tp = 0
+old_xp = 0
+old_tp = 0
+
+function xp_update(updated_xp, updated_tp, updated_needed_xp, updated_needed_tp)
+	if old_xp ~= 0 then
+		gained_xp = updated_xp - old_xp
+	end
+	if old_tp ~= 0 then
+		gained_tp = updated_tp - old_tp
+	end
+	session_xp = session_xp + gained_xp
+	session_tp = session_tp + gained_tp
+	old_xp = updated_xp
+	old_tp = updated_tp
+	needed_xp = updated_needed_xp
+	needed_tp = updated_needed_tp
+end
+
+function tp_update(updated_tp, updated_needed_tp)
+	if old_tp ~= 0 then
+		gained_tp = updated_tp - old_tp
+	end
+	session_tp = session_tp + gained_tp
+	old_tp = updated_tp
+	needed_tp = updated_needed_tp
+	Note(string.format("Gained: %s, Session: %s, Needed: %s, Total: %s", gained_tp, session_tp, needed_tp, updated_tp))
+end
 
 function xp_display()
 	Note("Gained XP: ", tostring(gained_xp), ", TP: ", tostring(gained_tp))
