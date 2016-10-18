@@ -54,7 +54,10 @@ CONFIG = "d19a2f0a604c96b7318aa67f"
 MUME_MISC = "ad20dd80cbd7c2fea78ce15c"
 MUME_CASTOR_SPELL_TRANSLATOR = "8b4e5dd676d8477dc5f14376"
 MUME_SOUNDS = "32821ab3fa17b04a8ab4c420"
+XML_PARSER = "74834d3734b2c8a3a9da4d18"
+BROADCAST_NAME = 4
 
+room_name = "No room name"
 repeat_command = nil
 local return_code, keyboard_layout = CallPlugin(CONFIG, "get", "keyboard_layout")
 
@@ -71,7 +74,7 @@ if keyboard_layout == "dvorak" then
 	Accelerator("Alt+shift+H", "scout west")
 	Accelerator("Alt+shift+G", "scout up")
 	Accelerator("Alt+shift+R", "scout down")
-	Accelerator("Alt+S", "roomname")
+	AcceleratorTo("alt+S", "CallPlugin(TTS, 'say', room_name, true)", sendto.script)
 	Accelerator("Alt+B", "flee")
 	Accelerator("Alt+M", "v")
 	AcceleratorTo("alt+I", "CallPlugin(MUME_MISC, 'speak_prompt', 'buffer')", sendto.script)
@@ -98,7 +101,7 @@ else
 	Accelerator("Alt+shift+J", "scout west")
 	Accelerator("Alt+shift+U", "scout up")
 	Accelerator("Alt+shift+O", "scout down")
-	Accelerator("Alt+;", "roomname")
+	AcceleratorTo("alt+;", "CallPlugin(TTS, 'say', room_name, true)", sendto.script)
 	Accelerator("Alt+N", "flee")
 	Accelerator("Alt+M", "v")
 	AcceleratorTo("alt+G", "CallPlugin(MUME_MISC, 'speak_prompt', 'buffer')", sendto.script)
@@ -145,6 +148,12 @@ function repeat_last_command()
 		Execute(command)
 	else
 		Note("No repeat command.")
+	end
+end
+
+function OnPluginBroadcast (msg, id, name, text)
+	if id == XML_PARSER and name == "mume_xml_parser" and msg == BROADCAST_NAME then
+		room_name = text ~= "" and text or "No room name"
 	end
 end
 
