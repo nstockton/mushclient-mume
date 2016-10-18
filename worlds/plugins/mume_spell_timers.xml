@@ -451,9 +451,9 @@ end
 function spell_timer_status(spell)
 	if spell_timers[spell] then
 		local current_time = os.time()
-		local minutes = math.floor((currentTime - spell_timers[spell]) / 60)
+		local minutes = math.floor((current_time - spell_timers[spell]) / 60)
 		local minutes_pretty = minutes ~= 1 and "s" or ""
-		local seconds = math.floor((currentTime - spell_timers[spell]) % 60)
+		local seconds = math.floor((current_time - spell_timers[spell]) % 60)
 		local seconds_pretty = seconds ~= 1 and "s" or ""
 		Note(string.format("%s up for %d minute%s, %d second%s.", spell, minutes, minutes_pretty, seconds, seconds_pretty))
 	else
