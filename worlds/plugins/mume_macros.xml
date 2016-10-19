@@ -51,15 +51,41 @@
 <![CDATA[
 TTS = "925cdd0331023d9f0b8f05a7"
 CONFIG = "d19a2f0a604c96b7318aa67f"
-MUME_MISC = "ad20dd80cbd7c2fea78ce15c"
 MUME_CASTOR_SPELL_TRANSLATOR = "8b4e5dd676d8477dc5f14376"
 MUME_SOUNDS = "32821ab3fa17b04a8ab4c420"
 XML_PARSER = "74834d3734b2c8a3a9da4d18"
+BROADCAST_PROMPT = 1
 BROADCAST_NAME = 4
+PROMPT_REGEX = rex.new([[^(?P<light>[\@\*\!\)o])?(?P<terrain>[\#\(\[\+\.\%fO\~UW\:\=\<])?(?P<weather>[\*\'\"\~\=\-]{1,2})?(?P<movement_flags> [RrSsCcW]{1,4})?(?P<hp> HP\:\w+)?(?P<mp> Mana\:\w+)?(?P<mv> Move\:\w+)?(?P<mount> Mount\:\w+)?(?P<fighting> [^\:]+\:\w+)?(?P<buffer> [^\:]+\:\w+)?.*?>$]])
+TERRAIN_SYMBOLS = {
+	[":"] = "brush",
+	["O"] = "cavern",
+	["#"] = "city",
+	["."] = "field",
+	["f"] = "forest",
+	["("] = "hills",
+	["["] = "indoors",
+	["<"] = "mountains",
+	["W"] = "rapids",
+	["+"] = "road",
+	["%"] = "shallow water",
+	["="] = "tunnel",
+	["U"] = "under water",
+	["~"] = "water"
+}
+LIGHT_SYMBOLS = {
+	["@"] = "lit at",
+	["*"] = "sun light",
+	["!"] = "artificial light",
+	[")"] = "moon light",
+	["o"] = "darkness"
+}
 
 room_name = "No room name"
 repeat_command = nil
 local return_code, keyboard_layout = CallPlugin(CONFIG, "get", "keyboard_layout")
+last_prompt = {}
+last_fought = "Unknown last fought"
 
 if keyboard_layout == "dvorak" then
 	Accelerator("Alt+C", "north")
@@ -77,16 +103,16 @@ if keyboard_layout == "dvorak" then
 	AcceleratorTo("alt+S", "CallPlugin(TTS, 'say', room_name, true)", sendto.script)
 	Accelerator("Alt+B", "flee")
 	Accelerator("Alt+M", "v")
-	AcceleratorTo("alt+I", "CallPlugin(MUME_MISC, 'speak_prompt', 'buffer')", sendto.script)
-	AcceleratorTo("alt+U", "CallPlugin(MUME_MISC, 'speak_prompt', 'fighting')", sendto.script)
-	AcceleratorTo("alt+E", "CallPlugin(MUME_MISC, 'speak_prompt', 'hp')", sendto.script)
-	AcceleratorTo("alt+O", "CallPlugin(MUME_MISC, 'speak_prompt', 'mp')", sendto.script)
-	AcceleratorTo("alt+A", "CallPlugin(MUME_MISC, 'speak_prompt', 'mv')", sendto.script)
-	AcceleratorTo("alt+;", "CallPlugin(MUME_MISC, 'speak_prompt', 'light')", sendto.script)
-	AcceleratorTo("alt+Q", "CallPlugin(MUME_MISC, 'speak_prompt', 'terrain')", sendto.script)
-	AcceleratorTo("alt+J", "CallPlugin(MUME_MISC, 'speak_prompt', 'last_fought')", sendto.script)
-	AcceleratorTo("alt+K", "CallPlugin(MUME_MISC, 'speak_prompt', 'flags')", sendto.script)
-	AcceleratorTo("alt+X", "CallPlugin(MUME_MISC, 'speak_prompt', 'sneak')", sendto.script)
+	AcceleratorTo("alt+I", "speak_prompt('buffer')", sendto.script)
+	AcceleratorTo("alt+U", "speak_prompt('fighting')", sendto.script)
+	AcceleratorTo("alt+E", "speak_prompt('hp')", sendto.script)
+	AcceleratorTo("alt+O", "speak_prompt('mp')", sendto.script)
+	AcceleratorTo("alt+A", "speak_prompt('mv')", sendto.script)
+	AcceleratorTo("alt+;", "speak_prompt('light')", sendto.script)
+	AcceleratorTo("alt+Q", "speak_prompt('terrain')", sendto.script)
+	AcceleratorTo("alt+J", "speak_prompt('last_fought')", sendto.script)
+	AcceleratorTo("alt+K", "speak_prompt('flags')", sendto.script)
+	AcceleratorTo("alt+X", "speak_prompt('sneak')", sendto.script)
 	AcceleratorTo("alt+P", "repeat_last_command()", sendto.script)
 else
 	Accelerator("Alt+I", "north")
@@ -104,16 +130,16 @@ else
 	AcceleratorTo("alt+;", "CallPlugin(TTS, 'say', room_name, true)", sendto.script)
 	Accelerator("Alt+N", "flee")
 	Accelerator("Alt+M", "v")
-	AcceleratorTo("alt+G", "CallPlugin(MUME_MISC, 'speak_prompt', 'buffer')", sendto.script)
-	AcceleratorTo("alt+F", "CallPlugin(MUME_MISC, 'speak_prompt', 'fighting')", sendto.script)
-	AcceleratorTo("alt+D", "CallPlugin(MUME_MISC, 'speak_prompt', 'hp')", sendto.script)
-	AcceleratorTo("alt+S", "CallPlugin(MUME_MISC, 'speak_prompt', 'mp')", sendto.script)
-	AcceleratorTo("alt+A", "CallPlugin(MUME_MISC, 'speak_prompt', 'mv')", sendto.script)
-	AcceleratorTo("alt+Z", "CallPlugin(MUME_MISC, 'speak_prompt', 'light')", sendto.script)
-	AcceleratorTo("alt+X", "CallPlugin(MUME_MISC, 'speak_prompt', 'terrain')", sendto.script)
-	AcceleratorTo("alt+C", "CallPlugin(MUME_MISC, 'speak_prompt', 'last_fought')", sendto.script)
-	AcceleratorTo("alt+V", "CallPlugin(MUME_MISC, 'speak_prompt', 'flags')", sendto.script)
-	AcceleratorTo("alt+B", "CallPlugin(MUME_MISC, 'speak_prompt', 'sneak')", sendto.script)
+	AcceleratorTo("alt+G", "speak_prompt('buffer')", sendto.script)
+	AcceleratorTo("alt+F", "speak_prompt('fighting')", sendto.script)
+	AcceleratorTo("alt+D", "speak_prompt('hp')", sendto.script)
+	AcceleratorTo("alt+S", "speak_prompt('mp')", sendto.script)
+	AcceleratorTo("alt+A", "speak_prompt('mv')", sendto.script)
+	AcceleratorTo("alt+Z", "speak_prompt('light')", sendto.script)
+	AcceleratorTo("alt+X", "speak_prompt('terrain')", sendto.script)
+	AcceleratorTo("alt+C", "speak_prompt('last_fought')", sendto.script)
+	AcceleratorTo("alt+V", "speak_prompt('flags')", sendto.script)
+	AcceleratorTo("alt+B", "speak_prompt('sneak')", sendto.script)
 	AcceleratorTo("alt+R", "repeat_last_command()", sendto.script)
 end
 
@@ -151,9 +177,41 @@ function repeat_last_command()
 	end
 end
 
+function speak_prompt(key)
+	if not next(last_prompt) then
+		CallPlugin(TTS, "say", "No prompt", true)
+	elseif key == "last_fought" then
+		CallPlugin(TTS, "say", last_fought, true)
+	elseif not last_prompt[key] then
+		CallPlugin(TTS, "say", "Unknown", true)
+	else
+		CallPlugin(TTS, "say", last_prompt[key], true)
+	end
+end
+
 function OnPluginBroadcast (msg, id, name, text)
-	if id == XML_PARSER and name == "mume_xml_parser" and msg == BROADCAST_NAME then
-		room_name = text ~= "" and text or "No room name"
+	if id == XML_PARSER and name == "mume_xml_parser" then
+		if msg == BROADCAST_NAME then
+			room_name = text ~= "" and text or "No room name"
+		elseif msg == BROADCAST_PROMPT and text ~= "" then
+			local starting, ending, match = PROMPT_REGEX:match(text)
+			if match then
+				last_prompt = {
+					["light"] = match["light"] and LIGHT_SYMBOLS[match["light"]] or "Unknown light",
+					["terrain"] = match["terrain"] and TERRAIN_SYMBOLS[match["terrain"]] or "Unknown terrain",
+					["flags"] = match["movement_flags"] and string.strip(string.format("%s%s%s%s", string.match(match["movement_flags"], "[S]") and "Sneaking " or string.match(match["movement_flags"], "[s]") and "NoSneak " or "", string.match(match["movement_flags"], "[W]") and "Swimming " or "", string.match(match["movement_flags"], "[C]") and "Climbing " or string.match(match["movement_flags"], "[c]") and "Climbing safely " or "", string.match(match["movement_flags"], "[R]") and "Riding " or string.match(match["movement_flags"], "[r]") and "Ridden " or "")) or "No movement flags",
+					["sneak"] = match["movement_flags"] and (string.match(match["movement_flags"], "[S]") and "Sneaking" or string.match(match["movement_flags"], "[s]") and "NoSneak") or "Off",
+					["hp"] = match["hp"] and string.split(match["hp"], ":")[2] or "Healthy",
+					["mp"] = match["mp"] and string.split(match["mp"], ":")[2] or "Full",
+					["mv"] = string.format("%s %s", match["mv"] and string.split(match["mv"], ":")[2] or "Rested", match["movement_flags"] and string.match(match["movement_flags"], "[R]") and (match["mount"] and string.split(match["mount"], ":")[2] or "Rested") or "Not riding"),
+					["fighting"] = string.format("%s %s", match["fighting"] and string.split(match["fighting"], ":")[2] or "Unknown", match["fighting"] and string.strip(string.split(match["fighting"], ":")[1]) or "Not fighting"),
+					["buffer"] = string.format("%s %s", match["buffer"] and string.split(match["buffer"], ":")[2] or "Unknown", match["buffer"] and string.strip(string.split(match["buffer"], ":")[1]) or "No buffer")
+				}
+				if last_prompt["fighting"] ~= "Unknown Not fighting" then
+					last_fought = string.format("%s last fought", last_prompt["fighting"])
+				end
+			end -- if match
+		end
 	end
 end
 
