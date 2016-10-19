@@ -27,9 +27,25 @@
 <!--  Get our standard constants -->
 
 <include name="constants.lua"/>
+<!--  Aliases  -->
+
+<aliases>
+  <alias
+   name="show_prompt"
+   match="showprompt"
+   enabled="y"
+   group="mume_xml_parser"
+   send_to="12"
+   sequence="100"
+  >
+  <send>toggle_show_prompt()</send>
+  </alias>
+</aliases>
+
 <script>
 <![CDATA[
 require("mystdlib")
+CONFIG = "d19a2f0a604c96b7318aa67f"
 
 local IGNORE_BYTES = {["\0"] = true, ["\17"] = true}
 local NEGOTIATION_BYTES = {["\254"] = true, ["\253"] = true, ["\252"] = true, ["\251"] = true}
@@ -80,9 +96,16 @@ local scouting = false
 local reading_tag = false
 local initial_packet = true
 local last_packet = ""
+local return_code, show_prompt = CallPlugin(CONFIG, "get", "show_prompt")
 
 function get(key)
 	return last_data[key]
+end
+
+function toggle_show_prompt()
+	show_prompt = not show_prompt
+	CallPlugin(CONFIG, "set", "show_prompt", show_prompt)
+	Note("Show prompt ", show_prompt and "on" or "off", ".")
 end
 
 function process_text(data)
@@ -103,7 +126,9 @@ function process_text(data)
 		last_data["exits"] = string.format("%s%s", last_data["exits"], data)
 	elseif xml_mode == XML_PROMPT then
 		last_data["prompt"] = string.format("%s%s", last_data["prompt"], data)
-		return ""
+		if not show_prompt then
+			return ""
+		end
 	end
 	return data
 end
@@ -185,8 +210,8 @@ function OnPluginPacketReceived(packet)
 						last_data = {["name"] = "", ["description"] = "", ["dynamic"] = "", ["exits"] = ""}
 						xml_mode = XML_ROOM
 					elseif string.startswith(tag, "movement") then
-						BroadcastPlugin(BROADCAST_MOVEMENT, string.match(tag, "^movement dir=(%w+)/$") or "")
 						scouting = false
+						BroadcastPlugin(BROADCAST_MOVEMENT, string.match(tag, "^movement dir=(%w+)/$") or "")
 					elseif tag == "status" then
 						xml_mode = XML_NONE
 					end
@@ -203,15 +228,15 @@ function OnPluginPacketReceived(packet)
 				elseif (xml_mode == XML_DESCRIPTION and tag == "/description") or (xml_mode == XML_TERRAIN and tag == "/terrain") then
 					xml_mode = XML_ROOM
 				elseif xml_mode == XML_NAME and tag == "/name" then
-					BroadcastPlugin(BROADCAST_NAME, last_data["name"])
 					xml_mode = XML_ROOM
+					BroadcastPlugin(BROADCAST_NAME, last_data["name"])
 				elseif xml_mode == XML_EXITS and tag == "/exits" then
-					BroadcastPlugin(BROADCAST_EXITS, last_data["exits"])
 					xml_mode = XML_NONE
+					BroadcastPlugin(BROADCAST_EXITS, last_data["exits"])
 				elseif xml_mode == XML_PROMPT and tag == "/prompt" then
-					BroadcastPlugin(BROADCAST_PROMPT, last_data["prompt"])
 					scouting = false
 					xml_mode = XML_NONE
+					BroadcastPlugin(BROADCAST_PROMPT, last_data["prompt"])
 				end
 				tag_buffer = {}
 				reading_tag = false
