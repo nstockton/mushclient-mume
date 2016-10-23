@@ -79,7 +79,7 @@ end
    send_to="14"
    sequence="100"
   >
-  <send>score("%&lt;hp&gt;", "%&lt;max_hp&gt;", "%&lt;mana&gt;", "%&lt;max_mana&gt;", "%&lt;mv&gt;", "%&lt;max_mv&gt;")</send>
+  <send>score(tonumber("%&lt;hp&gt;"), tonumber("%&lt;max_hp&gt;"), tonumber("%&lt;mana&gt;"), tonumber("%&lt;max_mana&gt;"), tonumber("%&lt;mv&gt;"), tonumber("%&lt;max_mv&gt;"))</send>
   </trigger>
 </triggers>
 
@@ -122,13 +122,13 @@ end
    sequence="100"
   >
   <send>
-rpscore
+rp
 rptnl
   </send>
   </alias>
   <alias
    name="report_score"
-   match="rpscore"
+   match="rp"
    enabled="y"
    group="mume_report"
    send_to="12"
