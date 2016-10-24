@@ -49,6 +49,7 @@
 
 <script>
 <![CDATA[
+require("mystdlib")
 TTS = "925cdd0331023d9f0b8f05a7"
 CONFIG = "d19a2f0a604c96b7318aa67f"
 MUME_CASTOR_SPELL_TRANSLATOR = "8b4e5dd676d8477dc5f14376"

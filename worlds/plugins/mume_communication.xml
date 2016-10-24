@@ -28,93 +28,52 @@
 
 <include name="constants.lua"/>
 
-<!--  Triggers  -->
-
-<triggers>
-  <trigger
-   enabled="y"
-   group="mume_communication"
-   match="^EMOTE:(?P&lt;line&gt;(?P&lt;player&gt;\w+) .+):EMOTE$"
-   name="log_emotes"
-   omit_from_output="y"
-   regexp="y"
-   send_to="14"
-   sequence="80"
-  >
-  <send>communicationAdd("say", "%&lt;player&gt;", StripANSI("%&lt;line&gt;"))</send>
-  </trigger>
-  <trigger
-   enabled="y"
-   group="mume_communication"
-   match="^(?P&lt;channel&gt;TELL|SAY|NARRATE|PRAY):(?P&lt;line&gt;(?:The voice of )?(?P&lt;player&gt;\w+) (?:narrates|says|prays|tells you|tells the group|whispers to you[,]?|asks you) '.+'):(?P=channel)$"
-   name="log_channels"
-   omit_from_output="y"
-   regexp="y"
-   send_to="14"
-   sequence="80"
-  >
-  <send>communicationAdd(string.lower("%&lt;channel&gt;"), "%&lt;player&gt;", StripANSI("%&lt;line&gt;"))</send>
-  </trigger>
-  <trigger
-   enabled="y"
-   group="mume_communication"
-   match="^(?P&lt;channel&gt;TELL|SAY|NARRATE|PRAY|EMOTE):(?P&lt;line&gt;.+):(?P=channel)$"
-   name="print_channels"
-   omit_from_output="y"
-   regexp="y"
-   send_to="14"
-   sequence="100"
-  >
-  <send>Note(StripANSI("%&lt;line&gt;"))</send>
-  </trigger>
-</triggers>
-
 <!--  Aliases  -->
 
 <aliases>
   <alias
    name="review_pray_logs"
-   match="^pl(?P&lt;text&gt; .+)?$"
+   match="^pl(?:\s+(?P&lt;text&gt;.+))?$"
    enabled="y"
    group="mume_communication"
    regexp="y"
    send_to="12"
    sequence="100"
   >
-  <send>communicationReview("pray", "%&lt;text&gt;")</send>
+  <send>review("pray", "%&lt;text&gt;")</send>
   </alias>
   <alias
    name="review_narrate_logs"
-   match="^nl(?P&lt;text&gt; .+)?$"
+   match="^nl(?:\s+(?P&lt;text&gt;.+))?$"
    enabled="y"
    group="mume_communication"
    regexp="y"
    send_to="12"
    sequence="100"
   >
-  <send>communicationReview("narrate", "%&lt;text&gt;")</send>
+  <send>review("narrate", "%&lt;text&gt;")</send>
   </alias>
   <alias
    name="review_say_logs"
-   match="^sl(?P&lt;text&gt; .+)?$"
+   match="^sl(?:\s+(?P&lt;text&gt;.+))?$"
    enabled="y"
    group="mume_communication"
    regexp="y"
    send_to="12"
    sequence="100"
   >
-  <send>communicationReview("say", "%&lt;text&gt;")</send>
+  <send>review("say", "%&lt;text&gt;")</send>
   </alias>
   <alias
    name="review_tell_logs"
-   match="^tl(?P&lt;text&gt; .+)?$"
+   match="^tl(?:\s+(?P&lt;text&gt;.+))?$"
    enabled="y"
    group="mume_communication"
    regexp="y"
    send_to="12"
    sequence="100"
   >
-  <send>communicationReview("tell", "%&lt;text&gt;")</send>
+  <send>review("tell", "%&lt;text&gt;")</send>
   </alias>
   <alias
    name="review_last_say"
@@ -124,7 +83,7 @@
    send_to="12"
    sequence="100"
   >
-  <send>communicationReview("say", "1")</send>
+  <send>review("say", "1")</send>
   </alias>
   <alias
    name="review_last_tell"
@@ -134,22 +93,26 @@
    send_to="12"
    sequence="100"
   >
-  <send>communicationReview("tell", "1")</send>
+  <send>review("tell", "1")</send>
   </alias>
   <alias
    name="reply"
-   match="^rep(?:l|ly)? (?P&lt;message&gt;.+)$"
+   match="^rep(?:\s+(?P&lt;message&gt;.+))?$"
    enabled="y"
    group="mume_communication"
    regexp="y"
    send_to="12"
    sequence="100"
   >
-  <send>if communicationReplyTo then
-	Send("tell " .. communicationReplyTo .. " %&lt;message&gt;")
-else
+  <send>
+if reply_to == "" then
 	Note("No one to reply to.")
-end</send>
+elseif "%&lt;message&gt;" == "" then
+	Note("Replying to ", reply_to, ".")
+else
+	Send("tell ", reply_to, " %&lt;message&gt;")
+end
+  </send>
   </alias>
 </aliases>
 
@@ -160,8 +123,23 @@ end</send>
 <![CDATA[
 require("mystdlib")
 MUME_SOUNDS = "32821ab3fa17b04a8ab4c420"
+XML_PARSER = "74834d3734b2c8a3a9da4d18"
+-- For sounds:
 TYPE_COMMUNICATION = 9
-
+-- Types of communications received by the XML parser:
+BROADCAST_TELL = 5
+BROADCAST_NARRATE = 6
+BROADCAST_PRAY = 7
+BROADCAST_SAY = 8
+BROADCAST_EMOTE = 9
+COMMUNICATION_REGEX = rex.new([[^(?:The voice of )?(?P<player>\w+) (?:narrates|says|prays|tells you|tells the group|whispers to you[,]?|asks you) \'.+\'$]])
+CHANNELS = {
+	[BROADCAST_TELL] = "tell",
+	[BROADCAST_NARRATE] = "narrate",
+	[BROADCAST_PRAY] = "pray",
+	[BROADCAST_SAY] = "say",
+	[BROADCAST_EMOTE] = "say" -- This is *not* a typo.
+}
 IGNORE_LIST = {
 	["Aldereon"] = true,
 	["Anarwen"] = true,
@@ -189,62 +167,43 @@ IGNORE_LIST = {
 	["Sauron"] = true
 }
 
-communicationReplyTo = nil
+reply_to = ""
 
-function communicationAdd(channel, player, line)
-	Note(line)
-	if not IGNORE_LIST[player] then
-		if channel == "say" then
-			CallPlugin(MUME_SOUNDS, "play", TYPE_COMMUNICATION, GetInfo(67) .. "sounds/says.wav")
-		elseif channel == "tell" then
-			if line:match("^.- tells the group '.+'$") then
-				communicationReplyTo = "group"
-			else
-				communicationReplyTo = player
-			end
-			CallPlugin(MUME_SOUNDS, "play", TYPE_COMMUNICATION, GetInfo(67) .. "sounds/tells.wav")
-		end
-		local file = io.open(GetInfo(67) .. "communication/" .. channel .. ".txt", "ab")
-		file:write(line .. "\r\n")
-		file:close()
-	end
-end
-
-function communicationReview(channel, text)
+function review(channel, text)
 	local text = string.strip(text:lower())
 	local output = {}
-	local channelLines = {}
-	local fileName = string.format("%scommunication/%s.txt", GetInfo(67), channel)
-	if not os.isFile(fileName) then
-		return Note(string.format("The log file for channel '%s' hasn't been created yet. It will be created when a message to the channel has been received.", channel))
+	local channel_lines = {}
+	local file_name = string.format("%scommunication/%s.txt", GetInfo(67), channel)
+	if not os.isFile(file_name) then
+		return Note("The log file for channel '", channel, "' hasn't been created yet. It will be created when a message to the channel has been received.")
 	end
-	local file = io.open(fileName, "rb")
+	local file = io.open(file_name, "rb")
 	for line in file:read("*all"):gmatch("[^\r\n]+") do
 		line = string.strip(line)
 		if line ~= "" then
-			table.insert(channelLines, line)
+			table.insert(channel_lines, line)
 		end
 	end
 	file:close()
-	if next(channelLines) == nil then
+	if not next(channel_lines) then
 		-- The channel log file is empty.
-		output = {string.capitalize(channelName) .. " log is empty!"}
-	elseif string.isdigit(text) and tonumber(text) >= 1 and #channelLines >= tonumber(text) then
+		output = {string.capitalize(channel_name) .. " log is empty!"}
+	elseif string.isdigit(text) and tonumber(text) >= 1 and #channel_lines >= tonumber(text) then
 		-- The search string is a number, so output the last (N) lines.
-		output = table.slice(channelLines, tonumber(text) * -1)
+		output = table.slice(channel_lines, tonumber(text) * -1)
 	elseif not string.isdigit(text) and text ~= "" then
 		-- Output lines that contain the search string.
 		output = {}
-		for i, line in ipairs(channelLines) do
-			if string.match(line:lower(), text) then
+		for _, line in ipairs(channel_lines) do
+			if string.findpos(line:lower(), text) then
 				table.insert(output, line)
 			end
 		end
 	else
 		-- The search string is empty, so output the last 20 lines.
-		output = table.slice(channelLines, -20, -1)
+		output = table.slice(channel_lines, -20, -1)
 	end
-	if next(output) == nil then
+	if not next(output) then
 		-- A search string was specified, but no lines matched it.
 		table.insert(output, "Nothing found!")
 	elseif #output > 500 then
@@ -252,6 +211,34 @@ function communicationReview(channel, text)
 		output = table.slice(output, -500)
 	end
 	Note(table.concat(output, "\n"))
+end
+
+function OnPluginBroadcast (msg, id, name, text)
+	if id == XML_PARSER and name == "mume_xml_parser" and msg >= BROADCAST_TELL and msg <= BROADCAST_EMOTE and text ~= "" then
+		local player = ""
+		if msg == BROADCAST_EMOTE then
+			player = text:match("%S+")
+		else
+			local starting, ending, match = COMMUNICATION_REGEX:match(text)
+			player = match and match["player"] or ""
+		end
+		if player ~= "" and not IGNORE_LIST[player] then
+			local channel = CHANNELS[msg]
+			if channel == "say" then
+				CallPlugin(MUME_SOUNDS, "play", TYPE_COMMUNICATION, GetInfo(67) .. "sounds/says.wav")
+			elseif channel == "tell" then
+				if text:match("^.- tells the group '.+'$") then
+					reply_to = "group"
+				else
+					reply_to = player
+				end
+				CallPlugin(MUME_SOUNDS, "play", TYPE_COMMUNICATION, GetInfo(67) .. "sounds/tells.wav")
+			end
+			local file = io.open(GetInfo(67) .. "communication/" .. channel .. ".txt", "ab")
+			file:write(text .. "\r\n")
+			file:close()
+		end
+	end
 end
 
 ]]>
