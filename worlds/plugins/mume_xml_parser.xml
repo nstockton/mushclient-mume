@@ -62,6 +62,11 @@ local XML_DESCRIPTION = 8
 local XML_EXITS = 16
 local XML_PROMPT = 32
 local XML_TERRAIN = 64
+local XML_TELL = 128
+local XML_NARRATE = 256
+local XML_PRAY = 512
+local XML_SAY = 1024
+local XML_EMOTE = 2048
 local XML_REPLACEMENTS = {
 	["&lt;"] = "<",
 	["&gt;"] = ">",
@@ -70,22 +75,15 @@ local XML_REPLACEMENTS = {
 	["&apos;"] = "'",
 	["&quot;"] = '"',
 }
-local TAG_REPLACEMENTS = {
-	["tell"] = "TELL:",
-	["/tell"] = ":TELL",
-	["narrate"] = "NARRATE:",
-	["/narrate"] = ":NARRATE",
-	["pray"] = "PRAY:",
-	["/pray"] = ":PRAY",
-	["say"] = "SAY:",
-	["/say"] = ":SAY",
-	["emote"] = "EMOTE:",
-	["/emote"] = ":EMOTE"
-}
 local BROADCAST_PROMPT = 1
 local BROADCAST_MOVEMENT = 2
 local BROADCAST_EXITS = 3
 local BROADCAST_NAME = 4
+local BROADCAST_TELL = 5
+local BROADCAST_NARRATE = 6
+local BROADCAST_PRAY = 7
+local BROADCAST_SAY = 8
+local BROADCAST_EMOTE = 9
 
 local in_esc = false
 local in_iac = false
@@ -97,6 +95,7 @@ local reading_tag = false
 local initial_packet = true
 local last_packet = ""
 local return_code, show_prompt = CallPlugin(CONFIG, "get", "show_prompt")
+local last_communication = ""
 
 function get(key)
 	return last_data[key]
@@ -119,16 +118,18 @@ function process_text(data)
 		-- dynamic description
 		last_data["dynamic"] = string.format("%s%s\n", last_data["dynamic"], data)
 	elseif xml_mode == XML_NAME then
-		last_data["name"] = string.format("%s%s", last_data["name"], data)
+		last_data["name"] = last_data["name"] .. data
 	elseif xml_mode == XML_DESCRIPTION then
 		last_data["description"] = string.format("%s%s\n", last_data["description"], data)
 	elseif xml_mode == XML_EXITS then
-		last_data["exits"] = string.format("%s%s", last_data["exits"], data)
+		last_data["exits"] = last_data["exits"] .. data
 	elseif xml_mode == XML_PROMPT then
-		last_data["prompt"] = string.format("%s%s", last_data["prompt"], data)
+		last_data["prompt"] = last_data["prompt"] .. data
 		if not show_prompt then
 			return ""
 		end
+	elseif xml_mode >= XML_TELL and xml_mode <= XML_EMOTE then
+		last_communication = last_communication .. data
 	end
 	return data
 end
@@ -196,9 +197,6 @@ function OnPluginPacketReceived(packet)
 					if tag == "/xml" then
 						-- XML mode was turned off by the player.
 						xml_mode = XML_NONE
-					elseif TAG_REPLACEMENTS[tag] then
-						-- Replace the tag with a marked up version for triggering.
-						table.insert(result, TAG_REPLACEMENTS[tag])
 					elseif tag == "prompt" then
 						last_data.prompt = ""
 						xml_mode = XML_PROMPT
@@ -206,6 +204,16 @@ function OnPluginPacketReceived(packet)
 						-- The next incoming room data should be ignored. For example if the player is scouting.
 					elseif tag == "exits" then
 						xml_mode = XML_EXITS
+					elseif tag == "tell" then
+						xml_mode = XML_TELL
+					elseif tag == "narrate" then
+						xml_mode = XML_NARRATE
+					elseif tag == "pray" then
+						xml_mode = XML_PRAY
+					elseif tag == "say" then
+						xml_mode = XML_SAY
+					elseif tag == "emote" then
+						xml_mode = XML_EMOTE
 					elseif tag == "room" then
 						last_data = {["name"] = "", ["description"] = "", ["dynamic"] = "", ["exits"] = ""}
 						xml_mode = XML_ROOM
@@ -233,6 +241,26 @@ function OnPluginPacketReceived(packet)
 				elseif xml_mode == XML_EXITS and tag == "/exits" then
 					xml_mode = XML_NONE
 					BroadcastPlugin(BROADCAST_EXITS, last_data["exits"])
+				elseif xml_mode == XML_TELL and tag == "/tell" then
+					xml_mode = XML_NONE
+					BroadcastPlugin(BROADCAST_TELL, last_communication)
+					last_communication = ""
+				elseif xml_mode == XML_NARRATE and tag == "/narrate" then
+					xml_mode = XML_NONE
+					BroadcastPlugin(BROADCAST_NARRATE, last_communication)
+					last_communication = ""
+				elseif xml_mode == XML_PRAY and tag == "/pray" then
+					xml_mode = XML_NONE
+					BroadcastPlugin(BROADCAST_PRAY, last_communication)
+					last_communication = ""
+				elseif xml_mode == XML_SAY and tag == "/say" then
+					xml_mode = XML_NONE
+					BroadcastPlugin(BROADCAST_SAY, last_communication)
+					last_communication = ""
+				elseif xml_mode == XML_EMOTE and tag == "/emote" then
+					xml_mode = XML_NONE
+					BroadcastPlugin(BROADCAST_EMOTE, last_communication)
+					last_communication = ""
 				elseif xml_mode == XML_PROMPT and tag == "/prompt" then
 					scouting = false
 					xml_mode = XML_NONE
