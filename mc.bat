@@ -7,17 +7,10 @@ copy /Y MUSHclient.ini.sample MUSHclient.ini > nul
 if not exist "worlds\mume\mume.mcl" copy /Y worlds\mume\mume.mcl.sample worlds\mume\mume.mcl > nul
 start MUSHclient.exe
 cd mapperproxy
-for %%x in (pypy.exe) do (
-	if not [%%~$PATH:x]==[] (
-		echo "Running mapper with PyPy."
-		pypy.exe -B startmapper.py raw
-		goto :finished
-	)
-)
 for %%x in (python.exe) do (
 	if not [%%~$PATH:x]==[] (
 		echo "Running mapper with Python."
-		python.exe -B startmapper.py raw
+		python.exe -B start.py --format raw
 		goto :finished
 	)
 )
