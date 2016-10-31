@@ -34,6 +34,46 @@
   <trigger
    enabled="y"
    group="mume_misc"
+   match="  green colour is cast upon its surroundings when touched by illumination."
+   omit_from_output="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 - (remp ring, requires emerald)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="  blue glow emanates from deep within. This gem must then be placed within the"
+   omit_from_output="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 - (scout ring, requires opal)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="  hardness and rare blue transparency give off a vitreous luster. This gem"
+   omit_from_output="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 - (strength ring, requires topaz)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="  red glow seems to capture and absorb all illumination surrounding it. This"
+   omit_from_output="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 - (mana ring, requires ruby)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
    match="^A citizen mercenary (?:\(\w+\) )?(?:snuffs|lights) a lantern\.$"
    name="omit_merc_lanterns"
    omit_from_output="y"
