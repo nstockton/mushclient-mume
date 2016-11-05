@@ -34,6 +34,16 @@
   <trigger
    enabled="y"
    group="mume_misc"
+   match="  sparkling maroon. This gem must then be placed within the inset of an"
+   omit_from_output="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 - (cc ring, requires garnet)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
    match="  green colour is cast upon its surroundings when touched by illumination."
    omit_from_output="y"
    send_to="2"
