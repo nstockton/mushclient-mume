@@ -113,6 +113,27 @@ end
   <trigger
    enabled="y"
    group="mume_sounds"
+   match="^A small campfire burns here\, its (?:low flames giving off only a little|embers barely giving off any) light.$"
+   name="misc_alert3"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_ALERT, GetInfo(67) .. "sounds/misc_alert.wav")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
+   match="The scarred fell beast opens its horrendous, shadow-veiled mouth and screeches!"
+   name="misc_alert4"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_ALERT, GetInfo(67) .. "sounds/misc_alert.wav")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
    match="^(?:A blue transparent wall slowly appears around you|Your magic armour is revitalised)\.$"
    name="armour_up"
    regexp="y"
