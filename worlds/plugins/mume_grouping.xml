@@ -185,7 +185,7 @@ end
   <trigger
    enabled="y"
    group="mume_grouping"
-   match="^You are now a member of (?P&lt;player&gt;\w+)(?: \(\w+\))?\'s group\.$"
+   match="^You are now a member of (?P&lt;player&gt;\w+)(?: \(\w+\))?(?:\'s|s\') group\.$"
    name="define_leader1"
    regexp="y"
    send_to="12"
