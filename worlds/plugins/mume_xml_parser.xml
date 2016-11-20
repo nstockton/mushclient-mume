@@ -197,13 +197,6 @@ function OnPluginPacketReceived(packet)
 					if tag == "/xml" then
 						-- XML mode was turned off by the player.
 						xml_mode = XML_NONE
-					elseif tag == "prompt" then
-						last_data.prompt = ""
-						xml_mode = XML_PROMPT
-					elseif scouting then
-						-- The next incoming room data should be ignored. For example if the player is scouting.
-					elseif tag == "exits" then
-						xml_mode = XML_EXITS
 					elseif tag == "tell" then
 						xml_mode = XML_TELL
 					elseif tag == "narrate" then
@@ -214,6 +207,13 @@ function OnPluginPacketReceived(packet)
 						xml_mode = XML_SAY
 					elseif tag == "emote" then
 						xml_mode = XML_EMOTE
+					elseif tag == "prompt" then
+						last_data.prompt = ""
+						xml_mode = XML_PROMPT
+					elseif scouting then
+						-- The next incoming room data should be ignored. For example if the player is scouting.
+					elseif tag == "exits" then
+						xml_mode = XML_EXITS
 					elseif tag == "room" then
 						last_data = {["name"] = "", ["description"] = "", ["dynamic"] = "", ["exits"] = ""}
 						xml_mode = XML_ROOM
