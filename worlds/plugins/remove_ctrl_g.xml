@@ -34,7 +34,6 @@
 <script>
 <![CDATA[
 AcceleratorTo ("ctrl+G", "--", sendto.script)
-AcceleratorTo ("ctrl+shift+A", "--", sendto.script)
 
 ]]>
 </script>
