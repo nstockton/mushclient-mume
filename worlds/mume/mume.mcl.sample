@@ -12,7 +12,7 @@
 
    auto_log_file_name="%F%N\logs\%Y-%m-%d (%I_%M_%S %p).log"
    auto_say_override_prefix="-"
-   auto_say_string="say "
+   auto_say_string=""
    chat_name="Name-not-set"
    command_stack_character=";"
    id="6c981ab925deb7bdf50f67e3"
@@ -195,7 +195,7 @@
   </macro>
 
   <macro name="say" type="replace" >
-  <send>say </send>
+  <send></send>
 
   </macro>
 
