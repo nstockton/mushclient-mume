@@ -100,3 +100,24 @@ function table.uniqueItems(tbl)
 	end
 	return outputTbl
 end
+
+function table.index(tbl, item)
+	local index = false
+	for i, value in ipairs(tbl) do
+		if value == item then
+			index = i
+			break
+		end
+	end
+	return index or nil
+end
+
+function table.count(tbl, item)
+	local count = 0
+	for i, value in ipairs(tbl) do
+		if value == item then
+			count = count + 1
+		end
+	end
+	return count
+end
