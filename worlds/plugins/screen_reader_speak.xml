@@ -81,8 +81,6 @@ local nvda_api = IS_32_BIT and ffi.load("screen_reader_dlls/nvdaControllerClient
 local sa_api = IS_32_BIT and ffi.load("screen_reader_dlls/SAAPI32.dll") or ffi.load("screen_reader_dlls/SAAPI64.dll")
 local dolphin_api = IS_32_BIT and ffi.load("screen_reader_dlls/dolapi32.dll")
 
-local codepage = CP_1252
-
 local function dolphin_running()
 	if not dolphin_api then
 		return False
@@ -171,12 +169,17 @@ function say(text, interrupt)
 	if not text or text:find("^%s*$") then
 		return
 	end
-	local widestr = ffiNew("wchar_t[?]", 4096)
-	ffiC.MultiByteToWideChar(codepage, 0, text, #text, widestr, 4096)
+	local codepage = CP_UTF8
+	local length = utils.utf8valid(text)
+	if not length then
+		codepage = CP_1252
+		length = ffiC.MultiByteToWideChar(codepage, 0, text, #text, nil, 0)
+	end
+	local widestr = ffiNew("wchar_t[?]", length + 1)
+	ffiC.MultiByteToWideChar(codepage, 0, text, #text, widestr, length)
 	if ffi.errno(0) == ERROR_NO_UNICODE_TRANSLATION then
-		codepage = CP_UTF8
-		widestr = ffiNew("wchar_t[?]", 4096)
-		ffiC.MultiByteToWideChar(codepage, 0, text, #text, widestr, 4096)
+		-- User should hopefully never see this.
+		Note("Error in screen reader speak plugin: no unicode translation.")
 	end
 	if nvda_running() then
 		nvda_say(widestr, interrupt)
