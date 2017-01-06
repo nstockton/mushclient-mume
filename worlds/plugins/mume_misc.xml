@@ -104,7 +104,7 @@
   <trigger
    enabled="y"
    group="mume_misc"
-   match="^    \:                          \*\*     (?P&lt;direction&gt; [NEW]|S[EW])    \*\*                             \:   $"
+   match="^[ ]{4}[:][ ]{26}[*]{2}[ ]{5}(?P&lt;direction&gt; [NEW]|S[EW])[ ]{4}[*]{2}[ ]{29}[:][ ]{3}$"
    name="auto_move_stakes"
    regexp="y"
    send_to="12"
@@ -112,7 +112,7 @@
   >
   <send>
 if auto_move_stakes then
-	move_stakes(REVERSED_STAKES[string.strip("%&lt;direction&gt;")])
+	move_stakes(string.strip("%&lt;direction&gt;"))
 	auto_move_stakes = false
 end
   </send>
@@ -596,14 +596,6 @@ else
 	country_codes = {}
 end
 
-REVERSED_STAKES = {
-	["N"] = "N",
-	["W"] = "E",
-	["SW"] = "SE",
-	["SE"] = "SW",
-	["E"] = "W"
-}
-
 GLYPHS = {
 	["sprig of mistletoe"] = "wedding",
 	["tree"] = "hunt",
@@ -619,24 +611,19 @@ auto_drag = false
 auto_drag_counter = 1
 
 function move_stakes(direction)
-	local dir_values = {"N", "E", "SE", "SW", "W"}
-	local dir_total = #dir_values
-	local dir_keys = {}
-	for key, value in pairs(dir_values) do
-		dir_keys[value] = key
-	end
-	if not dir_keys[direction] then
-		Note(string.format("Invalid direction '%s': Must be one of %s.", direction, table.concat(dir_values, ", ")))
+	local directions = {"N", "E", "SE", "SW", "W"}
+	local offset = table.index(directions, direction)
+	if not offset then
+		Note(string.format("Error: invalid direction '%s'.", direction))
 		return
 	end
 	local stakes = {"Forostar", "Orrostar", "Hyarrostar", "Hyarnustar", "Andustar"}
-	local orientation = dir_keys[direction] - 1
-	local stake_counter = 1
-	for i = orientation, orientation + (dir_total - 1) do
-		Send(string.format("move %s %s", stakes[stake_counter], dir_values[i % dir_total + 1]))
-		stake_counter = stake_counter + 1
-	end
+	-- Mittalmar is always in the center.
 	Send("move Mittalmar centre")
+	for i, stake in ipairs(stakes) do
+		local oriented = (i - offset) % table.getn(directions) + 1
+		Send(string.format("move %s %s", stake, directions[oriented]))
+	end
 end
 
 ]]>
