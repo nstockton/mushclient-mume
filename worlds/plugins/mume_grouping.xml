@@ -34,7 +34,7 @@
   <trigger
    enabled="y"
    group="mume_grouping"
-   match="^(?P&lt;player&gt;\w+)(?: \(\w+\))? picks up a (?:pony|dales-pony|horse|warhorse|pack horse|trained horse|horse of the Rohirrim|brown donkey|mountain mule|hungry warg|brown wolf)(?: \(\w+\))?\'s reins and starts riding (?:him|her|it)\.$"
+   match="^(?P&lt;player&gt;\w+)(?: \(\w+\))? (?:picks up|grabs on to) a (?:pony|dales-pony|horse|warhorse|pack horse|trained horse|horse of the Rohirrim|brown donkey|mountain mule|hungry warg|brown wolf)(?: \(\w+\))?\'s (?:reins|fur) and starts riding (?:him|her|it)\.$"
    name="autoride"
    regexp="y"
    send_to="12"
