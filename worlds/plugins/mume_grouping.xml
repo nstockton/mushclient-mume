@@ -112,7 +112,7 @@ end
   <trigger
    enabled="y"
    group="mume_grouping"
-   match="^ZBLAM\! A (?:pony|dales-pony|horse|warhorse|pack horse|trained horse|horse of the Rohirrim|brown donkey|mountain mule|hungry warg|brown wolf) (?:\(\w+\) )?sends (?P&lt;player&gt;\w+) (?:\(\w+\) )?flying\!$"
+   match="^ZBLAM\! A (?:pony|dales-pony|horse|warhorse|pack horse|trained horse|horse of the Rohirrim|brown donkey|mountain mule|hungry warg|brown wolf) (?:\(\w+\) )?sends (?P&lt;player&gt;\w+) (?:\(\w+\) )?(?:flying|across the dancefloor)\!$"
    name="player_zblammed"
    regexp="y"
    send_to="12"
