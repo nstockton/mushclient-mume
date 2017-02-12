@@ -77,8 +77,9 @@ Send("info XPCOUNTER: %x %t %X %T.")
   <trigger
    enabled="y"
    group="mume_xp_counter"
-   match="You receive your share of experience."
+   match="^You (?:feel more experienced|receive your share of experience)\."
    name="gained_xp"
+   regexp="y"
    omit_from_output="y"
    sequence="100"
   >
