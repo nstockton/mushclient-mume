@@ -52,7 +52,7 @@ elseif action == "begins some strange" then
 	action = "casting"
 end
 if "%&lt;direction&gt;" ~= "hiding place" then
-	play(TYPE_PK, GetInfo(67) .. "sounds/" .. player .. action .. "%&lt;direction&gt;.wav")
+	play(TYPE_PK, player .. action .. "%&lt;direction&gt;.wav")
 end
   </send>
   </trigger>
@@ -65,7 +65,7 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_ALERT, GetInfo(67) .. "sounds/%&lt;need&gt;.wav")</send>
+  <send>play(TYPE_ALERT, "%&lt;need&gt;.wav")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -76,7 +76,7 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_ALERT, GetInfo(67) .. "sounds/hidden.wav")</send>
+  <send>play(TYPE_ALERT, "hidden.wav")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -86,7 +86,7 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_ALERT, GetInfo(67) .. "sounds/tada.wav")</send>
+  <send>play(TYPE_ALERT, "tada.wav")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -97,7 +97,7 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_ALERT, GetInfo(67) .. "sounds/misc_alert.wav")</send>
+  <send>play(TYPE_ALERT, "misc_alert.wav")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -108,7 +108,7 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_ALERT, GetInfo(67) .. "sounds/misc_alert.wav")</send>
+  <send>play(TYPE_ALERT, "misc_alert.wav")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -119,7 +119,7 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_ALERT, GetInfo(67) .. "sounds/misc_alert.wav")</send>
+  <send>play(TYPE_ALERT, "misc_alert.wav")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -129,7 +129,7 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_ALERT, GetInfo(67) .. "sounds/misc_alert.wav")</send>
+  <send>play(TYPE_ALERT, "misc_alert.wav")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -140,7 +140,7 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_SPELL_STATUS, GetInfo(67) .. "sounds/spells/armour_on.wav")</send>
+  <send>play(TYPE_SPELL_STATUS, "spells/armour_on.wav")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -150,7 +150,7 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_SPELL_STATUS, GetInfo(67) .. "sounds/spells/armour_off.wav")</send>
+  <send>play(TYPE_SPELL_STATUS, "spells/armour_off.wav")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -161,7 +161,7 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_SPELL_STATUS, GetInfo(67) .. "sounds/spells/bless_on.wav")</send>
+  <send>play(TYPE_SPELL_STATUS, "spells/bless_on.wav")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -171,7 +171,7 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_SPELL_STATUS, GetInfo(67) .. "sounds/spells/bless_off.wav")</send>
+  <send>play(TYPE_SPELL_STATUS, "spells/bless_off.wav")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -182,7 +182,7 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_SPELL_STATUS, GetInfo(67) .. "sounds/spells/shield_on.wav")</send>
+  <send>play(TYPE_SPELL_STATUS, "spells/shield_on.wav")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -192,7 +192,7 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_SPELL_STATUS, GetInfo(67) .. "sounds/spells/shield_off.wav")</send>
+  <send>play(TYPE_SPELL_STATUS, "spells/shield_off.wav")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -203,7 +203,7 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_SPELL_STATUS, GetInfo(67) .. "sounds/spells/strength_on.wav")</send>
+  <send>play(TYPE_SPELL_STATUS, "spells/strength_on.wav")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -213,7 +213,7 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_SPELL_STATUS, GetInfo(67) .. "sounds/spells/strength_off.wav")</send>
+  <send>play(TYPE_SPELL_STATUS, "spells/strength_off.wav")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -224,7 +224,7 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_SPELL_STATUS, GetInfo(67) .. "sounds/spells/sense_life_on.wav")</send>
+  <send>play(TYPE_SPELL_STATUS, "spells/sense_life_on.wav")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -234,7 +234,7 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_SPELL_STATUS, GetInfo(67) .. "sounds/spells/sense_life_off.wav")</send>
+  <send>play(TYPE_SPELL_STATUS, "spells/sense_life_off.wav")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -245,7 +245,7 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_SPELL_STATUS, GetInfo(67) .. "sounds/spells/breath_of_briskness_on.wav")</send>
+  <send>play(TYPE_SPELL_STATUS, "spells/breath_of_briskness_on.wav")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -255,7 +255,7 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_SPELL_STATUS, GetInfo(67) .. "sounds/spells/breath_of_briskness_off.wav")</send>
+  <send>play(TYPE_SPELL_STATUS, "spells/breath_of_briskness_off.wav")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -266,7 +266,7 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_SPELL_STATUS, GetInfo(67) .. "sounds/spells/sanctuary_on.wav")</send>
+  <send>play(TYPE_SPELL_STATUS, "spells/sanctuary_on.wav")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -276,7 +276,7 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_SPELL_STATUS, GetInfo(67) .. "sounds/spells/sanctuary_off.wav")</send>
+  <send>play(TYPE_SPELL_STATUS, "spells/sanctuary_off.wav")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -286,7 +286,7 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_SPELL_STATUS, GetInfo(67) .. "sounds/spells/blindness_on.wav")</send>
+  <send>play(TYPE_SPELL_STATUS, "spells/blindness_on.wav")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -296,7 +296,7 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_SPELL_STATUS, GetInfo(67) .. "sounds/spells/blindness_off.wav")</send>
+  <send>play(TYPE_SPELL_STATUS, "spells/blindness_off.wav")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -308,7 +308,19 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_SPELL_ATTACK, GetInfo(67) .. "sounds/spells/dispel_evil_target.wav")</send>
+  <send>play(TYPE_SPELL_ATTACK, "spells/dispel_evil_target.wav", -100)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
+   match="^[^\.]+? (?:dissolves your evil presence|makes your evil soul suffer with her goodness)\.$"
+   name="dispel_evil_you"
+   omit_from_output="y"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_SPELL_ATTACK, "spells/dispel_evil_target.wav", 100)</send>
   </trigger>
   <trigger
    enabled="y"
@@ -319,19 +331,42 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_SPELL_ATTACK, GetInfo(67) .. "sounds/spells/fear_target.wav")</send>
+  <send>play(TYPE_SPELL_ATTACK, "spells/fear_target.wav", -100)</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_sounds"
-   match="^You(?:r spray of light rips [^\,]+? apart completely\, killing \w+| spray [^\.]+? with many\-coloured rays of bright light)\.$"
+   match="An icy wind starts to blow in the room. You panic!"
+   name="fear_you"
+   omit_from_output="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_SPELL_ATTACK, "spells/fear_target.wav", 100)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
+   match="^You(?:r spray of light rips [^\.]+? apart completely\, killing \w+| spray [^\.]+? with many\-coloured rays of bright light)\.$"
    name="colour_spray_target"
    omit_from_output="y"
    regexp="y"
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_SPELL_ATTACK, GetInfo(67) .. "sounds/spells/colour_spray_target.wav")</send>
+  <send>play(TYPE_SPELL_ATTACK, "spells/colour_spray_target.wav", -100)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
+   match="^(?:You die as [^\.]+? sprays you with bright|[^\.]+? sprays you with piercing rays of many\-coloured) light\.$"
+   name="colour_spray_you"
+   omit_from_output="y"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_SPELL_ATTACK, "spells/colour_spray_target.wav", 100)</send>
   </trigger>
   <trigger
    enabled="y"
@@ -343,19 +378,43 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_SPELL_ATTACK, GetInfo(67) .. "sounds/spells/burning_hands_target.wav")</send>
+  <send>play(TYPE_SPELL_ATTACK, "spells/burning_hands_target.wav", -100)</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_sounds"
-   match="^Your fireball (?:completely envelops [^\.]+? in flames|hits [^\,]+? with full force\, causing an immediate death)\.$"
+   match="^[^\.]+? burns you\.$"
+   name="burning_hands_you"
+   omit_from_output="y"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_SPELL_ATTACK, "spells/burning_hands_target.wav", 100)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
+   match="^Your fireball (?:completely envelops [^\.]+? in flames|hits [^\.]+? with full force\, causing an immediate death)\.$"
    name="fireball_target"
    omit_from_output="y"
    regexp="y"
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_SPELL_ATTACK, GetInfo(67) .. "sounds/spells/fireball_target.wav")</send>
+  <send>play(TYPE_SPELL_ATTACK, "spells/fireball_target.wav", -100)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
+   match="^[^\.]+? fireball completely envelops you\, causing infernal pain\.$"
+   name="fireball_you"
+   omit_from_output="y"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_SPELL_ATTACK, "spells/fireball_target.wav", 100)</send>
   </trigger>
   <trigger
    enabled="y"
@@ -367,7 +426,19 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_SPELL_ATTACK, GetInfo(67) .. "sounds/spells/lightning_bolt_target.wav")</send>
+  <send>play(TYPE_SPELL_ATTACK, "spells/lightning_bolt_target.wav", -100)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
+   match="^(?:You\'re killed by the lightning bolt sent by [^\.]+?|[^\.]+? sends a powerful lightning bolt at you\, you stagger from the impact)\.$"
+   name="lightning_bolt_you"
+   omit_from_output="y"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_SPELL_ATTACK, "spells/lightning_bolt_target.wav", 100)</send>
   </trigger>
   <trigger
    enabled="y"
@@ -378,7 +449,7 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_SPELL_ATTACK, GetInfo(67) .. "sounds/spells/earthquake.wav")</send>
+  <send>play(TYPE_SPELL_ATTACK, "spells/earthquake.wav")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -390,7 +461,7 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_SPELL_ATTACK, GetInfo(67) .. "sounds/spells/blind_target.wav")</send>
+  <send>play(TYPE_SPELL_ATTACK, "spells/blind_target.wav")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -401,19 +472,31 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_SPELL_ATTACK, GetInfo(67) .. "sounds/spells/already_blind_target.wav")</send>
+  <send>play(TYPE_SPELL_ATTACK, "spells/already_blind_target.wav")</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_sounds"
-   match="^(?:[^\.]+? swiftly dodges your attempt to shoot \w+|You try to shoot [^\,]+\, but \w+ parries successfully|Your attempt to shoot [^\.]+? fails)\.$"
+   match="^(?:[^\.]+? swiftly dodges your attempt to shoot \w+|You try to shoot [^\.]+?\, but \w+ parries successfully|Your attempt to shoot [^\.]+? fails)\.$"
    name="fail_shoot_target"
    omit_from_output="y"
    regexp="y"
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_SPELL_ATTACK, GetInfo(67) .. "sounds/combat/fail_shoot_target.wav")</send>
+  <send>play(TYPE_SPELL_ATTACK, "combat/fail_shoot_target.wav", -100)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
+   match="^(?:You swiftly dodge [^\.]+? attempt to shoot you|[^\.]+? tries to shoot you\, but your parry is successful)\.$"
+   name="fail_shoot_you"
+   omit_from_output="y"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_SPELL_ATTACK, "combat/fail_shoot_target.wav", 100)</send>
   </trigger>
   <trigger
    enabled="y"
@@ -425,7 +508,19 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_SPELL_ATTACK, GetInfo(67) .. "sounds/combat/shoot_target.wav")</send>
+  <send>play(TYPE_SPELL_ATTACK, "combat/shoot_target.wav", -100)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
+   match="^[^\.]+? (?:barely |lightly |strongly )?shoots your [^\.]+\.$"
+   name="shoot_you"
+   omit_from_output="y"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_SPELL_ATTACK, "combat/shoot_target.wav", 100)</send>
   </trigger>
   <trigger
    enabled="y"
@@ -437,7 +532,19 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_SPELL_ATTACK, GetInfo(67) .. "sounds/skills/backstab/" .. math.random(1, 7) .. ".wav")</send>
+  <send>play(TYPE_SPELL_ATTACK, "skills/backstab/" .. math.random(1, 7) .. ".wav", -100)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
+   match="^Suddenly [^\.]+? stabs you in the back(?:\, you die)?\.$"
+   name="backstab_you"
+   omit_from_output="y"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_SPELL_ATTACK, "skills/backstab/" .. math.random(1, 7) .. ".wav", 100)</send>
   </trigger>
   <trigger
    enabled="y"
@@ -449,7 +556,19 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_SPELL_ATTACK, GetInfo(67) .. "sounds/skills/backstab/fail_backstab_target.wav")</send>
+  <send>play(TYPE_SPELL_ATTACK, "skills/backstab/fail_backstab_target.wav", -100)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
+   match="^(?:You surprise [^\.]+?\.|Oops\, you\'ve sensed a danger\!)$"
+   name="fail_backstab_you"
+   omit_from_output="y"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_SPELL_ATTACK, "skills/backstab/fail_backstab_target.wav", 100)</send>
   </trigger>
 </triggers>
 
@@ -497,9 +616,9 @@ function adjust_volume(value)
 	CallPlugin(TTS, "say", string.format("%dDB volume.", sound_volume), false)
 end
 
-function play(sound_type, file_name)
+function play(sound_type, file_name, pan, loop)
 	if not sound_mute then
-		PlaySound(sound_type, file_name, false, sound_volume, 0)
+		PlaySound(sound_type, GetInfo(67) .. "sounds/" .. file_name, loop and true or false, sound_volume, pan or 0)
 	end
 end
 
