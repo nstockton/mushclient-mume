@@ -225,14 +225,14 @@ function OnPluginBroadcast (msg, id, name, text)
 		if player ~= "" and not IGNORE_LIST[player] then
 			local channel = CHANNELS[msg]
 			if channel == "say" then
-				CallPlugin(MUME_SOUNDS, "play", TYPE_COMMUNICATION, GetInfo(67) .. "sounds/says.wav")
+				CallPlugin(MUME_SOUNDS, "play", TYPE_COMMUNICATION, "says.wav")
 			elseif channel == "tell" then
 				if text:match("^.- tells the group '.+'$") then
 					reply_to = "group"
 				else
 					reply_to = player
 				end
-				CallPlugin(MUME_SOUNDS, "play", TYPE_COMMUNICATION, GetInfo(67) .. "sounds/tells.wav")
+				CallPlugin(MUME_SOUNDS, "play", TYPE_COMMUNICATION, "tells.wav")
 			end
 			local file = io.open(GetInfo(67) .. "communication/" .. channel .. ".txt", "ab")
 			file:write(text .. "\r\n")
