@@ -308,7 +308,7 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_SPELL_ATTACK, "spells/dispel_evil_target.wav", -100)</send>
+  <send>play(TYPE_SPELL_ATTACK, "spells/dispel_evil.wav", -100)</send>
   </trigger>
   <trigger
    enabled="y"
@@ -320,7 +320,7 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_SPELL_ATTACK, "spells/dispel_evil_target.wav", 100)</send>
+  <send>play(TYPE_SPELL_ATTACK, "spells/dispel_evil.wav", 100)</send>
   </trigger>
   <trigger
    enabled="y"
@@ -331,7 +331,7 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_SPELL_ATTACK, "spells/fear_target.wav", -100)</send>
+  <send>play(TYPE_SPELL_ATTACK, "spells/fear.wav", -100)</send>
   </trigger>
   <trigger
    enabled="y"
@@ -342,7 +342,7 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_SPELL_ATTACK, "spells/fear_target.wav", 100)</send>
+  <send>play(TYPE_SPELL_ATTACK, "spells/fear.wav", 100)</send>
   </trigger>
   <trigger
    enabled="y"
@@ -354,7 +354,7 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_SPELL_ATTACK, "spells/colour_spray_target.wav", -100)</send>
+  <send>play(TYPE_SPELL_ATTACK, "spells/colour_spray.wav", -100)</send>
   </trigger>
   <trigger
    enabled="y"
@@ -366,7 +366,7 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_SPELL_ATTACK, "spells/colour_spray_target.wav", 100)</send>
+  <send>play(TYPE_SPELL_ATTACK, "spells/colour_spray.wav", 100)</send>
   </trigger>
   <trigger
    enabled="y"
@@ -378,7 +378,7 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_SPELL_ATTACK, "spells/burning_hands_target.wav", -100)</send>
+  <send>play(TYPE_SPELL_ATTACK, "spells/burning_hands.wav", -100)</send>
   </trigger>
   <trigger
    enabled="y"
@@ -390,7 +390,7 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_SPELL_ATTACK, "spells/burning_hands_target.wav", 100)</send>
+  <send>play(TYPE_SPELL_ATTACK, "spells/burning_hands.wav", 100)</send>
   </trigger>
   <trigger
    enabled="y"
@@ -402,7 +402,7 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_SPELL_ATTACK, "spells/fireball_target.wav", -100)</send>
+  <send>play(TYPE_SPELL_ATTACK, "spells/fireball.wav", -100)</send>
   </trigger>
   <trigger
    enabled="y"
@@ -414,7 +414,7 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_SPELL_ATTACK, "spells/fireball_target.wav", 100)</send>
+  <send>play(TYPE_SPELL_ATTACK, "spells/fireball.wav", 100)</send>
   </trigger>
   <trigger
    enabled="y"
@@ -426,7 +426,7 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_SPELL_ATTACK, "spells/lightning_bolt_target.wav", -100)</send>
+  <send>play(TYPE_SPELL_ATTACK, "spells/lightning_bolt.wav", -100)</send>
   </trigger>
   <trigger
    enabled="y"
@@ -438,7 +438,7 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_SPELL_ATTACK, "spells/lightning_bolt_target.wav", 100)</send>
+  <send>play(TYPE_SPELL_ATTACK, "spells/lightning_bolt.wav", 100)</send>
   </trigger>
   <trigger
    enabled="y"
@@ -461,7 +461,7 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_SPELL_ATTACK, "spells/blind_target.wav")</send>
+  <send>play(TYPE_SPELL_ATTACK, "spells/blind.wav")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -472,7 +472,7 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_SPELL_ATTACK, "spells/already_blind_target.wav")</send>
+  <send>play(TYPE_SPELL_ATTACK, "spells/already_blind.wav")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -484,7 +484,7 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_SPELL_ATTACK, "combat/fail_shoot_target.wav", -100)</send>
+  <send>play(TYPE_SPELL_ATTACK, "combat/fail_shoot.wav", -100)</send>
   </trigger>
   <trigger
    enabled="y"
@@ -496,7 +496,7 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_SPELL_ATTACK, "combat/fail_shoot_target.wav", 100)</send>
+  <send>play(TYPE_SPELL_ATTACK, "combat/fail_shoot.wav", 100)</send>
   </trigger>
   <trigger
    enabled="y"
@@ -508,7 +508,7 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_SPELL_ATTACK, "combat/shoot_target.wav", -100)</send>
+  <send>play(TYPE_SPELL_ATTACK, "combat/shoot.wav", -100)</send>
   </trigger>
   <trigger
    enabled="y"
@@ -520,7 +520,7 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_SPELL_ATTACK, "combat/shoot_target.wav", 100)</send>
+  <send>play(TYPE_SPELL_ATTACK, "combat/shoot.wav", 100)</send>
   </trigger>
   <trigger
    enabled="y"
@@ -556,7 +556,7 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_SPELL_ATTACK, "skills/backstab/fail_backstab_target.wav", -100)</send>
+  <send>play(TYPE_SPELL_ATTACK, "skills/backstab/fail_backstab.wav", -100)</send>
   </trigger>
   <trigger
    enabled="y"
@@ -568,7 +568,7 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_SPELL_ATTACK, "skills/backstab/fail_backstab_target.wav", 100)</send>
+  <send>play(TYPE_SPELL_ATTACK, "skills/backstab/fail_backstab.wav", 100)</send>
   </trigger>
 </triggers>
 
