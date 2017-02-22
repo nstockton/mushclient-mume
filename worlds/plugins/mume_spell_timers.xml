@@ -306,6 +306,26 @@
   <trigger
    enabled="y"
    group="mume_spell_timers"
+   match="You feel very sleepy... zzzzzz"
+   name="sleep_up"
+   send_to="12"
+   sequence="100"
+  >
+  <send>spell_timer_set("sleep")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_spell_timers"
+   match="You feel less tired."
+   name="sleep_down"
+   send_to="12"
+   sequence="100"
+  >
+  <send>spell_timer_unset("sleep")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_spell_timers"
    match="You feel your muscles relax and your pulse slow as the strength that welled within you subsides."
    name="tiredness_up"
    send_to="12"
@@ -346,7 +366,7 @@
   <trigger
    enabled="y"
    group="mume_spell_timers"
-   match="You feel a sudden loss of energy as the power that once mingled with your own has now vanished."
+   match="You feel a sudden loss of energy as the power that once mingled with your own vanishes."
    name="lethargy_up"
    send_to="12"
    sequence="100"
