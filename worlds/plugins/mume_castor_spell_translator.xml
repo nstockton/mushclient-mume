@@ -62,10 +62,10 @@
    name="shorten_dispel_message"
    omit_from_output="y"
    regexp="y"
-   send_to="14"
+   send_to="2"
    sequence="100"
   >
-  <send>note_interrupt("Dispelled %&lt;target&gt;!")</send>
+  <send>Dispelled %&lt;target&gt;!</send>
   </trigger>
   <trigger
    enabled="y"
@@ -73,10 +73,10 @@
    match="You raise your hand and an icy wind starts to blow through the room."
    name="shorten_fear_message"
    omit_from_output="y"
-   send_to="14"
+   send_to="2"
    sequence="100"
   >
-  <send>note_interrupt("Feared!")</send>
+  <send>Feared!</send>
   </trigger>
   <trigger
    enabled="y"
@@ -85,10 +85,10 @@
    name="shorten_colour_spray_message"
    omit_from_output="y"
    regexp="y"
-   send_to="14"
+   send_to="2"
    sequence="100"
   >
-  <send>note_interrupt("Sprayed %&lt;target&gt;!")</send>
+  <send>Sprayed %&lt;target&gt;!</send>
   </trigger>
   <trigger
    enabled="y"
@@ -97,10 +97,10 @@
    name="shorten_burning_hands_message"
    omit_from_output="y"
    regexp="y"
-   send_to="14"
+   send_to="2"
    sequence="100"
   >
-  <send>note_interrupt("Burned %&lt;target&gt;!")</send>
+  <send>Burned %&lt;target&gt;!</send>
   </trigger>
   <trigger
    enabled="y"
@@ -109,10 +109,10 @@
    name="shorten_fireball_message"
    omit_from_output="y"
    regexp="y"
-   send_to="14"
+   send_to="2"
    sequence="100"
   >
-  <send>note_interrupt("Fireballed %&lt;target&gt;!")</send>
+  <send>Fireballed %&lt;target&gt;!</send>
   </trigger>
   <trigger
    enabled="y"
@@ -121,10 +121,10 @@
    name="shorten_lightning_bolt_message"
    omit_from_output="y"
    regexp="y"
-   send_to="14"
+   send_to="2"
    sequence="100"
   >
-  <send>note_interrupt("Bolted %&lt;target&gt;!")</send>
+  <send>Bolted %&lt;target&gt;!</send>
   </trigger>
   <trigger
    enabled="y"
@@ -132,10 +132,22 @@
    match="The earth trembles beneath your feet!"
    name="shorten_earth_quake_message"
    omit_from_output="y"
-   send_to="14"
+   send_to="2"
    sequence="100"
   >
-  <send>note_interrupt("Quake!")</send>
+  <send>Quake!</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_castor_spell_translator"
+   match="^(?P&lt;target&gt;[^\.]+?) lies down and falls asleep\.$"
+   name="shorten_sleeping_message"
+   omit_from_output="y"
+   regexp="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>Sleeping %&lt;target&gt;!</send>
   </trigger>
   <trigger
    enabled="y"
@@ -144,10 +156,10 @@
    name="shorten_blinded_message"
    omit_from_output="y"
    regexp="y"
-   send_to="14"
+   send_to="2"
    sequence="100"
   >
-  <send>note_interrupt("Blinded %&lt;target&gt;!")</send>
+  <send>Blinded %&lt;target&gt;!</send>
   </trigger>
   <trigger
    enabled="y"
@@ -156,10 +168,10 @@
    name="already_blinded_message"
    omit_from_output="y"
    regexp="n"
-   send_to="14"
+   send_to="2"
    sequence="100"
   >
-  <send>note_interrupt("Already blinded!")</send>
+  <send>Already blinded!</send>
   </trigger>
   <trigger
    enabled="y"

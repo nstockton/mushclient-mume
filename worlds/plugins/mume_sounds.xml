@@ -34,6 +34,75 @@
   <trigger
    enabled="y"
    group="mume_sounds"
+   match="^(?:Struggling against the Yellow Face\, you try|You start) to concentrate\.\.\.$"
+   name="you_casting"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send></send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
+   match="^(?:Argh\! You cannot concentrate any more\.\.\.|The cruel light of the sun made you lose your concentration\!)$"
+   name="casting_interrupted"
+   regexp="y"
+   omit_from_output="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send></send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
+   match="^(?:Your victim has disappeared|Alas\! There was no clear line of sight to \w+)\!$"
+   name="no_line_of_sight"
+   regexp="y"
+   omit_from_output="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send></send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
+   match="Ok."
+   name="ok"
+   omit_from_output="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_ALERT, "ok.wav")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   lines_to_match="2"
+   group="mume_sounds"
+   match="^[^\']+ utters the word[s]? \'[\']+\'$Nothing seems to happen\.\Z"
+   name="nothing_happens_other"
+   omit_from_output="y"
+   multi_line="y"
+   regexp="y"
+   sequence="80"
+  >
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
+   match="Nothing seems to happen."
+   name="nothing_happens"
+   omit_from_output="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send></send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
    match="^\*.+(?P&lt;player&gt;Orc|Troll|Man|Woman|Elf|Half-Elf|Dwarf|Hobbit|Bear|Numenorean|Númenórean)\*.*?(?P&lt;action&gt;standing|sitting|resting|sleeping|fighting|riding|nocks a missile|begins some strange|arrived|leaves).+?((?P&lt;direction&gt;north|south|east|west|up|down|above|below|hiding place).*)?$"
    name="pk_action_sounds"
    regexp="y"
@@ -126,6 +195,16 @@ end
    group="mume_sounds"
    match="The scarred fell beast opens its horrendous, shadow-veiled mouth and screeches!"
    name="misc_alert4"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_ALERT, "misc_alert.wav")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
+   match="The ice layer is completely molten!"
+   name="misc_alert5"
    send_to="12"
    sequence="100"
   >
@@ -444,24 +523,89 @@ end
    enabled="y"
    group="mume_sounds"
    match="The earth trembles beneath your feet!"
-   name="earthquake"
+   name="earthquake_target"
    omit_from_output="y"
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_SPELL_ATTACK, "spells/earthquake.wav")</send>
+  <send>play(TYPE_SPELL_ATTACK, "spells/earthquake.wav", -100)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
+   match="^[^\.]+? makes the earth tremble and shiver\.$"
+   name="earthquake_you"
+   omit_from_output="y"
+   send_to="12"
+   regexp="y"
+   sequence="100"
+  >
+  <send>play(TYPE_SPELL_ATTACK, "spells/earthquake.wav", 100)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
+   match="The earth trembles and shivers."
+   name="earthquake_near"
+   omit_from_output="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_SPELL_ATTACK, "spells/earthquake_near.wav")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   lines_to_match="2"
+   group="mume_sounds"
+   match="^Ok\.$[^\.]+? lies down and falls asleep\.\Z"
+   name="sleep_target"
+   omit_from_output="y"
+   multi_line="y"
+   regexp="y"
+   send_to="12"
+   sequence="80"
+  >
+  <send>play(TYPE_SPELL_ATTACK, "spells/sleep.wav", -100)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   lines_to_match="2"
+   group="mume_sounds"
+   match="^[^\']+ utters the word \'(?:sleep|grzzs)\'$[^\.]+? lies down and falls asleep\.\Z"
+   name="sleep_other"
+   omit_from_output="y"
+   multi_line="y"
+   regexp="y"
+   send_to="12"
+   sequence="80"
+  >
+  <send>play(TYPE_FREE_SLOT, "spells/sleep.wav")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   lines_to_match="2"
+   group="mume_sounds"
+   match="^Ok\.$[^\!]+? seems to be blinded\!\Z"
+   name="blind_target"
+   omit_from_output="y"
+   multi_line="y"
+   regexp="y"
+   send_to="12"
+   sequence="80"
+  >
+  <send>play(TYPE_SPELL_ATTACK, "spells/blind.wav", -100)</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_sounds"
    match="^[^\!]+? seems to be blinded\!$"
-   name="blind_target"
+   name="blind_other"
    omit_from_output="y"
    regexp="y"
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_SPELL_ATTACK, "spells/blind.wav")</send>
+  <send>play(TYPE_FREE_SLOT, "spells/blind.wav")</send>
   </trigger>
   <trigger
    enabled="y"
@@ -472,7 +616,7 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>play(TYPE_SPELL_ATTACK, "spells/already_blind.wav")</send>
+  <send>play(TYPE_SPELL_ATTACK, "spells/already_blind.wav", -100)</send>
   </trigger>
   <trigger
    enabled="y"
@@ -579,6 +723,7 @@ end
 <![CDATA[
 CONFIG = "d19a2f0a604c96b7318aa67f"
 TTS = "925cdd0331023d9f0b8f05a7"
+TYPE_FREE_SLOT = 0
 TYPE_ALERT = 3
 TYPE_SPELL_ATTACK = 4
 TYPE_SPELL_STATUS = 5
