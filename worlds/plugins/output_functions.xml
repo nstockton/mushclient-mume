@@ -54,18 +54,39 @@ end
 
 AcceleratorTo("ctrl + shift + c", "copy_key()", sendto.script)
 
+local return_code, interrupt = CallPlugin(CONFIG, "get", "interrupt_on_enter")
+local last_count = 0
 local current_line = 1
 local selecting = false
 local selection_start = 0
-local selected_text = {}
+
+function buffer_lines_count()
+	local count = GetLinesInBufferCount()
+	if count < last_count then
+		if current_line > 100 then
+			current_line = current_line - 100
+		else
+			current_line = 1
+		end
+		if selecting then
+			if selection_start > 100 then
+				selection_start = selection_start - 100
+			else
+				selection_start = 1
+			end
+		end
+	end
+	last_count = count
+	return count
+end
 
 function copy_key()
-	local lines = GetLinesInBufferCount()
-	if lines <= 1 then
+	local count = buffer_lines_count()
+	if count <= 1 then
 		CallPlugin(TTS, "say", "No output.", true)
 		return
 	elseif current_line == 0 then
-		current_line = lines
+		current_line = count
 	end
 	local line = GetLineInfo(current_line, 1) or ""
 	local normal_key = line:match("^.+ key: '([a-z]+)'$")
@@ -82,45 +103,43 @@ function copy_key()
 end
 
 function select_text()
-	local lines = GetLinesInBufferCount()
-	if lines <= 1 then
-		CallPlugin(TTS, "say", "No output.", true)
+	local count = buffer_lines_count()
+	if count <= 1 then
 		selecting = false
-		selected_text = {}
+		CallPlugin(TTS, "say", "No output.", true)
 		return
 	elseif not selecting then
 		selecting = true
-		CallPlugin(TTS, "say", "selection start.", true)
-		selected_text = {}
 		selection_start = current_line
+		CallPlugin(TTS, "say", "selection start.", true)
 	else
-		CallPlugin(TTS, "say", "Selection coppied.", true)
-		for i = selection_start, current_line do
+		local selected_text = {}
+		local beginning = selection_start < current_line and selection_start or current_line
+		local ending = current_line > selection_start and current_line or selection_start
+		for i = beginning, ending do
 			table.insert(selected_text, GetLineInfo(i, 1) or "")
 		end
 		SetClipboard(table.concat(selected_text, "\r\n"))
 		selecting = false
-		selected_text = {}
+		CallPlugin(TTS, "say", "Selection coppied.", true)
 	end
 end
 
 function interrupt_toggle()
-	local return_code, interrupt = CallPlugin(CONFIG, "get", "interrupt_on_enter")
 	interrupt = not interrupt
 	CallPlugin(CONFIG, "set", "interrupt_on_enter", interrupt)
 	Note(string.format("interrupt on enter %s.", interrupt and "on" or "off"))
 end
 
 function OnPluginCommandEntered(command)
-	local return_code, interrupt = CallPlugin(CONFIG, "get", "interrupt_on_enter")
 	if interrupt then
 		CallPlugin(TTS, "silence")
 	end
 end
 
 function prev_line()
-	local lines = GetLinesInBufferCount()
-	if lines <= 1 then
+	local count = buffer_lines_count()
+	if count <= 1 then
 		CallPlugin(TTS, "say", "No output.", true)
 		return
 	elseif current_line - 1 <= 1 then
@@ -133,23 +152,23 @@ function prev_line()
 end
 
 function cur_line()
-	local lines = GetLinesInBufferCount()
-	if lines <= 1 then
+	local count = buffer_lines_count()
+	if count <= 1 then
 		CallPlugin(TTS, "say", "No output.", true)
 		return
 	elseif current_line == 0 then
-		current_line = lines
+		current_line = count
 	end
 	local line = GetLineInfo(current_line, 1) or ""
 	CallPlugin(TTS, "say", string.strip(line) ~= "" and line or "blank", true)
 end
 
 function next_line()
-	local lines = GetLinesInBufferCount()
-	if lines <= 1 then
+	local count = buffer_lines_count()
+	if count <= 1 then
 		CallPlugin(TTS, "say", "No output.", true)
 		return
-	elseif current_line + 1 >= lines then
+	elseif current_line + 1 >= count then
 		CallPlugin(TTS, "say", "bottom", true)
 	else
 		current_line = current_line + 1
@@ -159,19 +178,19 @@ function next_line()
 end
 
 function end_line()
-	local lines = GetLinesInBufferCount()
-	if lines <= 1 then
+	local count = buffer_lines_count()
+	if count <= 1 then
 		CallPlugin(TTS, "say", "No output.", true)
 		return
 	end
-	current_line = lines - 1
+	current_line = count - 1
 	local line = GetLineInfo(current_line, 1) or ""
 	CallPlugin(TTS, "say", string.strip(line) ~= "" and line or "blank", true)
 end
 
 function top_line()
-	local lines = GetLinesInBufferCount()
-	if lines <= 1 then
+	local count = buffer_lines_count()
+	if count <= 1 then
 		CallPlugin(TTS, "say", "No output.", true)
 		return
 	end
