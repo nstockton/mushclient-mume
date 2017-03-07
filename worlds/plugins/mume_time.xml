@@ -180,35 +180,23 @@ end
 <script>
 <![CDATA[
 INIT_TIMER = math.floor(utils.timer())
+DAYS_IN_YEAR = 360
 MONTHS = {
-	{["name"] = "Afteryule", ["dawn"] = 8, ["dusk"] = 18, ["season"] = "Early-Winter"},
-	{["name"] = "Solmath", ["dawn"] = 9, ["dusk"] = 17, ["season"] = "Winter"},
-	{["name"] = "Rethe", ["dawn"] = 8, ["dusk"] = 18, ["season"] = "Late-Winter"},
-	{["name"] = "Astron", ["dawn"] = 7, ["dusk"] = 19, ["season"] = "Early-Spring"},
-	{["name"] = "Thrimidge", ["dawn"] = 7, ["dusk"] = 20, ["season"] = "Spring"},
-	{["name"] = "Forelithe", ["dawn"] = 6, ["dusk"] = 20, ["season"] = "Late-Spring"},
-	{["name"] = "Afterlithe", ["dawn"] = 5, ["dusk"] = 21, ["season"] = "Early-Summer"},
-	{["name"] = "Wedmath", ["dawn"] = 4, ["dusk"] = 22, ["season"] = "Summer"},
-	{["name"] = "Halimath", ["dawn"] = 5, ["dusk"] = 21, ["season"] = "Late-Summer"},
-	{["name"] = "Winterfilth", ["dawn"] = 6, ["dusk"] = 20, ["season"] = "Early-Autumn"},
-	{["name"] = "Blotmath", ["dawn"] = 7, ["dusk"] = 20, ["season"] = "Autumn"},
-	{["name"] = "Foreyule", ["dawn"] = 7, ["dusk"] = 19, ["season"] = "Late-Autumn"},
-	{["name"] = "Narwain"},
-	{["name"] = "Ninui"},
-	{["name"] = "Gwaeron"},
-	{["name"] = "Gwirith"},
-	{["name"] = "Lothron"},
-	{["name"] = "Norui"},
-	{["name"] = "Cerveth"},
-	{["name"] = "Urui"},
-	{["name"] = "Ivanneth"},
-	{["name"] = "Narbeleth"},
-	{["name"] = "Hithui"},
-	{["name"] = "Girithron"}
+	{["name"] = "December", ["sindarin"] = "Narwain", ["westron"] = "Afteryule", ["dawn"] = 8, ["dusk"] = 18, ["season"] = "Early-Winter"},
+	{["name"] = "January", ["sindarin"] = "Ninui", ["westron"] = "Solmath", ["dawn"] = 9, ["dusk"] = 17, ["season"] = "Winter"},
+	{["name"] = "February", ["sindarin"] = "Gwaeron", ["westron"] = "Rethe", ["dawn"] = 8, ["dusk"] = 18, ["season"] = "Late-Winter"},
+	{["name"] = "March", ["sindarin"] = "Gwirith", ["westron"] = "Astron", ["dawn"] = 7, ["dusk"] = 19, ["season"] = "Early-Spring"},
+	{["name"] = "April", ["sindarin"] = "Lothron", ["westron"] = "Thrimidge", ["dawn"] = 7, ["dusk"] = 20, ["season"] = "Spring"},
+	{["name"] = "May", ["sindarin"] = "Norui", ["westron"] = "Forelithe", ["dawn"] = 6, ["dusk"] = 20, ["season"] = "Late-Spring"},
+	{["name"] = "June", ["sindarin"] = "Cerveth", ["westron"] = "Afterlithe", ["dawn"] = 5, ["dusk"] = 21, ["season"] = "Early-Summer"},
+	{["name"] = "July", ["sindarin"] = "Urui", ["westron"] = "Wedmath", ["dawn"] = 4, ["dusk"] = 22, ["season"] = "Summer"},
+	{["name"] = "August", ["sindarin"] = "Ivanneth", ["westron"] = "Halimath", ["dawn"] = 5, ["dusk"] = 21, ["season"] = "Late-Summer"},
+	{["name"] = "September", ["sindarin"] = "Narbeleth", ["westron"] = "Winterfilth", ["dawn"] = 6, ["dusk"] = 20, ["season"] = "Early-Autumn"},
+	{["name"] = "October", ["sindarin"] = "Hithui", ["westron"] = "Blotmath", ["dawn"] = 7, ["dusk"] = 20, ["season"] = "Autumn"},
+	{["name"] = "November", ["sindarin"] = "Girithron", ["westron"] = "Foreyule", ["dawn"] = 7, ["dusk"] = 19, ["season"] = "Late-Autumn"}
 }
 
 current_month = 1
-current_month_name = ""
 current_hour = 0
 current_day = 0
 current_year = 0
@@ -228,29 +216,18 @@ function time_tick()
 	if current_day == 1 and current_hour == 24 then
 		-- increase current_month (wraps 1 through 12).
 		current_month = current_month % 12 + 1
-		for i, m in ipairs(MONTHS) do
-			if m.name == current_month_name then
-				local next_month = i + 1
-				if current_month == 1 then
-					next_month = next_month - 12
-				end
-				current_month_name = MONTHS[next_month].name
-				break
-			end -- if
-		end -- for
 		if current_month == 1 then
 			current_year = current_year + 1
 		end
-		Note(MONTHS[current_month].season, " has begun with the month of ", current_month_name, ".")
+		Note(string.format("%s has begun with the month of %s (%s / %s).", MONTHS[current_month].season, MONTHS[current_month].name, MONTHS[current_month].westron, MONTHS[current_month].sindarin))
 	end -- if
 end
 
 function time_parse(day, month_name, year)
 	current_day = tonumber(day) or 0
 	current_year = tonumber(year) or 0
-	current_month_name = month_name or ""
 	for i, m in ipairs(MONTHS) do
-		if m.name == current_month_name then
+		if m.westron == month_name or m.sindarin == month_name then
 			current_month = (i - 1) % 12 + 1
 			break
 		end
@@ -269,7 +246,6 @@ function sync_precise(hours, minutes, am_pm)
 	hours = hours or 12
 	minutes = minutes or 0
 	am_pm = am_pm or "am"
-	difference = timer() - minutes
 	if hours == 12 and am_pm == "am" then
 		current_hour = 24
 	elseif hours == 12 and am_pm == "pm" then
@@ -279,8 +255,8 @@ function sync_precise(hours, minutes, am_pm)
 	elseif am_pm == "pm" then
 		current_hour = hours + 12
 	end
-	difference = difference - (current_hour * 60)
-	AddTimer("tick_reset", 0, minutes == 0 and 1 or 0, (60 - minutes) % 60, string.format("reset_timer(%s)", tostring(minutes ~= 0)), 37, "")
+	difference = timer() - minutes - current_hour * 60
+	AddTimer("tick_reset", 0, minutes == 0 and 1 or 0, (60 - minutes) % 60, string.format("reset_timer(%s)", tostring(minutes ~= 0)), timer_flag.Enabled + timer_flag.OneShot + timer_flag.ActiveWhenClosed + timer_flag.Replace + timer_flag.Temporary, "")
 	SetTimerOption("tick_reset", "send_to", sendto.script)
 end
 
@@ -288,7 +264,8 @@ function sync_event(dawn_dusk, hours)
 	hours = hours or 0
 	current_hour = MONTHS[current_month][dawn_dusk] + hours
 	difference = timer() - current_hour * 60
-	reset_timer(false)
+	AddTimer("tick_reset", 0, 0, 0, "reset_timer(false)", timer_flag.Enabled + timer_flag.OneShot + timer_flag.ActiveWhenClosed + timer_flag.Replace + timer_flag.Temporary, "")
+	SetTimerOption("tick_reset", "send_to", sendto.script)
 end
 
 function time_check(action)
@@ -354,10 +331,34 @@ function time_check(action)
 	local next_winter_in_mume_days = ((12 - current_month) * 30) + (30 - current_day) + (1 - math.floor(mume_hour / 24))
 	local next_winter_in_rl_days = math.floor(math.floor(next_winter_in_mume_days * 24 / 60) / 24)
 	local next_winter_in_rl_hours = math.floor(next_winter_in_mume_days * 24 / 60) % 24
-	output = string.format("%s\nIt is currently %s, in %s, (%s).", output, current_state, current_month_name, MONTHS[current_month].season)
+	output = string.format("%s\nIt is currently %s, in %s (%s / %s), (%s).", output, current_state, MONTHS[current_month].name, MONTHS[current_month].westron, MONTHS[current_month].sindarin, MONTHS[current_month].season)
 	output = string.format("%s\nTime left until %s is less than %s tick%s", output, next_state, till_next_state, till_next_state ~= "1" and "s." or "!")
 	output = string.format("%s\n%s ends in %d mume day%s or %d real-life hour%s.", output, string.sub(MONTHS[current_month].season, -6), next_season_in_mume_days, next_season_in_mume_days ~= 1 and "s" or "", next_season_in_rl_hours, next_season_in_rl_hours ~= 1 and "s" or "")
 	output = string.format("%s\nNext winter starts in %d real-life day%s and %d hour%s.", output, next_winter_in_rl_days, next_winter_in_rl_days ~= 1 and "s" or "", next_winter_in_rl_hours, next_winter_in_rl_hours ~= 1 and "s" or "")
+	local full_moon_cycle = 24 * 24
+	local day_of_year = (current_month - 1) * 30 + current_day
+	local moon_day = (12 + day_of_year) % 24
+	local moon_hour = 24 * moon_day + current_hour % 24
+	local next_dk_day = 1
+	local ticks_until_dk = 0
+	if moon_hour <= 17 then
+		ticks_until_dk = 17 - moon_hour
+	elseif moon_hour <= 24 + 18 then
+		ticks_until_dk = 24 + 18 - moon_hour
+		next_dk_day = 2
+	elseif moon_hour <= 48 + 19 then
+		ticks_until_dk = 48 + 19 - moon_hour
+		next_dk_day = 3
+	else
+		ticks_until_dk = full_moon_cycle - moon_hour + 18
+	end
+	local next_dk_in_rl_hours = math.floor(ticks_until_dk / 60)
+	local next_dk_in_rl_minutes = ticks_until_dk % 60
+	if ticks_until_dk == 0 then
+		output = output .. "\nDK is open now!"
+	else
+		output = string.format("%s\nDK opens in %d real-life hour%s and %d minute%s (day %d of 3).", output, next_dk_in_rl_hours, next_dk_in_rl_hours ~= 1 and "s" or "", next_dk_in_rl_minutes, next_dk_in_rl_minutes ~= 1 and "s" or "", next_dk_day)
+	end
 	Note(output)
 end
 
