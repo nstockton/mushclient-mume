@@ -34,6 +34,17 @@
   <trigger
    enabled="y"
    group="mume_misc"
+   match="^(?P&lt;player&gt;\w+) slips on the treacherous ground and falls (?P&lt;direction&gt;\w+)\.$"
+   name="auto_tell_player_fell_gloom"
+   regexp="y"
+   send_to="0"
+   sequence="100"
+  >
+  <send>tell %&lt;player&gt; You fell %&lt;direction&gt;.</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
    match="You break the surface and find yourself looking upwards at the twinkling stars above a twilit land."
    omit_from_output="n"
    send_to="0"
@@ -578,6 +589,49 @@ put boots pouch</send>
 get boots backpack
 wear boots
 put boots backpack</send>
+  </alias>
+  <alias
+   name="switch_belt_from_pack"
+   match="belt"
+   enabled="y"
+   group="mume_misc"
+   sequence="100"
+  >
+  <send>remove belt
+get belt backpack
+wear belt
+put belt backpack
+wear all</send>
+  </alias>
+  <alias
+   name="use_str_ring"
+   match="string"
+   enabled="y"
+   group="mume_misc"
+   sequence="100"
+  >
+  <send>remove ring
+get topaz-ring backpack
+wear topaz-ring
+use ring
+remove topaz-ring
+put topaz-ring backpack
+wear ring</send>
+  </alias>
+  <alias
+   name="use_pipe"
+   match="pipe"
+   enabled="y"
+   group="mume_misc"
+   sequence="100"
+  >
+  <send>get pipe backpack
+wield pipe
+rest
+smoke pipe
+stand
+remove pipe
+put pipe backpack</send>
   </alias>
 </aliases>
 
