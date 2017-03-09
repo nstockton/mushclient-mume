@@ -213,6 +213,36 @@ end
   <trigger
    enabled="y"
    group="mume_sounds"
+   match="A wider patch of rock is cleared of ice."
+   name="misc_alert6"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_ALERT, "misc_alert.wav")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
+   match="The Balrog entangles you in his whip and hurls you out of the room!"
+   name="misc_alert7"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_ALERT, "misc_alert.wav")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
+   match="The ground trembles slightly."
+   name="misc_alert8"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_ALERT, "misc_alert.wav")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
    match="^(?:A blue transparent wall slowly appears around you|Your magic armour is revitalised)\.$"
    name="armour_up"
    regexp="y"
@@ -585,7 +615,7 @@ end
    enabled="y"
    lines_to_match="2"
    group="mume_sounds"
-   match="^Ok\.$[^\!]+? seems to be blinded\!\Z"
+   match="^Ok\.$[^\!]+? (?:seems to be blinded\!|shivers as some of \w+ eyes become glazed\.)\Z"
    name="blind_target"
    omit_from_output="y"
    multi_line="y"
@@ -598,7 +628,7 @@ end
   <trigger
    enabled="y"
    group="mume_sounds"
-   match="^[^\!]+? seems to be blinded\!$"
+   match="^[^\!]+? (?:seems to be blinded\!|shivers as some of \w+ eyes become glazed\.)$"
    name="blind_other"
    omit_from_output="y"
    regexp="y"

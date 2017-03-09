@@ -152,7 +152,7 @@
   <trigger
    enabled="y"
    group="mume_castor_spell_translator"
-   match="^(?P&lt;target&gt;[^\!]+?) seems to be blinded\!$"
+   match="^(?P&lt;target&gt;[^\!]+?) (?:seems to be blinded\!|shivers as some of \w+ eyes become glazed\.)$"
    name="shorten_blinded_message"
    omit_from_output="y"
    regexp="y"
