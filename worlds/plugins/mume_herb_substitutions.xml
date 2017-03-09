@@ -30,6 +30,26 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
+   match="A fragrant-smelling bag contains a bright red mushroom, a hemlock plant, a sticky mass of stems, leaves and sap, a foul-smelling root, some orange-red flowers and some white, egg-shaped berries."
+   omit_from_output="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>Scaly kit</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_herb_substitutions"
+   match="A fragrant-smelling bag contains a handful of narrow leaves, a short, moist tail, some short, black fur and a vial of preserved blood."
+   omit_from_output="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>orkish draught</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_herb_substitutions"
    match="A reddish-brown shrub with purplish-pink flowers grows here."
    omit_from_output="y"
    send_to="2"
