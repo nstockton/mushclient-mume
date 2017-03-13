@@ -699,7 +699,7 @@ end
   <trigger
    enabled="y"
    group="mume_sounds"
-   match="^[^\.]+? makes a strange sound(?: but is suddenly very silent)?\, as you place a[n]? [^\.]+? in \w+ back\.$"
+   match="^[^\.]+? makes a strange sound(?: but is suddenly very silent)?\, as you place (?:something|a[n]? [^\.]+?) in \w+ back\.$"
    name="backstab_target"
    omit_from_output="y"
    regexp="y"
