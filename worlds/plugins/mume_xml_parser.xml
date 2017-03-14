@@ -184,7 +184,9 @@ function OnPluginPacketReceived(packet)
 					-- Start of tag.
 					-- Process the bytes in the character buffer, and write them to the result buffer.
 					table.insert(result, process_text(table.concat(character_buffer)))
-					character_buffer = {}
+					for key in pairs(character_buffer) do
+						character_buffer[key] = nil
+					end
 					reading_tag = true
 				end
 			elseif byte ~= ">" then
@@ -266,7 +268,9 @@ function OnPluginPacketReceived(packet)
 					xml_mode = XML_NONE
 					BroadcastPlugin(BROADCAST_PROMPT, last_data["prompt"])
 				end
-				tag_buffer = {}
+				for key in pairs(tag_buffer) do
+					tag_buffer[key] = nil
+				end
 				reading_tag = false
 			end
 		elseif not in_iac then
