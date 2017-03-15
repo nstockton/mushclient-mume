@@ -576,7 +576,18 @@ end
    enabled="y"
    group="mume_sounds"
    match="The earth trembles and shivers."
-   name="earthquake_near"
+   name="earthquake_near1"
+   omit_from_output="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_SPELL_ATTACK, "spells/earthquake_near.wav")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
+   match="A mild tremor shakes the ground."
+   name="earthquake_near2"
    omit_from_output="y"
    send_to="12"
    sequence="100"
