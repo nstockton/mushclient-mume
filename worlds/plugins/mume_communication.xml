@@ -33,7 +33,7 @@
 <aliases>
   <alias
    name="review_pray_logs"
-   match="^pl(?:\s+(?P&lt;text&gt;.+))?$"
+   match="^pl\s*?(?:\s+(?P&lt;text&gt;.+))?$"
    enabled="y"
    group="mume_communication"
    regexp="y"
@@ -44,7 +44,7 @@
   </alias>
   <alias
    name="review_narrate_logs"
-   match="^nl(?:\s+(?P&lt;text&gt;.+))?$"
+   match="^nl\s*?(?:\s+(?P&lt;text&gt;.+))?$"
    enabled="y"
    group="mume_communication"
    regexp="y"
@@ -55,7 +55,7 @@
   </alias>
   <alias
    name="review_say_logs"
-   match="^sl(?:\s+(?P&lt;text&gt;.+))?$"
+   match="^sl\s*?(?:\s+(?P&lt;text&gt;.+))?$"
    enabled="y"
    group="mume_communication"
    regexp="y"
@@ -66,7 +66,7 @@
   </alias>
   <alias
    name="review_tell_logs"
-   match="^tl(?:\s+(?P&lt;text&gt;.+))?$"
+   match="^tl\s*?(?:\s+(?P&lt;text&gt;.+))?$"
    enabled="y"
    group="mume_communication"
    regexp="y"
@@ -97,7 +97,7 @@
   </alias>
   <alias
    name="reply"
-   match="^rep(?:\s+(?P&lt;message&gt;.+))?$"
+   match="^rep\s*?(?:\s+(?P&lt;message&gt;.+))?$"
    enabled="y"
    group="mume_communication"
    regexp="y"
