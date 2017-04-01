@@ -34,6 +34,69 @@
   <trigger
    enabled="y"
    group="mume_misc"
+   match="^Anarwen says \'Would you help me\, \w+\?\'$"
+   name="auto_quest_anarwen"
+   regexp="y"
+   send_to="0"
+   sequence="100"
+  >
+  <send>say yes</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="Yerik the Sage says 'Come again!'"
+   name="auto_give_note_yerik"
+   send_to="0"
+   sequence="100"
+  >
+  <send>get note all
+give note Yerik</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="The aloof hobbit says 'Maybe you are experienced enough to be the leader on such a perilous journey! Now, what do you say? Great fame and treasures could lie before us!'"
+   name="auto_quest_harle"
+   send_to="0"
+   sequence="100"
+  >
+  <send>say yes</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="Elrond says 'Would you be willing to help me with a dangerous task?'"
+   name="auto_quest_elrond"
+   send_to="0"
+   sequence="100"
+  >
+  <send>say yes</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="Elrond gives you an ancient silver key."
+   name="auto_keyring_oie_key"
+   send_to="0"
+   sequence="100"
+  >
+  <send>put key keyring</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="^Daegil says \'The ferry has arrived in (?:Ha|Fo)rlond\. We hope you enjoyed the ride and we wish you a pleasant day\. Please leave the ferry now\.\'$"
+   name="auto_leave_ferry_gh"
+   regexp="y"
+   send_to="0"
+   sequence="100"
+  >
+  <send>leave</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
    match="^(?P&lt;player&gt;\w+) slips on the treacherous ground and falls (?P&lt;direction&gt;\w+)\.$"
    name="auto_tell_player_fell_gloom"
    regexp="y"
@@ -41,6 +104,17 @@
    sequence="100"
   >
   <send>tell %&lt;player&gt; You fell %&lt;direction&gt;.</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="^The Balrog entangles \w+ in his whip and hurls h(?:im|er) out of the room\!$"
+   name="auto_yell_fear_balrog"
+   regexp="y"
+   send_to="0"
+   sequence="100"
+  >
+  <send>yell HERE!</send>
   </trigger>
   <trigger
    enabled="y"
@@ -586,9 +660,9 @@ put boots pouch</send>
    sequence="100"
   >
   <send>remove boots
-get boots backpack
+get boots pack
 wear boots
-put boots backpack</send>
+put boots pack</send>
   </alias>
   <alias
    name="switch_belt_from_pack"
@@ -598,9 +672,9 @@ put boots backpack</send>
    sequence="100"
   >
   <send>remove belt
-get belt backpack
+get belt pack
 wear belt
-put belt backpack
+put belt pack
 wear all</send>
   </alias>
   <alias
@@ -611,11 +685,11 @@ wear all</send>
    sequence="100"
   >
   <send>remove ring
-get topaz-ring backpack
+get topaz-ring pack
 wear topaz-ring
 use ring
 remove topaz-ring
-put topaz-ring backpack
+put topaz-ring pack
 wear ring</send>
   </alias>
   <alias
@@ -625,13 +699,35 @@ wear ring</send>
    group="mume_misc"
    sequence="100"
   >
-  <send>get pipe backpack
+  <send>get pipe pack
 wield pipe
 rest
 smoke pipe
 stand
 remove pipe
-put pipe backpack</send>
+put pipe pack</send>
+  </alias>
+  <alias
+   name="drink_goblet"
+   match="dg"
+   enabled="y"
+   group="mume_misc"
+   sequence="100"
+  >
+  <send>get goblet pack
+drink goblet
+put goblet pack</send>
+  </alias>
+  <alias
+   name="pour_water_goblet"
+   match="pg"
+   enabled="y"
+   group="mume_misc"
+   sequence="100"
+  >
+  <send>get goblet pack
+pour water goblet
+put goblet pack</send>
   </alias>
 </aliases>
 
