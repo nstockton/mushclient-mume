@@ -33,437 +33,144 @@
 <aliases>
   <alias
    name="set_target"
-   match="^tt(?P&lt;target&gt; [*\w-\.]+)?$"
+   match="^(?P&lt;number&gt;[t]{1,2})\s*?(?:\s+(?P&lt;target&gt;.+))?$"
    enabled="y"
    group="mume_hunting"
    regexp="y"
    send_to="12"
    sequence="100"
   >
-  <send>setTarget("%&lt;target&gt;")</send>
+  <send>set_target(#"%&lt;number&gt;", "%&lt;target&gt;")</send>
   </alias>
   <alias
-   name="backstab_target1"
-   match="bs."
+   name="set_target_pk"
+   match="^(?P&lt;number&gt;[t]{1,2})\s*?(?:\s+(?P&lt;target&gt;[bedahmor]))?$"
    enabled="y"
    group="mume_hunting"
-   send_to="10"
-   sequence="100"
-  >
-  <send>. backstab</send>
-  </alias>
-  <alias
-   name="backstab_target2"
-   match="j"
-   enabled="y"
-   group="mume_hunting"
-   send_to="10"
-   sequence="100"
-  >
-  <send>. backstab</send>
-  </alias>
-  <alias
-   name="backstab_target_flee"
-   match="jf"
-   enabled="y"
-   group="mume_hunting"
-   send_to="10"
-   sequence="100"
-  >
-  <send>. backstab
-flee</send>
-  </alias>
-  <alias
-   name="target_fighting"
-   match="ttf"
-   enabled="y"
-   group="mume_hunting"
+   regexp="y"
    send_to="12"
    sequence="100"
   >
-  <send>Send("label t")
-setTarget("t")</send>
+  <send>set_target(#"%&lt;number&gt;", PK_EXPANSIONS["%&lt;target&gt;"])</send>
   </alias>
   <alias
-   name="target_again"
-   match="tta"
+   name="set_action"
+   match="^ac(?:\s*(?P&lt;number&gt;\d*))?\s*?(?:\s+(?P&lt;action&gt;.+))?$"
    enabled="y"
    group="mume_hunting"
+   regexp="y"
    send_to="12"
    sequence="100"
   >
-  <send>setTarget("AGAIN")</send>
+  <send>set_action("%&lt;number&gt;", "%&lt;action&gt;")</send>
+  </alias>
+  <alias
+   name="kill_target_pk"
+   match="^k(?P&lt;target&gt;[bedahmor])$"
+   enabled="y"
+   group="mume_hunting"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>Send("kill ", PK_EXPANSIONS["%&lt;target&gt;"])</send>
+  </alias>
+  <alias
+   name="backstab_target"
+   match="^(?P&lt;number&gt;[j]{1,2})(?P&lt;flee&gt;[f])?$"
+   enabled="y"
+   group="mume_hunting"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+do_action(#"%&lt;number&gt;", "backstab")
+if "%&lt;flee&gt;" == "f" then
+	Send("flee")
+end
+  </send>
   </alias>
   <alias
    name="shoot_target"
-   match="s."
-   enabled="y"
-   group="mume_hunting"
-   send_to="10"
-   sequence="100"
-  >
-  <send>. shoot</send>
-  </alias>
-  <alias
-   name="action_target"
-   match=". *"
-   enabled="y"
-   group="mume_hunting"
-   send_to="12"
-   sequence="100"
-  >
-  <send>doTarget("%1")</send>
-  </alias>
-  <alias
-   name="kill_elf"
-   match="ke"
-   enabled="y"
-   group="mume_hunting"
-   sequence="100"
-  >
-  <send>kill *elf*</send>
-  </alias>
-  <alias
-   name="kill_half_elf"
-   match="khe"
-   enabled="y"
-   group="mume_hunting"
-   sequence="100"
-  >
-  <send>kill *half-elf*</send>
-  </alias>
-  <alias
-   name="Set_target_t"
-   match="ttt"
-   enabled="y"
-   group="mume_hunting"
-   send_to="12"
-   sequence="100"
-  >
-  <send>setTarget("t")</send>
-  </alias>
-  <alias
-   name="target_dwarf"
-   match="ttd"
-   enabled="y"
-   group="mume_hunting"
-   send_to="10"
-   sequence="100"
-  >
-  <send>tt *dwarf*</send>
-  </alias>
-  <alias
-   name="clear_target"
-   match="ttc"
-   enabled="y"
-   group="mume_hunting"
-   send_to="12"
-   sequence="100"
-  >
-  <send>setTarget("CLEAR")</send>
-  </alias>
-  <alias
-   name="kill_dwarf"
-   match="kd"
-   enabled="y"
-   group="mume_hunting"
-   sequence="100"
-  >
-  <send>kill *dwarf*</send>
-  </alias>
-  <alias
-   name="where_target"
-   match="w."
-   enabled="y"
-   group="mume_hunting"
-   send_to="10"
-   sequence="100"
-  >
-  <send>. where</send>
-  </alias>
-  <alias
-   name="kill_target_flee"
-   match="kf"
-   enabled="y"
-   group="mume_hunting"
-   send_to="10"
-   sequence="100"
-  >
-  <send>. kill
-flee</send>
-  </alias>
-  <alias
-   name="kill_target2"
-   match="kk"
-   enabled="y"
-   group="mume_hunting"
-   send_to="10"
-   sequence="100"
-  >
-  <send>. kill</send>
-  </alias>
-  <alias
-   name="bash_target1"
-   match="b."
-   enabled="y"
-   group="mume_hunting"
-   send_to="10"
-   sequence="100"
-  >
-  <send>. bash</send>
-  </alias>
-  <alias
-   name="bash_target2"
-   match="bb"
-   enabled="y"
-   group="mume_hunting"
-   send_to="10"
-   sequence="100"
-  >
-  <send>. bash</send>
-  </alias>
-  <alias
-   name="target_man"
-   match="ttm"
-   enabled="y"
-   group="mume_hunting"
-   send_to="10"
-   sequence="100"
-  >
-  <send>tt *man*</send>
-  </alias>
-  <alias
-   name="target_troll"
-   match="ttr"
-   enabled="y"
-   group="mume_hunting"
-   send_to="10"
-   sequence="100"
-  >
-  <send>tt *troll*</send>
-  </alias>
-  <alias
-   name="kill_man"
-   match="km"
-   enabled="y"
-   group="mume_hunting"
-   sequence="100"
-  >
-  <send>kill *man*</send>
-  </alias>
-  <alias
-   name="kill_troll"
-   match="kt"
-   enabled="y"
-   group="mume_hunting"
-   sequence="100"
-  >
-  <send>kill *troll*</send>
-  </alias>
-  <alias
-   name="target_orc"
-   match="tto"
-   enabled="y"
-   group="mume_hunting"
-   send_to="10"
-   sequence="100"
-  >
-  <send>tt *orc*</send>
-  </alias>
-  <alias
-   name="bash"
-   match="^b(?P&lt;target&gt; \w+)?$"
+   match="^(?P&lt;number&gt;[h]{1,2})(?P&lt;flee&gt;[f])?$"
    enabled="y"
    group="mume_hunting"
    regexp="y"
+   send_to="12"
    sequence="100"
   >
-  <send>bash %&lt;target&gt;</send>
+  <send>
+do_action(#"%&lt;number&gt;", "shoot")
+if "%&lt;flee&gt;" == "f" then
+	Send("flee")
+end
+  </send>
+  </alias>
+  <alias
+   name="kill_target"
+   match="^(?P&lt;number&gt;[k]{1,2})(?P&lt;flee&gt;[f])?$"
+   enabled="y"
+   group="mume_hunting"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+do_action(#"%&lt;number&gt;", "kill")
+if "%&lt;flee&gt;" == "f" then
+	Send("flee")
+end
+  </send>
+  </alias>
+  <alias
+   name="bash_target"
+   match="^(?P&lt;number&gt;[b]{1,2})(?P&lt;dis&gt;[d])?(?P&lt;flee&gt;[f])?$"
+   enabled="y"
+   group="mume_hunting"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+do_action(#"%&lt;number&gt;", "%&lt;dis&gt;" == "d" and "bash dis" or "bash")
+if "%&lt;flee&gt;" == "f" then
+	Send("flee")
+end
+  </send>
   </alias>
   <alias
    name="examine_target"
-   match="e."
+   match="^(?P&lt;number&gt;[e]{1,2})t$"
    enabled="y"
    group="mume_hunting"
-   send_to="10"
+   regexp="y"
+   send_to="12"
    sequence="100"
   >
-  <send>. examine</send>
-  </alias>
-  <alias
-   name="kill_hobbit"
-   match="kh"
-   enabled="y"
-   group="mume_hunting"
-   sequence="100"
-  >
-  <send>kill *hobbit*</send>
-  </alias>
-  <alias
-   name="target_hobbit"
-   match="tth"
-   enabled="y"
-   group="mume_hunting"
-   send_to="10"
-   sequence="100"
-  >
-  <send>tt *hobbit*</send>
+  <send>do_action(#"%&lt;number&gt;", "examine")</send>
   </alias>
   <alias
    name="track_target"
-   match="t."
+   match="^(?P&lt;number&gt;[.]{1,2})$"
    enabled="y"
    group="mume_hunting"
-   send_to="10"
+   regexp="y"
+   send_to="12"
    sequence="100"
   >
-  <send>. track</send>
+  <send>do_action(#"%&lt;number&gt;", "track")</send>
   </alias>
   <alias
-   name="search_thorough"
-   match="st"
+   name="where_target"
+   match="^(?P&lt;number&gt;[,]{1,2})$"
    enabled="y"
    group="mume_hunting"
+   regexp="y"
+   send_to="12"
    sequence="100"
   >
-  <send>search thorough</send>
-  </alias>
-  <alias
-   name="search_quick"
-   match="sq"
-   enabled="y"
-   group="mume_hunting"
-   sequence="100"
-  >
-  <send>search quick</send>
-  </alias>
-  <alias
-   name="consider_target"
-   match="c."
-   enabled="y"
-   group="mume_hunting"
-   send_to="10"
-   sequence="100"
-  >
-  <send>. consider</send>
-  </alias>
-  <alias
-   name="kill_target1"
-   match="k."
-   enabled="y"
-   group="mume_hunting"
-   send_to="10"
-   sequence="100"
-  >
-  <send>. kill</send>
-  </alias>
-  <alias
-   name="bash_target_flee"
-   match="bf"
-   enabled="y"
-   group="mume_hunting"
-   send_to="10"
-   sequence="100"
-  >
-  <send>. bash
-flee</send>
-  </alias>
-  <alias
-   name="kill_bear"
-   match="kb"
-   enabled="y"
-   group="mume_hunting"
-   sequence="100"
-  >
-  <send>kill *bear*</send>
-  </alias>
-  <alias
-   name="target_bear"
-   match="ttb"
-   enabled="y"
-   group="mume_hunting"
-   send_to="10"
-   sequence="100"
-  >
-  <send>tt *bear*</send>
-  </alias>
-  <alias
-   name="shoot_target_flee"
-   match="sf"
-   enabled="y"
-   group="mume_hunting"
-   send_to="10"
-   sequence="100"
-  >
-  <send>. shoot
-flee</send>
-  </alias>
-  <alias
-   name="target_elf"
-   match="tte"
-   enabled="y"
-   group="mume_hunting"
-   send_to="10"
-   sequence="100"
-  >
-  <send>tt *elf*</send>
-  </alias>
-  <alias
-   name="target_half_elf"
-   match="tthe"
-   enabled="y"
-   group="mume_hunting"
-   send_to="10"
-   sequence="100"
-  >
-  <send>tt *half-elf*</send>
-  </alias>
-  <alias
-   name="kill_orc"
-   match="ko"
-   enabled="y"
-   group="mume_hunting"
-   sequence="100"
-  >
-  <send>kill *orc*</send>
-  </alias>
-  <alias
-   name="spam_recover"
-   match="rr"
-   enabled="y"
-   group="mume_hunting"
-   sequence="100"
-  >
-  <send>get all.arrow all.corpse
-get all.arrow
-put all.arrow quiver</send>
-  </alias>
-  <alias
-   name="reveal_all"
-   match="ra"
-   enabled="y"
-   group="mume_hunting"
-   sequence="100"
-  >
-  <send>reveal all</send>
-  </alias>
-  <alias
-   name="reveal_quick"
-   match="rq"
-   enabled="y"
-   group="mume_hunting"
-   sequence="100"
-  >
-  <send>reveal quick</send>
-  </alias>
-  <alias
-   name="reveal_thorough"
-   match="rt"
-   enabled="y"
-   group="mume_hunting"
-   sequence="100"
-  >
-  <send>reveal thorough</send>
+  <send>do_action(#"%&lt;number&gt;", "where")</send>
   </alias>
 </aliases>
 
@@ -472,40 +179,69 @@ put all.arrow quiver</send>
 
 <script>
 <![CDATA[
-targeting = nil
+require("mystdlib")
 
-function setTarget(target)
-	if target == "CLEAR" then
-		targeting = nil
-		Note("Target cleared.")
-	elseif target == "AGAIN" then
-		if targeting then
-			Note(string.format("Targeting %s again!", targeting))
-			Send(string.format("label %s t", targeting))
-		else
-			Note("Target is undefined! Can not target again.")
-		end
-	elseif target == "t" then
-		Note("Target now t!")
-		targeting = "t"
-	elseif target and target~="" then
-		targeting = target
-		Note(string.format("Target now %s!", target))
-		Send(string.format("label %s t", target))
-	elseif targeting then
-		Note(string.format("Targeting %s!", targeting))
+PK_EXPANSIONS = {
+	["b"] = "*bear*",
+	["e"] = "*elf*",
+	["d"] = "*dwarf*",
+	["a"] = "*half-elf*",
+	["h"] = "*hobbit*",
+	["m"] = "*man*",
+	["o"] = "*orc*",
+	["r"] = "*troll*"
+}
+
+actions = {}
+targets = {}
+
+function do_action(target, action)
+	if not targets[target] then
+		Note("Target ", target, " not defined.")
 	else
-		Note("Target undefined.")
+		Send(action, " ", targets[target])
 	end
 end
 
-function doTarget(action)
-	if not action or action=="" then
-		Note("No action given to do to target.")
-	elseif targeting then
-		Send(string.format("%s %s", action, targeting))
+function do_action_instance(target, action, instance)
+	if not actions[action] then
+		Note("Action ", action, " not defined.")
+	elseif not targets[target] then
+		Note("Target ", target, " not defined.")
 	else
-		Note("Target undefined.")
+		Send(actions[action], " ", instance and instance or 1, ".", targets[target])
+	end
+end
+
+function set_target(number, target)
+	local number = tonumber(number) or 1
+	local target = target and string.strip(target) or ""
+	if target == "c" then
+		targets[number] = nil
+		Note("Target ", number, " cleared.")
+	elseif target ~= "" then
+		targets[number] = target
+		Note("Target ", number, " now ", target)
+	elseif targets[number] then
+		Note("Target ", number, " is ", targets[number])
+	else
+		Note("Target ", number, " undefined.")
+	end
+end
+
+function set_action(number, action)
+	local number = tonumber(number) or 1
+	local action = action and string.strip(action) or ""
+	if action == "c" then
+		actions[number] = nil
+		Note("Action ", number, " cleared.")
+	elseif action ~= "" then
+		actions[number] = action
+		Note("Action ", number, " now ", action)
+	elseif actions[number] then
+		Note("Action ", number, " is ", actions[number])
+	else
+		Note("Action ", number, " undefined.")
 	end
 end
 

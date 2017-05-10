@@ -87,7 +87,7 @@
   </alias>
   <alias
    name="review_last_tell"
-   match="t"
+   match="X"
    enabled="y"
    group="mume_communication"
    send_to="12"

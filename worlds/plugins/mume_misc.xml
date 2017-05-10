@@ -108,7 +108,7 @@ give note Yerik</send>
   <trigger
    enabled="y"
    group="mume_misc"
-   match="^The Balrog entangles \w+ in his whip and hurls h(?:im|er) out of the room\!$"
+   match="^The Balrog entangles \w+ in its whip and hurls h(?:im|er) out of the room\!$"
    name="auto_yell_fear_balrog"
    regexp="y"
    send_to="0"
@@ -477,6 +477,62 @@ Note(string.format("%s copied to clipboard.", new_id))
   </send>
   </alias>
   <alias
+   name="spam_recover"
+   match="rr"
+   enabled="y"
+   group="mume_misc"
+   sequence="100"
+  >
+  <send>get all.arrow all.corpse
+get all.arrow
+put all.arrow quiver</send>
+  </alias>
+  <alias
+   name="reveal_all"
+   match="ra"
+   enabled="y"
+   group="mume_misc"
+   sequence="100"
+  >
+  <send>reveal all</send>
+  </alias>
+  <alias
+   name="reveal_quick"
+   match="rq"
+   enabled="y"
+   group="mume_misc"
+   sequence="100"
+  >
+  <send>reveal quick</send>
+  </alias>
+  <alias
+   name="reveal_thorough"
+   match="rt"
+   enabled="y"
+   group="mume_misc"
+   sequence="100"
+  >
+  <send>reveal thorough</send>
+  </alias>
+  <alias
+   name="search_thorough"
+   match="st"
+   enabled="y"
+   group="mume_misc"
+   sequence="100"
+  >
+  <send>search thorough</send>
+  </alias>
+  <alias
+   name="search_quick"
+   match="sq"
+   enabled="y"
+   group="mume_misc"
+   sequence="100"
+  >
+  <send>search quick</send>
+  </alias>
+  <alias
    name="show_level"
    match="lev"
    enabled="y"
@@ -774,6 +830,10 @@ function move_stakes(direction)
 		local oriented = (i - offset) % table.getn(directions) + 1
 		Send(string.format("move %s %s", stake, directions[oriented]))
 	end
+end
+
+function OnPluginConnect()
+	DoCommand("FullScreenMode")
 end
 
 ]]>
