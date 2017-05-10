@@ -60,7 +60,7 @@
    match="^(?:Your victim has disappeared|Alas\! There was no clear line of sight to \w+)\!$"
    name="no_line_of_sight"
    regexp="y"
-   omit_from_output="y"
+   omit_from_output="n"
    send_to="12"
    sequence="100"
   >
@@ -223,7 +223,7 @@ end
   <trigger
    enabled="y"
    group="mume_sounds"
-   match="The Balrog entangles you in his whip and hurls you out of the room!"
+   match="The Balrog entangles you in its whip and hurls you out of the room!"
    name="misc_alert7"
    send_to="12"
    sequence="100"
@@ -235,6 +235,26 @@ end
    group="mume_sounds"
    match="The ground trembles slightly."
    name="misc_alert8"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_ALERT, "misc_alert.wav")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
+   match="As you finish your incantations, a thick clump of intertwined roots writhes in agony and slowly withers into nothingness."
+   name="misc_alert9"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_ALERT, "misc_alert.wav")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
+   match="An old man, swathed in a great light-coloured cloak, is standing here."
+   name="misc_alert10"
    send_to="12"
    sequence="100"
   >
