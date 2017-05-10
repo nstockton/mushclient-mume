@@ -28,22 +28,6 @@
 
 <include name="constants.lua"/>
 
-<!--  Aliases  -->
-
-<aliases>
-  <alias
-   name="set_repeat_command"
-   match="^setrep(?P&lt;command&gt;.*)$"
-   enabled="y"
-   regexp="y"
-   group="mume_macros"
-   send_to="12"
-   sequence="100"
-  >
-  <send>set_repeat("%&lt;command&gt;")</send>
-  </alias>
-</aliases>
-
 <!--  Script  -->
 
 
@@ -54,6 +38,7 @@ TTS = "925cdd0331023d9f0b8f05a7"
 CONFIG = "d19a2f0a604c96b7318aa67f"
 MUME_CASTOR_SPELL_TRANSLATOR = "8b4e5dd676d8477dc5f14376"
 MUME_SOUNDS = "32821ab3fa17b04a8ab4c420"
+MUME_HUNTING = "d54f37916d74ac326debe33f"
 XML_PARSER = "74834d3734b2c8a3a9da4d18"
 BROADCAST_PROMPT = 1
 BROADCAST_NAME = 4
@@ -83,7 +68,7 @@ LIGHT_SYMBOLS = {
 }
 
 room_name = "No room name"
-repeat_command = nil
+repeat_commands = {}
 local return_code, keyboard_layout = CallPlugin(CONFIG, "get", "keyboard_layout")
 last_prompt = {}
 last_fought = "Unknown last fought"
@@ -114,7 +99,14 @@ if keyboard_layout == "dvorak" then
 	AcceleratorTo("alt+J", "speak_prompt('last_fought')", sendto.script)
 	AcceleratorTo("alt+K", "speak_prompt('flags')", sendto.script)
 	AcceleratorTo("alt+X", "speak_prompt('sneak')", sendto.script)
-	AcceleratorTo("alt+P", "repeat_last_command()", sendto.script)
+	AcceleratorTo("alt+'", "repeat_command(1)", sendto.script)
+	AcceleratorTo("alt+shift+'", "set_repeat(1, GetCommand()); SelectCommand(); PasteCommand('')", sendto.script)
+	AcceleratorTo("alt+,", "repeat_command(2)", sendto.script)
+	AcceleratorTo("alt+shift+,", "set_repeat(2, GetCommand()); SelectCommand(); PasteCommand('')", sendto.script)
+	AcceleratorTo("alt+.", "repeat_command(3)", sendto.script)
+	AcceleratorTo("alt+shift+.", "set_repeat(3, GetCommand()); SelectCommand(); PasteCommand('')", sendto.script)
+	AcceleratorTo("alt+P", "repeat_command(4)", sendto.script)
+	AcceleratorTo("alt+shift+P", "set_repeat(4, GetCommand()); SelectCommand(); PasteCommand('')", sendto.script)
 else
 	Accelerator("Alt+I", "north")
 	Accelerator("Alt+K", "south")
@@ -141,8 +133,26 @@ else
 	AcceleratorTo("alt+C", "speak_prompt('last_fought')", sendto.script)
 	AcceleratorTo("alt+V", "speak_prompt('flags')", sendto.script)
 	AcceleratorTo("alt+B", "speak_prompt('sneak')", sendto.script)
-	AcceleratorTo("alt+R", "repeat_last_command()", sendto.script)
+	AcceleratorTo("alt+Q", "repeat_command(1)", sendto.script)
+	AcceleratorTo("alt+shift+Q", "set_repeat(1, GetCommand()); SelectCommand(); PasteCommand('')", sendto.script)
+	AcceleratorTo("alt+W", "repeat_command(2)", sendto.script)
+	AcceleratorTo("alt+shift+W", "set_repeat(2, GetCommand()); SelectCommand(); PasteCommand('')", sendto.script)
+	AcceleratorTo("alt+E", "repeat_command(3)", sendto.script)
+	AcceleratorTo("alt+shift+E", "set_repeat(3, GetCommand()); SelectCommand(); PasteCommand('')", sendto.script)
+	AcceleratorTo("alt+R", "repeat_command(4)", sendto.script)
+	AcceleratorTo("alt+shift+R", "set_repeat(4, GetCommand()); SelectCommand(); PasteCommand('')", sendto.script)
 end
+
+for i = 1, 9 do
+	AcceleratorTo("alt+" .. tostring(i), string.format("CallPlugin(MUME_HUNTING, 'do_action_instance', 1, 1, %d)", i), sendto.script)
+	AcceleratorTo("alt+shift+" .. tostring(i), string.format("CallPlugin(MUME_HUNTING, 'do_action_instance', 1, 2, %d)", i), sendto.script)
+	AcceleratorTo("ctrl+" .. tostring(i), string.format("CallPlugin(MUME_HUNTING, 'do_action_instance', 2, 1, %d)", i), sendto.script)
+	AcceleratorTo("ctrl+shift+" .. tostring(i), string.format("CallPlugin(MUME_HUNTING, 'do_action_instance', 2, 2, %d)", i), sendto.script)
+end
+AcceleratorTo("alt+0", "CallPlugin(MUME_HUNTING, 'do_action_instance', 1, 1, 10)", sendto.script)
+AcceleratorTo("alt+shift+0", "CallPlugin(MUME_HUNTING, 'do_action_instance', 1, 2, 10)", sendto.script)
+AcceleratorTo("ctrl+0", "CallPlugin(MUME_HUNTING, 'do_action_instance', 2, 1, 10)", sendto.script)
+AcceleratorTo("ctrl+shift+0", "CallPlugin(MUME_HUNTING, 'do_action_instance', 2, 2, 10)", sendto.script)
 
 Accelerator("ctrl+shift+M", "assist")
 Accelerator("ctrl+shift+B", "bash")
@@ -152,27 +162,27 @@ AcceleratorTo("F12", "CallPlugin(MUME_SOUNDS, 'adjust_volume', 1)", sendto.scrip
 AcceleratorTo("shift+F12", "CallPlugin(MUME_SOUNDS, 'adjust_volume', -1)", sendto.script)
 AcceleratorTo("ctrl+shift+F12", "CallPlugin(MUME_SOUNDS, 'toggle_mute')", sendto.script)
 
-function set_repeat(command)
-	command = Trim(command)
+function set_repeat(number, command)
+	local command = string.strip(command)
 	if command == "" then
-		if repeat_command then
-			Note(string.format("'%s' is repeated.", repeat_command))
+		if repeat_commands[number] then
+			Note("'", repeat_commands[number], "' is repeated.")
 		else
 			Note("Repeat command not set.")
 		end
 	elseif command == "clear" then
-		repeat_command = nil
+		repeat_commands[number] = nil
 		Note("Cleared.")
 	else
-		repeat_command = command
-		Note(string.format("'%s' now repeated.", repeat_command))
+		repeat_commands[number] = command
+		Note("'", repeat_commands[number], "' now repeated.")
 	end
 end
 
-function repeat_last_command()
-	local command = repeat_command or GetCommandList(1)[1]
-	if command then
-		Execute(command)
+function repeat_command(number)
+	-- local command = repeat_commands[number] or GetCommandList(1)[1]
+	if repeat_commands[number] then
+		Execute(repeat_commands[number])
 	else
 		Note("No repeat command.")
 	end
