@@ -154,8 +154,9 @@ AcceleratorTo("alt+shift+0", "CallPlugin(MUME_HUNTING, 'do_action_instance', 1, 
 AcceleratorTo("ctrl+0", "CallPlugin(MUME_HUNTING, 'do_action_instance', 2, 1, 10)", sendto.script)
 AcceleratorTo("ctrl+shift+0", "CallPlugin(MUME_HUNTING, 'do_action_instance', 2, 2, 10)", sendto.script)
 
-Accelerator("ctrl+shift+M", "assist")
-Accelerator("ctrl+shift+B", "bash")
+Accelerator("ctrl+M", "assist")
+Accelerator("ctrl+B", "bash")
+Accelerator("ctrl+H", "shoot")
 AcceleratorTo ("ctrl+U", "SelectCommand(); PasteCommand(''); CallPlugin(TTS, 'say', 'Cleared')", sendto.script)
 AcceleratorTo("ctrl+I", "CallPlugin(MUME_CASTOR_SPELL_TRANSLATOR, 'toggle_casting_interrupt')", sendto.script)
 AcceleratorTo("F12", "CallPlugin(MUME_SOUNDS, 'adjust_volume', 1)", sendto.script)
