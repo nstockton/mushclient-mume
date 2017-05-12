@@ -41,7 +41,7 @@ Log and review communication channels.
 * X  -  Print the last line from the tell log.
 * rep [text]  -  Send a reply to the last player who sent you a tell.
 ### Doors
-Perform different actions on doors.
+Perform actions on doors.
 #### Aliases
 * autoopen  --  Turn on or off automatic opening of doors when the player runs into them (Defaults to on).
 * door [text|clear]  --  manually set the door name or clear the previously set value.
@@ -166,7 +166,7 @@ Miscellaneous aliases and triggers that don't belong anywhere else.
 * citizen  --  Print the list of towns in which the character has citizenship.
 * cpack  --  Switch the cloak that the character is currently wearing with the ones in the character's backpack.
 * cpouch  --  Switch the cloak that the character is currently wearing with the ones in the character's pouch.
-* dg  --  Drink Goblet.
+* dg  --  Drink from the goblet in the character's backpack.
 * dragall  --  Drag all corpses in the room.
 * fpack  --  Switch the cloak that the character is wearing with the fur in the character's backpack.
 * lev  --  Prints the character's current level.
