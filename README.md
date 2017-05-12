@@ -2,7 +2,7 @@
 A portable copy of [MUSHclient](http://mushclient.com/mushclient/mushclient.htm "MUSHclient Home Page") bundled with scripts for playing [MUME](http://mume.org "MUME Official Site") and a [mapper](https://github.com/nstockton/mapperproxy-mume "Mapper Proxy GitHub Page") for use by blind players.
 
 ## License And Credits
-All of the MUSHclient plugins that I (Nick Stockton) wrote are licensed under the terms of the [Mozilla Public License, version 2.0](https://www.mozilla.org/en-US/MPL/2.0/ "MPL2 official Site"). MUSHclient is copyrighted by Nick Gammon, and licenses for MUSHclient and bundled third-party components can be found in the docs directory of this project.
+All of the MUSHclient plugins that I (Nick Stockton) wrote are licensed under the terms of the [Mozilla Public License, version 2.0.](https://www.mozilla.org/en-US/MPL/2.0/ "MPL2 official Site") MUSHclient is copyrighted by Nick Gammon, and licenses for MUSHclient and bundled third-party components can be found in the docs directory of this project.
 
 ## Installation
 ### Screen Reader Specific Instructions.
@@ -51,7 +51,7 @@ Makes you more useful in a group.
 #### Aliases
 * leader [name|clear]  --  Manually set or clear the leader.
 * fs  --  Follow self. Stops you from following someone.
-* autogroup  --  Turn automatic grouping of players when their raise their hand on or off (defaults to off).
+* autogroup  --  Turn automatic grouping of players when they raise their hand on or off (defaults to off).
 * autoride  --  Turn automatic riding or leading when the leader rides or leads on or off (defaults to on)
 * lt [text]  --  Tell the leader a message.
 * lp  --  Protect the leader.
@@ -210,7 +210,7 @@ Provides aliases for printing and reporting the character's current hit/mana/mov
 * rptnl  --  Report how much xp and tp the character needs to level to the room.
 * rpf  --  Report hit/mana/movement points and xp/tp needed to level to the room.
 ### Secrets Database
-Provides a database of secret door names and commands to add/modify/view the data.
+Provides a database of secret door names and commands to add/modify/view the data. This database is separate from the mapper's database.
 * dadd [name] [direction]  --  Add a door with name to direction. The current room name will be used as the key when searching.
 * ddel [name|all] [direction|all]  --  Delete a door with name to direction. The current room name will be used as the key when searching.
 * dinfo [text]  --  Print the secret exit information for all room names in the database that match text.
@@ -238,7 +238,7 @@ Keeps track of how much XP/TP you've gained for each kill, how much you've gaine
 ### Output Functions
 Originally written by Oriol Gomez and modified by me (Nick Stockton), this plugin allows you to review the lines in the output windows without using screen reader specific commands. It's useful to utilize it as a second buffer for reviewing text that has scrolled off the screen while using the screen reader's review commands to review the current output. This plugin contains Macros exclusive to the QWERTY and [Dvorak](https://en.wikipedia.org/wiki/Dvorak_Simplified_Keyboard "Dvorak Entry On Wikipedia") keyboard layouts.
 #### QWERTY And Dvorak Common Macros
-* Control+shift+C  --  If the current line being reviewed is a locate key or item's magical key, copy it to the clipboard.
+* Control+shift+C  --  If the current line being reviewed contains a locate key or item's magical key, copy *just* the key to the clipboard.
 * Control+alt+enter  --  Toggle speech interrupt when the enter key is pressed.
 * Control+shift+space  --  Set a start marker on the currently reviewed line for copying text to the clipboard. When this Macro is pressed a second time, the lines from start to the currently reviewed line will be copied to the clipboard.
 #### QWERTY Macros
@@ -259,14 +259,15 @@ This plugin by Nick Gammon allows you to repeat a command multiple times.
 ### Screen Reader Speak
 I (Nick Stockton) wrote this plugin to be a drop-in replacement for the Mush Reader plugin used by other projects. It wraps the various screen reader APIs directly using the FFI library built into LuaJit, rather than requiring a separate dll to wrap the APIs.
 * tts  --  Toggle automatic speech output via the screen reader on or off (defaults to on).
-### Mapper Proxy
-#### Auto Mapping Commands
+
+## Mapper Proxy
+### Auto Mapping Commands
 Auto mapping mode must be on for these commands to have any effect.
 * autolink  --  Toggle Auto linking on or off. If on, the mapper will attempt to link undefined exits in newly added rooms.
 * automap  --  Toggle automatic mapping mode on.
 * automerge  --  Toggle automatic merging of duplicate rooms on or off.
 * autoupdate  --  Toggle Automatic updating of room name/descriptions/dynamic descriptions on or off.
-#### Map Editing Commands
+### Map Editing Commands
 * doorflags [add|remove] [hidden|needkey|noblock|nobreak|nopick|delayed|reserved1|reserved2] [north|east|south|west|up|down]  --  Modify door flags for a given direction.
 * exitflags [add|remove] [exit|door|road|climb|random|special|avoid|no_match] [north|east|south|west|up|down]  --  Modify exit flags for a given direction.
 * ralign [good|neutral|evil|undefined]  --  Modify the alignment flag of the current room.
@@ -286,7 +287,7 @@ Auto mapping mode must be on for these commands to have any effect.
 * rz [number]  --  Modify the Z coordinate of the current room.
 * savemap  --  Save modifications to the map to disk.
 * secret [add|remove] [name] [north|east|south|west|up|down]  --  Add or remove a secret door in the current room.
-#### Miscellaneous Mapper Commands
+### Miscellaneous Mapper Commands
 * gettimer  --  Returns the amount of seconds since the mapper was started in an optimal format for triggering. This is to assist scripters who use clients with no time stamp support such as VIP Mud.
 * gettimerms  --  Returns the amount of milliseconds since the mapper was started in an optimal format for triggering. This is to assist scripters who use clients with no time stamp support such as VIP Mud.
 * path [vnum|label] [nodeath|nocity|noshallowwater|noforest|nohills|noroad|nocavern|nofield|nowater|nounderwater|norapids|noindoors|nobrush|notunnel|nomountains|norandom|noundefined]  --  Print speed walk directions from the current room to the room with vnum or label. If one or more avoid terrain flags are given after the destination, the mapper will try to avoid all rooms with that terrain type. Multiple avoid terrains can be ringed together with the '|' character, for example, path ingrove noroad|nobrush.
