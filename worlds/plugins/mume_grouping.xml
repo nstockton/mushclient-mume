@@ -157,69 +157,74 @@ end
   </send>
   </trigger>
   <trigger
+   name="define_leader1"
+   match="^You now follow (?P&lt;player&gt;\w+)\.$"
    enabled="y"
    group="mume_grouping"
-   match="^(?:\w+(?: \(\w+\))? transfers group leadership to you\.|You leave the group\.|Group disbanded\.|What group\?\!|You are no longer a member of the group\!|You can\'t group with yourself\.)$"
-   name="undefine_leader1"
-   regexp="y"
-   send_to="12"
-   sequence="100"
-  >
-  <send>leader = nil</send>
-  </trigger>
-  <trigger
-   enabled="y"
-   group="mume_grouping"
-   match="^(?P&lt;player&gt;\w+)(?: \(\w+\))? disbands (?:his|her) group\.$"
-   name="undefine_leader2"
    regexp="y"
    send_to="12"
    sequence="100"
   >
   <send>
-if "%&lt;player&gt;" == leader then
-	leader = nil
+if leader ~= "%&lt;player&gt;" then
+	leader = "%&lt;player&gt;"
+	Note("Setting leader to ", leader, ".")
 end
   </send>
   </trigger>
   <trigger
-   enabled="y"
-   group="mume_grouping"
-   match="^You are now a member of (?P&lt;player&gt;\w+)(?: \(\w+\))?(?:\'s|s\') group\.$"
-   name="define_leader1"
-   regexp="y"
-   send_to="12"
-   sequence="100"
-  >
-  <send>leader = "%&lt;player&gt;"</send>
-  </trigger>
-  <trigger
-   enabled="y"
-   group="mume_grouping"
-   match="^You transfer group leadership to (?P&lt;player&gt;\w+)(?: \(\w+\))?\.$"
    name="define_leader2"
+   match="^You are now a member of (?P&lt;player&gt;\w+)(?: \(\w+\))?(?:\'[s]?) group\.$"
+   enabled="y"
+   group="mume_grouping"
    regexp="y"
    send_to="12"
    sequence="100"
   >
-  <send>leader = "%&lt;player&gt;"</send>
+  <send>
+if not leader then
+	leader = "%&lt;player&gt;"
+	Note("Setting leader to ", leader, ".")
+end
+  </send>
   </trigger>
   <trigger
-   enabled="y"
-   group="mume_grouping"
-   match="^[ ]{5}(?P&lt;player&gt;\w+) \(Head of group\)$"
    name="define_leader3"
+   match="^[ ]{5}(?P&lt;player&gt;\w+) \(Head of group\)$"
+   enabled="y"
+   group="mume_grouping"
    regexp="y"
    send_to="12"
    sequence="100"
   >
-  <send>leader = "%&lt;player&gt;"</send>
+  <send>
+if not leader then
+	leader = "%&lt;player&gt;"
+	Note("Setting leader to ", leader, ".")
+end
+  </send>
   </trigger>
   <trigger
+   name="undefine_leader"
+   match="^(?:You will not follow anyone else now|\w+ doesn\'t want you to follow (?:him|her|it))\.$"
    enabled="y"
    group="mume_grouping"
-   match="^(?P&lt;player&gt;\w+)(?: \(\w+\))? dismounts from a (?:pony|dales-pony|horse|warhorse|pack horse|trained horse|horse of the Rohirrim|brown donkey|mountain mule|hungry warg|brown wolf)(?: \(\w+\))?\, and stops riding (?:him|her|it)\.$"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+if leader then
+	leader = nil
+	Note("Leader cleared.")
+end
+  </send>
+  </trigger>
+  <trigger
    name="autolead"
+   match="^(?P&lt;player&gt;\w+)(?: \(\w+\))? dismounts from a (?:pony|dales-pony|horse|warhorse|pack horse|trained horse|horse of the Rohirrim|brown donkey|mountain mule|hungry warg|brown wolf)(?: \(\w+\))?\, and stops riding (?:him|her|it)\.$"
+   enabled="y"
+   group="mume_grouping"
    regexp="y"
    send_to="12"
    sequence="100"
@@ -237,7 +242,7 @@ end
 <aliases>
   <alias
    name="define_leader"
-   match="^leader(?P&lt;name&gt; \w+)?$"
+   match="^leader\s*?(?:\s+(?P&lt;name&gt;\w+))?$"
    enabled="y"
    group="mume_grouping"
    regexp="y"
@@ -245,7 +250,7 @@ end
    sequence="100"
   >
   <send>
-local name = string.capitalize(string.strip("%&lt;name&gt;"))
+local name = string.capitalize("%&lt;name&gt;")
 if name == "Clear" then
 	leader = nil
 	Note("Leader cleared.")

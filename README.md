@@ -156,6 +156,7 @@ Contains macros for performing different tasks. Some macros are different depend
 * Alt+shift+p  --  Set the associated command for the fourth user definable key from the contents of the input line, then clear the input line.
 ### Misc
 Miscellaneous aliases and triggers that don't belong anywhere else.
+#### Aliases
 * bc[number]  --  Butcher number.corpse.
 * affect  --  Prints a list of spells and other things the player is affected by.
 * age  --  Prints the character's age.
@@ -189,10 +190,12 @@ Miscellaneous aliases and triggers that don't belong anywhere else.
 Add info about the mob's level for known mobs.
 ### Path Walker
 This plugin allows you to automatically walk along roads. It works by looking for directions in the exits line enclosed in '=' signs. If the end of the road or a junction is reached, automatic walking will stop.
+#### Aliases
 * p [direction]  --  Start walking along the road in direction.
 * pp  --  Stop auto walking along the road.
 ### Reentering
 This plugin provides aliases for escaping and for returning from the direction the player fled from.
+#### Aliases
 * v  --  Return the way you came from after fleeing out of a room.
 * nn  --  Escape north.
 * ee  --  Escape east.
@@ -202,6 +205,7 @@ This plugin provides aliases for escaping and for returning from the direction t
 * dd  --  Escape down.
 ### Report
 Provides aliases for printing and reporting the character's current hit/mana/movement points.
+#### Aliases
 * hp  --  Print the character's current hit points.
 * mp  --  Print the character's current mana points.
 * mv  --  Print the character's current movement points.
@@ -211,6 +215,7 @@ Provides aliases for printing and reporting the character's current hit/mana/mov
 * rpf  --  Report hit/mana/movement points and xp/tp needed to level to the room.
 ### Secrets Database
 Provides a database of secret door names and commands to add/modify/view the data. This database is separate from the mapper's database.
+#### Aliases
 * dadd [name] [direction]  --  Add a door with name to direction. The current room name will be used as the key when searching.
 * ddel [name|all] [direction|all]  --  Delete a door with name to direction. The current room name will be used as the key when searching.
 * dinfo [text]  --  Print the secret exit information for all room names in the database that match text.
@@ -225,14 +230,17 @@ Provides sound triggers for MUME. When you land an attack spell on someone else,
 Shows how long your support spells have been up. you can see the list of support spells as part of the info command, the status command, or the affect alias from the Misc plugin.
 ### Time
 Allows you to see the current game time, how long until next winter, how long until DK opens, etc. The time will be synchronized to dawn/dusk events, or when you walk into a room with a clock.
+#### Aliases
 * ti  --  Print time information.
 * nti  --  Narrate time information.
 * sti  --  Say time information.
 ### XML Parser
 This plugin parses the XML output from mume and dispatches events to other plugins for each supported XML element.
+#### Aliases
 * showprompt  --  Toggle the displaying of the MUME prompt on or off (defaults to on). Once you get used to using the macros for speaking prompt information, you might find it less spammy to turn showprompt off and use the macros to get your health information instead.
 ### XP Counter
 Keeps track of how much XP/TP you've gained for each kill, how much you've gained for the current session, and how much you need to level.
+#### Aliases
 * xp  --  Print how much XP/TP gained for last kill, for current session, and how much is needed to level. Values are updated each time you kill something.
 * TP  --  Print how much TP gained since last kill or since the tp alias was last executed, How much gained for current session, and how much is needed to level. This is useful while TPing as the XP alias only updates it's values after you kill something.
 ### Output Functions
@@ -255,9 +263,11 @@ Originally written by Oriol Gomez and modified by me (Nick Stockton), this plugi
 * Control+shift+s  --  Review the last line in the output buffer.
 ### Repeat Command
 This plugin by Nick Gammon allows you to repeat a command multiple times.
+#### Aliases
 * #[number] [command]  --  Repeat command number times.
 ### Screen Reader Speak
 I (Nick Stockton) wrote this plugin to be a drop-in replacement for the Mush Reader plugin used by other projects. It wraps the various screen reader APIs directly using the FFI library built into LuaJit, rather than requiring a separate dll to wrap the APIs.
+#### Aliases
 * tts  --  Toggle automatic speech output via the screen reader on or off (defaults to on).
 
 ## Mapper Proxy
