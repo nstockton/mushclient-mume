@@ -44,7 +44,7 @@
   </alias>
   <alias
    name="set_target_pk"
-   match="^(?P&lt;number&gt;[t]{1,2})\s*?(?:\s+(?P&lt;target&gt;[bedahmor]))?$"
+   match="^(?P&lt;number&gt;[t]{1,2})(?P&lt;target&gt;[bedahmor])$"
    enabled="y"
    group="mume_hunting"
    regexp="y"
