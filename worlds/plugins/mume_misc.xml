@@ -129,6 +129,16 @@ give note Yerik</send>
   <trigger
    enabled="y"
    group="mume_misc"
+   match="The entire cave system thunders and reverberates as the huge beast drops dead to the ground, making you lose your balance."
+   omit_from_output="n"
+   send_to="0"
+   sequence="100"
+  >
+  <send>stand</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
    match="  sparkling maroon. This gem must then be placed within the inset of an"
    omit_from_output="y"
    send_to="2"
