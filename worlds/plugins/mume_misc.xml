@@ -129,6 +129,16 @@ give note Yerik</send>
   <trigger
    enabled="y"
    group="mume_misc"
+   match="You slip on the treacherous ground and fall down, landing on your back."
+   omit_from_output="n"
+   send_to="0"
+   sequence="100"
+  >
+  <send>stand</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
    match="The entire cave system thunders and reverberates as the huge beast drops dead to the ground, making you lose your balance."
    omit_from_output="n"
    send_to="0"
