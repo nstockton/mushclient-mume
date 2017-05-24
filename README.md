@@ -221,7 +221,7 @@ Provides a database of secret door names and commands to add/modify/view the dat
 * dinfo [text]  --  Print the secret exit information for all room names in the database that match text.
 * ddo  --  Open all secret exits that have a room name that matches the current room's name.
 ### Sounds
-Provides sound triggers for MUME. When you land an attack spell on someone else, the corresponding sound will be played on the left channel. When someone lands an attack spell on you, the corresponding sound will play on the right channel. Everything else will be played in both channels.
+Provides sound triggers for MUME. When you land an aggressive spell on someone else, the corresponding sound will be played on the left channel. When someone lands an aggressive spell on you, the corresponding sound will play on the right channel. Everything else will be played in both channels.
 #### Macros
 * F12  --  Raise sound volume.
 * shift+F12  --  Lower sound volume.
@@ -244,7 +244,7 @@ Keeps track of how much XP/TP you've gained for each kill, how much you've gaine
 * xp  --  Print how much XP/TP gained for last kill, for current session, and how much is needed to level. Values are updated each time you kill something.
 * TP  --  Print how much TP gained since last kill or since the tp alias was last executed, How much gained for current session, and how much is needed to level. This is useful while TPing as the XP alias only updates it's values after you kill something.
 ### Output Functions
-Originally written by Oriol Gomez and modified by me (Nick Stockton), this plugin allows you to review the lines in the output windows without using screen reader specific commands. It's useful to utilize it as a second buffer for reviewing text that has scrolled off the screen while using the screen reader's review commands to review the current output. This plugin contains Macros exclusive to the QWERTY and [Dvorak](https://en.wikipedia.org/wiki/Dvorak_Simplified_Keyboard "Dvorak Entry On Wikipedia") keyboard layouts.
+Originally written by Oriol Gomez and modified by me (Nick Stockton), this plugin allows you to review the lines in the output window without using screen reader specific commands. It's useful to utilize it as a second buffer for reviewing text that has scrolled off the screen while using the screen reader's review commands to review the current output. This plugin contains Macros exclusive to the QWERTY and [Dvorak](https://en.wikipedia.org/wiki/Dvorak_Simplified_Keyboard "Dvorak Entry On Wikipedia") keyboard layouts.
 #### QWERTY And Dvorak Common Macros
 * Control+shift+C  --  If the current line being reviewed contains a locate key or item's magical key, copy *just* the key to the clipboard.
 * Control+alt+enter  --  Toggle speech interrupt when the enter key is pressed.
