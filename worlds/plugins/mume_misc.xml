@@ -45,6 +45,37 @@
   <trigger
    enabled="y"
    group="mume_misc"
+   match="An ancient weaver says 'But perhaps you would be willing to help me?'"
+   name="auto_quest_weaver"
+   send_to="0"
+   sequence="100"
+  >
+  <send>say yes</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="Ithildir the Noldo says 'Are you seeking safety, adventure, or fighting our common foe?'"
+   name="auto_quest_ithildir1"
+   send_to="0"
+   sequence="100"
+  >
+  <send>say adventure</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="^Ithildir the Noldo says \'Please\, \w+\, will you help me\?\'$"
+   name="auto_quest_ithildir2"
+   regexp="y"
+   send_to="0"
+   sequence="100"
+  >
+  <send>say yes</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
    match="Yerik the Sage says 'Come again!'"
    name="auto_give_note_yerik"
    send_to="0"
@@ -300,6 +331,16 @@ Note("Web removed!")
    group="mume_misc"
    match="^(?:There is an old street\-lamp on the border of the street|A finely crafted crystal lamp is here|A finely crafted crystal lamp is hanging from a tree branch)\.$"
    name="gag_street_lamps"
+   omit_from_output="y"
+   regexp="y"
+   sequence="100"
+  >
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="^There is (?:a lot of|some) (?:water|snow) on the ground\.$"
+   name="gag_snow_water_ground"
    omit_from_output="y"
    regexp="y"
    sequence="100"

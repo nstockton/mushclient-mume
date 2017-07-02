@@ -243,8 +243,9 @@ end
   <trigger
    enabled="y"
    group="mume_sounds"
-   match="As you finish your incantations, a thick clump of intertwined roots writhes in agony and slowly withers into nothingness."
+   match="^As \w+ finish(?:es)? (?:your|his|her) incantations\, a thick clump of intertwined roots writhes in agony and slowly withers into nothingness\.$"
    name="misc_alert9"
+   regexp="y"
    send_to="12"
    sequence="100"
   >
@@ -255,6 +256,16 @@ end
    group="mume_sounds"
    match="An old man, swathed in a great light-coloured cloak, is standing here."
    name="misc_alert10"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_ALERT, "misc_alert.wav")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
+   match="A barely noticeable *click* is heard as you enter."
+   name="misc_alert11"
    send_to="12"
    sequence="100"
   >
