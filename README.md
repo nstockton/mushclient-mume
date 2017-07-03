@@ -297,6 +297,10 @@ Auto mapping mode must be on for these commands to have any effect.
 * rz [number]  --  Modify the Z coordinate of the current room.
 * savemap  --  Save modifications to the map to disk.
 * secret [add|remove] [name] [north|east|south|west|up|down]  --  Add or remove a secret door in the current room.
+### Searching Commands
+* fdoor [text]  --  Search the map for rooms with doors matching text. Returns the closest 20 rooms to you based on the [Manhattan Distance.](https://en.wikipedia.org/wiki/Taxicab_geometry "Wikipedia Page On Taxicab Geometry")
+* fname [text]  --  Search the map for rooms with names matching text. Returns the closest 20 rooms to you based on the [Manhattan Distance.](https://en.wikipedia.org/wiki/Taxicab_geometry "Wikipedia Page On Taxicab Geometry")
+* fnote [text]  --  Search the map for rooms with notes matching text. Returns the closest 20 rooms to you based on the [Manhattan Distance.](https://en.wikipedia.org/wiki/Taxicab_geometry "Wikipedia Page On Taxicab Geometry")
 ### Miscellaneous Mapper Commands
 * gettimer  --  Returns the amount of seconds since the mapper was started in an optimal format for triggering. This is to assist scripters who use clients with no time stamp support such as VIP Mud.
 * gettimerms  --  Returns the amount of milliseconds since the mapper was started in an optimal format for triggering. This is to assist scripters who use clients with no time stamp support such as VIP Mud.
