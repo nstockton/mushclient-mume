@@ -34,6 +34,56 @@
   <trigger
    enabled="y"
    group="mume_misc"
+   match="A sharp-edged shining sickle."
+   omit_from_output="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 - (Ginnar The Weapon Smith, BM)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="An exquisite retort of polished copper."
+   omit_from_output="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 - (Niuldor)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="A delicate set of translucent glass measuring cups."
+   omit_from_output="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 - (GH Herbalist)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="A fine slender paring knife and a stout chopping knife."
+   omit_from_output="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 - (Thrakghash)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="A round metal sieve with a mesh of golden threads."
+   omit_from_output="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 - (Sabb)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
    match="^Anarwen says \'Would you help me\, \w+\?\'$"
    name="auto_quest_anarwen"
    regexp="y"
