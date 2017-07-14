@@ -283,7 +283,7 @@ Auto mapping mode must be on for these commands to have any effect.
 * ralign [good|neutral|evil|undefined]  --  Modify the alignment flag of the current room.
 * ravoid [+|-]  --  Set or clear the avoid flag for the current room. If the avoid flag is set, the mapper will try to avoid the room when path finding.
 * rdelete [vnum]  --  Delete the room with vnum. If the mapper is synced and no vnum is given, delete the current room.
-* rlabel [add|info|delete] [label] [vnum]  --  Manage room labels. Vnum is only used when adding a room. Leave it blank to use the current room's vnum. Use rlabel info all to get a list of all labels.
+* rlabel [add|delete|info|search] [label] [vnum]  --  Manage room labels. Vnum is only used when adding a room. Leave it blank to use the current room's vnum. Use rlabel info all to get a list of all labels.
 * rlight [lit|dark|undefined]  --  Modify the light flag of the current room.
 * rlink [add|remove] [oneway] [vnum] [north|east|south|west|up|down]  --  Manually manage links from the current room to room with vnum. If oneway is given, treat the link as unidirectional.
 * rloadflags [add|remove] [treasure|armour|weapon|water|food|herb|key|mule|horse|packhorse|trainedhorse|rohirrim|warg|boat|attention|tower]  --  Modify the load flags of the current room.
