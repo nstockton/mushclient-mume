@@ -34,6 +34,26 @@
   <trigger
    enabled="y"
    group="mume_misc"
+   match="A handful of small, silvery bottles and vials."
+   omit_from_output="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 - (Scarred Man)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="A mortar and pestle of smooth, white marble."
+   omit_from_output="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 - (Grobb the Zaugurz ranger)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
    match="A sharp-edged shining sickle."
    omit_from_output="y"
    send_to="2"
@@ -196,6 +216,26 @@ give note Yerik</send>
    sequence="100"
   >
   <send>yell HERE!</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="When you come to, you find yourself lying on a muddy floor, stripped of your gear. An overpowering smell of smoke fills your nostrils."
+   omit_from_output="n"
+   send_to="0"
+   sequence="100"
+  >
+  <send>stand</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="A gnarled tree stomps the forest floor, producing thunderous vibrations that send you sprawling."
+   omit_from_output="n"
+   send_to="0"
+   sequence="100"
+  >
+  <send>stand</send>
   </trigger>
   <trigger
    enabled="y"
