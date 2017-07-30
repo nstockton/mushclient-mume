@@ -274,6 +274,16 @@ end
   <trigger
    enabled="y"
    group="mume_sounds"
+   match="Frychra lets out a high-pitched shriek, and answering calls come from all around!"
+   name="misc_alert12"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_ALERT, "misc_alert.wav")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
    match="^(?:A blue transparent wall slowly appears around you|Your magic armour is revitalised)\.$"
    name="armour_up"
    regexp="y"
@@ -453,7 +463,7 @@ end
   <trigger
    enabled="y"
    group="mume_sounds"
-   match="^[^\.]+? (?:dissolves your evil presence|makes your evil soul suffer with her goodness)\.$"
+   match="^[^\.]+? (?:dissolves your evil presence|makes your evil soul suffer with h(?:is|er) goodness)\.$"
    name="dispel_evil_you"
    omit_from_output="y"
    regexp="y"
