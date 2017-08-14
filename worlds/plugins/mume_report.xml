@@ -193,7 +193,7 @@ end
 end
 
 function tnl(xp, tp, level)
-	local output = string.format("%.3fK XP and %s TP to reach level %s.", xp / 1000, tp, level + 1)
+	local output = string.format("%.3f%s XP and %s TP to reach level %s.", string.len(xp) >= 7 and xp / 1000000 or xp / 1000, string.len(xp) >= 7 and "M" or "K", tp, level + 1)
 	Note(string.format("You need %s", output))
 	if will_report_tnl then
 		Send("emote needs ", output)
