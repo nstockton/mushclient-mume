@@ -115,12 +115,103 @@
   <trigger
    enabled="y"
    group="mume_misc"
+   match="An elven scout smiles at you."
+   name="auto_quest_elf_camp1"
+   send_to="12"
+   sequence="100"
+  >
+  <send>elf_camp_quest_me = true</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="An elven scout says 'chance be headed north, to fair Imladris?'"
+   name="auto_quest_elf_camp2"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+if elf_camp_quest_me then
+	Send("say yes")
+end
+  </send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="An elven scout says 'perhaps bring this letter to our master?'"
+   name="auto_quest_elf_camp3"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+if elf_camp_quest_me then
+	Send("say yes")
+	elf_camp_quest_me = false
+end
+  </send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="An elven shepherdess says 'Feel free to speak first, then remind me - I would like to tell you of Nirnaeth Arnoediad.'"
+   name="auto_quest_mystical1"
+   send_to="0"
+   sequence="100"
+  >
+  <send>change language Sindarin
+say Nirnaeth Arnoediad
+change language Westron</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="An elven shepherdess gives you an oaken rod."
+   name="auto_quest_mystical2"
+   send_to="0"
+   sequence="100"
+  >
+  <send>tell group Auto-tell: Elven shepherdess loaded rod.</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
    match="An ancient weaver says 'But perhaps you would be willing to help me?'"
    name="auto_quest_weaver"
    send_to="0"
    sequence="100"
   >
   <send>say yes</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="A stout dwarf is here mixing dyes."
+   name="auto_quest_dye_maker1"
+   send_to="0"
+   sequence="100"
+  >
+  <send>say dye</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="A dwarven dye-maker says 'Let me guess, that old biddy who makes those green cloaks sent you looking for her order? Answer to me, didn't she?'"
+   name="auto_quest_dye_maker2"
+   send_to="0"
+   sequence="100"
+  >
+  <send>say yes</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="The rope lands close but does not quite seem to catch the stump."
+   name="auto_quest_dye_maker3"
+   send_to="0"
+   sequence="100"
+  >
+  <send>throw rope stump</send>
   </trigger>
   <trigger
    enabled="y"
@@ -966,6 +1057,7 @@ GLYPHS = {
 auto_move_stakes = false
 auto_drag = false
 auto_drag_counter = 1
+elf_camp_quest_me = false
 
 function move_stakes(direction)
 	local directions = {"N", "E", "SE", "SW", "W"}
