@@ -30,22 +30,79 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="A herbal kit contains a bright red mushroom, a hemlock plant, a sticky mass of stems, leaves and sap, a foul-smelling root, some orange-red flowers and some white, egg-shaped berries."
+   match="^A(?:n enhanced)? herbal kit contains two piles of blackberries\, some grey petals\, some long\, slender green leaves and some white petals\.$"
    omit_from_output="y"
+   regexp="y"
    send_to="2"
    sequence="100"
   >
-  <send>Scaly kit</send>
+  <send>Antidote</send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="A herbal kit contains a handful of narrow leaves, a short, moist tail, some short, black fur and a vial of preserved blood."
+   match="^A(?:n enhanced)? herbal kit contains some short\, black fur\, a short\, moist tail and a small fluid\-sack\.$"
    omit_from_output="y"
+   regexp="y"
    send_to="2"
    sequence="100"
   >
-  <send>orkish draught</send>
+  <send>Venom</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_herb_substitutions"
+   match="^A(?:n enhanced)? herbal kit contains three eggs\, a mashed honey\-wax mixture and a sack of flour\.$"
+   omit_from_output="y"
+   regexp="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>Baker</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_herb_substitutions"
+   match="^A(?:n enhanced)? herbal kit contains a handful of narrow leaves\, a handful of clover and a man-like root\.$"
+   omit_from_output="y"
+   regexp="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>Travelling</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_herb_substitutions"
+   match="^A(?:n enhanced)? herbal kit contains a handful of blackcurrant berries\, two piles of grey\-green leaves\, some long\, slender green leaves and some yellow petals\.$"
+   omit_from_output="y"
+   regexp="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>Healing</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_herb_substitutions"
+   match="^A(?:n enhanced)? herbal kit contains a bright red mushroom\, a hemlock plant\, a sticky mass of stems\, leaves and sap\, a foul\-smelling root\, some orange\-red flowers and some white\, egg\-shaped berries\.$"
+   omit_from_output="y"
+   regexp="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>Scaly</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_herb_substitutions"
+   match="^A(?:n enhanced)? herbal kit contains a handful of narrow leaves\, a short\, moist tail\, some short\, black fur and a vial of preserved blood\.$"
+   omit_from_output="y"
+   regexp="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>Orkish draught</send>
   </trigger>
   <trigger
    enabled="y"
