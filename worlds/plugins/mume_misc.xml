@@ -154,6 +154,16 @@ end
   <trigger
    enabled="y"
    group="mume_misc"
+   match="An elven scout gives you an important-looking letter."
+   name="auto_quest_elf_camp4"
+   send_to="0"
+   sequence="100"
+  >
+  <send>put letter pack</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
    match="An elven shepherdess says 'Feel free to speak first, then remind me - I would like to tell you of Nirnaeth Arnoediad.'"
    name="auto_quest_mystical1"
    send_to="0"
