@@ -104,13 +104,28 @@
   <trigger
    enabled="y"
    group="mume_misc"
-   match="^Anarwen says \'Would you help me\, \w+\?\'$"
-   name="auto_quest_anarwen"
-   regexp="y"
-   send_to="0"
+   match="Anarwen's grey eyes stop on you, as she ponders something."
+   name="auto_quest_anarwen1"
+   send_to="12"
    sequence="100"
   >
-  <send>say yes</send>
+  <send>anarwen_quest_me = true</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="^Anarwen says \'Would you help me\, \w+\?\'$"
+   name="auto_quest_anarwen2"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+if anarwen_quest_me then
+	Send("nod anarwen")
+	anarwen_quest_me = false
+end
+  </send>
   </trigger>
   <trigger
    enabled="y"
@@ -226,23 +241,57 @@ change language Westron</send>
   <trigger
    enabled="y"
    group="mume_misc"
-   match="Ithildir the Noldo says 'Are you seeking safety, adventure, or fighting our common foe?'"
+   match="Ithildir the Noldo glances at you with a hint of suspicion in his dark eyes."
    name="auto_quest_ithildir1"
-   send_to="0"
+   send_to="12"
    sequence="100"
   >
-  <send>say adventure</send>
+  <send>ithildir_quest_me = true</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="Ithildir the Noldo says 'Are you seeking safety, adventure, or fighting our common foe?'"
+   name="auto_quest_ithildir2"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+if ithildir_quest_me then
+	Send("change language westron")
+	Send("say adventure")
+end
+  </send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_misc"
    match="^Ithildir the Noldo says \'Please\, \w+\, will you help me\?\'$"
-   name="auto_quest_ithildir2"
+   name="auto_quest_ithildir3"
    regexp="y"
-   send_to="0"
+   send_to="12"
    sequence="100"
   >
-  <send>say yes</send>
+  <send>
+if ithildir_quest_me then
+	Send("nod Ithildir")
+end
+  </send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="Ithildir the Noldo gives you a beryl ring."
+   name="auto_quest_ithildir4"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+if ithildir_quest_me then
+	Send("put beryl pack")
+	ithildir_quest_me = false
+end
+  </send>
   </trigger>
   <trigger
    enabled="y"
@@ -268,12 +317,27 @@ give note Yerik</send>
   <trigger
    enabled="y"
    group="mume_misc"
-   match="Elrond says 'Would you be willing to help me with a dangerous task?'"
-   name="auto_quest_elrond"
-   send_to="0"
+   match="Elrond turns his gaze toward you, peering into the very depths of your soul."
+   name="auto_quest_elrond1"
+   send_to="12"
    sequence="100"
   >
-  <send>say yes</send>
+  <send>oie_key_quest_me = true</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="Elrond says 'Would you be willing to help me with a dangerous task?'"
+   name="auto_quest_elrond2"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+if oie_key_quest_me then
+	Send("nod elrond")
+	oie_key_quest_me = false
+end
+  </send>
   </trigger>
   <trigger
    enabled="y"
@@ -317,6 +381,17 @@ give note Yerik</send>
    sequence="100"
   >
   <send>yell HERE!</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="Suddenly, the ground drops beneath your feet!"
+   omit_from_output="n"
+   send_to="0"
+   sequence="100"
+  >
+  <send>stand
+open debris up</send>
   </trigger>
   <trigger
    enabled="y"
@@ -982,6 +1057,7 @@ put boots pack</send>
   <send>remove belt
 get belt pack
 wear belt
+wear ruby
 put belt pack
 wear all</send>
   </alias>
@@ -1068,6 +1144,9 @@ auto_move_stakes = false
 auto_drag = false
 auto_drag_counter = 1
 elf_camp_quest_me = false
+oie_key_quest_me = false
+anarwen_quest_me = false
+ithildir_quest_me = false
 
 function move_stakes(direction)
 	local directions = {"N", "E", "SE", "SW", "W"}
