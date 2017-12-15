@@ -34,7 +34,7 @@
   <trigger
    enabled="y"
    group="mume_castor_spell_translator"
-   match="^(?P&lt;castor&gt;[^\']+?) utters the word[s]? \'(?P&lt;spell&gt;[a-z ]+)\'$"
+   match="^(?P&lt;castor&gt;.+?) utters the word[s]? \'(?P&lt;spell&gt;[a-z ]+)\'$"
    name="translate_spell"
    omit_from_output="y"
    regexp="y"
