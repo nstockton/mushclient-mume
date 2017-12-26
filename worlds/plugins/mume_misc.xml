@@ -676,14 +676,34 @@ end
   <trigger
    enabled="y"
    group="mume_misc"
-   match="^(?P&lt;someone&gt;.+?) leaves (?P&lt;direction&gt;north|east|south|west|up|down)\.$"
+   match="^(?:A |The )?(?P&lt;someone&gt;.+?)(?: \((?P&lt;someone_label&gt;\w+)\))? leaves (?P&lt;direction&gt;north|east|south|west|up|down)(?: (?P&lt;action&gt;sneaking|riding a (?P&lt;mount&gt;pony|dales-pony|horse|warhorse|pack horse|trained horse|horse of the Rohirrim|brown donkey|mountain mule|hungry warg|brown wolf)(?: \((?P&lt;mount_label&gt;\w+)\))?))?\.$"
    name="shorten_leaves_message"
    omit_from_output="y"
    regexp="y"
-   send_to="2"
+   send_to="14"
    sequence="80"
   >
-  <send>%&lt;direction&gt; %&lt;someone&gt;</send>
+  <send>
+local someone = "%&lt;someone&gt;"
+local direction = "%&lt;direction&gt;"
+local mount = "%&lt;mount&gt;"
+if "%&lt;someone_label&gt;" ~= "" then
+	someone = "%&lt;someone_label&gt;"
+end
+if "%&lt;mount_label&gt;" ~= "" then
+	mount = "%&lt;mount_label&gt;"
+elseif mount == "horse" then
+	mount = "docile"
+elseif mount:startswith("brown") or mount:startswith("mountain") or mount:endswith("Rohirrim") then
+	-- Use the last word of the string.
+	mount = mount:match("%w+$")
+else
+	-- Use the first word in the string.
+	-- If string is empty, mount will be set to nil.
+	mount = mount:match("^%w+")
+end
+Note(string.strip(string.format("%s %s %s", direction, someone, mount and mount or "%&lt;action&gt;")))
+  </send>
   </trigger>
   <trigger
    enabled="y"
