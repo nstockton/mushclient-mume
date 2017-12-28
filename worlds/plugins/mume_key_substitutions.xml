@@ -30,6 +30,16 @@
   <trigger
    enabled="y"
    group="mume_key_substitutions"
+   match="a slender, wooden key"
+   omit_from_output="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 - tree hideout, south of Tharbad</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_key_substitutions"
    match="an unadorned steel key"
    omit_from_output="y"
    send_to="2"
