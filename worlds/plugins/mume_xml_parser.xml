@@ -88,6 +88,7 @@ local BROADCAST_EMOTE = 9
 local in_esc = false
 local in_iac = false
 local in_sub_option = false
+local in_gratuitous = false
 local xml_mode = XML_NONE
 local last_data = {name="", description="", dynamic="", exits="", prompt=""}
 local scouting = false
@@ -130,6 +131,9 @@ function process_text(data)
 		end
 	elseif xml_mode >= XML_TELL and xml_mode <= XML_EMOTE then
 		last_communication = last_communication .. data
+	end
+	if in_gratuitous then
+		return ""
 	end
 	return data
 end
@@ -232,6 +236,10 @@ function OnPluginPacketReceived(packet)
 						xml_mode = XML_DESCRIPTION
 					elseif tag == "terrain" then
 						xml_mode = XML_TERRAIN
+					elseif tag == "gratuitous" then
+						in_gratuitous = true
+					elseif tag == "/gratuitous" then
+						in_gratuitous = false
 					elseif tag == "/room" then
 						xml_mode = XML_NONE
 					end
