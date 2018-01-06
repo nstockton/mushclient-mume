@@ -171,7 +171,7 @@ end
   <trigger
    enabled="y"
    group="mume_sounds"
-   match="^(?:Cirdan the Shipwright|Elrond(?: the Master of Rivendell)?) (?:is standing here \(glowing\)| (?:leaves|has arrived from) [^\.]+)\.$"
+   match="^(?:Cirdan the Shipwright|Elrond|Galadriel(?: the Master of Rivendell| the Lady of Lorien)?) (?:is standing here \(glowing\)| (?:leaves|has arrived from) [^\.]+)\.$"
    name="misc_alert2"
    regexp="y"
    send_to="12"
@@ -276,6 +276,16 @@ end
    group="mume_sounds"
    match="Frychra lets out a high-pitched shriek, and answering calls come from all around!"
    name="misc_alert12"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_ALERT, "misc_alert.wav")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
+   match="An Angmarian patrol-guard has been summoned by the Witch-king."
+   name="misc_alert13"
    send_to="12"
    sequence="100"
   >
