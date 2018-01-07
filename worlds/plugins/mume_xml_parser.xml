@@ -115,6 +115,15 @@ function process_text(data)
 	data = string.gsub(data, "&[^; ]+;", XML_REPLACEMENTS)
 	if xml_mode == XML_NONE and data:findpos("You quietly scout ") then
 		scouting = true
+	elseif xml_mode == XML_PROMPT then
+		last_data["prompt"] = last_data["prompt"] .. data
+		if not show_prompt then
+			return ""
+		end
+	elseif xml_mode >= XML_TELL and xml_mode <= XML_EMOTE then
+		last_communication = last_communication .. data
+	elseif scouting then
+		-- The next incoming room data should be ignored. For example if the player is scouting.
 	elseif xml_mode == XML_ROOM then
 		-- dynamic description
 		last_data["dynamic"] = string.format("%s%s\n", last_data["dynamic"], data)
@@ -124,13 +133,6 @@ function process_text(data)
 		last_data["description"] = string.format("%s%s\n", last_data["description"], data)
 	elseif xml_mode == XML_EXITS then
 		last_data["exits"] = last_data["exits"] .. data
-	elseif xml_mode == XML_PROMPT then
-		last_data["prompt"] = last_data["prompt"] .. data
-		if not show_prompt then
-			return ""
-		end
-	elseif xml_mode >= XML_TELL and xml_mode <= XML_EMOTE then
-		last_communication = last_communication .. data
 	end
 	if in_gratuitous then
 		return ""
@@ -214,14 +216,15 @@ function OnPluginPacketReceived(packet)
 					elseif tag == "emote" then
 						xml_mode = XML_EMOTE
 					elseif tag == "prompt" then
+						scouting = false
 						last_data.prompt = ""
 						xml_mode = XML_PROMPT
-					elseif scouting then
-						-- The next incoming room data should be ignored. For example if the player is scouting.
 					elseif tag == "exits" then
 						xml_mode = XML_EXITS
 					elseif tag == "room" then
-						last_data = {["name"] = "", ["description"] = "", ["dynamic"] = "", ["exits"] = ""}
+						if not scouting then
+							last_data = {["name"] = "", ["description"] = "", ["dynamic"] = "", ["exits"] = ""}
+						end
 						xml_mode = XML_ROOM
 					elseif string.startswith(tag, "movement") then
 						scouting = false
@@ -272,7 +275,6 @@ function OnPluginPacketReceived(packet)
 					BroadcastPlugin(BROADCAST_EMOTE, last_communication)
 					last_communication = ""
 				elseif xml_mode == XML_PROMPT and tag == "/prompt" then
-					scouting = false
 					xml_mode = XML_NONE
 					BroadcastPlugin(BROADCAST_PROMPT, last_data["prompt"])
 				end
