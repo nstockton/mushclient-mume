@@ -294,6 +294,17 @@ end
   <trigger
    enabled="y"
    group="mume_sounds"
+   match="^\w+ get[s]? an ancient dwarven key from the corpse of a packrat\.$"
+   name="misc_alert14"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_ALERT, "misc_alert.wav")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
    match="^(?:A blue transparent wall slowly appears around you|Your magic armour is revitalised)\.$"
    name="armour_up"
    regexp="y"
