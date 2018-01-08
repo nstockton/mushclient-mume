@@ -107,6 +107,26 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
+   match="a small wooden box"
+   omit_from_output="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 - [cure critic, uses some HPs]</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_herb_substitutions"
+   match="an inscribed wooden box"
+   omit_from_output="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 - [makes plants grow]</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_herb_substitutions"
    match="A reddish-brown shrub with purplish-pink flowers grows here."
    omit_from_output="y"
    send_to="2"
