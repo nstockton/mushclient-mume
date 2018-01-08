@@ -147,7 +147,7 @@ end
   >
   <send>
 if elf_camp_quest_me then
-	Send("say yes")
+	Send("nod")
 end
   </send>
   </trigger>
@@ -301,7 +301,7 @@ end
    send_to="0"
    sequence="100"
   >
-  <send>get note all
+  <send>get note e.all
 give note Yerik</send>
   </trigger>
   <trigger
@@ -1097,6 +1097,21 @@ put topaz-ring pack
 wear ring</send>
   </alias>
   <alias
+   name="use_cc_ring"
+   match="ccring"
+   enabled="y"
+   group="mume_misc"
+   sequence="100"
+  >
+  <send>remove ring
+get garnet-ring pack
+wear garnet-ring
+use ring
+remove garnet-ring
+put garnet-ring pack
+wear ring</send>
+  </alias>
+  <alias
    name="use_pipe"
    match="pipe"
    enabled="y"
@@ -1132,6 +1147,23 @@ put goblet pack</send>
   <send>get goblet pack
 pour water goblet
 put goblet pack</send>
+  </alias>
+  <alias
+   name="use_pbs"
+   match="^pbs(?:\s+(?P&lt;player&gt;\w+))?$"
+   enabled="y"
+   group="mume_misc"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+Send("get bluestone all")
+Send("wield bluestone")
+Send(string.format("use bluestone %s", "%&lt;player&gt;"))
+Send("remove bluestone")
+Send("put bluestone in pack")
+  </send>
   </alias>
 </aliases>
 

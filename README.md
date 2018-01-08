@@ -157,13 +157,14 @@ Contains macros for performing different tasks. Some macros are different depend
 ### Misc
 Miscellaneous aliases and triggers that don't belong anywhere else.
 #### Aliases
-* bc[number]  --  Butcher number.corpse.
 * affect  --  Prints a list of spells and other things the player is affected by.
 * age  --  Prints the character's age.
 * align  --  Prints the character's alignment.
+* bc[number]  --  Butcher number.corpse.
 * belt  --  Switch the belt the character is currently wearing with the one in the character's backpack.
 * bpack  --  Switch the boots that the character is currently wearing with the ones in the character's backpack.
 * bpouch  --  Switch the boots that the character is currently wearing with the ones in the character's pouch.
+* ccring  --  Use the cure critic ring in the character's backpack.
 * citizen  --  Print the list of towns in which the character has citizenship.
 * cpack  --  Switch the cloak that the character is currently wearing with the ones in the character's backpack.
 * cpouch  --  Switch the cloak that the character is currently wearing with the ones in the character's pouch.
@@ -175,6 +176,7 @@ Miscellaneous aliases and triggers that don't belong anywhere else.
 * money  --  Print how much money the character has.
 * movestakes  --  Open azra-zaira's door.
 * newid  --  Generate a new unique ID and copy it to the clipboard. This is used for plugin developers.
+* pbs [player]  --  Get the PBS from the character's backpack, wield it, and use it. If a player name is supplied, use the pbs on him/her instead of self.
 * pg  --  Pour water into the character's goblet stored in the character's backpack.
 * pipe  --  Rest and use the pipe stored in the character's backpack.
 * ra  --  Reveal all. Use this if you find someone hiding in a room to alert everyone else in the room to the player's presents.
