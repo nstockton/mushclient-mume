@@ -34,6 +34,21 @@
   <trigger
    enabled="y"
    group="mume_grouping"
+   match="^(?P&lt;player&gt;\w+) puts all (?:his|her|its) weight against the (?P&lt;door&gt;\w+)\, trying to (?P&lt;action&gt;close|open) (?:it|them)\.$"
+   name="auto_assist_leader_doors"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+if "%&lt;player&gt;" == leader and auto_ride then
+	Send("%&lt;action&gt; %&lt;door&gt;")
+end
+  </send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_grouping"
    match="^(?P&lt;player&gt;\w+)(?: \(\w+\))? (?:picks up|grabs on to) a (?:pony|dales-pony|horse|warhorse|pack horse|trained horse|horse of the Rohirrim|brown donkey|mountain mule|hungry warg|brown wolf)(?: \(\w+\))?\'s (?:reins|fur) and starts riding (?:him|her|it)\.$"
    name="autoride"
    regexp="y"
