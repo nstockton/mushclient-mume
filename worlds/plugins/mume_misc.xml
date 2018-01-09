@@ -161,7 +161,7 @@ end
   >
   <send>
 if elf_camp_quest_me then
-	Send("say yes")
+	Send("nod")
 	elf_camp_quest_me = false
 end
   </send>
