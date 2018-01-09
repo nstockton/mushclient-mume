@@ -1150,7 +1150,7 @@ put goblet pack</send>
   </alias>
   <alias
    name="use_pbs"
-   match="^pbs(?:\s+(?P&lt;player&gt;\w+))?$"
+   match="^pbs\s*?(?:\s+(?P&lt;player&gt;\w+))?$"
    enabled="y"
    group="mume_misc"
    regexp="y"
