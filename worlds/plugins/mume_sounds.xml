@@ -171,7 +171,7 @@ end
   <trigger
    enabled="y"
    group="mume_sounds"
-   match="^(?:Cirdan the Shipwright|Elrond|Galadriel(?: the Master of Rivendell| the Lady of Lorien)?) (?:is standing here \(glowing\)| (?:leaves|has arrived from) [^\.]+)\.$"
+   match="^(?:Cirdan the Shipwright|Elrond(?: the Master of Rivendell)?|Galadriel(?: the Lady of Lorien)?) (?:is standing here \(glowing\)| (?:leaves|has arrived from) [^\.]+)\.$"
    name="misc_alert2"
    regexp="y"
    send_to="12"
