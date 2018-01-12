@@ -35,7 +35,22 @@
    enabled="y"
    group="mume_grouping"
    match="^(?P&lt;player&gt;\w+) puts all (?:his|her|its) weight against the (?P&lt;door&gt;\w+)\, trying to (?P&lt;action&gt;close|open) (?:it|them)\.$"
-   name="auto_assist_leader_doors"
+   name="auto_assist_leader_doors1"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+if "%&lt;player&gt;" == leader and auto_ride then
+	Send("%&lt;action&gt; %&lt;door&gt;")
+end
+  </send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_grouping"
+   match="^(?P&lt;player&gt;\w+) tries to help the (?P&lt;door&gt;\w+)(?:\'[s]?)? movement as (?:it|they) (?P&lt;action&gt;close|open)[s]?\.$"
+   name="auto_assist_leader_doors2"
    regexp="y"
    send_to="12"
    sequence="100"
