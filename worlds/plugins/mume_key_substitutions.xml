@@ -175,7 +175,7 @@
    send_to="2"
    sequence="100"
   >
-  <send>%0 - either oakendoor at Necro or Tharbad chief</send>
+  <send>%0 - oakendoor, Necro</send>
   </trigger>
   <trigger
    enabled="y"
@@ -346,6 +346,16 @@
    sequence="100"
   >
   <send>%0 - board + grating at Necro</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_key_substitutions"
+   match="a steel key"
+   omit_from_output="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 - door, Tharbad chief</send>
   </trigger>
   <trigger
    enabled="y"
