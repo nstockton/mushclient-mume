@@ -100,12 +100,22 @@
   <trigger
    enabled="y"
    group="mume_key_substitutions"
+   match="a crude bronze key"
+   omit_from_output="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 - Metaldoor, Filthy</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_key_substitutions"
    match="a crude metal key"
    omit_from_output="y"
    send_to="2"
    sequence="100"
   >
-  <send>%0 - Filthy or Brolg</send>
+  <send>%0 - Brolg</send>
   </trigger>
   <trigger
    enabled="y"
