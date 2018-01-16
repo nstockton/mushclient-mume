@@ -305,6 +305,16 @@ end
   <trigger
    enabled="y"
    group="mume_sounds"
+   match="With loud roaring, the webs catch fire and burn away with noxious, black fumes!"
+   name="misc_alert15"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_ALERT, "misc_alert.wav")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
    match="^(?:A blue transparent wall slowly appears around you|Your magic armour is revitalised)\.$"
    name="armour_up"
    regexp="y"
