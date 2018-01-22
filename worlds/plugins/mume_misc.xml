@@ -615,6 +615,16 @@ Note("Web removed!")
   <trigger
    enabled="y"
    group="mume_misc"
+   match="^The (?:ground|water) is frozen solid\.$"
+   name="gag_frozen_ground_and_water"
+   omit_from_output="y"
+   regexp="y"
+   sequence="100"
+  >
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
    match="^(?:You quietly scout \w+\.\.|You stop scouting)\.$"
    name="gag_scouting_start_stop"
    omit_from_output="y"
