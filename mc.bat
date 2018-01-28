@@ -10,7 +10,7 @@ cd mapperproxy
 for %%x in (python.exe) do (
 	if not [%%~$PATH:x]==[] (
 		echo "Running mapper with Python."
-		python.exe -B start.py --format raw
+		python.exe -B start.py --interface hc --format raw
 		goto :finished
 	)
 )
