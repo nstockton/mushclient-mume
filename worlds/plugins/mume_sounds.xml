@@ -315,6 +315,16 @@ end
   <trigger
    enabled="y"
    group="mume_sounds"
+   match="You hear a barely noticeable *click*, and sense that the floor descends"
+   name="misc_alert16"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_ALERT, "misc_alert.wav")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
    match="^(?:A blue transparent wall slowly appears around you|Your magic armour is revitalised)\.$"
    name="armour_up"
    regexp="y"
