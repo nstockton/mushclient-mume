@@ -30,6 +30,26 @@
   <trigger
    enabled="y"
    group="mume_key_substitutions"
+   match="a crude iron key"
+   omit_from_output="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 - zoc nobleman</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_key_substitutions"
+   match="a long, rusty key"
+   omit_from_output="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 - An Old Cottage on the Forest Glade, Mirkwood</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_key_substitutions"
    match="a slender, wooden key"
    omit_from_output="y"
    send_to="2"
