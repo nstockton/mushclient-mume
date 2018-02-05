@@ -127,6 +127,16 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
+   match="A black, thorny bush grows here, enshrouded in a murky gloom."
+   omit_from_output="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 - [Blackflower]</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_herb_substitutions"
    match="A reddish-brown shrub with purplish-pink flowers grows here."
    omit_from_output="y"
    send_to="2"
