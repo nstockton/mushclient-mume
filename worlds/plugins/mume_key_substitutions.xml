@@ -30,12 +30,32 @@
   <trigger
    enabled="y"
    group="mume_key_substitutions"
+   match="a bent brass key"
+   omit_from_output="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 - Smugglers south of Warrens</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_key_substitutions"
+   match="a crooked iron key"
+   omit_from_output="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 - Mine near Dragon</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_key_substitutions"
    match="a crude iron key"
    omit_from_output="y"
    send_to="2"
    sequence="100"
   >
-  <send>%0 - zoc nobleman</send>
+  <send>%0 - proud man, prison, ZOC</send>
   </trigger>
   <trigger
    enabled="y"
