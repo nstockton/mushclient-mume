@@ -1009,10 +1009,28 @@ Send("look star")
    sequence="100"
   >
   <send>remove cloak
+remove mantle
 remove fur
 get cloak pouch
 wear cloak
 put cloak pouch
+put mantle pouch
+put fur pouch</send>
+  </alias>
+  <alias
+   name="switch_mantle_from_pouch"
+   match="mpouch"
+   enabled="y"
+   group="mume_misc"
+   sequence="100"
+  >
+  <send>remove cloak
+remove mantle
+remove fur
+get mantle pouch
+wear mantle
+put cloak pouch
+put mantle pouch
 put fur pouch</send>
   </alias>
   <alias
@@ -1023,11 +1041,29 @@ put fur pouch</send>
    sequence="100"
   >
   <send>remove cloak
+remove mantle
 remove fur
 get fur pack
 wear fur
 put cloak pack
+put mantle pack
 put fur pack</send>
+  </alias>
+  <alias
+   name="switch_fur_from_pouch"
+   match="fpouch"
+   enabled="y"
+   group="mume_misc"
+   sequence="100"
+  >
+  <send>remove cloak
+remove mantle
+remove fur
+get fur pouch
+wear fur
+put cloak pouch
+put mantle pouch
+put fur pouch</send>
   </alias>
   <alias
    name="wake_stand"
@@ -1047,9 +1083,27 @@ stand</send>
    sequence="100"
   >
   <send>remove cloak
+remove mantle
 remove fur
 get cloak pack
 wear cloak
+put cloak pack
+put mantle pack
+put fur pack</send>
+  </alias>
+  <alias
+   name="Switch_mantle_from_pack"
+   match="mpack"
+   enabled="y"
+   group="mume_misc"
+   sequence="100"
+  >
+  <send>remove cloak
+remove mantle
+remove fur
+get mantle pack
+wear mantle
+put mantle pack
 put cloak pack
 put fur pack</send>
   </alias>
