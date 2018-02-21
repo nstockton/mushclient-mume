@@ -161,31 +161,34 @@ Miscellaneous aliases and triggers that don't belong anywhere else.
 * age  --  Prints the character's age.
 * align  --  Prints the character's alignment.
 * bc[number]  --  Butcher number.corpse.
-* belt  --  Switch the belt the character is currently wearing with the one in the character's backpack.
-* bpack  --  Switch the boots that the character is currently wearing with the ones in the character's backpack.
+* belt  --  Switch the belt the character is currently wearing with the one in the character's pack.
+* bpack  --  Switch the boots that the character is currently wearing with the ones in the character's pack.
 * bpouch  --  Switch the boots that the character is currently wearing with the ones in the character's pouch.
-* ccring  --  Use the cure critic ring in the character's backpack.
+* ccring  --  Use the cure critic ring in the character's pack.
 * citizen  --  Print the list of towns in which the character has citizenship.
-* cpack  --  Switch the cloak that the character is currently wearing with the ones in the character's backpack.
-* cpouch  --  Switch the cloak that the character is currently wearing with the ones in the character's pouch.
-* dg  --  Drink from the goblet in the character's backpack.
+* cpack  --  Switch the cloak, fur, or mantle that the character is currently wearing with the cloak in the character's pack.
+* cpouch  --  Switch the cloak, fur, or mantle that the character is currently wearing with the cloak in the character's pouch.
+* dg  --  Drink from the goblet in the character's pack.
 * dragall  --  Drag all corpses in the room.
-* fpack  --  Switch the cloak that the character is wearing with the fur in the character's backpack.
+* fpack  --  Switch the cloak, fur, or mantle that the character is wearing with the fur in the character's pack.
+* fpouch  --  Switch the cloak, fur, or mantle that the character is wearing with the fur in the character's pouch.
 * lev  --  Prints the character's current level.
 * li [container]  --  Look in container.
 * money  --  Print how much money the character has.
 * movestakes  --  Open azra-zaira's door.
+* mpack  --  Switch the cloak, fur, or mantle that the character is currently wearing with the mantle in the character's pack.
+* mpouch  --  Switch the cloak, fur, or mantle that the character is currently wearing with the mantle in the character's pouch.
 * newid  --  Generate a new unique ID and copy it to the clipboard. This is used for plugin developers.
-* pbs [player]  --  Get the PBS from the character's backpack, wield it, and use it. If a player name is supplied, use the pbs on him/her instead of self.
-* pg  --  Pour water into the character's goblet stored in the character's backpack.
-* pipe  --  Rest and use the pipe stored in the character's backpack.
+* pbs [player]  --  Get the PBS from the character's pack, wield it, and use it. If a player name is supplied, use the pbs on him/her instead of self.
+* pg  --  Pour water into the character's goblet stored in the character's pack.
+* pipe  --  Rest and use the pipe stored in the character's pack.
 * ra  --  Reveal all. Use this if you find someone hiding in a room to alert everyone else in the room to the player's presents.
 * rq  --  Reveal quick.
 * rr  --  Get all.arrow all.corpse, get all.arrow, put all.arrow quiver.
 * rt  --  reveal thorough.
 * sq  --  Search quick.
 * st  --  Search thorough.
-* string  --  Use the strength ring in the character's backpack.
+* string  --  Use the strength ring in the character's pack.
 * weight  --  Print the weight of the character's equipment.
 * ws  --  Wake, stand.
 ### Mob Substitutions
