@@ -30,6 +30,16 @@
   <trigger
    enabled="y"
    group="mume_key_substitutions"
+   match="a burnished iron key"
+   omit_from_output="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 - chest, Illusionist + stonedoor, trolls</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_key_substitutions"
    match="a bent brass key"
    omit_from_output="y"
    send_to="2"
@@ -375,7 +385,7 @@
    send_to="2"
    sequence="100"
   >
-  <send>%0 - either chest at overseer or illusionist</send>
+  <send>%0 - chest at overseer</send>
   </trigger>
   <trigger
    enabled="y"
