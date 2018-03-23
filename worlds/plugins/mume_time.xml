@@ -180,6 +180,7 @@ end
 <script>
 <![CDATA[
 INIT_TIMER = math.floor(utils.timer())
+FIRST_YEAR = 2850
 DAYS_IN_YEAR = 360
 MONTHS = {
 	{["name"] = "December", ["sindarin"] = "Narwain", ["westron"] = "Afteryule", ["dawn"] = 8, ["dusk"] = 18, ["season"] = "Early-Winter"},
@@ -194,6 +195,15 @@ MONTHS = {
 	{["name"] = "September", ["sindarin"] = "Narbeleth", ["westron"] = "Winterfilth", ["dawn"] = 6, ["dusk"] = 20, ["season"] = "Early-Autumn"},
 	{["name"] = "October", ["sindarin"] = "Hithui", ["westron"] = "Blotmath", ["dawn"] = 7, ["dusk"] = 20, ["season"] = "Autumn"},
 	{["name"] = "November", ["sindarin"] = "Girithron", ["westron"] = "Foreyule", ["dawn"] = 7, ["dusk"] = 19, ["season"] = "Late-Autumn"}
+}
+WEEKDAYS = {
+	{["name"] = "Monday", ["sindarin"] = "Orithil", ["westron"] = "Monday"},
+	{["name"] = "Tuesday", ["sindarin"] = "Orgaladhad", ["westron"] = "Trewsday"},
+	{["name"] = "Wednesday", ["sindarin"] = "Ormenel", ["westron"] = "Hevensday"},
+	{["name"] = "Thursday", ["sindarin"] = "Orbelain", ["westron"] = "Mersday"},
+	{["name"] = "Friday", ["sindarin"] = "Oraearon", ["westron"] = "Highday"},
+	{["name"] = "Saturday", ["sindarin"] = "Orgilion", ["westron"] = "Sterday"},
+	{["name"] = "Sunday", ["sindarin"] = "Oranor", ["westron"] = "Sunday"}
 }
 
 current_month = 1
@@ -331,13 +341,14 @@ function time_check(action)
 	local next_winter_in_mume_days = ((12 - current_month) * 30) + (30 - current_day) + (1 - math.floor(mume_hour / 24))
 	local next_winter_in_rl_days = math.floor(math.floor(next_winter_in_mume_days * 24 / 60) / 24)
 	local next_winter_in_rl_hours = math.floor(next_winter_in_mume_days * 24 / 60) % 24
-	output = string.format("%s\nIt is currently %s, in %s (%s / %s), (%s).", output, current_state, MONTHS[current_month].name, MONTHS[current_month].westron, MONTHS[current_month].sindarin, MONTHS[current_month].season)
+	local day_of_year = 30 * (current_month - 1) + current_day
+	local weekday = WEEKDAYS[(DAYS_IN_YEAR * (current_year - FIRST_YEAR) + day_of_year) % 7 + 1].name
+	output = string.format("%s\nIt is currently %s, on %s, %s %s (%s / %s), (%s).", output, current_state, weekday, MONTHS[current_month].name, current_day, MONTHS[current_month].westron, MONTHS[current_month].sindarin, MONTHS[current_month].season)
 	output = string.format("%s\nTime left until %s is less than %s tick%s", output, next_state, till_next_state, till_next_state ~= "1" and "s." or "!")
 	output = string.format("%s\n%s ends in %d mume day%s or %d real-life hour%s.", output, string.sub(MONTHS[current_month].season, -6), next_season_in_mume_days, next_season_in_mume_days ~= 1 and "s" or "", next_season_in_rl_hours, next_season_in_rl_hours ~= 1 and "s" or "")
 	output = string.format("%s\nNext winter starts in %d real-life day%s and %d hour%s.", output, next_winter_in_rl_days, next_winter_in_rl_days ~= 1 and "s" or "", next_winter_in_rl_hours, next_winter_in_rl_hours ~= 1 and "s" or "")
 	local full_moon_cycle = 24 * 24
-	local day_of_year = (current_month - 1) * 30 + current_day
-	local moon_day = (12 + day_of_year) % 24
+	local moon_day = day_of_year % 24
 	local moon_hour = 24 * moon_day + current_hour % 24
 	local next_dk_day = 1
 	local ticks_until_dk = 0
