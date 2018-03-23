@@ -141,6 +141,7 @@ CHANNELS = {
 	[BROADCAST_EMOTE] = "say" -- This is *not* a typo.
 }
 IGNORE_LIST = {
+	["A"] = true, -- For mobs that emote.
 	["Aldereon"] = true,
 	["Anarwen"] = true,
 	["Angdil"] = true,
@@ -153,6 +154,7 @@ IGNORE_LIST = {
 	["Daegil"] = true,
 	["Ecthelion"] = true,
 	["Elrond"] = true,
+	["Erestor"] = true,
 	["Erienal"] = true,
 	["Fardur"] = true,
 	["Galadriel"] = true,
@@ -164,7 +166,8 @@ IGNORE_LIST = {
 	["Nordri"] = true,
 	["Orophin"] = true,
 	["Sarion"] = true,
-	["Sauron"] = true
+	["Sauron"] = true,
+	["The"] = true -- For mobs that emote.
 }
 
 reply_to = ""
