@@ -170,8 +170,10 @@ Miscellaneous aliases and triggers that don't belong anywhere else.
 * cpouch  --  Switch the cloak, fur, or mantle that the character is currently wearing with the cloak in the character's pouch.
 * dg  --  Drink from the goblet in the character's pack.
 * dragall  --  Drag all corpses in the room.
+* fbag  --  Get food from the character's elven bag and eat it.
 * fpack  --  Switch the cloak, fur, or mantle that the character is wearing with the fur in the character's pack.
 * fpouch  --  Switch the cloak, fur, or mantle that the character is wearing with the fur in the character's pouch.
+* kbag  --  Get a butcher knife from the character's elven bag.
 * lev  --  Prints the character's current level.
 * li [container]  --  Look in container.
 * money  --  Print how much money the character has.
@@ -183,12 +185,14 @@ Miscellaneous aliases and triggers that don't belong anywhere else.
 * pg  --  Pour water into the character's goblet stored in the character's pack.
 * pipe  --  Rest and use the pipe stored in the character's pack.
 * ra  --  Reveal all. Use this if you find someone hiding in a room to alert everyone else in the room to the player's presents.
+* rbag  --  Get a rope from the character's elven bag.
 * rq  --  Reveal quick.
 * rr  --  Get all.arrow all.corpse, get all.arrow, put all.arrow quiver.
 * rt  --  reveal thorough.
 * sq  --  Search quick.
 * st  --  Search thorough.
 * string  --  Use the strength ring in the character's pack.
+* wbag  --  Get water from the character's elven bag and drink it.
 * weight  --  Print the weight of the character's equipment.
 * ws  --  Wake, stand.
 ### Mob Substitutions
