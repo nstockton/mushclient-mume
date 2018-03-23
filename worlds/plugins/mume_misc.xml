@@ -1229,6 +1229,45 @@ Send("remove bluestone")
 Send("put bluestone in pack")
   </send>
   </alias>
+  <alias
+   name="water_bag"
+   match="wbag"
+   enabled="y"
+   group="mume_misc"
+   sequence="100"
+  >
+  <send>get cup elven
+drink cup
+put cup elven</send>
+  </alias>
+  <alias
+   name="food_bag"
+   match="fbag"
+   enabled="y"
+   group="mume_misc"
+   sequence="100"
+  >
+  <send>get wafer elven
+eat wafer</send>
+  </alias>
+  <alias
+   name="rope_bag"
+   match="rbag"
+   enabled="y"
+   group="mume_misc"
+   sequence="100"
+  >
+  <send>get rope elven</send>
+  </alias>
+  <alias
+   name="knife_bag"
+   match="kbag"
+   enabled="y"
+   group="mume_misc"
+   sequence="100"
+  >
+  <send>get knife elven</send>
+  </alias>
 </aliases>
 
 <script>
