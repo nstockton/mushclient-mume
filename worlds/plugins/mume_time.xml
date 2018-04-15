@@ -253,9 +253,9 @@ function reset_timer(tick_now)
 end
 
 function sync_precise(hours, minutes, am_pm)
-	hours = hours or 12
-	minutes = minutes or 0
-	am_pm = am_pm or "am"
+	local hours = hours or 12
+	local minutes = minutes or 0
+	local am_pm = am_pm or "am"
 	if hours == 12 and am_pm == "am" then
 		current_hour = 24
 	elseif hours == 12 and am_pm == "pm" then
@@ -271,7 +271,7 @@ function sync_precise(hours, minutes, am_pm)
 end
 
 function sync_event(dawn_dusk, hours)
-	hours = hours or 0
+	local hours = hours or 0
 	current_hour = MONTHS[current_month][dawn_dusk] + hours
 	difference = timer() - current_hour * 60
 	AddTimer("tick_reset", 0, 0, 0, "reset_timer(false)", timer_flag.Enabled + timer_flag.OneShot + timer_flag.ActiveWhenClosed + timer_flag.Replace + timer_flag.Temporary, "")
