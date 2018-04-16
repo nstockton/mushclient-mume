@@ -163,11 +163,14 @@ IGNORE_LIST = {
 	["Haldir"] = true,
 	["Huor"] = true,
 	["Malardil"] = true,
+	["Muranog"] = true,
 	["Nagrorh"] = true,
 	["Nordri"] = true,
 	["Orophin"] = true,
 	["Sarion"] = true,
 	["Sauron"] = true,
+	["Wuda"] = true,
+	["Wyrdda"] = true,
 	["The"] = true -- For mobs that emote.
 }
 
