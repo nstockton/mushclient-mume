@@ -426,7 +426,8 @@ open debris up</send>
   <trigger
    enabled="y"
    group="mume_misc"
-   match="You slip on the treacherous ground and fall down, landing on your back."
+   match="^You slip on the treacherous ground and fall (?:north|east|south|west|up|down)\, landing on your back\.$"
+   regexp="y"
    omit_from_output="n"
    send_to="0"
    sequence="100"
