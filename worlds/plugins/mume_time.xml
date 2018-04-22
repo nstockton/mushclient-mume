@@ -88,7 +88,7 @@
   <trigger
    enabled="y"
    group="mume_time"
-   match="^The current time is (?P&lt;hour&gt;[1-9]|1[0-2])\:(?P&lt;minutes&gt;[0-5]\d) (?P&lt;am_pm&gt;[ap]m)\.$"
+   match="^The current time is (?P&lt;hour&gt;[1-9]|1[0-2])\:(?P&lt;minutes&gt;[0-5]\d)(?P&lt;am_pm&gt;[ap]m)\.$"
    name="sync_from_clock"
    send_to="12"
    regexp="y"
