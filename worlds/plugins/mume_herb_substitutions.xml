@@ -52,7 +52,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="^A(?:n enhanced)? herbal kit contains three eggs\, a mashed honey\-wax mixture and a sack of flour\.$"
+   match="^A(?:n enhanced)? herbal kit contains three eggs\, a sack of flour and a mashed honey\-wax mixture\.$"
    omit_from_output="y"
    regexp="y"
    send_to="2"
