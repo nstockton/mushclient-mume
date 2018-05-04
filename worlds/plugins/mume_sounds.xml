@@ -34,6 +34,128 @@
   <trigger
    enabled="y"
    group="mume_sounds"
+   match="^Your bash at (?:a |the )?(?P&lt;someone&gt;.+?)(?: \((?P&lt;someone_label&gt;\w+)\))? sends (?:him|her|it) sprawling\.$"
+   name="bash_target"
+   omit_from_output="y"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+last_target_bashed = "%&lt;someone_label&gt;" ~= "" and "%&lt;someone_label&gt;" or "%&lt;someone&gt;"
+play(TYPE_COMBAT, "combat/bash.wav", -100)
+  </send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
+   match="^As (?:a |the )?(?P&lt;someone&gt;.+?)(?: \((?P&lt;someone_label&gt;\w+)\))? avoids your bash\, you topple over and lose your balance\.$"
+   name="bash_fail_target"
+   omit_from_output="y"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_COMBAT, "combat/bash_fail.wav", -100)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
+   match="^You dodge a bash from (?:a |the )?(?P&lt;someone&gt;.+?)(?: \((?P&lt;someone_label&gt;\w+)\))? who loses (?:his|her|its) balance\.$"
+   name="bash_fail_you"
+   omit_from_output="y"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_COMBAT, "combat/bash_fail.wav", 100)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
+   match="Your head stops stinging."
+   name="bash_recover_you"
+   omit_from_output="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_COMBAT, "combat/bash_recover.wav", 100)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
+   match="^(?:A |The )?(?P&lt;basher&gt;.+?)(?: \((?P&lt;basher_label&gt;\w+)\))? sends (?:A |The )?(?P&lt;someone&gt;.+?)(?: \((?P&lt;someone_label&gt;\w+)\))? sprawling with a powerful bash\.$"
+   name="bash_someone"
+   omit_from_output="y"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+if "%&lt;someone&gt;" == "you" then
+	play(TYPE_COMBAT, "combat/bash.wav", 100)
+elseif string.startswith("%&lt;someone&gt;", "*") then
+	-- Opposite side player was bashed, but not by the user.
+	play(TYPE_COMBAT, "combat/bash.wav", -8)
+elseif string.startswith("%&lt;basher&gt;", "*") then
+	-- Opposite side player bashed someone or something, but the thing bashed was *not* the user.
+	play(TYPE_COMBAT, "combat/bash.wav", 8)
+else
+	-- Someone or something was bashed, but the basher was *not* an opposite side player, and the person bashed was *not* the user.
+	play(TYPE_COMBAT, "combat/bash.wav")
+end
+  </send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
+   match="^(?:A |The )?(?P&lt;someone&gt;.+?)(?: \((?P&lt;someone_label&gt;\w+)\))? avoids being bashed by (?:a |the )?(?P&lt;basher&gt;.+?)(?: \((?P&lt;basher_label&gt;\w+)\))? who loses (?:his|her|its) balance\.$"
+   name="bash_fail_someone"
+   omit_from_output="y"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+if string.startswith("%&lt;someone&gt;", "*") then
+	-- Someone other than the user failed to bash an opposite side player.
+	play(TYPE_COMBAT, "combat/bash_fail.wav", -8)
+elseif string.startswith("%&lt;basher&gt;", "*") then
+	-- Opposite side player failed to bash someone or something, other than the user.
+	play(TYPE_COMBAT, "combat/bash_fail.wav", 8)
+else
+	-- Someone or something other than the user failed bash.
+	play(TYPE_COMBAT, "combat/bash_fail.wav")
+end
+  </send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
+   match="^(?:A |The )?(?P&lt;someone&gt;.+?)(?: \((?P&lt;someone_label&gt;\w+)\))? seems to have recovered (?:his|her|its) senses\.$"
+   name="bash_recover_someone"
+   omit_from_output="y"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+if "%&lt;someone_label&gt;" ~= "" and "%&lt;someone_label&gt;" == last_target_bashed or "%&lt;someone&gt;" == last_target_bashed then
+	-- The last player or mob that the user bashed has recovered from bash. (Possible to be invalid if more than one player or mob with the same name was bashed)
+	play(TYPE_COMBAT, "combat/bash_recover.wav", -100)
+	last_target_bashed = ""
+elseif string.startswith("%&lt;someone&gt;", "*") then
+	-- Opposite side player recovered from bash.
+	play(TYPE_COMBAT, "combat/bash_recover.wav", -8)
+else
+	-- Someone or something recovered from bash.
+	play(TYPE_COMBAT, "combat/bash_recover.wav")
+end
+  </send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
    match="^(?:Struggling against the Yellow Face\, you try|You start) to concentrate\.\.\.$"
    name="you_casting"
    regexp="y"
@@ -845,12 +967,15 @@ end
 
 <script>
 <![CDATA[
+require("mystdlib")
+
 CONFIG = "d19a2f0a604c96b7318aa67f"
 TTS = "925cdd0331023d9f0b8f05a7"
 TYPE_FREE_SLOT = 0
 TYPE_ALERT = 3
 TYPE_SPELL_ATTACK = 4
 TYPE_SPELL_STATUS = 5
+TYPE_COMBAT = 6
 TYPE_PK = 8
 TYPE_COMMUNICATION = 9
 
@@ -858,6 +983,7 @@ return_code, sound_volume = CallPlugin(CONFIG, "get", "sound_volume")
 sound_volume = sound_volume or 0
 return_code, sound_mute = CallPlugin(CONFIG, "get", "sound_mute")
 sound_mute = sound_mute or false
+last_target_bashed = ""
 
 math.randomseed(os.time())
 

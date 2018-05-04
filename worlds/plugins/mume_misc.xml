@@ -34,6 +34,95 @@
   <trigger
    enabled="y"
    group="mume_misc"
+   match="^Your bash at (?:a |the )?(?P&lt;someone&gt;.+?)(?: \((?P&lt;someone_label&gt;\w+)\))? sends (?:him|her|it) sprawling\.$"
+   name="bash_target"
+   omit_from_output="y"
+   regexp="y"
+   send_to="14"
+   sequence="100"
+  >
+  <send>Note("You bash ", "%&lt;someone_label&gt;" ~= "" and "%&lt;someone_label&gt;" or "%&lt;someone&gt;")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="^As (?:a |the )?(?P&lt;someone&gt;.+?)(?: \((?P&lt;someone_label&gt;\w+)\))? avoids your bash\, you topple over and lose your balance\.$"
+   name="bash_fail_target"
+   omit_from_output="y"
+   regexp="y"
+   send_to="14"
+   sequence="100"
+  >
+  <send>Note("You fail bash ", "%&lt;someone_label&gt;" ~= "" and "%&lt;someone_label&gt;" or "%&lt;someone&gt;")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="^You dodge a bash from (?:a |the )?(?P&lt;someone&gt;.+?)(?: \((?P&lt;someone_label&gt;\w+)\))? who loses (?:his|her|its) balance\.$"
+   name="bash_fail_you"
+   omit_from_output="y"
+   regexp="y"
+   send_to="14"
+   sequence="100"
+  >
+  <send>Note("Failed bash from ", "%&lt;someone_label&gt;" ~= "" and "%&lt;someone_label&gt;" or "%&lt;someone&gt;")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="Your head stops stinging."
+   name="bash_recover_you"
+   omit_from_output="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>You recover.</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="^(?:A |The )?(?P&lt;basher&gt;.+?)(?: \((?P&lt;basher_label&gt;\w+)\))? sends (?:A |The )?(?P&lt;someone&gt;.+?)(?: \((?P&lt;someone_label&gt;\w+)\))? sprawling with a powerful bash\.$"
+   name="bash_someone"
+   omit_from_output="y"
+   regexp="y"
+   send_to="14"
+   sequence="100"
+  >
+  <send>
+if "%&lt;someone&gt;" == "you" then
+	Note("Bashed by ", "%&lt;basher_label&gt;" ~= "" and "%&lt;basher_label&gt;" or "%&lt;basher&gt;")
+else
+	Note("%&lt;someone_label&gt;" ~= "" and "%&lt;someone_label&gt;" or "%&lt;someone&gt;", " Bashed by ", "%&lt;basher_label&gt;" ~= "" and "%&lt;basher_label&gt;" or "%&lt;basher&gt;")
+end
+  </send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="^(?:A |The )?(?P&lt;someone&gt;.+?)(?: \((?P&lt;someone_label&gt;\w+)\))? avoids being bashed by (?:a |the )?(?P&lt;basher&gt;.+?)(?: \((?P&lt;basher_label&gt;\w+)\))? who loses (?:his|her|its) balance\.$"
+   name="bash_fail_someone"
+   omit_from_output="y"
+   regexp="y"
+   send_to="14"
+   sequence="100"
+  >
+  <send>Note("%&lt;someone_label&gt;" ~= "" and "%&lt;someone_label&gt;" or "%&lt;someone&gt;", " failed Bash from ", "%&lt;basher_label&gt;" ~= "" and "%&lt;basher_label&gt;" or "%&lt;basher&gt;")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="^(?:A |The )?(?P&lt;someone&gt;.+?)(?: \((?P&lt;someone_label&gt;\w+)\))? seems to have recovered (?:his|her|its) senses\.$"
+   name="bash_recover_someone"
+   omit_from_output="y"
+   regexp="y"
+   send_to="14"
+   sequence="100"
+  >
+  <send>Note("%&lt;someone_label&gt;" ~= "" and "%&lt;someone_label&gt;" or "%&lt;someone&gt;", " recovers.")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
    match="A handful of small, silvery bottles and vials."
    omit_from_output="y"
    send_to="2"
