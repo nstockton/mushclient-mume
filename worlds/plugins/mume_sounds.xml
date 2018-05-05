@@ -376,8 +376,9 @@ end
   <trigger
    enabled="y"
    group="mume_sounds"
-   match="An old man, swathed in a great light-coloured cloak, is standing here."
+   match="^An old man(?:\, swathed in a great light\-coloured cloak\, is standing here| is resting here)\.$"
    name="misc_alert10"
+   regexp="y"
    send_to="12"
    sequence="100"
   >
