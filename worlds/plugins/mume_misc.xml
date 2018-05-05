@@ -263,7 +263,7 @@ end
    send_to="0"
    sequence="100"
   >
-  <send>put letter pack</send>
+  <send>put letter e.pack</send>
   </trigger>
   <trigger
    enabled="y"
@@ -377,7 +377,7 @@ end
   >
   <send>
 if ithildir_quest_me then
-	Send("put beryl pack")
+	Send("put beryl e.pack")
 	ithildir_quest_me = false
 end
   </send>
@@ -392,6 +392,16 @@ end
   >
   <send>get note e.all
 give note Yerik</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="An old man gives you a white folded note."
+   name="auto_put_note_pack"
+   send_to="0"
+   sequence="100"
+  >
+  <send>put note e.pack</send>
   </trigger>
   <trigger
    enabled="y"
@@ -1133,11 +1143,11 @@ put fur pouch</send>
   <send>remove cloak
 remove mantle
 remove fur
-get fur pack
+get fur e.pack
 wear fur
-put cloak pack
-put mantle pack
-put fur pack</send>
+put cloak e.pack
+put mantle e.pack
+put fur e.pack</send>
   </alias>
   <alias
    name="switch_fur_from_pouch"
@@ -1175,11 +1185,11 @@ stand</send>
   <send>remove cloak
 remove mantle
 remove fur
-get cloak pack
+get cloak e.pack
 wear cloak
-put cloak pack
-put mantle pack
-put fur pack</send>
+put cloak e.pack
+put mantle e.pack
+put fur e.pack</send>
   </alias>
   <alias
    name="Switch_mantle_from_pack"
@@ -1191,11 +1201,11 @@ put fur pack</send>
   <send>remove cloak
 remove mantle
 remove fur
-get mantle pack
+get mantle e.pack
 wear mantle
-put mantle pack
-put cloak pack
-put fur pack</send>
+put mantle e.pack
+put cloak e.pack
+put fur e.pack</send>
   </alias>
   <alias
    name="switch_boots_from_pouch"
@@ -1217,9 +1227,9 @@ put boots pouch</send>
    sequence="100"
   >
   <send>remove boots
-get boots pack
+get boots e.pack
 wear boots
-put boots pack</send>
+put boots e.pack</send>
   </alias>
   <alias
    name="switch_belt_from_pack"
@@ -1229,10 +1239,10 @@ put boots pack</send>
    sequence="100"
   >
   <send>remove belt
-get belt pack
+get belt e.pack
 wear belt
 wear ruby
-put belt pack
+put belt e.pack
 wear all</send>
   </alias>
   <alias
@@ -1243,11 +1253,11 @@ wear all</send>
    sequence="100"
   >
   <send>remove ring
-get topaz-ring pack
+get topaz-ring e.pack
 wear topaz-ring
 use ring
 remove topaz-ring
-put topaz-ring pack
+put topaz-ring e.pack
 wear ring</send>
   </alias>
   <alias
@@ -1258,11 +1268,11 @@ wear ring</send>
    sequence="100"
   >
   <send>remove ring
-get garnet-ring pack
+get garnet-ring e.pack
 wear garnet-ring
 use ring
 remove garnet-ring
-put garnet-ring pack
+put garnet-ring e.pack
 wear ring</send>
   </alias>
   <alias
@@ -1272,13 +1282,13 @@ wear ring</send>
    group="mume_misc"
    sequence="100"
   >
-  <send>get pipe pack
+  <send>get pipe e.pack
 wield pipe
 rest
 smoke pipe
 stand
 remove pipe
-put pipe pack</send>
+put pipe e.pack</send>
   </alias>
   <alias
    name="drink_goblet"
@@ -1287,9 +1297,9 @@ put pipe pack</send>
    group="mume_misc"
    sequence="100"
   >
-  <send>get goblet pack
+  <send>get goblet e.pack
 drink goblet
-put goblet pack</send>
+put goblet e.pack</send>
   </alias>
   <alias
    name="pour_water_goblet"
@@ -1298,9 +1308,9 @@ put goblet pack</send>
    group="mume_misc"
    sequence="100"
   >
-  <send>get goblet pack
+  <send>get goblet e.pack
 pour water goblet
-put goblet pack</send>
+put goblet e.pack</send>
   </alias>
   <alias
    name="use_pbs"
@@ -1316,7 +1326,7 @@ Send("get bluestone all")
 Send("wield bluestone")
 Send(string.format("use bluestone %s", "%&lt;player&gt;"))
 Send("remove bluestone")
-Send("put bluestone in pack")
+Send("put bluestone e.pack")
   </send>
   </alias>
   <alias
