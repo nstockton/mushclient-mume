@@ -169,6 +169,7 @@ IGNORE_LIST = {
 	["Orophin"] = true,
 	["Sarion"] = true,
 	["Sauron"] = true,
+	["Scarred"] = true,
 	["Wuda"] = true,
 	["Wyrdda"] = true,
 	["The"] = true -- For mobs that emote.
