@@ -462,6 +462,27 @@ end
   <trigger
    enabled="y"
    group="mume_misc"
+   match="With a grinding noise, the passage to the west closes."
+   omit_from_output="n"
+   send_to="0"
+   sequence="100"
+  >
+  <send>change alert paranoid
+search</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="With a grinding noise, the passage to the west opens."
+   omit_from_output="n"
+   send_to="0"
+   sequence="100"
+  >
+  <send>change alert normal</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
    match="^(?P&lt;player&gt;\w+) slips on the treacherous ground and falls (?P&lt;direction&gt;\w+)\.$"
    name="auto_tell_player_fell_gloom"
    regexp="y"
