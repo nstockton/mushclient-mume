@@ -387,8 +387,9 @@ end
   <trigger
    enabled="y"
    group="mume_sounds"
-   match="A barely noticeable *click* is heard as you enter."
+   match="^A barely noticeable \*click\* is heard as you enter\.$"
    name="misc_alert11"
+   regexp="y"
    send_to="12"
    sequence="100"
   >
@@ -438,8 +439,9 @@ end
   <trigger
    enabled="y"
    group="mume_sounds"
-   match="You hear a barely noticeable *click*, and sense that the floor descends"
+   match="^You hear a barely noticeable \*click\*\, and sense that the floor descends$"
    name="misc_alert16"
+   regexp="y"
    send_to="12"
    sequence="100"
   >
