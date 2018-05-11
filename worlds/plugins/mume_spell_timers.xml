@@ -406,6 +406,26 @@
   <trigger
    enabled="y"
    group="mume_spell_timers"
+   match="Alas, you realise that yet again the mighty knowledge of drowned Numenor has been lost... Despair settles on you."
+   name="depression_up"
+   send_to="12"
+   sequence="100"
+  >
+  <send>spell_timer_set("depression")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_spell_timers"
+   match="Your heart feels lighter."
+   name="depression_down"
+   send_to="12"
+   sequence="100"
+  >
+  <send>spell_timer_unset("depression")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_spell_timers"
    match="Hearing the horn blow, you feel your urge to battle increase!"
    name="battleglory_up"
    send_to="12"
@@ -446,7 +466,7 @@
   <trigger
    enabled="y"
    group="mume_spell_timers"
-   match="^\- (?P&lt;spell&gt;armour|bless|shield|strength|shroud|sense life|breath of briskness|sanctuary|protection from evil|detect evil|detect magic|detect invisibility|night vision|tiredness|haggardness|lethargy|blindness|battleglory|Orkish draught|sleep)$"
+   match="^\- (?P&lt;spell&gt;armour|bless|shield|strength|shroud|sense life|breath of briskness|sanctuary|protection from evil|detect evil|detect magic|detect invisibility|night vision|tiredness|haggardness|lethargy|blindness|depression|battleglory|Orkish draught|sleep)$"
    name="spell_status"
    omit_from_output="y"
    regexp="y"
