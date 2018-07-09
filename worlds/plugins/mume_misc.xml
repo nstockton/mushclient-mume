@@ -34,7 +34,62 @@
   <trigger
    enabled="y"
    group="mume_misc"
-   match="^Your bash at (?:a |the )?(?P&lt;someone&gt;.+?)(?: \((?P&lt;someone_label&gt;\w+)\))? sends (?:him|her|it) sprawling\.$"
+   match="^(?:&lt;wielded&gt;[ ]{12})?the silvery broadsword \(flawless\)(?:[;] it glows blue)?$"
+   omit_from_output="y"
+   regexp="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 (Mithvegil, WC)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="^(?:&lt;wielded&gt;[ ]{12})?the gleaming broadsword \(flawless\)(?:[;] it glows blue)?$"
+   omit_from_output="y"
+   regexp="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 (Defense sword, dragon)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="^(?:&lt;wielded&gt;[ ]{12})?the broad Elven blade \(flawless\)(?:[;] it glows blue)?$"
+   omit_from_output="y"
+   regexp="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 (Glamdring, BBT)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="^(?:&lt;wielded&gt;[ ]{12})?the slender Elven sword \(flawless\)(?:[;] it glows blue)?$"
+   omit_from_output="y"
+   regexp="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 (ORCRIST, BBT)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="^(?:&lt;wielded&gt;[ ]{12})?the Elven shortsword with a runic inscription \(flawless\)(?:[;] it glows blue)?$"
+   omit_from_output="y"
+   regexp="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 (Sting, BBT)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="^Your bash at (?:a[n]? |the )?(?P&lt;someone&gt;.+?)(?: \((?P&lt;someone_label&gt;\w+)\))? sends (?:him|her|it) sprawling\.$"
    name="bash_target"
    omit_from_output="y"
    regexp="y"
@@ -46,7 +101,7 @@
   <trigger
    enabled="y"
    group="mume_misc"
-   match="^As (?:a |the )?(?P&lt;someone&gt;.+?)(?: \((?P&lt;someone_label&gt;\w+)\))? avoids your bash\, you topple over and lose your balance\.$"
+   match="^As (?:a[n]? |the )?(?P&lt;someone&gt;.+?)(?: \((?P&lt;someone_label&gt;\w+)\))? avoids your bash\, you topple over and lose your balance\.$"
    name="bash_fail_target"
    omit_from_output="y"
    regexp="y"
@@ -58,7 +113,7 @@
   <trigger
    enabled="y"
    group="mume_misc"
-   match="^You dodge a bash from (?:a |the )?(?P&lt;someone&gt;.+?)(?: \((?P&lt;someone_label&gt;\w+)\))? who loses (?:his|her|its) balance\.$"
+   match="^You dodge a bash from (?:a[n]? |the )?(?P&lt;someone&gt;.+?)(?: \((?P&lt;someone_label&gt;\w+)\))? who loses (?:his|her|its) balance\.$"
    name="bash_fail_you"
    omit_from_output="y"
    regexp="y"
@@ -81,7 +136,7 @@
   <trigger
    enabled="y"
    group="mume_misc"
-   match="^(?:A |The )?(?P&lt;basher&gt;.+?)(?: \((?P&lt;basher_label&gt;\w+)\))? sends (?:A |The )?(?P&lt;someone&gt;.+?)(?: \((?P&lt;someone_label&gt;\w+)\))? sprawling with a powerful bash\.$"
+   match="^(?:A[n]? |The )?(?P&lt;basher&gt;.+?)(?: \((?P&lt;basher_label&gt;\w+)\))? sends (?:A[n]? |The )?(?P&lt;someone&gt;.+?)(?: \((?P&lt;someone_label&gt;\w+)\))? sprawling with a powerful bash\.$"
    name="bash_someone"
    omit_from_output="y"
    regexp="y"
@@ -99,7 +154,7 @@ end
   <trigger
    enabled="y"
    group="mume_misc"
-   match="^(?:A |The )?(?P&lt;someone&gt;.+?)(?: \((?P&lt;someone_label&gt;\w+)\))? avoids being bashed by (?:a |the )?(?P&lt;basher&gt;.+?)(?: \((?P&lt;basher_label&gt;\w+)\))? who loses (?:his|her|its) balance\.$"
+   match="^(?:A[n]? |The )?(?P&lt;someone&gt;.+?)(?: \((?P&lt;someone_label&gt;\w+)\))? avoids being bashed by (?:a[n]? |the )?(?P&lt;basher&gt;.+?)(?: \((?P&lt;basher_label&gt;\w+)\))? who loses (?:his|her|its) balance\.$"
    name="bash_fail_someone"
    omit_from_output="y"
    regexp="y"
@@ -111,7 +166,7 @@ end
   <trigger
    enabled="y"
    group="mume_misc"
-   match="^(?:A |The )?(?P&lt;someone&gt;.+?)(?: \((?P&lt;someone_label&gt;\w+)\))? seems to have recovered (?:his|her|its) senses\.$"
+   match="^(?:A[n]? |The )?(?P&lt;someone&gt;.+?)(?: \((?P&lt;someone_label&gt;\w+)\))? seems to have recovered (?:his|her|its) senses\.$"
    name="bash_recover_someone"
    omit_from_output="y"
    regexp="y"
@@ -193,7 +248,94 @@ end
   <trigger
    enabled="y"
    group="mume_misc"
-   match="Anarwen's grey eyes stop on you, as she ponders something."
+   match="A low moan arises from the forest and the trees all around seem to part slightly."
+   omit_from_output="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 - (Eblees open)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="With a sigh, the forest shifts slightly."
+   omit_from_output="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 - (Eblees closed)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="A nasty old hag ponders you, a disquieting sparkle in her eyes."
+   name="auto_quest_hag1"
+   send_to="12"
+   sequence="100"
+  >
+  <send>hag_quest_me = true</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="^A nasty old hag says &apos;So\, are you willing to help me\?&apos;(?: in Beorning\.)?$"
+   name="auto_quest_hag2"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+if hag_quest_me then
+	Send("nod hag")
+	hag_quest_me = false
+end
+  </send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="Freuf the baker notices your antlers and turns to you with an annoyed look."
+   name="auto_quest_freuf1"
+   send_to="12"
+   sequence="100"
+  >
+  <send>freuf_quest_me = true</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="^Freuf the baker says &apos;You want to burn the antlers\, don&apos;t you\?&apos;(?: in Beorning\.)?$"
+   name="auto_quest_freuf2"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+if freuf_quest_me then
+	Send("nod Freuf")
+end
+  </send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="^Freuf the baker says &apos;Tell me\, would you do this service for me\?&apos;(?: in Beorning\.)?$"
+   name="auto_quest_freuf3"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+if freuf_quest_me then
+	Send("nod Freuf")
+	freuf_quest_me = false
+end
+  </send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="Anarwen&apos;s grey eyes stop on you, as she ponders something."
    name="auto_quest_anarwen1"
    send_to="12"
    sequence="100"
@@ -203,7 +345,7 @@ end
   <trigger
    enabled="y"
    group="mume_misc"
-   match="^Anarwen says \'Would you help me\, \w+\?\'$"
+   match="^Anarwen says &apos;Would you help me\, \w+\?&apos;$"
    name="auto_quest_anarwen2"
    regexp="y"
    send_to="12"
@@ -229,7 +371,7 @@ end
   <trigger
    enabled="y"
    group="mume_misc"
-   match="An elven scout says 'chance be headed north, to fair Imladris?'"
+   match="An elven scout says &apos;chance be headed north, to fair Imladris?&apos;"
    name="auto_quest_elf_camp2"
    send_to="12"
    sequence="100"
@@ -243,7 +385,7 @@ end
   <trigger
    enabled="y"
    group="mume_misc"
-   match="An elven scout says 'perhaps bring this letter to our master?'"
+   match="An elven scout says &apos;perhaps bring this letter to our master?&apos;"
    name="auto_quest_elf_camp3"
    send_to="12"
    sequence="100"
@@ -268,7 +410,7 @@ end
   <trigger
    enabled="y"
    group="mume_misc"
-   match="An elven shepherdess says 'Feel free to speak first, then remind me - I would like to tell you of Nirnaeth Arnoediad.'"
+   match="An elven shepherdess says &apos;Feel free to speak first, then remind me - I would like to tell you of Nirnaeth Arnoediad.&apos;"
    name="auto_quest_mystical1"
    send_to="0"
    sequence="100"
@@ -290,7 +432,7 @@ change language Westron</send>
   <trigger
    enabled="y"
    group="mume_misc"
-   match="An ancient weaver says 'But perhaps you would be willing to help me?'"
+   match="An ancient weaver says &apos;But perhaps you would be willing to help me?&apos;"
    name="auto_quest_weaver"
    send_to="0"
    sequence="100"
@@ -310,7 +452,7 @@ change language Westron</send>
   <trigger
    enabled="y"
    group="mume_misc"
-   match="A dwarven dye-maker says 'Let me guess, that old biddy who makes those green cloaks sent you looking for her order? Answer to me, didn't she?'"
+   match="A dwarven dye-maker says &apos;Let me guess, that old biddy who makes those green cloaks sent you looking for her order? Answer to me, didn&apos;t she?&apos;"
    name="auto_quest_dye_maker2"
    send_to="0"
    sequence="100"
@@ -340,7 +482,7 @@ change language Westron</send>
   <trigger
    enabled="y"
    group="mume_misc"
-   match="Ithildir the Noldo says 'Are you seeking safety, adventure, or fighting our common foe?'"
+   match="Ithildir the Noldo says &apos;Are you seeking safety, adventure, or fighting our common foe?&apos;"
    name="auto_quest_ithildir2"
    send_to="12"
    sequence="100"
@@ -355,7 +497,7 @@ end
   <trigger
    enabled="y"
    group="mume_misc"
-   match="^Ithildir the Noldo says \'Please\, \w+\, will you help me\?\'$"
+   match="^Ithildir the Noldo says &apos;Please\, \w+\, will you help me\?&apos;$"
    name="auto_quest_ithildir3"
    regexp="y"
    send_to="12"
@@ -385,7 +527,7 @@ end
   <trigger
    enabled="y"
    group="mume_misc"
-   match="Yerik the Sage says 'Come again!'"
+   match="Yerik the Sage says &apos;Come again!&apos;"
    name="auto_give_note_yerik"
    send_to="0"
    sequence="100"
@@ -406,7 +548,7 @@ give note Yerik</send>
   <trigger
    enabled="y"
    group="mume_misc"
-   match="The aloof hobbit says 'Maybe you are experienced enough to be the leader on such a perilous journey! Now, what do you say? Great fame and treasures could lie before us!'"
+   match="The aloof hobbit says &apos;Maybe you are experienced enough to be the leader on such a perilous journey! Now, what do you say? Great fame and treasures could lie before us!&apos;"
    name="auto_quest_harle"
    send_to="0"
    sequence="100"
@@ -426,7 +568,7 @@ give note Yerik</send>
   <trigger
    enabled="y"
    group="mume_misc"
-   match="Elrond says 'Would you be willing to help me with a dangerous task?'"
+   match="Elrond says &apos;Would you be willing to help me with a dangerous task?&apos;"
    name="auto_quest_elrond2"
    send_to="12"
    sequence="100"
@@ -451,7 +593,7 @@ end
   <trigger
    enabled="y"
    group="mume_misc"
-   match="^Daegil says \'The ferry has arrived in (?:Ha|Fo)rlond\. We hope you enjoyed the ride and we wish you a pleasant day\. Please leave the ferry now\.\'$"
+   match="^Daegil says &apos;The ferry has arrived in (?:Ha|Fo)rlond\. We hope you enjoyed the ride and we wish you a pleasant day\. Please leave the ferry now\.&apos;$"
    name="auto_leave_ferry_gh"
    regexp="y"
    send_to="0"
@@ -573,6 +715,46 @@ open debris up</send>
    sequence="100"
   >
   <send>stand</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="runes in deep ebony ink. A large glowing rune &quot;I&quot; is written on the top"
+   omit_from_output="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 - (level 20 magic blast, detect evil, and poison)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="runes in deep ebony ink. A large glowing rune &quot;M&quot; is written on the top"
+   omit_from_output="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 - (level 20 blindness, shroud, and poison)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="runes in deep ebony ink. A large glowing rune &quot;N&quot; is written on the top"
+   omit_from_output="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 - (level 20 call lightning, curse, and earthquake)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="runes in deep ebony ink. A large glowing rune &quot;Q&quot; is written on the top"
+   omit_from_output="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 - (level 20 silence, night vision, and curse)</send>
   </trigger>
   <trigger
    enabled="y"
@@ -726,6 +908,26 @@ Note("Web removed!")
   <trigger
    enabled="y"
    group="mume_misc"
+   match="^A cockroach (?:is scuttling across the floor carrying some debris|panics\, and attempts to flee)\.$"
+   name="gag_cockroach"
+   omit_from_output="y"
+   regexp="y"
+   sequence="100"
+  >
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="^A large\, shimmering pearl shines a warm light on \w+\.$"
+   name="gag_bless_purl"
+   omit_from_output="y"
+   regexp="y"
+   sequence="100"
+  >
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
    match="^(?:There is an old street\-lamp on the border of the street|A finely crafted crystal lamp is here|A finely crafted crystal lamp is hanging from a tree branch)\.$"
    name="gag_street_lamps"
    omit_from_output="y"
@@ -805,7 +1007,7 @@ end
   <trigger
    enabled="y"
    group="mume_misc"
-   match="^(?P&lt;player&gt;.+?) joins (?P&lt;tank&gt;.+?)'s fight\.$"
+   match="^(?P&lt;player&gt;.+?) joins (?P&lt;tank&gt;.+?)&apos;s fight\.$"
    name="shorten_assists"
    omit_from_output="y"
    regexp="y"
@@ -817,7 +1019,7 @@ end
   <trigger
    enabled="y"
    group="mume_misc"
-   match="^(?:A |The )?(?P&lt;someone&gt;.+?)(?: \((?P&lt;someone_label&gt;\w+)\))? leaves (?P&lt;direction&gt;north|east|south|west|up|down)(?: (?P&lt;action&gt;sneaking|riding a (?P&lt;mount&gt;pony|dales-pony|horse|warhorse|pack horse|trained horse|horse of the Rohirrim|brown donkey|mountain mule|hungry warg|brown wolf)(?: \((?P&lt;mount_label&gt;\w+)\))?))?\.$"
+   match="^(?:A[n]? |The )?(?P&lt;someone&gt;.+?)(?: \((?P&lt;someone_label&gt;\w+)\))? leaves (?P&lt;direction&gt;north|east|south|west|up|down)(?: (?P&lt;action&gt;sneaking|riding a (?P&lt;mount&gt;pony|dales-pony|horse|warhorse|pack horse|trained horse|horse of the Rohirrim|brown donkey|mountain mule|hungry warg|brown wolf)(?: \((?P&lt;mount_label&gt;\w+)\))?))?\.$"
    name="shorten_leaves_message"
    omit_from_output="y"
    regexp="y"
@@ -843,13 +1045,15 @@ else
 	-- If string is empty, mount will be set to nil.
 	mount = mount:match("^%w+")
 end
-Note(string.strip(string.format("%s %s %s", direction, someone, mount and mount or "%&lt;action&gt;")))
+if "%&lt;someone&gt;" ~= "cockroach" then
+	Note(string.strip(string.format("%s %s %s", direction, someone, mount and mount or "%&lt;action&gt;")))
+end
   </send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_misc"
-   match="^(?:Last login [1]?\d hour[s]? ago|Is playing) from \*\.(?P&lt;alpha2&gt;[a-z]{2,2})\.$"
+   match="^(?:Last login (?:less than one|[1]?\d) hour[s]? ago|Is (?:playing|disconnected)) from \*\.(?P&lt;alpha2&gt;[a-z]{2,2})\.$"
    name="translate_country_codes"
    omit_from_output="y"
    regexp="y"
@@ -879,7 +1083,7 @@ train all</send>
   <trigger
    enabled="y"
    group="mume_misc"
-   match="^ACK\! .+? didn\'t follow you\, you lost (him|her|it)\.$"
+   match="^ACK\! .+? didn&apos;t follow you\, you lost (him|her|it)\.$"
    name="beep_on_ack"
    regexp="y"
    send_to="12"
@@ -890,7 +1094,7 @@ train all</send>
   <trigger
    enabled="y"
    group="mume_misc"
-   match="^(Nah\.\.\. You feel too relaxed to do that\.|Maybe you should get on your feet first\?|You can\'t do this sitting\!|You can\'t concentrate enough while resting\.|Not from your present position\!)$"
+   match="^(Nah\.\.\. You feel too relaxed to do that\.|Maybe you should get on your feet first\?|You can&apos;t do this sitting\!|You can&apos;t concentrate enough while resting\.|Not from your present position\!)$"
    name="auto_stand"
    regexp="y"
    sequence="100"
@@ -936,7 +1140,7 @@ train all</send>
    sequence="100"
   >
   <send>
--- Negotiate echo back on.
+-- Negotiate echo back on (IAC, Do, Echo).
 -- If this is not done, command history in MushClient won't work.
 SendPkt(string.char(255, 253, 1))
 Send("change compact on")
@@ -1429,6 +1633,8 @@ GLYPHS = {
 auto_move_stakes = false
 auto_drag = false
 auto_drag_counter = 1
+hag_quest_me = false
+freuf_quest_me = false
 elf_camp_quest_me = false
 oie_key_quest_me = false
 anarwen_quest_me = false

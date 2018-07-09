@@ -34,7 +34,7 @@
   <trigger
    enabled="y"
    group="mume_sounds"
-   match="^Your bash at (?:a |the )?(?P&lt;someone&gt;.+?)(?: \((?P&lt;someone_label&gt;\w+)\))? sends (?:him|her|it) sprawling\.$"
+   match="^Your bash at (?:a[n]? |the )?(?P&lt;someone&gt;.+?)(?: \((?P&lt;someone_label&gt;\w+)\))? sends (?:him|her|it) sprawling\.$"
    name="bash_target"
    omit_from_output="y"
    regexp="y"
@@ -49,7 +49,7 @@ play(TYPE_COMBAT, "combat/bash.wav", -100)
   <trigger
    enabled="y"
    group="mume_sounds"
-   match="^As (?:a |the )?(?P&lt;someone&gt;.+?)(?: \((?P&lt;someone_label&gt;\w+)\))? avoids your bash\, you topple over and lose your balance\.$"
+   match="^As (?:a[n]? |the )?(?P&lt;someone&gt;.+?)(?: \((?P&lt;someone_label&gt;\w+)\))? avoids your bash\, you topple over and lose your balance\.$"
    name="bash_fail_target"
    omit_from_output="y"
    regexp="y"
@@ -61,7 +61,7 @@ play(TYPE_COMBAT, "combat/bash.wav", -100)
   <trigger
    enabled="y"
    group="mume_sounds"
-   match="^You dodge a bash from (?:a |the )?(?P&lt;someone&gt;.+?)(?: \((?P&lt;someone_label&gt;\w+)\))? who loses (?:his|her|its) balance\.$"
+   match="^You dodge a bash from (?:a[n]? |the )?(?P&lt;someone&gt;.+?)(?: \((?P&lt;someone_label&gt;\w+)\))? who loses (?:his|her|its) balance\.$"
    name="bash_fail_you"
    omit_from_output="y"
    regexp="y"
@@ -84,7 +84,7 @@ play(TYPE_COMBAT, "combat/bash.wav", -100)
   <trigger
    enabled="y"
    group="mume_sounds"
-   match="^(?:A |The )?(?P&lt;basher&gt;.+?)(?: \((?P&lt;basher_label&gt;\w+)\))? sends (?:A |The )?(?P&lt;someone&gt;.+?)(?: \((?P&lt;someone_label&gt;\w+)\))? sprawling with a powerful bash\.$"
+   match="^(?:A[n]? |The )?(?P&lt;basher&gt;.+?)(?: \((?P&lt;basher_label&gt;\w+)\))? sends (?:A[n]? |The )?(?P&lt;someone&gt;.+?)(?: \((?P&lt;someone_label&gt;\w+)\))? sprawling with a powerful bash\.$"
    name="bash_someone"
    omit_from_output="y"
    regexp="y"
@@ -109,7 +109,7 @@ end
   <trigger
    enabled="y"
    group="mume_sounds"
-   match="^(?:A |The )?(?P&lt;someone&gt;.+?)(?: \((?P&lt;someone_label&gt;\w+)\))? avoids being bashed by (?:a |the )?(?P&lt;basher&gt;.+?)(?: \((?P&lt;basher_label&gt;\w+)\))? who loses (?:his|her|its) balance\.$"
+   match="^(?:A[n]? |The )?(?P&lt;someone&gt;.+?)(?: \((?P&lt;someone_label&gt;\w+)\))? avoids being bashed by (?:a[n]? |the )?(?P&lt;basher&gt;.+?)(?: \((?P&lt;basher_label&gt;\w+)\))? who loses (?:his|her|its) balance\.$"
    name="bash_fail_someone"
    omit_from_output="y"
    regexp="y"
@@ -132,7 +132,7 @@ end
   <trigger
    enabled="y"
    group="mume_sounds"
-   match="^(?:A |The )?(?P&lt;someone&gt;.+?)(?: \((?P&lt;someone_label&gt;\w+)\))? seems to have recovered (?:his|her|its) senses\.$"
+   match="^(?:A[n]? |The )?(?P&lt;someone&gt;.+?)(?: \((?P&lt;someone_label&gt;\w+)\))? seems to have recovered (?:his|her|its) senses\.$"
    name="bash_recover_someone"
    omit_from_output="y"
    regexp="y"
@@ -200,10 +200,10 @@ end
   <send>play(TYPE_ALERT, "ok.wav")</send>
   </trigger>
   <trigger
-   enabled="y"
+   enabled="n"
    lines_to_match="2"
    group="mume_sounds"
-   match="^[^\']+ utters the word[s]? \'[\']+\'$Nothing seems to happen\.\Z"
+   match="^.+? utters the word[s]? &apos;[^&apos;]+?&apos;$Nothing seems to happen\.\Z"
    name="nothing_happens_other"
    omit_from_output="y"
    multi_line="y"
@@ -212,7 +212,7 @@ end
   >
   </trigger>
   <trigger
-   enabled="y"
+   enabled="n"
    group="mume_sounds"
    match="Nothing seems to happen."
    name="nothing_happens"
@@ -293,7 +293,7 @@ end
   <trigger
    enabled="y"
    group="mume_sounds"
-   match="^(?:Cirdan the Shipwright|Elrond(?: the Master of Rivendell)?|Galadriel(?: the Lady of Lorien)?) (?:is standing here \(glowing\)| (?:leaves|has arrived from) [^\.]+)\.$"
+   match="^(?:Cirdan the Shipwright|Elrond(?: the Master of Rivendell)?|Galadriel(?: the Lady of Lorien)?) (?:is standing here \(glowing\)|(?:leaves|has arrived from) [^\.]+)\.$"
    name="misc_alert2"
    regexp="y"
    send_to="12"
@@ -442,6 +442,76 @@ end
    match="^You hear a barely noticeable \*click\*\, and sense that the floor descends$"
    name="misc_alert16"
    regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_ALERT, "misc_alert.wav")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
+   match="A darkly gnarled tree suddenly creaks and moves, slowly swaying back and forth."
+   name="misc_alert17"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_ALERT, "misc_alert.wav")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
+   match="An ebon wraith seeps from a crack in the ground!"
+   name="misc_alert18"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_ALERT, "misc_alert.wav")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
+   match="An ebon wraith dismounts from a Fell Beast, and stops riding him."
+   name="misc_alert19"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_ALERT, "misc_alert.wav")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
+   match="The misty shape of a man floats in the air."
+   name="misc_alert20"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_ALERT, "misc_alert.wav")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
+   match="With a roar, Mithnaur the Dragon lets a storm of fire sweep over the cave."
+   name="misc_alert21"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_ALERT, "misc_alert.wav")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
+   match="A pale figure of a battle-scarred man stands here."
+   name="misc_alert22"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_ALERT, "misc_alert.wav")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
+   match="A phantom terror looms here bathed in shadows of malice."
+   name="misc_alert23"
    send_to="12"
    sequence="100"
   >
@@ -747,7 +817,7 @@ end
   <trigger
    enabled="y"
    group="mume_sounds"
-   match="^(?:You\'re killed by the lightning bolt sent by [^\.]+?|[^\.]+? sends a powerful lightning bolt at you\, you stagger from the impact)\.$"
+   match="^(?:You&apos;re killed by the lightning bolt sent by [^\.]+|[^\.]+? sends a powerful lightning bolt at you\, you stagger from the impact)\.$"
    name="lightning_bolt_you"
    omit_from_output="y"
    regexp="y"
@@ -820,7 +890,7 @@ end
    enabled="y"
    lines_to_match="2"
    group="mume_sounds"
-   match="^[^\']+ utters the word \'(?:sleep|grzzs)\'$[^\.]+? lies down and falls asleep\.\Z"
+   match="^[^&apos;]+? utters the word &apos;(?:sleep|grzzs)&apos;$[^\.]+? lies down and falls asleep\.\Z"
    name="sleep_other"
    omit_from_output="y"
    multi_line="y"
@@ -954,7 +1024,7 @@ end
   <trigger
    enabled="y"
    group="mume_sounds"
-   match="^(?:You surprise [^\.]+?\.|Oops\, you\'ve sensed a danger\!)$"
+   match="^(?:You surprise [^\.]+\.|Oops\, you&apos;ve sensed a danger\!)$"
    name="fail_backstab_you"
    omit_from_output="y"
    regexp="y"

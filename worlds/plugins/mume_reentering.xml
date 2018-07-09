@@ -52,7 +52,7 @@
   <trigger
    enabled="y"
    group="mume_reentering"
-   match="^PANIC\! You (couldn\'t escape|can\'t quit the fight)\!$"
+   match="^PANIC\! You (couldn&apos;t escape|can&apos;t quit the fight)\!$"
    name="Shorten_panic_message"
    omit_from_output="y"
    regexp="y"

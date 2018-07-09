@@ -30,7 +30,29 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="^A(?:n enhanced)? herbal kit contains two piles of blackberries\, some grey petals\, some long\, slender green leaves and some white petals\.$"
+   match="^A(?:n enhanced)? herbal kit contains a bag of cinnamon\, several needlelike leaves and a rib\-bone of a skeleton\.$"
+   omit_from_output="y"
+   regexp="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>Shadows</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_herb_substitutions"
+   match="^A(?:n enhanced)? herbal kit contains some sweet\-smelling dried mauve petals\, some grey\-green leaves\, some scented crushed leaves and a cluster of hard\, round\, black berries\.$"
+   omit_from_output="y"
+   regexp="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>Clear Thoughts</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_herb_substitutions"
+   match="^A(?:n enhanced)? herbal kit contains two piles of blackberries\, some long\, slender green leaves\, some white petals and some grey petals\.$"
    omit_from_output="y"
    regexp="y"
    send_to="2"
@@ -418,7 +440,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="A man's-waist high evergreen shrub grows here, with bright green branches."
+   match="A man&apos;s-waist high evergreen shrub grows here, with bright green branches."
    omit_from_output="y"
    send_to="2"
    sequence="100"
