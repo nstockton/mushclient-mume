@@ -34,6 +34,21 @@
   <trigger
    enabled="y"
    group="mume_grouping"
+   match="^(?P&lt;player&gt;\w+) examines the terrain intently\.$"
+   name="auto_reveal1"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+if "%&lt;player&gt;" == leader and auto_ride then
+	Send("reveal thorough")
+end
+  </send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_grouping"
    match="^(?P&lt;player&gt;\w+) puts all (?:his|her|its) weight against the (?P&lt;door&gt;\w+)\, trying to (?P&lt;action&gt;close|open) (?:it|them)\.$"
    name="auto_assist_leader_doors1"
    regexp="y"
@@ -49,7 +64,7 @@ end
   <trigger
    enabled="y"
    group="mume_grouping"
-   match="^(?P&lt;player&gt;\w+) tries to help the (?P&lt;door&gt;\w+)(?:\'[s]?)? movement as (?:it|they) (?P&lt;action&gt;close|open)[s]?\.$"
+   match="^(?P&lt;player&gt;\w+) tries to help the (?P&lt;door&gt;\w+)(?:&apos;[s]?)? movement as (?:it|they) (?P&lt;action&gt;close|open)[s]?\.$"
    name="auto_assist_leader_doors2"
    regexp="y"
    send_to="12"
@@ -64,7 +79,7 @@ end
   <trigger
    enabled="y"
    group="mume_grouping"
-   match="^(?P&lt;player&gt;\w+)(?: \(\w+\))? (?:picks up|grabs on to) a (?:pony|dales-pony|horse|warhorse|pack horse|trained horse|horse of the Rohirrim|brown donkey|mountain mule|hungry warg|brown wolf)(?: \(\w+\))?\'s (?:reins|fur) and starts riding (?:him|her|it)\.$"
+   match="^(?P&lt;player&gt;\w+)(?: \(\w+\))? (?:picks up|grabs on to) a (?:pony|dales-pony|horse|warhorse|pack horse|trained horse|horse of the Rohirrim|brown donkey|mountain mule|hungry warg|brown wolf)(?: \(\w+\))?&apos;s (?:reins|fur) and starts riding (?:him|her|it)\.$"
    name="autoride"
    regexp="y"
    send_to="12"
@@ -113,7 +128,7 @@ end
   <trigger
    enabled="y"
    group="mume_grouping"
-   match="^ZBLAM\! A (?P&lt;mount&gt;pony|dales-pony|horse|warhorse|pack horse|trained horse|horse of the Rohirrim|brown donkey|mountain mule|hungry warg|brown wolf) (?:\((?P&lt;label&gt;\w+)\) )?doesn\'t want you riding (?:him|her|it) anymore\.$"
+   match="^ZBLAM\! A (?P&lt;mount&gt;pony|dales-pony|horse|warhorse|pack horse|trained horse|horse of the Rohirrim|brown donkey|mountain mule|hungry warg|brown wolf) (?:\((?P&lt;label&gt;\w+)\) )?doesn&apos;t want you riding (?:him|her|it) anymore\.$"
    name="autoremount"
    regexp="y"
    send_to="12"
@@ -204,7 +219,7 @@ end
   </trigger>
   <trigger
    name="define_leader2"
-   match="^You are now a member of (?P&lt;player&gt;\w+)(?: \(\w+\))?(?:\'[s]?) group\.$"
+   match="^You are now a member of (?P&lt;player&gt;\w+)(?: \(\w+\))?(?:&apos;[s]?) group\.$"
    enabled="y"
    group="mume_grouping"
    regexp="y"
@@ -236,7 +251,7 @@ end
   </trigger>
   <trigger
    name="undefine_leader"
-   match="^(?:You will not follow anyone else now|\w+ doesn\'t want you to follow (?:him|her|it))\.$"
+   match="^(?:You will not follow anyone else now|\w+ doesn&apos;t want you to follow (?:him|her|it))\.$"
    enabled="y"
    group="mume_grouping"
    regexp="y"

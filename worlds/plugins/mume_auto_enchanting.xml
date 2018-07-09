@@ -107,7 +107,7 @@ end
   <trigger
    enabled="y"
    group="mume_auto_enchanting"
-   match="^You exhausted yourself refreshing \'[^\']+\'\.$"
+   match="^You exhausted yourself refreshing &apos;[^&apos;]+&apos;\.$"
    name="auto_bob"
    regexp="y"
    send_to="12"
@@ -170,7 +170,7 @@ end
   <trigger
    enabled="y"
    group="mume_auto_enchanting"
-   match="^(?:A water skin is now empty|It\'s empty already)\.$"
+   match="^(?:A water skin is now empty|It&apos;s empty already)\.$"
    name="auto_create_water_skin"
    regexp="y"
    send_to="12"

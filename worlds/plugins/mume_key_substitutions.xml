@@ -30,6 +30,36 @@
   <trigger
    enabled="y"
    group="mume_key_substitutions"
+   match="a crudely wrought iron key"
+   omit_from_output="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 - chest (Squaretooth loot)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_key_substitutions"
+   match="an intricate silver key"
+   omit_from_output="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 - blackdoor (Sage loot)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_key_substitutions"
+   match="a large, smeared key"
+   omit_from_output="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 - Rahku's prison</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_key_substitutions"
    match="a burnished iron key"
    omit_from_output="y"
    send_to="2"
@@ -590,7 +620,7 @@
   <trigger
    enabled="y"
    group="mume_key_substitutions"
-   match="You notice 'My Cottage' has been inscribed on the key."
+   match="You notice &apos;My Cottage&apos; has been inscribed on the key."
    omit_from_output="y"
    send_to="2"
    sequence="100"
