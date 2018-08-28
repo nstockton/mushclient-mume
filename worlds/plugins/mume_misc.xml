@@ -1481,6 +1481,30 @@ put belt e.pack
 wear all</send>
   </alias>
   <alias
+   name="wear_helm"
+   match="helm"
+   enabled="y"
+   group="mume_misc"
+   sequence="100"
+  >
+  <send>remove circlet
+get helm e.pack
+wear helm
+put circlet e.pack</send>
+  </alias>
+  <alias
+   name="wear_circlet"
+   match="cir"
+   enabled="y"
+   group="mume_misc"
+   sequence="100"
+  >
+  <send>remove helm
+get circlet e.pack
+wear circlet
+put helm e.pack</send>
+  </alias>
+  <alias
    name="use_str_ring"
    match="string"
    enabled="y"
