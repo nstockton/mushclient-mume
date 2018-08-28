@@ -61,6 +61,63 @@ if auto_open then
 end
   </send>
   </trigger>
+  <trigger
+   enabled="y"
+   group="mume_doors"
+   match="The irondoor swings shut."
+   name="auto_open_nagash"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+if auto_open then
+	Send("open irondoor")
+end
+  </send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_doors"
+   match="Mordrath the Uroth-Ghash closes the wall."
+   name="auto_open_mordrath"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+if auto_open then
+	Send("open wall")
+end
+  </send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_doors"
+   match="Ushurg the albino Beorning closes the stonehinge."
+   name="auto_open_ushurg"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+if auto_open then
+	Send("open stonehinge")
+end
+  </send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_doors"
+   match="^An ebon wraith closes the (\w+)\.$"
+   name="auto_open_ebon"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+if auto_open then
+	Send("open %1")
+end
+  </send>
+  </trigger>
 </triggers>
 
 <!--  Aliases  -->
