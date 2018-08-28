@@ -165,6 +165,7 @@ Miscellaneous aliases and triggers that don't belong anywhere else.
 * bpack  --  Switch the boots that the character is currently wearing with the ones in the character's pack.
 * bpouch  --  Switch the boots that the character is currently wearing with the ones in the character's pouch.
 * ccring  --  Use the cure critic ring in the character's pack.
+* cir  --  Remove the character's helm, and switch to using the character's circlet.
 * citizen  --  Print the list of towns in which the character has citizenship.
 * cpack  --  Switch the cloak, fur, or mantle that the character is currently wearing with the cloak in the character's pack.
 * cpouch  --  Switch the cloak, fur, or mantle that the character is currently wearing with the cloak in the character's pouch.
@@ -173,6 +174,7 @@ Miscellaneous aliases and triggers that don't belong anywhere else.
 * fbag  --  Get food from the character's elven bag and eat it.
 * fpack  --  Switch the cloak, fur, or mantle that the character is wearing with the fur in the character's pack.
 * fpouch  --  Switch the cloak, fur, or mantle that the character is wearing with the fur in the character's pouch.
+* helm  --  Remove the character's circlet, and switch to using the character's helm.
 * kbag  --  Get a butcher knife from the character's elven bag.
 * lev  --  Prints the character's current level.
 * li [container]  --  Look in container.
