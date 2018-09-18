@@ -34,7 +34,7 @@
   <trigger
    enabled="y"
    group="mume_misc"
-   match="^(?:&lt;wielded&gt;[ ]{12})?the silvery broadsword \(flawless\)(?:[;] it glows blue)?$"
+   match="^(?:&lt;wielded&gt;[ ]{12})?the silvery broadsword \(flawless\)(?:[;] it glows blue)?(?:[;] it has a soft glowing aura)?$"
    omit_from_output="y"
    regexp="y"
    send_to="2"
@@ -56,7 +56,7 @@
   <trigger
    enabled="y"
    group="mume_misc"
-   match="^(?:&lt;wielded&gt;[ ]{12})?the broad Elven blade \(flawless\)(?:[;] it glows blue)?$"
+   match="^(?:&lt;wielded&gt;[ ]{12})?the broad Elven blade \(flawless\)(?:[;] it glows blue)?(?:[;] it has a soft glowing aura)?$"
    omit_from_output="y"
    regexp="y"
    send_to="2"
@@ -67,7 +67,7 @@
   <trigger
    enabled="y"
    group="mume_misc"
-   match="^(?:&lt;wielded&gt;[ ]{12})?the slender Elven sword \(flawless\)(?:[;] it glows blue)?$"
+   match="^(?:&lt;wielded&gt;[ ]{12})?the slender Elven sword \(flawless\)(?:[;] it glows blue)?(?:[;] it has a soft glowing aura)?$"
    omit_from_output="y"
    regexp="y"
    send_to="2"
@@ -78,7 +78,7 @@
   <trigger
    enabled="y"
    group="mume_misc"
-   match="^(?:&lt;wielded&gt;[ ]{12})?the Elven shortsword with a runic inscription \(flawless\)(?:[;] it glows blue)?$"
+   match="^(?:&lt;wielded&gt;[ ]{12})?the Elven shortsword with a runic inscription \(flawless\)(?:[;] it glows blue)?(?:[;] it has a soft glowing aura)?$"
    omit_from_output="y"
    regexp="y"
    send_to="2"
