@@ -30,6 +30,16 @@
   <trigger
    enabled="y"
    group="mume_key_substitutions"
+   match="a tiny iron key"
+   omit_from_output="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 - cages (Broghha)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_key_substitutions"
    match="a crudely wrought iron key"
    omit_from_output="y"
    send_to="2"
