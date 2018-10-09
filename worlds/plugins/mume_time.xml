@@ -40,7 +40,13 @@
    regexp="y"
    sequence="100"
   >
-  <send>sync_event("dawn", 1)</send>
+  <send>
+if not synchronized and time_event == "" then
+	time_event = "dawn"
+	time_event_offset = 1
+	Send("time")
+end
+  </send>
   </trigger>
   <trigger
    enabled="y"
@@ -51,7 +57,13 @@
    regexp="y"
    sequence="100"
   >
-  <send>sync_event("dawn")</send>
+  <send>
+if not synchronized and time_event == "" then
+	time_event = "dawn"
+	time_event_offset = 0
+	Send("time")
+end
+  </send>
   </trigger>
   <trigger
    enabled="y"
@@ -62,7 +74,13 @@
    regexp="y"
    sequence="100"
   >
-  <send>sync_event("dusk", 1)</send>
+  <send>
+if not synchronized and time_event == "" then
+	time_event = "dusk"
+	time_event_offset = 1
+	Send("time")
+end
+  </send>
   </trigger>
   <trigger
    enabled="y"
@@ -72,7 +90,13 @@
    send_to="12"
    sequence="100"
   >
-  <send>sync_event("dusk", 1)</send>
+  <send>
+if not synchronized and time_event == "" then
+	time_event = "dusk"
+	time_event_offset = 1
+	Send("time")
+end
+  </send>
   </trigger>
   <trigger
    enabled="y"
@@ -83,32 +107,75 @@
    regexp="y"
    sequence="100"
   >
-  <send>sync_event("dusk")</send>
+  <send>
+if not synchronized and time_event == "" then
+	time_event = "dusk"
+	time_event_offset = 0
+	Send("time")
+end
+  </send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_time"
    match="^The current time is (?P&lt;hour&gt;[1-9]|1[0-2])\:(?P&lt;minutes&gt;[0-5]\d)(?P&lt;am_pm&gt;[ap]m)\.$"
    name="sync_from_clock"
-   send_to="12"
+   omit_from_output="y"
+   send_to="14"
    regexp="y"
    sequence="100"
   >
-  <send>sync_precise(tonumber("%&lt;hour&gt;"), tonumber("%&lt;minutes&gt;"), "%&lt;am_pm&gt;")</send>
+  <send>
+if not synchronized and time_event == "" then
+	-- parsed_hour should be 0 - 23.
+	parsed_hour = tonumber("%&lt;hour&gt;") % 12 + ("%&lt;am_pm&gt;" == "pm" and 12 or 0)
+	parsed_minutes = tonumber("%&lt;minutes&gt;")
+	if parsed_hour == 23 and parsed_minutes == 59 then
+		AddTimer("send_look_clock", 0, 0, 1, "look at clock", timer_flag.Enabled + timer_flag.OneShot + timer_flag.ActiveWhenClosed + timer_flag.Replace + timer_flag.Temporary, "")
+		SetTimerOption("send_look_clock", "send_to", sendto.world)
+	else
+		time_event = "clock"
+		Note("%0")
+		Send("time")
+	end
+else
+	Note("%0")
+end
+  </send>
   </trigger>
   <trigger
    enabled="y"
    group="mume_time"
    match="^(?:(?:It is )?(?P&lt;hour&gt;[1-9]|1[0-2])(?P&lt;am_pm&gt;[ap]m)(?: on ))?\w+\, the (?P&lt;day&gt;\d+)(?:st|[nr]d|th) of (?P<month>\w+)\, [yY]ear (?P&lt;year&gt;\d{4}) of the Third Age\.$"
    name="parse_time"
-   send_to="12"
+   omit_from_output="y"
+   send_to="14"
    regexp="y"
    sequence="100"
   >
   <send>
-time_parse("%&lt;day&gt;", "%&lt;month&gt;", "%&lt;year&gt;")
-if "%&lt;am_pm&gt;" ~= "" then
-	sync_precise(tonumber("%&lt;hour&gt;"), 30, "%&lt;am_pm&gt;")
+if not synchronized and time_event ~= "" then
+	local month = 1
+	local day = tonumber("%&lt;day&gt;")
+	local year = tonumber("%&lt;year&gt;")
+	for i, m in ipairs(MONTHS) do
+		if m.westron == "%&lt;month&gt;" or m.sindarin == "%&lt;month&gt;" then
+			month = i
+			break
+		end
+	end
+	if time_event == "dawn" or time_event == "dusk" then
+		parsed_hour = MONTHS[month][time_event] + time_event_offset
+		parsed_minutes = 0
+	end
+	MUME_EPOCH = time_to_epoch(year, month, day, parsed_hour, parsed_minutes)
+	CallPlugin(CONFIG, "set", "mume_epoch", MUME_EPOCH)
+	time_event = ""
+	time_event_offset = 0
+	synchronized = true
+	Note(string.format("%0 (Synchronized with epoch %d)", MUME_EPOCH))
+else
+	Note("%0")
 end
   </send>
   </trigger>
@@ -117,19 +184,14 @@ end
    group="mume_time"
    match="A huge clock is standing here."
    name="look_at_clock"
+   send_to="12"
    sequence="100"
   >
-  <send>look at clock</send>
-  </trigger>
-  <trigger
-   enabled="y"
-   group="mume_time"
-   match="^(?:Reconnecting|Welcome to the land of Middle\-earth\. May your visit here be\.\.\. interesting)\.$"
-   name="auto_type_time"
-   regexp="y"
-   sequence="100"
-  >
-  <send>time</send>
+  <send>
+if not synchronized and time_event == "" then
+	Send("look at clock")
+end
+  </send>
   </trigger>
 </triggers>
 
@@ -162,28 +224,29 @@ end
   </alias>
 </aliases>
 
-<!--  Timers  -->
-
-<timers>
-  <timer
-   enabled="n" minute="1" second="0.00" offset_second="0.00"    send_to="12"
-   name="tick_timer"
-  >
-  <send>time_tick()</send>
-
-  </timer>
-</timers>
-
 <!--  Script  -->
 
 
 <script>
 <![CDATA[
-INIT_TIMER = math.floor(utils.timer())
+CONFIG = "d19a2f0a604c96b7318aa67f"
+
+return_code, MUME_EPOCH = CallPlugin(CONFIG, "get", "mume_epoch")
+if not MUME_EPOCH then
+	MUME_EPOCH = 1517486463
+end
 FIRST_YEAR = 2850
-DAYS_IN_YEAR = 360
+
+MINUTES_PER_HOUR = 60
+HOURS_PER_DAY = 24
+DAYS_PER_MONTH = 30
+MONTHS_PER_YEAR = 12
+DAYS_PER_YEAR = DAYS_PER_MONTH * MONTHS_PER_YEAR
+MINUTES_PER_DAY = MINUTES_PER_HOUR * HOURS_PER_DAY
+MINUTES_PER_MONTH = MINUTES_PER_DAY * DAYS_PER_MONTH
+MINUTES_PER_YEAR = MINUTES_PER_DAY * DAYS_PER_YEAR
+
 MONTHS = {
-	{["name"] = "December", ["sindarin"] = "Narwain", ["westron"] = "Afteryule", ["dawn"] = 8, ["dusk"] = 18, ["season"] = "Early-Winter"},
 	{["name"] = "January", ["sindarin"] = "Ninui", ["westron"] = "Solmath", ["dawn"] = 9, ["dusk"] = 17, ["season"] = "Winter"},
 	{["name"] = "February", ["sindarin"] = "Gwaeron", ["westron"] = "Rethe", ["dawn"] = 8, ["dusk"] = 18, ["season"] = "Late-Winter"},
 	{["name"] = "March", ["sindarin"] = "Gwirith", ["westron"] = "Astron", ["dawn"] = 7, ["dusk"] = 19, ["season"] = "Early-Spring"},
@@ -194,183 +257,116 @@ MONTHS = {
 	{["name"] = "August", ["sindarin"] = "Ivanneth", ["westron"] = "Halimath", ["dawn"] = 5, ["dusk"] = 21, ["season"] = "Late-Summer"},
 	{["name"] = "September", ["sindarin"] = "Narbeleth", ["westron"] = "Winterfilth", ["dawn"] = 6, ["dusk"] = 20, ["season"] = "Early-Autumn"},
 	{["name"] = "October", ["sindarin"] = "Hithui", ["westron"] = "Blotmath", ["dawn"] = 7, ["dusk"] = 20, ["season"] = "Autumn"},
-	{["name"] = "November", ["sindarin"] = "Girithron", ["westron"] = "Foreyule", ["dawn"] = 7, ["dusk"] = 19, ["season"] = "Late-Autumn"}
+	{["name"] = "November", ["sindarin"] = "Girithron", ["westron"] = "Foreyule", ["dawn"] = 7, ["dusk"] = 19, ["season"] = "Late-Autumn"},
+	{["name"] = "December", ["sindarin"] = "Narwain", ["westron"] = "Afteryule", ["dawn"] = 8, ["dusk"] = 18, ["season"] = "Early-Winter"}
 }
+
 WEEKDAYS = {
+	{["name"] = "Sunday", ["sindarin"] = "Oranor", ["westron"] = "Sunday"},
 	{["name"] = "Monday", ["sindarin"] = "Orithil", ["westron"] = "Monday"},
 	{["name"] = "Tuesday", ["sindarin"] = "Orgaladhad", ["westron"] = "Trewsday"},
 	{["name"] = "Wednesday", ["sindarin"] = "Ormenel", ["westron"] = "Hevensday"},
 	{["name"] = "Thursday", ["sindarin"] = "Orbelain", ["westron"] = "Mersday"},
 	{["name"] = "Friday", ["sindarin"] = "Oraearon", ["westron"] = "Highday"},
-	{["name"] = "Saturday", ["sindarin"] = "Orgilion", ["westron"] = "Sterday"},
-	{["name"] = "Sunday", ["sindarin"] = "Oranor", ["westron"] = "Sunday"}
+	{["name"] = "Saturday", ["sindarin"] = "Orgilion", ["westron"] = "Sterday"}
 }
 
-current_month = 1
-current_hour = 0
-current_day = 0
-current_year = 0
-difference = 0
+time_event = ""
+time_event_offset = 0
+synchronized = false
+parsed_hour = 0
+parsed_minutes = 0
 
-function timer()
-	return math.floor(utils.timer()) - INIT_TIMER
-end
-
-function time_tick()
-	-- increase current_hour (wraps 1 through 24).
-	current_hour = current_hour % 24 + 1
-	if current_hour == 24 then
-		-- increase current_day (wraps 1 through 30).
-		current_day = current_day % 30 + 1
-	end
-	if current_day == 1 and current_hour == 24 then
-		-- increase current_month (wraps 1 through 12).
-		current_month = current_month % 12 + 1
-		if current_month == 1 then
-			current_year = current_year + 1
-		end
-		Note(string.format("%s has begun with the month of %s (%s / %s).", MONTHS[current_month].season, MONTHS[current_month].name, MONTHS[current_month].westron, MONTHS[current_month].sindarin))
-	end -- if
-end
-
-function time_parse(day, month_name, year)
-	current_day = tonumber(day) or 0
-	current_year = tonumber(year) or 0
-	for i, m in ipairs(MONTHS) do
-		if m.westron == month_name or m.sindarin == month_name then
-			current_month = (i - 1) % 12 + 1
-			break
-		end
-	end
-end
-
-function reset_timer(tick_now)
-	if tick_now then
-		time_tick()
-	end
-	EnableTimer("tick_timer", true)
-	ResetTimer("tick_timer")
-end
-
-function sync_precise(hours, minutes, am_pm)
-	local hours = hours or 12
-	local minutes = minutes or 0
-	local am_pm = am_pm or "am"
-	if hours == 12 and am_pm == "am" then
-		current_hour = 24
-	elseif hours == 12 and am_pm == "pm" then
-		current_hour = 12
-	elseif am_pm == "am" then
-		current_hour = hours
-	elseif am_pm == "pm" then
-		current_hour = hours + 12
-	end
-	difference = timer() - minutes - current_hour * 60
-	AddTimer("tick_reset", 0, minutes == 0 and 1 or 0, (60 - minutes) % 60, string.format("reset_timer(%s)", tostring(minutes ~= 0)), timer_flag.Enabled + timer_flag.OneShot + timer_flag.ActiveWhenClosed + timer_flag.Replace + timer_flag.Temporary, "")
-	SetTimerOption("tick_reset", "send_to", sendto.script)
-end
-
-function sync_event(dawn_dusk, hours)
-	local hours = hours or 0
-	current_hour = MONTHS[current_month][dawn_dusk] + hours
-	difference = timer() - current_hour * 60
-	AddTimer("tick_reset", 0, 0, 0, "reset_timer(false)", timer_flag.Enabled + timer_flag.OneShot + timer_flag.ActiveWhenClosed + timer_flag.Replace + timer_flag.Temporary, "")
-	SetTimerOption("tick_reset", "send_to", sendto.script)
+function time_to_epoch(year, month, day, hour, minutes)
+	return os.time() - ((year - FIRST_YEAR) * MINUTES_PER_YEAR) - ((month - 1) * MINUTES_PER_MONTH) - ((day - 1) * MINUTES_PER_DAY) - (hour * MINUTES_PER_HOUR) - minutes
 end
 
 function time_check(action)
-	local elapsed_seconds = difference ~= 0 and timer() - difference or 0
-	local mume_hour = difference ~= 0 and math.floor(elapsed_seconds % (24 * 60) / 60) or current_hour
-	if difference ~= 0 and mume_hour == 0 then
-		mume_hour = 24
-	end
-	local current_time = ""
-	local current_state = ""
-	local next_state = ""
-	local till_next_state = ""
-	if current_month == 0 then
-		current_month = 1
-	end
-	local dawn = MONTHS[current_month].dawn
-	local dusk = MONTHS[current_month].dusk
-	if mume_hour < dawn then
-		current_state = "NIGHT"
-		next_state = "DAY"
-		till_next_state = tostring(dawn - mume_hour + 1)
-	elseif mume_hour >= dusk then
-		current_state = "NIGHT"
-		next_state = "DAY"
-		till_next_state = tostring(25 + dawn - mume_hour)
-	elseif mume_hour > dawn and mume_hour < dusk then
-		current_state = "DAY"
-		next_state = "NIGHT"
-		till_next_state = tostring(dusk - mume_hour)
-	elseif mume_hour == dawn then
-		current_state = "DAWN"
-		next_state = "DAY"
-		till_next_state = "1"
-	end
-	if difference == 0 then
-		if mume_hour == 12 then
-			current_time = "12 pm"
-		elseif mume_hour >= 24 then
-			current_time = "12 am"
-		elseif mume_hour < 12 then
-			current_time = string.format("%d am", mume_hour)
-		elseif mume_hour > 12 then
-			current_time = string.format("%d pm", mume_hour - 12)
-		end
-	else
-		local mume_minutes = elapsed_seconds % 60
-		if mume_hour == 12 then
-			current_time = string.format("12:%s%d pm", mume_minutes < 10 and "0" or "", mume_minutes)
-		elseif mume_hour >= 24 then
-			current_time = string.format("12:%s%d am", mume_minutes < 10 and "0" or "", mume_minutes)
-		elseif mume_hour < 12 then
-			current_time = string.format("%d:%s%d am", mume_hour, mume_minutes < 10 and "0" or "", mume_minutes)
-		elseif mume_hour > 12 then
-			current_time = string.format("%d:%s%d pm", mume_hour - 12, mume_minutes < 10 and "0" or "", mume_minutes)
-		end
-	end
-	local output = string.format("Game time %s: Dawn: %d am, Dusk: %d pm.", current_time, MONTHS[current_month].dawn, MONTHS[current_month].dusk - 12)
+	local minutes = os.time() - MUME_EPOCH
+	local year = math.floor(minutes / MINUTES_PER_YEAR) + FIRST_YEAR
+	minutes = minutes % MINUTES_PER_YEAR
+	local month = math.floor(minutes / MINUTES_PER_MONTH) + 1
+	minutes = minutes % MINUTES_PER_MONTH
+	local day = math.floor(minutes / MINUTES_PER_DAY) + 1
+	minutes = minutes % MINUTES_PER_DAY
+	local day_of_year = (month - 1) * DAYS_PER_MONTH + day
+	local hour = math.floor(minutes / MINUTES_PER_HOUR)
+	minutes = minutes % MINUTES_PER_HOUR
+	local ap = hour < 12 and "am" or "pm"
+	output = string.format("Game time %d:%s%d %s: Dawn: %d am, Dusk: %d pm.", hour % 12 ~= 0 and hour % 12 or 12, minutes < 10 and "0" or "", minutes, ap, MONTHS[month].dawn, MONTHS[month].dusk - 12)
 	if action then
-		return Send(string.format("%s %s", action, output))
+		return Send(action, " ", output)
+	else
+		Note(output)
 	end
-	local next_season_in_mume_days = (((math.floor((current_month - 1) / 3) * 3 + 3) - current_month) * 30) + (30 - current_day) + (1 - math.floor(mume_hour / 24))
-	local next_season_in_rl_hours = math.floor(next_season_in_mume_days * 24 / 60)
-	local next_winter_in_mume_days = ((12 - current_month) * 30) + (30 - current_day) + (1 - math.floor(mume_hour / 24))
-	local next_winter_in_rl_days = math.floor(math.floor(next_winter_in_mume_days * 24 / 60) / 24)
-	local next_winter_in_rl_hours = math.floor(next_winter_in_mume_days * 24 / 60) % 24
-	local day_of_year = 30 * (current_month - 1) + current_day
-	local weekday = WEEKDAYS[(DAYS_IN_YEAR * (current_year - FIRST_YEAR) + day_of_year) % 7 + 1].name
-	output = string.format("%s\nIt is currently %s, on %s, %s %s (%s / %s), (%s).", output, current_state, weekday, MONTHS[current_month].name, current_day, MONTHS[current_month].westron, MONTHS[current_month].sindarin, MONTHS[current_month].season)
-	output = string.format("%s\nTime left until %s is less than %s tick%s", output, next_state, till_next_state, till_next_state ~= "1" and "s." or "!")
-	output = string.format("%s\n%s ends in %d mume day%s or %d real-life hour%s.", output, string.sub(MONTHS[current_month].season, -6), next_season_in_mume_days, next_season_in_mume_days ~= 1 and "s" or "", next_season_in_rl_hours, next_season_in_rl_hours ~= 1 and "s" or "")
-	output = string.format("%s\nNext winter starts in %d real-life day%s and %d hour%s.", output, next_winter_in_rl_days, next_winter_in_rl_days ~= 1 and "s" or "", next_winter_in_rl_hours, next_winter_in_rl_hours ~= 1 and "s" or "")
-	local full_moon_cycle = 24 * 24
-	local moon_day = day_of_year % 24
-	local moon_hour = 24 * moon_day + current_hour % 24
+	local weekday = WEEKDAYS[(day_of_year + (year - FIRST_YEAR) * DAYS_PER_YEAR) % 7 + 1].name
+	local state = ""
+	local next_state = ""
+	local till_next_state = 0
+	if hour < MONTHS[month].dawn then
+		state = "NIGHT"
+		next_state = "DAY"
+		till_next_state = MONTHS[month].dawn - hour + 1
+	elseif hour >= MONTHS[month].dusk then
+		state = "NIGHT"
+		next_state = "DAY"
+		till_next_state = 25 + MONTHS[month].dawn - hour
+	elseif hour > MONTHS[month].dawn and hour < MONTHS[month].dusk then
+		state = "DAY"
+		next_state = "NIGHT"
+		till_next_state = MONTHS[month].dusk - hour
+	elseif hour == MONTHS[month].dawn then
+		state = "DAWN"
+		next_state = "DAY"
+		till_next_state = 1
+	end
+	Note(string.format("It is currently %s, on %s, %s %d (%s / %s), (%s), year %d of the third age.", state, weekday, MONTHS[month].name, day, MONTHS[month].westron, MONTHS[month].sindarin, MONTHS[month].season, year))
+	Note(string.format("Time left until %s is less than %d tick%s", next_state, till_next_state, till_next_state ~= 1 and "s" or "!"))
+	local next_season_in_mume_days = (((math.floor(month / 3) * 3 + 3) - month - 1) * DAYS_PER_MONTH) + (DAYS_PER_MONTH - day) + (1 - math.floor(hour / HOURS_PER_DAY))
+	local next_season_in_rl_hours = math.floor(next_season_in_mume_days * HOURS_PER_DAY / MINUTES_PER_HOUR)
+	Note(string.format("%s ends in %d mume day%s or %d real-life hour%s.", string.sub(MONTHS[month].season, -6), next_season_in_mume_days, next_season_in_mume_days ~= 1 and "s" or "", next_season_in_rl_hours, next_season_in_rl_hours ~= 1 and "s" or ""))
+	local next_winter_in_mume_days = ((MONTHS_PER_YEAR - month % 12 - 1) * DAYS_PER_MONTH) + (DAYS_PER_MONTH - day) + (1 - math.floor(hour / HOURS_PER_DAY))
+	local next_winter_in_rl_days = math.floor(math.floor(next_winter_in_mume_days * HOURS_PER_DAY / MINUTES_PER_HOUR) / HOURS_PER_DAY)
+	local next_winter_in_rl_hours = math.floor(next_winter_in_mume_days * HOURS_PER_DAY / MINUTES_PER_HOUR) % HOURS_PER_DAY
+	Note(string.format("Next winter starts in %d real-life day%s and %d hour%s.", next_winter_in_rl_days, next_winter_in_rl_days ~= 1 and "s" or "", next_winter_in_rl_hours, next_winter_in_rl_hours ~= 1 and "s" or ""))
+	local moon_rise = (day_of_year - 1) % 24
+	local moon_rise_day = ""
+	local moon_rise_ap = ""
+	if hour == moon_rise then
+		Note("Moon is up now!")
+	else
+		if hour > moon_rise then
+			moon_rise = day_of_year % 24
+			moon_rise_day = "tomorrow"
+		else
+			moon_rise_day = "today"
+		end
+		moon_rise_ap = moon_rise < 12 and "am" or "pm"
+		Note(string.format("Next moon rise %s at %d:00 %s (game time).", moon_rise_day, moon_rise % 12 ~= 0 and moon_rise % 12 or 12, moon_rise_ap))
+	end
+	local full_moon_cycle = HOURS_PER_DAY * 24 -- Every 24 days
+	local moon_day = (day_of_year + DAYS_PER_MONTH + 24) % 24
+	local moon_hour = moon_day * 24 + hour % HOURS_PER_DAY
 	local next_dk_day = 1
 	local ticks_until_dk = 0
-	if moon_hour <= 17 then
-		ticks_until_dk = 17 - moon_hour
-	elseif moon_hour <= 24 + 18 then
-		ticks_until_dk = 24 + 18 - moon_hour
+	if moon_hour < 20 then
+		ticks_until_dk = moon_hour <= 17 and 17 - moon_hour or 0
+	elseif moon_hour < HOURS_PER_DAY + 21 then
+		ticks_until_dk = moon_hour <= HOURS_PER_DAY + 18 and HOURS_PER_DAY + 18 - moon_hour or 0
 		next_dk_day = 2
-	elseif moon_hour <= 48 + 19 then
-		ticks_until_dk = 48 + 19 - moon_hour
+	elseif moon_hour < HOURS_PER_DAY * 2 + 22 then
+		ticks_until_dk = moon_hour <= HOURS_PER_DAY * 2 + 19 and HOURS_PER_DAY * 2 + 19 - moon_hour or 0
 		next_dk_day = 3
 	else
-		ticks_until_dk = full_moon_cycle - moon_hour + 18
+		ticks_until_dk = full_moon_cycle - moon_hour + 17
 	end
-	local next_dk_in_rl_hours = math.floor(ticks_until_dk / 60)
-	local next_dk_in_rl_minutes = ticks_until_dk % 60
+	local next_dk_in_rl_hours = math.floor(ticks_until_dk / MINUTES_PER_HOUR)
+	local next_dk_in_rl_minutes = ticks_until_dk % MINUTES_PER_HOUR
 	if ticks_until_dk == 0 then
-		output = output .. "\nDK is open now!"
+		Note("DK is open now!")
 	else
-		output = string.format("%s\nDK opens in %d real-life hour%s and %d minute%s (day %d of 3).", output, next_dk_in_rl_hours, next_dk_in_rl_hours ~= 1 and "s" or "", next_dk_in_rl_minutes, next_dk_in_rl_minutes ~= 1 and "s" or "", next_dk_day)
+		Note(string.format("DK opens in %d real-life hour%s and %d minute%s (day %d of 3).", next_dk_in_rl_hours, next_dk_in_rl_hours ~= 1 and "s" or "", next_dk_in_rl_minutes, next_dk_in_rl_minutes ~= 1 and "s" or "", next_dk_day))
 	end
-	Note(output)
 end
 
 ]]>
