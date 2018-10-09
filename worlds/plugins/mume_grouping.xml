@@ -34,7 +34,7 @@
   <trigger
    enabled="y"
    group="mume_grouping"
-   match="^(?P&lt;player&gt;\w+) examines the terrain intently\.$"
+   match="^(?P&lt;player&gt;\w+)(?: \(\w+\))? examines the terrain intently\.$"
    name="auto_reveal1"
    regexp="y"
    send_to="12"
@@ -49,7 +49,7 @@ end
   <trigger
    enabled="y"
    group="mume_grouping"
-   match="^(?P&lt;player&gt;\w+) puts all (?:his|her|its) weight against the (?P&lt;door&gt;\w+)\, trying to (?P&lt;action&gt;close|open) (?:it|them)\.$"
+   match="^(?P&lt;player&gt;\w+)(?: \(\w+\))? puts all (?:his|her|its) weight against the (?P&lt;door&gt;\w+)\, trying to (?P&lt;action&gt;close|open) (?:it|them)\.$"
    name="auto_assist_leader_doors1"
    regexp="y"
    send_to="12"
@@ -64,7 +64,7 @@ end
   <trigger
    enabled="y"
    group="mume_grouping"
-   match="^(?P&lt;player&gt;\w+) tries to help the (?P&lt;door&gt;\w+)(?:&apos;[s]?)? movement as (?:it|they) (?P&lt;action&gt;close|open)[s]?\.$"
+   match="^(?P&lt;player&gt;\w+)(?: \(\w+\))? tries to help the (?P&lt;door&gt;\w+)(?:&apos;[s]?)? movement as (?:it|they) (?P&lt;action&gt;close|open)[s]?\.$"
    name="auto_assist_leader_doors2"
    regexp="y"
    send_to="12"
@@ -73,6 +73,21 @@ end
   <send>
 if "%&lt;player&gt;" == leader and auto_ride then
 	Send("%&lt;action&gt; %&lt;door&gt;")
+end
+  </send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_grouping"
+   match="^(?P&lt;player&gt;\w+)(?: \(\w+\))? starts moving aside the heavy rocks\.\.\.$"
+   name="auto_assist_leader_doors3"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+if "%&lt;player&gt;" == leader and auto_ride then
+	Send("open rockslide")
 end
   </send>
   </trigger>
