@@ -121,3 +121,9 @@ function table.count(tbl, item)
 	end
 	return count
 end
+
+function table.clear(tbl)
+	for key in pairs(tbl) do
+		tbl[key] = nil
+	end
+end
