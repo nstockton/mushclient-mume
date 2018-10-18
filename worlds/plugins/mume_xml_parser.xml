@@ -190,9 +190,7 @@ function OnPluginPacketReceived(packet)
 					-- Start of tag.
 					-- Process the bytes in the character buffer, and write them to the result buffer.
 					table.insert(result, process_text(table.concat(character_buffer)))
-					for key in pairs(character_buffer) do
-						character_buffer[key] = nil
-					end
+					table.clear(character_buffer)
 					reading_tag = true
 				end
 			elseif byte ~= ">" then
@@ -223,7 +221,10 @@ function OnPluginPacketReceived(packet)
 						xml_mode = XML_EXITS
 					elseif tag == "room" then
 						if not scouting then
-							last_data = {["name"] = "", ["description"] = "", ["dynamic"] = "", ["exits"] = ""}
+							last_data.name = ""
+							last_data.description = ""
+							last_data.dynamic = ""
+							last_data.exits = ""
 						end
 						xml_mode = XML_ROOM
 					elseif string.startswith(tag, "movement") then
@@ -278,9 +279,7 @@ function OnPluginPacketReceived(packet)
 					xml_mode = XML_NONE
 					BroadcastPlugin(BROADCAST_PROMPT, last_data["prompt"])
 				end
-				for key in pairs(tag_buffer) do
-					tag_buffer[key] = nil
-				end
+				table.clear(tag_buffer)
 				reading_tag = false
 			end
 		elseif not in_iac then
