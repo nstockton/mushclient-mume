@@ -510,8 +510,19 @@ end
   <trigger
    enabled="y"
    group="mume_sounds"
-   match="A phantom terror looms here bathed in shadows of malice."
+   match="^A phantom terror looms here bathed in shadows of malice(?: \(hidden\))?\.$"
    name="misc_alert23"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_ALERT, "misc_alert.wav")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
+   match="A sudden plop is heard from the dark lake."
+   name="misc_alert24"
    send_to="12"
    sequence="100"
   >
@@ -668,7 +679,17 @@ end
    enabled="y"
    group="mume_sounds"
    match="You have been blinded!"
-   name="blindness_up"
+   name="blindness_up1"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_SPELL_STATUS, "spells/blindness_on.wav")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
+   match="You dream about going blind!"
+   name="blindness_up2"
    send_to="12"
    sequence="100"
   >
@@ -725,6 +746,26 @@ end
    match="An icy wind starts to blow in the room. You panic!"
    name="fear_you"
    omit_from_output="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_SPELL_ATTACK, "spells/fear.wav", 100)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
+   match="A hideous phantom explodes from the night, chilling your soul with a scream of horrible delight!"
+   name="fear_dugorwath"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_SPELL_ATTACK, "spells/fear.wav", 100)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
+   match="With a powerful sweep of its fists, the dwarven statue throws you out of the room!"
+   name="fear_dwarven_statue"
    send_to="12"
    sequence="100"
   >
