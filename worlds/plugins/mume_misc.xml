@@ -89,6 +89,24 @@
   <trigger
    enabled="y"
    group="mume_misc"
+   match="A wight-noble disappears into nothing."
+   name="count_nobles"
+   omit_from_output="y"
+   send_to="14"
+   sequence="100"
+  >
+  <send>
+nobles_dead = (nobles_dead + 1) % 10
+if nobles_dead == 0 then
+	Note("10 nobles dead! Resetting.")
+else
+	Note(nobles_dead, " noble", nobles_dead > 1 and "s" or "", " dead!")
+end
+  </send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
    match="^Your bash at (?:a[n]? |the )?(?P&lt;someone&gt;.+?)(?: \((?P&lt;someone_label&gt;\w+)\))? sends (?:him|her|it) sprawling\.$"
    name="bash_target"
    omit_from_output="y"
@@ -908,6 +926,15 @@ Note("Web removed!")
   <trigger
    enabled="y"
    group="mume_misc"
+   match="You feel a slight tremor in your blade."
+   name="gag_claymore"
+   omit_from_output="y"
+   sequence="100"
+  >
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
    match="^A cockroach (?:is scuttling across the floor carrying some debris|panics\, and attempts to flee)\.$"
    name="gag_cockroach"
    omit_from_output="y"
@@ -928,7 +955,17 @@ Note("Web removed!")
   <trigger
    enabled="y"
    group="mume_misc"
-   match="^(?:There is an old street\-lamp on the border of the street|A finely crafted crystal lamp is here|A finely crafted crystal lamp is hanging from a tree branch)\.$"
+   match="^A small crystal phial shines a warm light on \w+\.$"
+   name="gag_phial"
+   omit_from_output="y"
+   regexp="y"
+   sequence="100"
+  >
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="^(?:There is an old street\-lamp on the border of the street|A finely crafted crystal lamp is (?:here|hanging from a tree branch))\.$"
    name="gag_street_lamps"
    omit_from_output="y"
    regexp="y"
@@ -1663,6 +1700,7 @@ elf_camp_quest_me = false
 oie_key_quest_me = false
 anarwen_quest_me = false
 ithildir_quest_me = false
+nobles_dead = 0
 
 function move_stakes(direction)
 	local directions = {"N", "E", "SE", "SW", "W"}
