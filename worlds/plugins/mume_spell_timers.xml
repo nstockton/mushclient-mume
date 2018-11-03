@@ -387,7 +387,17 @@
    enabled="y"
    group="mume_spell_timers"
    match="You have been blinded!"
-   name="blindness_up"
+   name="blindness_up1"
+   send_to="12"
+   sequence="100"
+  >
+  <send>spell_timer_set("blindness")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_spell_timers"
+   match="You dream about going blind!"
+   name="blindness_up2"
    send_to="12"
    sequence="100"
   >
