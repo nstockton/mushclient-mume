@@ -199,6 +199,14 @@ end
 
 <aliases>
   <alias
+   match="pulldate"
+   enabled="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>time_check("pull")</send>
+  </alias>
+  <alias
    match="ti"
    enabled="y"
    send_to="12"
@@ -293,6 +301,11 @@ function time_check(action)
 	local hour = math.floor(minutes / MINUTES_PER_HOUR)
 	minutes = minutes % MINUTES_PER_HOUR
 	local ap = hour < 12 and "am" or "pm"
+	if action and action == "pull" then
+		Send("pull lever ", day)
+		Send("pull lever ", MONTHS[month].westron)
+		return
+	end
 	output = string.format("Game time %d:%s%d %s: Dawn: %d am, Dusk: %d pm.", hour % 12 ~= 0 and hour % 12 or 12, minutes < 10 and "0" or "", minutes, ap, MONTHS[month].dawn, MONTHS[month].dusk - 12)
 	if action then
 		return Send(action, " ", output)

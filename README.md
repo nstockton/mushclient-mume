@@ -242,6 +242,7 @@ Shows how long your support spells have been up. you can see the list of support
 ### Time
 Allows you to see the current game time, how long until next winter, how long until DK opens, etc. The time will be synchronized to dawn/dusk events, or when you walk into a room with a clock.
 #### Aliases
+* pulldate  --  Pull the appropriate levers to unlock the door in Mystical.
 * ti  --  Print time information.
 * nti  --  Narrate time information.
 * sti  --  Say time information.
