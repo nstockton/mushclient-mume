@@ -286,6 +286,37 @@ end
   <trigger
    enabled="y"
    group="mume_misc"
+   match="The strong current drags you along through a narrow tunnel. You lose all sense of direction and suddenly you break through the surface of the water."
+   name="auto_move_after_looting_elven_bag"
+   send_to="0"
+   sequence="100"
+  >
+  <send>east</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="An ashen aberration is dead! R.I.P."
+   name="auto_loot_gems_ashen"
+   send_to="0"
+   sequence="100"
+  >
+  <send>get all.gem all.pile</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="The radiance goes out like a snuffed candle flame, and Dagnir is gone."
+   name="auto_quest_dagnir"
+   send_to="0"
+   sequence="100"
+  >
+  <send>get medallion
+get key</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
    match="A nasty old hag ponders you, a disquieting sparkle in her eyes."
    name="auto_quest_hag1"
    send_to="12"
