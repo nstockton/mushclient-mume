@@ -754,6 +754,16 @@ end
   <trigger
    enabled="y"
    group="mume_sounds"
+   match="The world starts to speed up as you feel your muscles start to stiffen."
+   name="fear_sage"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_SPELL_ATTACK, "spells/fear.wav", 100)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
    match="A hideous phantom explodes from the night, chilling your soul with a scream of horrible delight!"
    name="fear_dugorwath"
    send_to="12"
