@@ -34,7 +34,7 @@
   <trigger
    enabled="y"
    group="mume_time"
-   match="^(?:It seems as if )?[Tt]he day has begun\.$"
+   match="^(?:It seems as if )?[Tt]he day has begun\.(?: You feel so weak under the cruel light\!)?$"
    name="sync_event1"
    send_to="12"
    regexp="y"
@@ -68,7 +68,7 @@ end
   <trigger
    enabled="y"
    group="mume_time"
-   match="^(?:It seems as if )?[Tt]he night has begun\.$"
+   match="^(?:It seems as if )?[Tt]he night has begun\.(?: You feel stronger in the dark\!)?$"
    name="sync_event3"
    send_to="12"
    regexp="y"
