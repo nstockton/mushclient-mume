@@ -311,6 +311,8 @@ Auto mapping mode must be on for these commands to have any effect.
 * secret [add|remove] [name] [north|east|south|west|up|down]  --  Add or remove a secret door in the current room.
 ### Searching Commands
 * fdoor [text]  --  Search the map for rooms with doors matching text. Returns the closest 20 rooms to you based on the [Manhattan Distance.](https://en.wikipedia.org/wiki/Taxicab_geometry "Wikipedia Page On Taxicab Geometry")
+* fdynamic [text]  --  Search the map for rooms with dynamic descriptions matching text. Returns the nearest 20 rooms to you (furthest to closest) based on the [Manhattan Distance.](https://en.wikipedia.org/wiki/Taxicab_geometry "Wikipedia Page On Taxicab Geometry")
+* flabel [text]  --  Search the map for rooms with labels matching text. Returns the nearest 20 rooms to you (furthest to closest) based on the [Manhattan Distance.](https://en.wikipedia.org/wiki/Taxicab_geometry "Wikipedia Page On Taxicab Geometry") If no text is given, will show the 20 closest labeled rooms.
 * fname [text]  --  Search the map for rooms with names matching text. Returns the closest 20 rooms to you based on the [Manhattan Distance.](https://en.wikipedia.org/wiki/Taxicab_geometry "Wikipedia Page On Taxicab Geometry")
 * fnote [text]  --  Search the map for rooms with notes matching text. Returns the closest 20 rooms to you based on the [Manhattan Distance.](https://en.wikipedia.org/wiki/Taxicab_geometry "Wikipedia Page On Taxicab Geometry")
 ### Miscellaneous Mapper Commands
