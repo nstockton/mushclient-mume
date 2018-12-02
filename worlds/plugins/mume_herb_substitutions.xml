@@ -149,6 +149,16 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
+   match="A very short plant with bright white flowers is growing here."
+   omit_from_output="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 - [Anemone]</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_herb_substitutions"
    match="A black, thorny bush grows here, enshrouded in a murky gloom."
    omit_from_output="y"
    send_to="2"
