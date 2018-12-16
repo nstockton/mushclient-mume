@@ -34,6 +34,17 @@
   <trigger
    enabled="y"
    group="mume_misc"
+   match="^(?:&lt;worn on feet&gt;[ ]{7})?a soft pair of padded boots \(flawless\)(?:[;] it glows blue)?$"
+   omit_from_output="y"
+   regexp="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 (NoTracks, Tharbad Chief)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
    match="^(?:&lt;wielded&gt;[ ]{12})?the silvery broadsword \(flawless\)(?:[;] it glows blue)?(?:[;] it has a soft glowing aura)?$"
    omit_from_output="y"
    regexp="y"
@@ -89,9 +100,38 @@
   <trigger
    enabled="y"
    group="mume_misc"
-   match="A wight-noble disappears into nothing."
+   match="^A citizen mercenary(?: \((?P&lt;label&gt;\w+)\))? says &apos;(?:Sorry\, my|My daily) fee is (?P&lt;mercenary_payment&gt;\d+) silver[^\.]+\.&apos;$"
+   name="pay_mercenary"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+mercenary_payment = "%&lt;mercenary_payment&gt;"
+Send("give ", mercenary_payment, " silver ", "%&lt;label&gt;" == "" and "mercenary" or "%&lt;label&gt;")
+Send("give ", mercenary_payment, " celeb ", "%&lt;label&gt;" == "" and "mercenary" or "%&lt;label&gt;")
+  </send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="^A citizen mercenary(?: \((?P&lt;label&gt;\w+)\))? taps you on the shoulder\.$"
+   name="repay_mercenary"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+Send("give ", mercenary_payment, " silver ", "%&lt;label&gt;" == "" and "mercenary" or "%&lt;label&gt;")
+Send("give ", mercenary_payment, " celeb ", "%&lt;label&gt;" == "" and "mercenary" or "%&lt;label&gt;")
+  </send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="^A wight\-noble(?: \(\w+\))? disappears into nothing\.$"
    name="count_nobles"
-   omit_from_output="y"
+   regexp="y"
    send_to="14"
    sequence="100"
   >
@@ -286,12 +326,36 @@ end
   <trigger
    enabled="y"
    group="mume_misc"
+   match="^As you attempt to parry (?:.+?) blow with your (?P&lt;weapon&gt;\w+)\, it suffers great damage\, and you lose your grip on it\!$"
+   name="auto_wield_weapon_trees"
+   regexp="y"
+   send_to="0"
+   sequence="100"
+  >
+  <send>wield %&lt;weapon&gt;</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
    match="The strong current drags you along through a narrow tunnel. You lose all sense of direction and suddenly you break through the surface of the water."
    name="auto_move_after_looting_elven_bag"
    send_to="0"
    sequence="100"
   >
   <send>east</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="Lauriel opens the walldoors."
+   name="auto_enter_before_lorien_herbalist"
+   send_to="0"
+   sequence="100"
+  >
+  <send>lead
+north
+open woodenbeam up
+climb up</send>
   </trigger>
   <trigger
    enabled="y"
@@ -654,7 +718,6 @@ end
    enabled="y"
    group="mume_misc"
    match="With a grinding noise, the passage to the west closes."
-   omit_from_output="n"
    send_to="0"
    sequence="100"
   >
@@ -665,7 +728,6 @@ search</send>
    enabled="y"
    group="mume_misc"
    match="With a grinding noise, the passage to the west opens."
-   omit_from_output="n"
    send_to="0"
    sequence="100"
   >
@@ -697,7 +759,6 @@ search</send>
    enabled="y"
    group="mume_misc"
    match="Suddenly, the ground drops beneath your feet!"
-   omit_from_output="n"
    send_to="0"
    sequence="100"
   >
@@ -708,7 +769,6 @@ open debris up</send>
    enabled="y"
    group="mume_misc"
    match="The earth crumbles away beneath your feet - you slip - you fall!"
-   omit_from_output="n"
    send_to="0"
    sequence="100"
   >
@@ -718,7 +778,6 @@ open debris up</send>
    enabled="y"
    group="mume_misc"
    match="When you come to, you find yourself lying on a muddy floor, stripped of your gear. An overpowering smell of smoke fills your nostrils."
-   omit_from_output="n"
    send_to="0"
    sequence="100"
   >
@@ -728,7 +787,6 @@ open debris up</send>
    enabled="y"
    group="mume_misc"
    match="A gnarled tree stomps the forest floor, producing thunderous vibrations that send you sprawling."
-   omit_from_output="n"
    send_to="0"
    sequence="100"
   >
@@ -738,7 +796,6 @@ open debris up</send>
    enabled="y"
    group="mume_misc"
    match="You break the surface and find yourself looking upwards at the twinkling stars above a twilit land."
-   omit_from_output="n"
    send_to="0"
    sequence="100"
   >
@@ -749,7 +806,6 @@ open debris up</send>
    group="mume_misc"
    match="^You slip on the treacherous ground and fall (?:north|east|south|west|up|down)\, landing on your back\.$"
    regexp="y"
-   omit_from_output="n"
    send_to="0"
    sequence="100"
   >
@@ -759,7 +815,6 @@ open debris up</send>
    enabled="y"
    group="mume_misc"
    match="The entire cave system thunders and reverberates as the huge beast drops dead to the ground, making you lose your balance."
-   omit_from_output="n"
    send_to="0"
    sequence="100"
   >
@@ -1000,6 +1055,15 @@ Note("Web removed!")
    name="gag_street_lamps"
    omit_from_output="y"
    regexp="y"
+   sequence="100"
+  >
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="You grope around for exits:"
+   name="gag_no_light_exits"
+   omit_from_output="y"
    sequence="100"
   >
   </trigger>
@@ -1731,6 +1795,7 @@ elf_camp_quest_me = false
 oie_key_quest_me = false
 anarwen_quest_me = false
 ithildir_quest_me = false
+mercenary_payment = "10"
 nobles_dead = 0
 
 function move_stakes(direction)
