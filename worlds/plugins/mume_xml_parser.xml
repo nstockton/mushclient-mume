@@ -54,7 +54,6 @@ local GA = "\249"
 local IAC_GA = IAC .. GA
 local SB = "\250"
 local SE = "\240"
-local ESC = "\27"
 local XML_NONE = 0
 local XML_ROOM = 2
 local XML_NAME = 4
@@ -68,9 +67,9 @@ local XML_PRAY = 512
 local XML_SAY = 1024
 local XML_EMOTE = 2048
 local XML_REPLACEMENTS = {
+	["&amp;"] = "&",
 	["&lt;"] = "<",
 	["&gt;"] = ">",
-	["&amp;"] = "&",
 	["&#39;"] = "'",
 	["&apos;"] = "'",
 	["&quot;"] = '"',
@@ -85,7 +84,6 @@ local BROADCAST_PRAY = 7
 local BROADCAST_SAY = 8
 local BROADCAST_EMOTE = 9
 
-local in_esc = false
 local in_iac = false
 local in_sub_option = false
 local in_gratuitous = false
@@ -116,23 +114,23 @@ function process_text(data)
 	if xml_mode == XML_NONE and data:findpos("You quietly scout ") then
 		scouting = true
 	elseif xml_mode == XML_PROMPT then
-		last_data["prompt"] = last_data["prompt"] .. data
+		last_data.prompt = last_data.prompt .. StripANSI(data)
 		if not show_prompt then
 			return ""
 		end
 	elseif xml_mode >= XML_TELL and xml_mode <= XML_EMOTE then
-		last_communication = last_communication .. data
+		last_communication = last_communication .. StripANSI(data)
 	elseif scouting then
 		-- The next incoming room data should be ignored. For example if the player is scouting.
 	elseif xml_mode == XML_ROOM then
 		-- dynamic description
-		last_data["dynamic"] = string.format("%s%s\n", last_data["dynamic"], data)
+		last_data.dynamic = string.format("%s%s\n", last_data.dynamic, StripANSI(data))
 	elseif xml_mode == XML_NAME then
-		last_data["name"] = last_data["name"] .. data
+		last_data.name = last_data.name .. StripANSI(data)
 	elseif xml_mode == XML_DESCRIPTION then
-		last_data["description"] = string.format("%s%s\n", last_data["description"], data)
+		last_data.description = string.format("%s%s\n", last_data.description, StripANSI(data))
 	elseif xml_mode == XML_EXITS then
-		last_data["exits"] = last_data["exits"] .. data
+		last_data.exits = last_data.exits .. StripANSI(data)
 	end
 	if in_gratuitous then
 		return ""
@@ -164,46 +162,43 @@ function OnPluginPacketReceived(packet)
 	local tag_buffer = {}
 	local result = {}
 	for byte in packet:gmatch(".") do
-		if not in_sub_option and (not in_iac and not IGNORE_BYTES[byte] or in_iac and byte == IAC) then
-			-- Byte is *not* part of a Telnet sequence.
-			if byte == IAC then
-				-- Escaped IAC.
+		if in_iac then
+			-- Telnet negotiation
+			table.insert(result, byte)
+			if not NEGOTIATION_BYTES[byte] then
+				-- Byte is the last byte in the negotiation sequence.
 				in_iac = false
-			end
-			if byte == ESC then
-				-- Beginning Ansi escape code.
-				table.insert(result, byte)
-				in_esc = true
-			elseif in_esc then
-				-- Byte is part of an Ansi escape code.
-				table.insert(result, byte)
-				if not string.match(byte, "[%d[;]") then
-					-- Byte is the final byte in an Ansi escape code.
-					in_esc = false
-				end
-			elseif not reading_tag then
-				-- Byte is out side of a tag, or in between opening and closing tags.
-				if byte ~= "<" then
-					-- Add the byte to the character buffer.
-					table.insert(character_buffer, byte)
-				else
-					-- Start of tag.
-					-- Process the bytes in the character buffer, and write them to the result buffer.
-					table.insert(result, process_text(table.concat(character_buffer)))
+				if byte == SB then
+					-- Begin sub-negotiation.
+					in_sub_option = true
+				elseif byte == SE then
+					-- End sub-negotiation
+					in_sub_option = false
+				elseif in_sub_option then
+					-- Skip.
+				elseif byte == GA then
+					-- delete IAC GA from result.
+					result[table.getn(result)] = nil
+					result[table.getn(result)] = nil
+					table.insert(result, process_text(table.concat(character_buffer)) .. IAC_GA)
 					table.clear(character_buffer)
-					reading_tag = true
 				end
-			elseif byte ~= ">" then
-				-- A tag is being parsed, and the end of the tag has *not* been reached yet.
-				table.insert(tag_buffer, byte)
-			else
+			end
+		elseif byte == IAC then
+			-- unescaped IAC, start of Telnet negotiation.
+			table.insert(result, byte)
+			in_iac = true
+		elseif IGNORE_BYTES[byte] then
+			table.insert(result, byte)
+		elseif reading_tag then
+			if byte == ">" then
 				-- End of XML tag.
 				local tag = table.concat(tag_buffer)
-				if xml_mode == XML_NONE then
-					if tag == "/xml" then
-						-- XML mode was turned off by the player.
-						xml_mode = XML_NONE
-					elseif tag == "tell" then
+				if tag == "/xml" then
+					-- XML mode was turned off by the player.
+					xml_mode = XML_NONE
+				elseif xml_mode == XML_NONE then
+					if tag == "tell" then
 						xml_mode = XML_TELL
 					elseif tag == "narrate" then
 						xml_mode = XML_NARRATE
@@ -251,10 +246,10 @@ function OnPluginPacketReceived(packet)
 					xml_mode = XML_ROOM
 				elseif xml_mode == XML_NAME and tag == "/name" then
 					xml_mode = XML_ROOM
-					BroadcastPlugin(BROADCAST_NAME, last_data["name"])
+					BroadcastPlugin(BROADCAST_NAME, last_data.name)
 				elseif xml_mode == XML_EXITS and tag == "/exits" then
 					xml_mode = XML_NONE
-					BroadcastPlugin(BROADCAST_EXITS, last_data["exits"])
+					BroadcastPlugin(BROADCAST_EXITS, last_data.exits)
 				elseif xml_mode == XML_TELL and tag == "/tell" then
 					xml_mode = XML_NONE
 					BroadcastPlugin(BROADCAST_TELL, last_communication)
@@ -277,33 +272,24 @@ function OnPluginPacketReceived(packet)
 					last_communication = ""
 				elseif xml_mode == XML_PROMPT and tag == "/prompt" then
 					xml_mode = XML_NONE
-					BroadcastPlugin(BROADCAST_PROMPT, last_data["prompt"])
+					BroadcastPlugin(BROADCAST_PROMPT, last_data.prompt)
 				end
 				table.clear(tag_buffer)
 				reading_tag = false
+			else
+				-- A tag is being parsed, and the end of the tag has *not* been reached yet.
+				table.insert(tag_buffer, byte)
 			end
-		elseif not in_iac then
-			-- Byte is IAC, ignored, or part of a sub-negotiation.
-			table.insert(result, byte)
-			if byte == IAC then
-				-- unescaped IAC, start of Telnet negotiation.
-				in_iac = true
-			end
+		elseif byte == "<" then
+			-- Start of tag.
+			-- Process the bytes in the character buffer, and write them to the result buffer.
+			table.insert(result, process_text(table.concat(character_buffer)))
+			table.clear(character_buffer)
+			reading_tag = true
 		else
-			-- Telnet negotiation
-			table.insert(result, byte)
-			if not NEGOTIATION_BYTES[byte] then
-				-- Byte is the last byte in the negotiation sequence.
-				in_iac = false
-				if byte == SB then
-					-- Begin sub-negotiation.
-					in_sub_option = true
-				elseif byte == SE then
-					-- End sub-negotiation
-					in_sub_option = false
-				end
-			end
-		end -- else
+			-- Add the byte to the character buffer.
+			table.insert(character_buffer, byte)
+		end
 	end -- for
 	if not reading_tag then
 		table.insert(result, process_text(table.concat(character_buffer)))
