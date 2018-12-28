@@ -30,6 +30,46 @@
   <trigger
    enabled="y"
    group="mume_mob_substitutions"
+   match="A cowled sorcerer, in dark robes, gestures when he sees you (glowing)."
+   omit_from_output="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 - (BN mage guild)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_mob_substitutions"
+   match="A man walks stealthily here, enshrouded in a grey woollen cloak."
+   omit_from_output="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 - (BN Scout guild)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_mob_substitutions"
+   match="A small and gaunt man, dressed in brown, looks at you from the shadows."
+   omit_from_output="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 - (BN ranger guild, also mends and sells armour)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_mob_substitutions"
+   match="A strange man, dressed in black priestly-garb, walks here (glowing)."
+   omit_from_output="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 - (BN cleric guild)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_mob_substitutions"
    match="A large predatory lion is on the prowl here, moving stealthily on soft paws."
    omit_from_output="y"
    send_to="2"
