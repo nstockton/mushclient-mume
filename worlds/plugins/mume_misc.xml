@@ -34,6 +34,31 @@
   <trigger
    enabled="y"
    group="mume_misc"
+   match="^.+? is (?:incapacitated|mortally wounded|stunned) and will (?:slowly |probably )?die[,]? (?:soon[ ]?)?(?:if not aided)?\.$"
+   name="auto_kick"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+if auto_kick then
+	Send("kick")
+end
+  </send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="a string of dwarven bones"
+   omit_from_output="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 (BM citizenship quest and HOB, Moria)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
    match="^(?:&lt;worn on feet&gt;[ ]{7})?a soft pair of padded boots \(flawless\)(?:[;] it glows blue)?$"
    omit_from_output="y"
    regexp="y"
@@ -1301,6 +1326,20 @@ Note(string.format("%s copied to clipboard.", new_id))
   </send>
   </alias>
   <alias
+   name="toggle_auto_kick"
+   match="autokick"
+   enabled="y"
+   group="mume_misc"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+auto_kick = not auto_kick
+CallPlugin(CONFIG, "set", "auto_kick", auto_kick)
+Note("Auto Kick ", auto_kick and "enabled." or "disabled.")
+  </send>
+  </alias>
+  <alias
    name="spam_recover"
    match="rr"
    enabled="y"
@@ -1613,6 +1652,18 @@ put belt e.pack
 wear all</send>
   </alias>
   <alias
+   name="switch_gloves_from_pack"
+   match="gpack"
+   enabled="y"
+   group="mume_misc"
+   sequence="100"
+  >
+  <send>remove gloves
+get gloves e.pack
+wear gloves
+put gloves e.pack</send>
+  </alias>
+  <alias
    name="wear_helm"
    match="helm"
    enabled="y"
@@ -1765,6 +1816,7 @@ eat wafer</send>
 <![CDATA[
 require("mystdlib")
 json = require("dkjson")
+CONFIG = "d19a2f0a604c96b7318aa67f"
 TTS = "925cdd0331023d9f0b8f05a7"
 COUNTRY_CODES_FILE = string.format("%sdatabases\\country_codes.json", GetInfo(67))
 
@@ -1789,6 +1841,8 @@ GLYPHS = {
 auto_move_stakes = false
 auto_drag = false
 auto_drag_counter = 1
+return_code, auto_kick = CallPlugin(CONFIG, "get", "auto_kick")
+auto_kick = auto_kick or false
 hag_quest_me = false
 freuf_quest_me = false
 elf_camp_quest_me = false
