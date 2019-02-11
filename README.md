@@ -160,6 +160,7 @@ Miscellaneous aliases and triggers that don't belong anywhere else.
 * affect  --  Prints a list of spells and other things the player is affected by.
 * age  --  Prints the character's age.
 * align  --  Prints the character's alignment.
+* autokick  --  Toggle automatic kicking when something is incapacitated on or off (defaults to off).
 * bc[number]  --  Butcher number.corpse.
 * belt  --  Switch the belt the character is currently wearing with the one in the character's pack.
 * bpack  --  Switch the boots that the character is currently wearing with the ones in the character's pack.
@@ -174,6 +175,7 @@ Miscellaneous aliases and triggers that don't belong anywhere else.
 * fbag  --  Get food from the character's elven bag and eat it.
 * fpack  --  Switch the cloak, fur, or mantle that the character is wearing with the fur in the character's pack.
 * fpouch  --  Switch the cloak, fur, or mantle that the character is wearing with the fur in the character's pouch.
+* gpack  --  Switch the gloves that the character is currently wearing with the ones in the character's pack.
 * helm  --  Remove the character's circlet, and switch to using the character's helm.
 * kbag  --  Get a butcher knife from the character's elven bag.
 * lev  --  Prints the character's current level.
