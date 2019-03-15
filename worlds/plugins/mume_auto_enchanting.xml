@@ -47,6 +47,7 @@ if auto_enchanting and "%&lt;max&gt;" ~= "xxx" and "%&lt;current&gt;" == "%&lt;m
 	Send("stand")
 	Send(string.format("get %s %s", arrow, unchanted_container))
 	Send(string.format("cast 'enchant' 2.%s", arrow))
+	Send(string.format("cast 'bless' 2.%s", arrow))
 	Send(string.format("compare 1.%s 2.%s", arrow, arrow))
 end
   </send>
@@ -72,7 +73,7 @@ end
   <trigger
    enabled="y"
    group="mume_auto_enchanting"
-   match="^The first arrow [^\.]+\.$"
+   match="^The first (?:arrow|bolt) [^\.]+\.$"
    name="not_max_enchant"
    regexp="y"
    send_to="12"
@@ -89,9 +90,9 @@ end
   <trigger
    enabled="y"
    group="mume_auto_enchanting"
-   match="Nothing."
+   match="^(?:Nothing|You are not carrying anything like that)\.$"
    name="unchanted_container_empty"
-   regexp="n"
+   regexp="y"
    send_to="12"
    sequence="100"
   >
