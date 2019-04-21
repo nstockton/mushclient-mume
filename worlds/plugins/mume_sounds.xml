@@ -182,7 +182,6 @@ end
    match="^(?:Your victim has disappeared|Alas\! There was no clear line of sight to \w+)\!$"
    name="no_line_of_sight"
    regexp="y"
-   omit_from_output="n"
    send_to="12"
    sequence="100"
   >
@@ -776,6 +775,16 @@ end
    group="mume_sounds"
    match="With a powerful sweep of its fists, the dwarven statue throws you out of the room!"
    name="fear_dwarven_statue"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_SPELL_ATTACK, "spells/fear.wav", 100)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
+   match="You feel a wave of panic in your heart."
+   name="fear_lord"
    send_to="12"
    sequence="100"
   >
