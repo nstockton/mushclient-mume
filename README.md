@@ -160,7 +160,10 @@ Miscellaneous aliases and triggers that don't belong anywhere else.
 * affect  --  Prints a list of spells and other things the player is affected by.
 * age  --  Prints the character's age.
 * align  --  Prints the character's alignment.
+* antidote [container]  --  Get the ingredients for the Antidote herblore from all containers, and put them in the specified container. If no container is specified, print a list of required ingredients instead.
+* arachnia [container]  --  Get the ingredients for the Arachnia herblore from all containers, and put them in the specified container. If no container is specified, print a list of required ingredients instead.
 * autokick  --  Toggle automatic kicking when something is incapacitated on or off (defaults to off).
+* baker [container]  --  Get the ingredients for the Baker herblore from all containers, and put them in the specified container. If no container is specified, print a list of required ingredients instead.
 * bc[number]  --  Butcher number.corpse.
 * belt  --  Switch the belt the character is currently wearing with the one in the character's pack.
 * bpack  --  Switch the boots that the character is currently wearing with the ones in the character's pack.
@@ -168,16 +171,20 @@ Miscellaneous aliases and triggers that don't belong anywhere else.
 * ccring  --  Use the cure critic ring in the character's pack.
 * cir  --  Remove the character's helm, and switch to using the character's circlet.
 * citizen  --  Print the list of towns in which the character has citizenship.
+* clearthoughts [container]  --  Get the ingredients for the ClearThoughts herblore from all containers, and put them in the specified container. If no container is specified, print a list of required ingredients instead.
 * cpack  --  Switch the cloak, fur, or mantle that the character is currently wearing with the cloak in the character's pack.
 * cpouch  --  Switch the cloak, fur, or mantle that the character is currently wearing with the cloak in the character's pouch.
 * dg  --  Drink from the goblet in the character's pack.
 * dragall  --  Drag all corpses in the room.
+* draught [container]  --  Get the ingredients for the Orkish-draught herblore from all containers, and put them in the specified container. If no container is specified, print a list of required ingredients instead.
 * fbag  --  Get food from the character's elven bag and eat it.
 * fpack  --  Switch the cloak, fur, or mantle that the character is wearing with the fur in the character's pack.
 * fpouch  --  Switch the cloak, fur, or mantle that the character is wearing with the fur in the character's pouch.
 * gpack  --  Switch the gloves that the character is currently wearing with the ones in the character's pack.
+* healing [container]  --  Get the ingredients for the Healing herblore from all containers, and put them in the specified container. If no container is specified, print a list of required ingredients instead.
 * helm  --  Remove the character's circlet, and switch to using the character's helm.
 * kbag  --  Get a butcher knife from the character's elven bag.
+* leafcake [container]  --  Get the ingredients for the Leaf-cake herblore from all containers, and put them in the specified container. If no container is specified, print a list of required ingredients instead.
 * lev  --  Prints the character's current level.
 * li [container]  --  Look in container.
 * money  --  Print how much money the character has.
@@ -193,9 +200,13 @@ Miscellaneous aliases and triggers that don't belong anywhere else.
 * rq  --  Reveal quick.
 * rr  --  Get all.arrow all.corpse, get all.arrow, put all.arrow quiver.
 * rt  --  reveal thorough.
+* scaly [container]  --  Get the ingredients for the Drake-slumber (Scaly) herblore from all containers, and put them in the specified container. If no container is specified, print a list of required ingredients instead.
+* shadows [container]  --  Get the ingredients for the Shadows herblore from all containers, and put them in the specified container. If no container is specified, print a list of required ingredients instead.
 * sq  --  Search quick.
 * st  --  Search thorough.
 * string  --  Use the strength ring in the character's pack.
+* travelling [container]  --  Get the ingredients for the Travelling herblore from all containers, and put them in the specified container. If no container is specified, print a list of required ingredients instead.
+* venom [container]  --  Get the ingredients for the Venom herblore from all containers, and put them in the specified container. If no container is specified, print a list of required ingredients instead.
 * wbag  --  Get water from the character's elven bag and drink it.
 * weight  --  Print the weight of the character's equipment.
 * ws  --  Wake, stand.

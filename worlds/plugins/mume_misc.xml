@@ -1056,18 +1056,8 @@ Note("Web removed!")
   <trigger
    enabled="y"
    group="mume_misc"
-   match="^A large\, shimmering pearl shines a warm light on \w+\.$"
-   name="gag_bless_purl"
-   omit_from_output="y"
-   regexp="y"
-   sequence="100"
-  >
-  </trigger>
-  <trigger
-   enabled="y"
-   group="mume_misc"
-   match="^A small crystal phial shines a warm light on \w+\.$"
-   name="gag_phial"
+   match="^A (?:large\, shimmering pearl|small crystal phial) shines a warm light on \w+\.$"
+   name="gag_bless_objects"
    omit_from_output="y"
    regexp="y"
    sequence="100"
@@ -1088,6 +1078,24 @@ Note("Web removed!")
    group="mume_misc"
    match="You grope around for exits:"
    name="gag_no_light_exits"
+   omit_from_output="y"
+   sequence="100"
+  >
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="Snow is falling from the sky, and thunder can be heard over the roofs."
+   name="gag_snow1"
+   omit_from_output="y"
+   sequence="100"
+  >
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="You don't see any more snow here."
+   name="gag_snow2"
    omit_from_output="y"
    sequence="100"
   >
@@ -1210,7 +1218,7 @@ end
   <trigger
    enabled="y"
    group="mume_misc"
-   match="^(?:Last login (?:less than one|[1]?\d) hour[s]? ago|Is (?:playing|disconnected)) from \*\.(?P&lt;alpha2&gt;[a-z]{2,2})\.$"
+   match="^(?:Last login (?:less than one|(?:(?:\d+ year[s]?\, )?[1]?\d month[s]? and [1-3]?\d day[s]?|(?:[1-3]?\d day[s]? and )?[1-2]?\d) hour[s]?) ago|Is (?:playing|disconnected)) from \*\.(?P&lt;alpha2&gt;[a-z]{2,2})\.$"
    name="translate_country_codes"
    omit_from_output="y"
    regexp="y"
@@ -1290,7 +1298,7 @@ train all</send>
   <trigger
    enabled="y"
    group="mume_misc"
-   match="^(Welcome to the land of Middle\-earth\. May your visit here be\.\.\. interesting\.|Reconnecting\.)$"
+   match="^(?:Welcome to the land of Middle\-earth\. May your visit here be\.\.\. interesting\.|Reconnecting\.)$"
    name="do_stuff_after_login"
    regexp="y"
    send_to="12"
@@ -1323,6 +1331,272 @@ Send("change prompt all")</send>
 local new_id = GetUniqueID()
 SetClipboard(new_id)
 Note(string.format("%s copied to clipboard.", new_id))
+  </send>
+  </alias>
+  <alias
+   name="antidote_lore"
+   match="^antidote\s*?(?:\s+(?P&lt;container&gt;[\w\.]+))?$"
+   enabled="y"
+   group="mume_misc"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+if "%&lt;container&gt;" == "" then
+	Note("Antidote Lore: 2X blackberries, 1X long, slender green leaves (athelas), 1X white petals (lily), 1X grey petals (figwort)")
+else
+	Send("get blackberries all")
+	Send("put blackberries %&lt;container&gt;")
+	Send("get blackberries all")
+	Send("put blackberries %&lt;container&gt;")
+	Send("get athelas all")
+	Send("put athelas %&lt;container&gt;")
+	Send("get lily all")
+	Send("put lily %&lt;container&gt;")
+	Send("get figwort all")
+	Send("put figwort %&lt;container&gt;")
+end
+  </send>
+  </alias>
+  <alias
+   name="arachnia_lore"
+   match="^arachnia\s*?(?:\s+(?P&lt;container&gt;[\w\.]+))?$"
+   enabled="y"
+   group="mume_misc"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+if "%&lt;container&gt;" == "" then
+	Note("Arachnia Lore: 1X short, black fur (butcher from bats), 1X short, moist tail (butcher from salamander), 1X grey fluid-sack (butcher from grey spider)")
+else
+	Send("get bat-fur all")
+	Send("put bat-fur %&lt;container&gt;")
+	Send("get salamander all")
+	Send("put salamander %&lt;container&gt;")
+	Send("get greyfluid-sack all")
+	Send("put greyfluid-sack %&lt;container&gt;")
+end
+  </send>
+  </alias>
+  <alias
+   name="baker_lore"
+   match="^baker\s*?(?:\s+(?P&lt;container&gt;[\w\.]+))?$"
+   enabled="y"
+   group="mume_misc"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+if "%&lt;container&gt;" == "" then
+	Note("Baker Lore: 3X eggs, 1X flour, 1X mashed honey-wax mixture (crushed honeycomb)")
+else
+	Send("get egg all")
+	Send("put egg %&lt;container&gt;")
+	Send("get egg all")
+	Send("put egg %&lt;container&gt;")
+	Send("get egg all")
+	Send("put egg %&lt;container&gt;")
+	Send("get flour all")
+	Send("put flour %&lt;container&gt;")
+	Send("get honey-wax all")
+	Send("put honey-wax %&lt;container&gt;")
+end
+  </send>
+  </alias>
+  <alias
+   name="clearthoughts_lore"
+   match="^clearthoughts\s*?(?:\s+(?P&lt;container&gt;[\w\.]+))?$"
+   enabled="y"
+   group="mume_misc"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+if "%&lt;container&gt;" == "" then
+	Note("ClearThoughts Lore: 1X mauve petals, 1X grey-green leaves (sage), 1X scented crushed leaves (thyme), 1X hard, round, black berries (juniper)")
+else
+	Send("get mauve all")
+	Send("put mauve %&lt;container&gt;")
+	Send("get sage all")
+	Send("put sage %&lt;container&gt;")
+	Send("get thyme all")
+	Send("put thyme %&lt;container&gt;")
+	Send("get juniper all")
+	Send("put juniper %&lt;container&gt;")
+end
+  </send>
+  </alias>
+  <alias
+   name="orkish_draught_lore"
+   match="^draught\s*?(?:\s+(?P&lt;container&gt;[\w\.]+))?$"
+   enabled="y"
+   group="mume_misc"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+if "%&lt;container&gt;" == "" then
+	Note("Orkish Draught Lore: 1X narrow leaves (tarragon), 1X short, moist tail (butcher salamander), 1X short, black fur (butcher bat), 1X vial of preserved blood")
+else
+	Send("get tarragon all")
+	Send("put tarragon %&lt;container&gt;")
+	Send("get salamander all")
+	Send("put salamander %&lt;container&gt;")
+	Send("get bat-fur all")
+	Send("put bat-fur %&lt;container&gt;")
+	Send("get vial all")
+	Send("put vial %&lt;container&gt;")
+end
+  </send>
+  </alias>
+  <alias
+   name="healing_lore"
+   match="^healing\s*?(?:\s+(?P&lt;container&gt;[\w\.]+))?$"
+   enabled="y"
+   group="mume_misc"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+if "%&lt;container&gt;" == "" then
+	Note("Healing Lore: 1X blackcurrant berries, 2X grey-green leaves (sage), 1X long, slender green leaves (athelas), 1X yellow petals (foxtail)")
+else
+	Send("get blackcurrant all")
+	Send("put blackcurrant %&lt;container&gt;")
+	Send("get sage all")
+	Send("put sage %&lt;container&gt;")
+	Send("get sage all")
+	Send("put sage %&lt;container&gt;")
+	Send("get athelas all")
+	Send("put athelas %&lt;container&gt;")
+	Send("get foxtail all")
+	Send("put foxtail %&lt;container&gt;")
+end
+  </send>
+  </alias>
+  <alias
+   name="leaf_cake_lore"
+   match="^leafcake\s*?(?:\s+(?P&lt;container&gt;[\w\.]+))?$"
+   enabled="y"
+   group="mume_misc"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+if "%&lt;container&gt;" == "" then
+	Note("Leaf-cake Lore: 1X purple flower with a fluffy red center (coneflower), 1X mashed honey-wax mixture (crushed honeycomb), 1X grey-green leaves (sage), 1X scented crushed leaves (thyme)")
+else
+	Send("get coneflower all")
+	Send("put coneflower %&lt;container&gt;")
+	Send("get honey-wax all")
+	Send("put honey-wax %&lt;container&gt;")
+	Send("get sage all")
+	Send("put sage %&lt;container&gt;")
+	Send("get thyme all")
+	Send("put thyme %&lt;container&gt;")
+end
+  </send>
+  </alias>
+  <alias
+   name="scaly_lore"
+   match="^scaly\s*?(?:\s+(?P&lt;container&gt;[\w\.]+))?$"
+   enabled="y"
+   group="mume_misc"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+if "%&lt;container&gt;" == "" then
+	Note("Drake-slumber (Scaly) Lore: 1X red mushroom, 1X hemlock, 1X sticky mass of stems, leaves and sap (crushed milkweed), 1X foul-smelling root (valerian), 1X orange-red flowers (poppy), 1X white, egg-shaped berries (baneberries)")
+else
+	Send("get red-mushroom all")
+	Send("put red-mushroom %&lt;container&gt;")
+	Send("get hemlock all")
+	Send("put hemlock %&lt;container&gt;")
+	Send("get milkweed all")
+	Send("put milkweed %&lt;container&gt;")
+	Send("get valerian all")
+	Send("put valerian %&lt;container&gt;")
+	Send("get poppy all")
+	Send("put poppy %&lt;container&gt;")
+	Send("get baneberries all")
+	Send("put baneberries %&lt;container&gt;")
+end
+  </send>
+  </alias>
+  <alias
+   name="shadows_lore"
+   match="^shadows\s*?(?:\s+(?P&lt;container&gt;[\w\.]+))?$"
+   enabled="y"
+   group="mume_misc"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+if "%&lt;container&gt;" == "" then
+	Note("Shadows Lore: 1X cinnamon, 1X needlelike leaves (rosemary), 1X rib-bone")
+else
+	Send("get cinnamon all")
+	Send("put cinnamon %&lt;container&gt;")
+	Send("get rosemary all")
+	Send("put rosemary %&lt;container&gt;")
+	Send("get rib-bone all")
+	Send("put rib-bone %&lt;container&gt;")
+end
+  </send>
+  </alias>
+  <alias
+   name="travelling_lore"
+   match="^trave[l]{1,2}ing\s*?(?:\s+(?P&lt;container&gt;[\w\.]+))?$"
+   enabled="y"
+   group="mume_misc"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+if "%&lt;container&gt;" == "" then
+	Note("Travelling Lore: 1X narrow leaves (tarragon), 1X clover, 1X man-like root (ginseng)")
+else
+	Send("get tarragon all")
+	Send("put tarragon %&lt;container&gt;")
+	Send("get clover all")
+	Send("put clover %&lt;container&gt;")
+	Send("get ginseng all")
+	Send("put ginseng %&lt;container&gt;")
+end
+  </send>
+  </alias>
+  <alias
+   name="venom_lore"
+   match="^venom\s*?(?:\s+(?P&lt;container&gt;[\w\.]+))?$"
+   enabled="y"
+   group="mume_misc"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+if "%&lt;container&gt;" == "" then
+	Note("Venom Lore: 1X short, black fur (butcher from bats), 1X short, moist tail (butcher from salamander), 1X small fluid-sack (butcher from rattlesnake)")
+else
+	Send("get bat-fur all")
+	Send("put bat-fur %&lt;container&gt;")
+	Send("get salamander all")
+	Send("put salamander %&lt;container&gt;")
+	Send("get smallfluid-sack all")
+	Send("put smallfluid-sack %&lt;container&gt;")
+end
   </send>
   </alias>
   <alias
