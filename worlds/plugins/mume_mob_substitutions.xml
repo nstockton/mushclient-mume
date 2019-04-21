@@ -30,6 +30,48 @@
   <trigger
    enabled="y"
    group="mume_mob_substitutions"
+   match="A Dunadan ranger is crouched over the fire, cooking a meal."
+   omit_from_output="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 - [19]</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_mob_substitutions"
+   match="The hazy grey shadow of a long-dead man floats in the air."
+   omit_from_output="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 - (Angrim) [12]</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_mob_substitutions"
+   match="^A small, muscled man sneaks by, measuring you with a quick glance(?: \(hidden\))?\.$"
+   omit_from_output="y"
+   regexp="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 - (Beriagon the hunter) [20]</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_mob_substitutions"
+   match="^A weather\-beaten man is moving around silently(?: \(hidden\))?\.$"
+   omit_from_output="y"
+   regexp="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 - (Experienced Trapper)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_mob_substitutions"
    match="A cowled sorcerer, in dark robes, gestures when he sees you (glowing)."
    omit_from_output="y"
    send_to="2"

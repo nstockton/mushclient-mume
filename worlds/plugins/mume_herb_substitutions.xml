@@ -107,6 +107,17 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
+   match="^A(?:n enhanced)? herbal kit contains a purple flower with a fluffy red center\, a mashed honey\-wax mixture\, some grey\-green leaves and some scented crushed leaves\.$"
+   omit_from_output="y"
+   regexp="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>Leaf-cake</send>
+  </trigger>  
+  <trigger
+   enabled="y"
+   group="mume_herb_substitutions"
    match="^A(?:n enhanced)? herbal kit contains a bright red mushroom\, a hemlock plant\, a sticky mass of stems\, leaves and sap\, a foul\-smelling root\, some orange\-red flowers and some white\, egg\-shaped berries\.$"
    omit_from_output="y"
    regexp="y"
