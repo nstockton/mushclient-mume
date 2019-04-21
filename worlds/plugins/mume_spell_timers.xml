@@ -476,7 +476,17 @@
   <trigger
    enabled="y"
    group="mume_spell_timers"
-   match="^\- (?P&lt;spell&gt;armour|bless|shield|strength|shroud|sense life|breath of briskness|sanctuary|protection from evil|detect evil|detect magic|detect invisibility|night vision|tiredness|haggardness|lethargy|blindness|depression|battleglory|Orkish draught|sleep)$"
+   match="The venom enters your body!"
+   name="venom_up"
+   send_to="12"
+   sequence="100"
+  >
+  <send>spell_timer_set("poison (type: venom)")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_spell_timers"
+   match="^\- (?P&lt;spell&gt;armour|bless|shield|strength|shroud|sense life|breath of briskness|sanctuary|protection from evil|detect evil|detect magic|detect invisibility|night vision|tiredness|haggardness|lethargy|blindness|depression|battleglory|Orkish draught|sleep|poison \(type\: venom\))$"
    name="spell_status"
    omit_from_output="y"
    regexp="y"
