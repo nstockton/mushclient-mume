@@ -160,6 +160,16 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
+   match="A long-stemmed plant that branches into many bright yellow flowers grows here."
+   omit_from_output="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 - [ragwort]</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_herb_substitutions"
    match="A very short plant with bright white flowers is growing here."
    omit_from_output="y"
    send_to="2"
