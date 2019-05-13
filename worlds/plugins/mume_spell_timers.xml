@@ -386,6 +386,26 @@
   <trigger
    enabled="y"
    group="mume_spell_timers"
+   match="A heavy weariness settles over your spirit, you feel drained and lifeless."
+   name="spiritual_fatigue_up"
+   send_to="12"
+   sequence="100"
+  >
+  <send>spell_timer_set("Spiritual fatigue")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_spell_timers"
+   match="Your spirit lifts as you recover from your spiritual fatigue."
+   name="spiritual_fatigue_down"
+   send_to="12"
+   sequence="100"
+  >
+  <send>spell_timer_unset("Spiritual fatigue")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_spell_timers"
    match="You have been blinded!"
    name="blindness_up1"
    send_to="12"
@@ -486,7 +506,7 @@
   <trigger
    enabled="y"
    group="mume_spell_timers"
-   match="^\- (?P&lt;spell&gt;armour|bless|shield|strength|shroud|sense life|breath of briskness|sanctuary|protection from evil|detect evil|detect magic|detect invisibility|night vision|tiredness|haggardness|lethargy|blindness|depression|battleglory|Orkish draught|sleep|poison \(type\: venom\))$"
+   match="^\- (?P&lt;spell&gt;armour|bless|shield|strength|shroud|sense life|breath of briskness|sanctuary|protection from evil|detect evil|detect magic|detect invisibility|night vision|tiredness|haggardness|lethargy|Spiritual fatigue|blindness|depression|battleglory|Orkish draught|sleep|poison \(type\: venom\))$"
    name="spell_status"
    omit_from_output="y"
    regexp="y"
