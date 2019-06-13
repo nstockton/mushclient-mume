@@ -342,14 +342,14 @@ function time_check(action)
 	local next_winter_in_rl_days = math.floor(math.floor(next_winter_in_mume_days * HOURS_PER_DAY / MINUTES_PER_HOUR) / HOURS_PER_DAY)
 	local next_winter_in_rl_hours = math.floor(next_winter_in_mume_days * HOURS_PER_DAY / MINUTES_PER_HOUR) % HOURS_PER_DAY
 	Note(string.format("Next winter starts in %d real-life day%s and %d hour%s.", next_winter_in_rl_days, next_winter_in_rl_days ~= 1 and "s" or "", next_winter_in_rl_hours, next_winter_in_rl_hours ~= 1 and "s" or ""))
-	local moon_rise = (day_of_year - 1) % 24
+	local moon_rise = (day_of_year + 11) % 24
 	local moon_rise_day = ""
 	local moon_rise_ap = ""
 	if hour == moon_rise then
 		Note("Moon is up now!")
 	else
 		if hour > moon_rise then
-			moon_rise = day_of_year % 24
+			moon_rise = (day_of_year + 12) % 24
 			moon_rise_day = "tomorrow"
 		else
 			moon_rise_day = "today"
@@ -358,7 +358,7 @@ function time_check(action)
 		Note(string.format("Next moon rise %s at %d:00 %s (game time).", moon_rise_day, moon_rise % 12 ~= 0 and moon_rise % 12 or 12, moon_rise_ap))
 	end
 	local full_moon_cycle = HOURS_PER_DAY * 24 -- Every 24 days
-	local moon_day = (day_of_year + DAYS_PER_MONTH + 24) % 24
+	local moon_day = (day_of_year + DAYS_PER_MONTH + 12) % 24
 	local moon_hour = moon_day * 24 + hour % HOURS_PER_DAY
 	local next_dk_day = 1
 	local ticks_until_dk = 0
