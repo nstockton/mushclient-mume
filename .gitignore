@@ -20,3 +20,5 @@ luac.out
 # Misc Files
 mushclient_prefs.sqlite
 MUSHclient.ini
+*.ignore
+mapper_proxy/
