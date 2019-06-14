@@ -46,9 +46,20 @@ local luacom = require "luacom"
 local ffi = require "ffi"
 
 ffi.cdef[[
-	int MultiByteToWideChar(unsigned int CodePage, unsigned int dwFlags, const char* lpMultiByteStr, int cbMultiByte, wchar_t* lpWideCharStr, int cchWideChar);
-	unsigned long FindWindowA(const char* lpClassName, const char* lpWindowName);
-	unsigned int wcslen(const wchar_t* str);
+	typedef void *PVOID;
+	typedef PVOID HANDLE;
+	typedef HANDLE HWND, HINSTANCE;
+	typedef unsigned long DWORD;
+	typedef unsigned int UINT;
+	typedef char CHAR;
+	typedef wchar_t WCHAR;
+	typedef CHAR *PSTR, *LPSTR;
+	typedef const CHAR *PCSTR, *LPCSTR, *LPCCH, *PCCH;
+	typedef WCHAR *PWSTR, *LPWSTR;
+	typedef const WCHAR *PCWSTR, *LPCWSTR;
+	int MultiByteToWideChar(UINT CodePage, DWORD dwFlags, LPCCH lpMultiByteStr, int cbMultiByte, LPWSTR lpWideCharStr, int cchWideChar);
+	HWND FindWindowA(LPCSTR lpClassName, LPCSTR lpWindowName);
+	size_t wcslen(const wchar_t *str);
 	void __stdcall DolAccess_Command(const wchar_t*, unsigned int, unsigned int);
 	void __stdcall DolAccess_Action(unsigned int);
 	int __stdcall DolAccess_GetSystem(void);
@@ -75,17 +86,24 @@ local tts_enabled = true
 
 local ffiC = ffi.C
 local ffiNew = ffi.new
+local NULL = ffiNew("void*")
 local SIZE_OF_WCHAR = ffi.sizeof("wchar_t")
 
 local nvda_api = IS_32_BIT and ffi.load("screen_reader_dlls/nvdaControllerClient32.dll") or ffi.load("screen_reader_dlls/nvdaControllerClient64.dll")
 local sa_api = IS_32_BIT and ffi.load("screen_reader_dlls/SAAPI32.dll") or ffi.load("screen_reader_dlls/SAAPI64.dll")
 local dolphin_api = IS_32_BIT and ffi.load("screen_reader_dlls/dolapi32.dll")
 
+-- If you need the numeric value of a window handle, casting it to intptr_t and passing the result to tonumber should work.
+-- tonumber(ffi.cast("intptr_t", handle))
+
+local function pointer(ptr)
+	-- When used to wrap other functions that return pointers, this function will return nil if the return value is a NULL pointer, or the pointer otherwise.
+	-- Because a NULL pointer is *not* automatically cast to nil or false, its boolean value is always true.
+	return ptr ~= NULL and ptr or nil
+end
+
 local function dolphin_running()
-	if not dolphin_api then
-		return False
-	end
-	return dolphin_api.DolAccess_GetSystem() ~= DOLACCESS_NONE
+	return dolphin_api and dolphin_api.DolAccess_GetSystem() ~= DOLACCESS_NONE
 end
 
 local function dolphin_say(text, interrupt)
@@ -101,7 +119,7 @@ local function dolphin_silence()
 end
 
 local function jfw_running()
-	return ffiC.FindWindowA("JFWUI2", nil) ~= 0
+	return pointer(ffiC.FindWindowA("JFWUI2", nil)) and true or false
 end
 
 local function jfw_say(text, interrupt)
@@ -149,7 +167,7 @@ local function sa_silence()
 end
 
 local function we_running()
-	return ffiC.FindWindowA("GWMExternalControl", "External Control") ~= 0
+	return pointer(ffiC.FindWindowA("GWMExternalControl", "External Control")) and true or false
 end
 
 local function we_say(text, interrupt)
@@ -176,11 +194,13 @@ function say(text, interrupt)
 		length = ffiC.MultiByteToWideChar(codepage, 0, text, #text, nil, 0)
 	end
 	local widestr = ffiNew("wchar_t[?]", length + 1)
-	ffiC.MultiByteToWideChar(codepage, 0, text, #text, widestr, length)
+	chars_written = ffiC.MultiByteToWideChar(codepage, 0, text, #text, widestr, length)
 	if ffi.errno(0) == ERROR_NO_UNICODE_TRANSLATION then
 		-- User should hopefully never see this.
-		Note("Error in screen reader speak plugin: no unicode translation.")
+		return Note("Error in screen reader speak plugin: no unicode translation.")
 	end
+	-- Null terminate the data.
+	widestr[chars_written] = 0
 	if nvda_running() then
 		nvda_say(widestr, interrupt)
 	elseif sa_running() then
