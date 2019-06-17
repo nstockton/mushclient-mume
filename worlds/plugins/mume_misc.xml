@@ -2142,6 +2142,23 @@ function move_stakes(direction)
 	end
 end
 
+function connect_to_mapper()
+	if not IsConnected() then
+		if os.isFile(GetInfo (68) .. "mapper_proxy\\mapper_ready.ignore") then
+			Connect()
+		else
+			DoAfterSpecial (0.1, "connect_to_mapper()", sendto.script)
+		end
+	end
+end
+
+function OnPluginInstall()
+	if not IsConnected() then
+		Note("Connecting to the mapper.")
+		connect_to_mapper()
+	end
+end
+
 function OnPluginConnect()
 	DoCommand("FullScreenMode")
 end

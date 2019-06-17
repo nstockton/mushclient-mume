@@ -12,6 +12,7 @@ if not exist "worlds\mume\mume.mcl" copy /Y worlds\mume\mume.mcl.sample worlds\m
 call update.bat /CalledByScript
 
 if exist "mapper_proxy" (
+	if exist "mapper_proxy\mapper_ready.ignore" del /F /Q "mapper_proxy\mapper_ready.ignore"
 	start MUSHclient.exe
 	cd mapper_proxy
 	echo Running the mapper.
