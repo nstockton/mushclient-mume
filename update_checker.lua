@@ -29,7 +29,7 @@ local function save_last_info(tbl)
 end
 
 local function latest_release_information(user, repo)
-	local command = string.format("curl.exe --silent https://api.github.com/repos/%s/%s/releases/latest", user, repo)
+	local command = string.format("curl.exe --silent --location --retry 999 --retry-max-time 0 --continue-at - \"https://api.github.com/repos/%s/%s/releases/latest\"", user, repo)
 	local handle = io.popen(command)
 	local result = handle:read("*all")
 	local gh = json.decode(result, 1, nil)
@@ -40,14 +40,18 @@ local function latest_release_information(user, repo)
 		for i, asset in ipairs(gh.assets) do
 			if string.startswith(asset.name, "Mapper_Proxy_V") and string.endswith(asset.name, ".zip") then
 				release_data.download_url = asset.browser_download_url
+				release_data.size = asset.size
 				release_data.updated_at = asset.updated_at
-				break
+			elseif string.startswith(asset.name, "Mapper_Proxy_V") and string.endswith(asset.name, ".zip.sha256") then
+				release_data.sha256_url = asset.browser_download_url
 			end
 		end
 	end
 	release_data.tag_name = release_data.tag_name or ""
 	release_data.download_url = release_data.download_url or ""
+	release_data.size = release_data.size or 0
 	release_data.updated_at = release_data.updated_at or ""
+	release_data.sha256_url = release_data.sha256_url or ""
 	return release_data
 end
 
@@ -70,9 +74,37 @@ local function prompt_for_update()
 end
 
 local function do_download(release)
+	local output_file = "mapper_proxy.zip"
+	local hash
 	print(string.format("Downloading Mapper Proxy %s (%s).", release.tag_name, release.updated_at))
-	os.execute(string.format("curl.exe --silent --location --output mapper_proxy.zip \"%s\"", release.download_url))
-	save_last_info(release)
+	if release.sha256_url ~= "" then
+		local handle = io.popen(string.format("curl.exe --silent --location --retry 999 --retry-max-time 0 --continue-at - \"%s\"", release.sha256_url))
+		hash = string.lower(string.strip(handle:read("*all")))
+		handle:close()
+		if not string.endswith(hash, ".zip") then
+			return print(string.format("Invalid checksum '%s'", hash))
+		end
+		hash = string.match(hash, "^%S+")
+	end
+	os.execute(string.format("curl.exe --silent --location --retry 999 --retry-max-time 0 --continue-at - --output %s \"%s\"", output_file, release.download_url))
+	local downloaded_size , error = os.fileSize(output_file)
+	if downloaded_size and downloaded_size > 0 and downloaded_size == release.size then
+		print("Verifying download.")
+		local output_file_hash = sha256sum_file(output_file)
+		if not hash then
+			print("Error: file size verified but no checksum available. Aborting.")
+		elseif output_file_hash == hash then
+			save_last_info(release)
+			return print("OK.")
+		else
+			print("Error: checksums do not match. Aborting.")
+		end
+	elseif error then
+		print(error)
+	else
+		print("Error downloading release: Downloaded file size and reported size from GitHub do not match.")
+	end
+	os.remove(output_file)
 end
 
 local last = load_last_info()
