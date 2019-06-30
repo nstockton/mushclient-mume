@@ -2,13 +2,9 @@ require("mystdlib")
 local getch = require("getch")
 local json = require("dkjson")
 local lfs = require("lfs")
-local socket = require("socket")
 
 local RELEASE_INFO_FILE = "update_info.ignore"
 local ZIP_FILE = "mapper_proxy.zip"
-
--- Pause briefly before starting so screen readers can detect the new text when the script is run.
-socket.sleep(0.1)
 
 
 local function load_last_info()
