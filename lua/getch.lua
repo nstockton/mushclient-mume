@@ -2,7 +2,12 @@
 -- License, v. 2.0. If a copy of the MPL was not distributed with this
 -- file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+
+-- For compatibility with Lua >= 5.2.
+local unpack = rawget(table, "unpack") or unpack
+
 local ffi = require "ffi"
+local msvcrt = ffi.load("msvcrt.dll")
 
 ffi.cdef[[
 	typedef wchar_t wint_t;
@@ -12,10 +17,6 @@ ffi.cdef[[
 	wint_t __stdcall _getwche(void);
 ]]
 
-local msvcrt = ffi.load("msvcrt.dll")
-
--- For compatibility with Lua >= 5.2.
-local unpack = rawget(table, "unpack") or unpack
 
 local function _getch(func)
 	local result = {}
@@ -31,27 +32,12 @@ local function _getch(func)
 	return string.char(unpack(result))
 end
 
-local function getch()
-	return _getch(msvcrt._getch)
-end
-
-local function getche()
-	return _getch(msvcrt._getche)
-end
-
-local function getwch()
-	return _getch(msvcrt._getwch)
-end
-
-local function getwche()
-	return _getch(msvcrt._getwche)
-end
 
 local __all__ = {
-	["getch"] = getch,
-	["getche"] = getche,
-	["getwch"] = getwch,
-	["getwche"] = getwche
+	["getch"] = function () return _getch(msvcrt._getch) end,
+	["getche"] = function () return _getch(msvcrt._getche) end,
+	["getwch"] = function () return _getch(msvcrt._getwch) end,
+	["getwche"] = function () return _getch(msvcrt._getwche) end
 }
 
 return __all__
