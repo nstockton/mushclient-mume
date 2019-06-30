@@ -1,8 +1,15 @@
 require("mystdlib")
-local json = require("dkjson")
 local getch = require("getch")
+local json = require("dkjson")
+local lfs = require("lfs")
+local socket = require("socket")
 
 local RELEASE_INFO_FILE = "update_info.ignore"
+local ZIP_FILE = "mapper_proxy.zip"
+
+-- Pause briefly before starting so screen readers can detect the new text when the script is run.
+socket.sleep(0.1)
+
 
 local function load_last_info()
 	local release_data = {}
@@ -74,7 +81,6 @@ local function prompt_for_update()
 end
 
 local function do_download(release)
-	local output_file = "mapper_proxy.zip"
 	local hash
 	print(string.format("Downloading Mapper Proxy %s (%s).", release.tag_name, release.updated_at))
 	if release.sha256_url ~= "" then
@@ -82,20 +88,22 @@ local function do_download(release)
 		hash = string.lower(string.strip(handle:read("*all")))
 		handle:close()
 		if not string.endswith(hash, ".zip") then
-			return print(string.format("Invalid checksum '%s'", hash))
+			print(string.format("Invalid checksum '%s'", hash))
+			return false
 		end
 		hash = string.match(hash, "^%S+")
 	end
-	os.execute(string.format("curl.exe --silent --location --retry 999 --retry-max-time 0 --continue-at - --output %s \"%s\"", output_file, release.download_url))
-	local downloaded_size , error = os.fileSize(output_file)
+	os.execute(string.format("curl.exe --silent --location --retry 999 --retry-max-time 0 --continue-at - --output %s \"%s\"", ZIP_FILE, release.download_url))
+	local downloaded_size , error = os.fileSize(ZIP_FILE)
 	if downloaded_size and downloaded_size > 0 and downloaded_size == release.size then
 		print("Verifying download.")
-		local output_file_hash = sha256sum_file(output_file)
+		local zip_file_hash = sha256sum_file(ZIP_FILE)
 		if not hash then
 			print("Error: file size verified but no checksum available. Aborting.")
-		elseif output_file_hash == hash then
+		elseif zip_file_hash == hash then
 			save_last_info(release)
-			return print("OK.")
+			print("OK.")
+			return true
 		else
 			print("Error: checksums do not match. Aborting.")
 		end
@@ -104,26 +112,94 @@ local function do_download(release)
 	else
 		print("Error downloading release: Downloaded file size and reported size from GitHub do not match.")
 	end
-	os.remove(output_file)
+	if os.isFile(ZIP_FILE) then
+		os.remove(ZIP_FILE)
+	end
+	return false
 end
+
+function do_extract()
+	local pwd = lfs.currentdir()
+	print("Extracting files.")
+	os.execute(string.format("unzip.exe -qq \"%s\" -d \"tempmapper\"", ZIP_FILE))
+	if os.isFile(ZIP_FILE) then
+		os.remove(ZIP_FILE)
+	end
+	if not lfs.chdir(pwd .. "\\tempmapper") then
+		return print(string.format("Error: failed to change directory to '%s\\tempmapper'", pwd))
+	end
+	local copy_from
+	for item in lfs.dir(lfs.currentdir()) do
+		if lfs.attributes(item, "mode") == "directory" and string.startswith(string.lower(item), "mapper_proxy_v") then
+			copy_from = string.format("tempmapper\\%s", item)
+			break
+		end
+	end
+	lfs.chdir(pwd)
+	os.execute(string.format("xcopy \"%s\" \"mapper_proxy\" /E /V /I /Q /R /Y", copy_from))
+	os.execute("rd /S /Q \"tempmapper\"")
+	print("Done.")
+end
+
+local function pause()
+	io.write("Press any key to continue.")
+	getch.getch()
+	io.write("\n")
+end
+
+local function called_by_script()
+	for i, a in ipairs(arg) do
+		if string.strip(string.lower(a)) == "/calledbyscript" then
+			return true
+		end
+	end
+	return false
+end
+
 
 local last = load_last_info()
 local latest = latest_release_information("nstockton", "mapperproxy-mume")
 
+-- Clean up previously left junk.
+if os.isFile(ZIP_FILE) then
+	os.remove(ZIP_FILE)
+end
+if os.isDir("tempmapper") then
+	os.execute("rd /S /Q \"tempmapper\"")
+end
+
+if os.isDir("mapper_proxy") and not called_by_script() then
+	print("Checking for updates to the mapper.")
+end
+
 if not os.isDir("mapper_proxy") then
-	do_download(latest)
+	print("Mapper Proxy not found. This is normal for new installations.")
+	if do_download(latest) then
+		do_extract()
+	end
 elseif last.skipped_release and last.skipped_release == latest.tag_name .. latest.updated_at then
 	print(string.format("The update to %s dated %s was previously skipped.", latest.tag_name, latest.updated_at))
+	if called_by_script() then
+		os.exit(0)
+	end
 elseif last.tag_name .. last.updated_at == latest.tag_name .. latest.updated_at then
 	print(string.format("You are currently running the latest Mapper Proxy (%s) dated %s.", latest.tag_name, latest.updated_at))
+	if called_by_script() then
+		os.exit(0)
+	end
 else
 	print(string.format("A new version of Mapper Proxy (%s) dated %s was found.", latest.tag_name, latest.updated_at))
-	input = prompt_for_update()
-	if input == "y" then
-		do_download(latest)
-	elseif input == "n" then
+	local user_choice = prompt_for_update()
+	if user_choice == "y" then
+		if do_download(latest) then
+			do_extract()
+		end
+	elseif user_choice == "n" then
 		print("You will no longer be prompted to download this version of Mapper Proxy.")
 		last.skipped_release = latest.tag_name .. latest.updated_at
 		save_last_info(last)
 	end
 end
+
+pause()
+os.exit(0)

@@ -9,7 +9,7 @@ copy /Y mushclient_prefs.sqlite.sample mushclient_prefs.sqlite >nul
 copy /Y MUSHclient.ini.sample MUSHclient.ini >nul
 if not exist "worlds\mume\mume.mcl" copy /Y worlds\mume\mume.mcl.sample worlds\mume\mume.mcl >nul
 
-call update.bat /CalledByScript
+luajit.exe update_checker.lua /CalledByScript
 
 if exist "mapper_proxy" (
 	if exist "mapper_proxy\mapper_ready.ignore" del /F /Q "mapper_proxy\mapper_ready.ignore"
