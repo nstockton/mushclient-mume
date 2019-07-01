@@ -2,6 +2,8 @@
 -- License, v. 2.0. If a copy of the MPL was not distributed with this
 -- file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+-- Copyright (C) 2019 Nick Stockton <https://github.com/nstockton>
+
 
 local lfs = require("lfs")
 local sha2 = require("sha2")
@@ -144,8 +146,8 @@ local function _shasum_file(hasher, file_name, block_size)
 	return string.gsub(hasher(), ".", function(c) return bit.tohex(string.byte(c), 2) end)
 end
 
-sha1sum_file = function(...) return _shasum_file(sha2.sha1_digest(), ...) end
-sha224sum_file = function(...) return _shasum_file(sha2.sha224_digest(), ...) end
-sha256sum_file = function(...) return _shasum_file(sha2.sha256_digest(), ...) end
-sha384sum_file = function(...) return _shasum_file(sha2.sha384_digest(), ...) end
-sha512sum_file = function(...) return _shasum_file(sha2.sha512_digest(), ...) end
+sha1sum_file = function (...) return _shasum_file(sha2.sha1_digest(), ...) end
+sha224sum_file = function (...) return _shasum_file(sha2.sha224_digest(), ...) end
+sha256sum_file = function (...) return _shasum_file(sha2.sha256_digest(), ...) end
+sha384sum_file = function (...) return _shasum_file(sha2.sha384_digest(), ...) end
+sha512sum_file = function (...) return _shasum_file(sha2.sha512_digest(), ...) end

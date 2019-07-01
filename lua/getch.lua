@@ -2,6 +2,8 @@
 -- License, v. 2.0. If a copy of the MPL was not distributed with this
 -- file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+-- Copyright (C) 2019 Nick Stockton <https://github.com/nstockton>
+
 
 -- For compatibility with Lua >= 5.2.
 local unpack = rawget(table, "unpack") or unpack
