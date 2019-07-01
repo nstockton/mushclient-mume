@@ -2,6 +2,8 @@
 -- License, v. 2.0. If a copy of the MPL was not distributed with this
 -- file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+-- Copyright (C) 2019 Nick Stockton <https://github.com/nstockton>
+
 
 -- Example: to open a cmd window elevated:
 -- shell_execute("cmd", nil, nil, "runas", SW_SHOWNORMAL)
@@ -31,6 +33,7 @@ ffi.cdef[[
 	typedef const CHAR *PCSTR, *LPCSTR;
 	HWND GetForegroundWindow();
 	HINSTANCE ShellExecuteA(HWND hwnd, LPCSTR lpOperation, LPCSTR lpFile, LPCSTR lpParameters, LPCSTR lpDirectory, int nShowCmd);
+	bool IsUserAnAdmin();
 ]]
 
 local function shell_execute(file, parameters, directory, operation, show_cmd)
@@ -39,6 +42,7 @@ end
 
 
 local __all__ = {
+	["is_user_an_admin"] = shell32.IsUserAnAdmin,
 	["shell_execute"] = shell_execute
 }
 
