@@ -5,6 +5,7 @@
 -- Copyright (C) 2019 Nick Stockton <https://github.com/nstockton>
 
 
+local getch = require("getch")
 local lfs = require("lfs")
 local sha2 = require("sha2")
 local stringy = require("stringy")
@@ -15,6 +16,59 @@ string.findpos = stringy.find
 string.split = stringy.split
 string.startswith = stringy.startswith
 string.strip = stringy.strip
+
+function printf(...)
+	-- Prints a string formatted with format identifiers to standard output.
+	-- Arguments to this function are first parsed by string.format and the result then passed to io.write, along with a trailing new-line character.
+	io.output(io.stdout)
+	io.write(string.format(...), "\n")
+end
+
+function url_quote(url)
+	-- Replace non-supported characters in a string with their URL-encoded equivalents.
+	local byte2hex = function (c) return bit and "%" .. bit.tohex(string.byte(c), -2) or string.format("%%%02X", string.byte(c)) end
+	return string.gsub(url, "([^%w])", byte2hex)
+end
+
+function pause()
+	-- Like the pause command in Windows batch script.
+	io.write("Press any key to continue.")
+	getch.getch()
+	io.write("\n")
+end
+
+function os.type()
+	local library_ext = package.cpath:match("%p[\\|/]?%p(%a+)")
+	return library_ext == "dll" and "Windows" or library_ext == "so" and "Unix" or library_ext == "dylib" and "Darwin" or nil
+end
+
+function architecture()
+	-- Returns the processor architecture, as reported by Windows.
+	assert(os.type() == "Windows", "Error: this script only supports Windows.")
+	if os.getenv("PROCESSOR_ARCHITEW6432") then
+		-- Running under a 32-bit process on 64-bit Windows.
+		return os.getenv("PROCESSOR_ARCHITEW6432")
+	elseif os.getenv("PROCESSOR_ARCHITECTURE") then
+		-- Running under a 32-bit process on 32-bit Windows, or a 64-bit process on 64-bit Windows.
+		return os.getenv("PROCESSOR_ARCHITECTURE")
+	else
+		return nil
+	end
+end
+
+function get_flags(as_set)
+	local flags = {}
+	for i, argument in ipairs(arg) do
+		if string.match(argument, "^[/-]+.+") then
+			if as_set then
+				flags[string.gsub(string.strip(string.lower(argument)), "^[/-]+", "")] = true
+			else
+				table.insert(flags, string.gsub(string.strip(string.lower(argument)), "^[/-]+", ""))
+			end
+		end
+	end
+	return flags
+end
 
 function os.fileSize(name)
 	return lfs.attributes(name, "size")
