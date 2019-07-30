@@ -3,36 +3,46 @@ local getch = require("getch")
 local json = require("dkjson")
 local lfs = require("lfs")
 
+local APP_NAME = "Mapper Proxy"
+local SCRIPT_VERSION = "1.0"
+local GITHUB_USER = "nstockton"
+local APPVEYOR_USER = "NickStockton"
+local REPO = "mapperproxy-mume"
 local RELEASE_INFO_FILE = "update_info.ignore"
 local ZIP_FILE = "mapper_proxy.zip"
 
+local HELP_TEXT = [[
+-h, --help:	Display this help.
+-release, -dev:	 Specify whether the latest stable release from GitHub should be used, or the latest development build from AppVeyor (defaults to release).
+]]
 
-local function load_last_info()
+local function get_last_info()
+	-- Return the previously stored release information as a table.
 	local release_data = {}
 	if os.isFile(RELEASE_INFO_FILE) then
 		local fileObj = io.open(RELEASE_INFO_FILE, "rb")
 		release_data = json.decode(fileObj:read("*all"), 1, nil)
 		fileObj:close()
 	end
-	release_data.tag_name = release_data.tag_name or ""
-	release_data.download_url = release_data.download_url or ""
-	release_data.updated_at = release_data.updated_at or ""
 	return release_data
 end
 
 local function save_last_info(tbl)
-	local orderedKeys = {}
+	-- Encode the release information in tbl to JSon, and save it to a file.
+	local ordered_keys = {}
 	for k, v in pairs(tbl) do
-		table.insert(orderedKeys, k)
+		table.insert(ordered_keys, k)
 	end
-	table.sort(orderedKeys)
+	table.sort(ordered_keys)
+	local data = string.gsub(json.encode(tbl, {indent=true, level=0, keyorder=ordered_keys}), "\r?\n", "\r\n")
 	local handle = io.open(RELEASE_INFO_FILE, "wb")
-	handle:write(json.encode(tbl, {indent=true, level=0, keyorder=orderedKeys}))
+	handle:write(data)
 	handle:close()
 end
 
-local function latest_release_information(user, repo)
-	local command = string.format("curl.exe --silent --location --retry 999 --retry-max-time 0 --continue-at - \"https://api.github.com/repos/%s/%s/releases/latest\"", user, repo)
+local function _get_latest_github()
+	local project_url = string.format("https://api.github.com/repos/%s/%s/releases/latest", GITHUB_USER, REPO)
+	local command = string.format("curl.exe --silent --location --retry 999 --retry-max-time 0 --continue-at - \"%s\"", project_url)
 	local handle = io.popen(command)
 	local result = handle:read("*all")
 	local gh = json.decode(result, 1, nil)
@@ -55,6 +65,34 @@ local function latest_release_information(user, repo)
 	release_data.size = release_data.size or 0
 	release_data.updated_at = release_data.updated_at or ""
 	release_data.sha256_url = release_data.sha256_url or ""
+	release_data.provider = "github"
+	return release_data
+end
+
+local function _get_latest_appveyor()
+	local project_url = string.format("https://ci.appveyor.com/api/projects/%s/%s", APPVEYOR_USER, REPO)
+	local command = string.format("curl.exe --silent --location --retry 999 --retry-max-time 0 --continue-at - \"%s\"", project_url)
+	local handle = io.popen(command)
+	local result = handle:read("*all")
+	local av = json.decode(result, 1, nil)
+	handle:close()
+	local release_data = {}
+	if av and av.build.status == "success" then
+		release_data.tag_name = string.gsub(string.match(av.build.version, "^[vV]([%w.-]+)$"), "-", "_")
+		release_data.updated_at = av.build.updated
+		for i, job in ipairs(av.build.jobs) do
+			if job.status == "success" then
+				release_data.download_url = string.format("%s/artifacts/Mapper_Proxy_V%s.zip?branch=%s", project_url, release_data.tag_name, av.build.branch)
+				release_data.sha256_url = string.format("%s/artifacts/Mapper_Proxy_V%s.zip.sha256?branch=%s", project_url, release_data.tag_name, av.build.branch)
+			end
+		end
+	end
+	release_data.tag_name = release_data.tag_name or ""
+	release_data.download_url = release_data.download_url or ""
+	release_data.size = nil
+	release_data.updated_at = release_data.updated_at or ""
+	release_data.sha256_url = release_data.sha256_url or ""
+	release_data.provider = "appveyor"
 	return release_data
 end
 
@@ -78,7 +116,7 @@ end
 
 local function do_download(release)
 	local hash
-	print(string.format("Downloading Mapper Proxy %s (%s).", release.tag_name, release.updated_at))
+	printf("Downloading %s %s (%s) from %s.", APP_NAME, release.tag_name, release.updated_at, release.provider == "github" and "GitHub" or release.provider == "appveyor" and "AppVeyor" or string.capitalize(release.provider))
 	if release.sha256_url ~= "" then
 		local handle = io.popen(string.format("curl.exe --silent --location --retry 999 --retry-max-time 0 --continue-at - \"%s\"", release.sha256_url))
 		hash = string.lower(string.strip(handle:read("*all")))
@@ -91,22 +129,23 @@ local function do_download(release)
 	end
 	os.execute(string.format("curl.exe --silent --location --retry 999 --retry-max-time 0 --continue-at - --output %s \"%s\"", ZIP_FILE, release.download_url))
 	local downloaded_size , error = os.fileSize(ZIP_FILE)
-	if downloaded_size and downloaded_size > 0 and downloaded_size == release.size then
-		print("Verifying download.")
-		local zip_file_hash = sha256sum_file(ZIP_FILE)
+	-- release.size should be nil if the provider's API doesn't support retrieving file size.
+	-- If the provider does support retrieving file size, but for some reason did not send it, release.size should be 0.
+	if downloaded_size and downloaded_size > 0 and downloaded_size == release.size or not release.size then
+		printf("Verifying download.")
 		if not hash then
-			print("Error: file size verified but no checksum available. Aborting.")
-		elseif zip_file_hash == hash then
+			printf("Error: no checksum available. Aborting.")
+		elseif sha256sum_file(ZIP_FILE) == hash then
 			save_last_info(release)
-			print("OK.")
+			printf("OK.")
 			return true
 		else
-			print("Error: checksums do not match. Aborting.")
+			printf("Error: checksums do not match. Aborting.")
 		end
 	elseif error then
-		print(error)
+		printf(error)
 	else
-		print("Error downloading release: Downloaded file size and reported size from GitHub do not match.")
+		printf("Error downloading release: Downloaded file size and reported size from provider API do not match.")
 	end
 	if os.isFile(ZIP_FILE) then
 		os.remove(ZIP_FILE)
@@ -116,13 +155,13 @@ end
 
 function do_extract()
 	local pwd = lfs.currentdir()
-	print("Extracting files.")
+	printf("Extracting files.")
 	os.execute(string.format("unzip.exe -qq \"%s\" -d \"tempmapper\"", ZIP_FILE))
 	if os.isFile(ZIP_FILE) then
 		os.remove(ZIP_FILE)
 	end
 	if not lfs.chdir(pwd .. "\\tempmapper") then
-		return print(string.format("Error: failed to change directory to '%s\\tempmapper'", pwd))
+		return printf("Error: failed to change directory to '%s\\tempmapper'", pwd)
 	end
 	local copy_from
 	for item in lfs.dir(lfs.currentdir()) do
@@ -134,27 +173,41 @@ function do_extract()
 	lfs.chdir(pwd)
 	os.execute(string.format("xcopy \"%s\" \"mapper_proxy\" /E /V /I /Q /R /Y", copy_from))
 	os.execute("rd /S /Q \"tempmapper\"")
-	print("Done.")
-end
-
-local function pause()
-	io.write("Press any key to continue.")
-	getch.getch()
-	io.write("\n")
+	printf("Done.")
 end
 
 local function called_by_script()
-	for i, a in ipairs(arg) do
-		if string.strip(string.lower(a)) == "/calledbyscript" then
-			return true
-		end
+	return get_flags(true)["calledbyscript"] or false
+end
+
+local function needs_help()
+	local flags = get_flags(true)
+	return flags["help"] or flags["h"] or flags["?"] or false
+end
+
+local function get_latest_info(last_provider)
+	local flags = get_flags(true)
+	local use_github = flags["release"]
+	local use_appveyor = flags["dev"] or flags["devel"] or flags["development"]
+	assert(not (use_github and use_appveyor), "Error: release and development are mutually exclusive.")
+	local provider = use_github and "github" or use_appveyor and "appveyor" or last_provider or "github"
+	if provider == "github" then
+		return _get_latest_github()
+	elseif provider == "appveyor" then
+		return _get_latest_appveyor()
+	else
+		assert(nil, string.format("Invalid provider: '%s'.", provider))
 	end
-	return false
 end
 
 
-local last = load_last_info()
-local latest = latest_release_information("nstockton", "mapperproxy-mume")
+local last = get_last_info()
+
+if needs_help() then
+	printf("%s Updater V%s.", APP_NAME, SCRIPT_VERSION)
+	printf(HELP_TEXT)
+	os.exit(0)
+end
 
 -- Clean up previously left junk.
 if os.isFile(ZIP_FILE) then
@@ -164,34 +217,36 @@ if os.isDir("tempmapper") then
 	os.execute("rd /S /Q \"tempmapper\"")
 end
 
+local latest = get_latest_info(last.provider)
+
 if os.isDir("mapper_proxy") and not called_by_script() then
-	print("Checking for updates to the mapper.")
+	printf("Checking for updates to %s.", APP_NAME)
 end
 
 if not os.isDir("mapper_proxy") then
-	print("Mapper Proxy not found. This is normal for new installations.")
+	printf("%s not found. This is normal for new installations.", APP_NAME)
 	if do_download(latest) then
 		do_extract()
 	end
 elseif last.skipped_release and last.skipped_release == latest.tag_name .. latest.updated_at then
-	print(string.format("The update to %s dated %s was previously skipped.", latest.tag_name, latest.updated_at))
+	printf("The update to %s (%s) dated %s from %s was previously skipped.", APP_NAME, latest.tag_name, latest.updated_at, latest.provider == "github" and "GitHub" or latest.provider == "appveyor" and "AppVeyor" or string.capitalize(latest.provider))
 	if called_by_script() then
 		os.exit(0)
 	end
-elseif last.tag_name .. last.updated_at == latest.tag_name .. latest.updated_at then
-	print(string.format("You are currently running the latest Mapper Proxy (%s) dated %s.", latest.tag_name, latest.updated_at))
+elseif last.tag_name and last.updated_at and last.tag_name .. last.updated_at == latest.tag_name .. latest.updated_at then
+	printf("You are currently running the latest %s (%s) dated %s from %s.", APP_NAME, latest.tag_name, latest.updated_at, latest.provider == "github" and "GitHub" or latest.provider == "appveyor" and "AppVeyor" or string.capitalize(latest.provider))
 	if called_by_script() then
 		os.exit(0)
 	end
 else
-	print(string.format("A new version of Mapper Proxy (%s) dated %s was found.", latest.tag_name, latest.updated_at))
+	printf("A new version of %s (%s) dated %s from %s was found.", APP_NAME, latest.tag_name, latest.updated_at, latest.provider == "github" and "GitHub" or latest.provider == "appveyor" and "AppVeyor" or string.capitalize(latest.provider))
 	local user_choice = prompt_for_update()
 	if user_choice == "y" then
 		if do_download(latest) then
 			do_extract()
 		end
 	elseif user_choice == "n" then
-		print("You will no longer be prompted to download this version of Mapper Proxy.")
+		printf("You will no longer be prompted to download this version of %s.", APP_NAME)
 		last.skipped_release = latest.tag_name .. latest.updated_at
 		save_last_info(last)
 	end
