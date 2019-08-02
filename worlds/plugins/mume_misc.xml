@@ -351,7 +351,7 @@ end
   <trigger
    enabled="y"
    group="mume_misc"
-   match="^As you attempt to parry (?:.+?) blow with your (?P&lt;weapon&gt;\w+)\, it suffers great damage\, and you lose your grip on it\!$"
+   match="^As you attempt to parry (?:.+?) blow with your (?P&lt;weapon&gt;\w+)\, (?:it suffers great damage\, and )?you lose your grip on it\!$"
    name="auto_wield_weapon_trees"
    regexp="y"
    send_to="0"
@@ -1450,8 +1450,8 @@ else
 	Send("put salamander %&lt;container&gt;")
 	Send("get bat-fur all")
 	Send("put bat-fur %&lt;container&gt;")
-	Send("get vial all")
-	Send("put vial %&lt;container&gt;")
+	Send("get blood-vial all")
+	Send("put blood-vial %&lt;container&gt;")
 end
   </send>
   </alias>
@@ -1600,6 +1600,30 @@ end
   </send>
   </alias>
   <alias
+   name="walking_lore"
+   match="^walking\s*?(?:\s+(?P&lt;container&gt;[\w\.]+))?$"
+   enabled="y"
+   group="mume_misc"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+if "%&lt;container&gt;" == "" then
+	Note("Walking Lore: 1X pale-green, crushed leaves (marjoram), 1X clover, 1X cloves, 1X hard, round, black berries (juniper)")
+else
+	Send("get marjoram all")
+	Send("put marjoram %&lt;container&gt;")
+	Send("get clover all")
+	Send("put clover %&lt;container&gt;")
+	Send("get cloves all")
+	Send("put cloves %&lt;container&gt;")
+	Send("get juniper all")
+	Send("put juniper %&lt;container&gt;")
+end
+  </send>
+  </alias>
+  <alias
    name="toggle_auto_kick"
    match="autokick"
    enabled="y"
@@ -1620,7 +1644,7 @@ Note("Auto Kick ", auto_kick and "enabled." or "disabled.")
    group="mume_misc"
    sequence="100"
   >
-  <send>get all.arrow all.corpse
+  <send>get all.arrow room.all
 get all.arrow
 put all.arrow quiver</send>
   </alias>

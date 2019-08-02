@@ -30,6 +30,17 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
+   match="^A(?:n enhanced)? herbal kit contains a pinch of pale\-green\, crushed leaves\, a handful of clover\, several cloves and a cluster of hard\, round\, black berries\.$"
+   omit_from_output="y"
+   regexp="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>Walking</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_herb_substitutions"
    match="^A(?:n enhanced)? herbal kit contains a bag of cinnamon\, several needlelike leaves and a rib\-bone of a skeleton\.$"
    omit_from_output="y"
    regexp="y"
