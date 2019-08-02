@@ -192,6 +192,7 @@ end
    group="mume_sounds"
    match="Ok."
    name="ok"
+   ignore_case="y"
    omit_from_output="y"
    send_to="12"
    sequence="100"

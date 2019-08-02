@@ -28,9 +28,41 @@
 
 <include name="constants.lua"/>
 
+<!--  Triggers  -->
+
+<triggers>
+  <trigger
+   enabled="y"
+   group="mume_communication"
+   match="^(?P&lt;player&gt;[^\s]+) tells you \[GT\] (?P&lt;message&gt;&apos;.+)$"
+   name="capture_mmapper_group_tell"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+CallPlugin(MUME_SOUNDS, "play", TYPE_COMMUNICATION, "tells.wav")
+local file = io.open(GetInfo(67) .. "communication/tell.txt", "ab")
+file:write("%0\\r\\n")
+file:close()
+  </send>
+  </trigger>
+</triggers>
+
 <!--  Aliases  -->
 
 <aliases>
+  <alias
+   name="send_mmapper_group_tell"
+   match="^gt\s*?(?:\s+(?P&lt;message&gt;.+))?$"
+   enabled="y"
+   group="mume_communication"
+   regexp="y"
+   send_to="0"
+   sequence="100"
+  >
+  <send>_gtell %&lt;message&gt;</send>
+  </alias>
   <alias
    name="review_pray_logs"
    match="^pl\s*?(?:\s+(?P&lt;text&gt;.+))?$"
