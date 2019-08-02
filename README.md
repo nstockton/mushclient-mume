@@ -33,6 +33,7 @@ Control+I  --  Toggle the interrupting of speech when someone or something casts
 ### Communication
 Log and review communication channels.
 #### Aliases
+* gt [text]  -  An alias for the '_gtell' command when using MMapper.
 * pl [text|number]  -  Review the log for the pray channel. If a string is passed to the alias, search the log for that text. If a number is passed, Print that many lines from the end of the log. If no argument is given, print the last 20 lines from the log.
 * nl [text|number]  -  Review the log for the narrate channel. If a string is passed to the alias, search the log for that text. If a number is passed, Print that many lines from the end of the log. If no argument is given, print the last 20 lines from the log.
 * sl [text|number]  -  Review the log for the say channel. If a string is passed to the alias, search the log for that text. If a number is passed, Print that many lines from the end of the log. If no argument is given, print the last 20 lines from the log.
@@ -207,6 +208,7 @@ Miscellaneous aliases and triggers that don't belong anywhere else.
 * string  --  Use the strength ring in the character's pack.
 * travelling [container]  --  Get the ingredients for the Travelling herblore from all containers, and put them in the specified container. If no container is specified, print a list of required ingredients instead.
 * venom [container]  --  Get the ingredients for the Venom herblore from all containers, and put them in the specified container. If no container is specified, print a list of required ingredients instead.
+* walking [container]  --  Get the ingredients for the Walking herblore from all containers, and put them in the specified container. If no container is specified, print a list of required ingredients instead.
 * wbag  --  Get water from the character's elven bag and drink it.
 * weight  --  Print the weight of the character's equipment.
 * ws  --  Wake, stand.
