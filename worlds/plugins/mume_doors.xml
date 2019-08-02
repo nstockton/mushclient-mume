@@ -34,6 +34,21 @@
   <trigger
    enabled="y"
    group="mume_doors"
+   match="^Doors: (?P&lt;doors&gt;[\w\s:,]+)$"
+   name="capture_doors"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+for direction, door in string.gmatch("%&lt;doors&gt;", "(%w+):%s+(%w+)") do
+	room_doors[string.match(direction, "^%w")] = door
+end
+  </send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_doors"
    match="^The (\w+) seem[s]? to be closed\.$"
    name="auto_open"
    regexp="y"
@@ -136,11 +151,7 @@ end
   <send>
 local action = DOOR_ACTIONS[string.lower("%&lt;action&gt;")]
 local direction = string.lower("%&lt;direction&gt;")
-if door_name == "" then
-	Send(string.format("secretaction %s %s", action, direction))
-else
-	Send(string.format("%s %s %s", action, door_name, direction))
-end
+Send(string.format("%s %s %s", action, door_name ~= "" and door_name or room_doors[direction] or "exit", direction))
   </send>
   </alias>
   <alias
@@ -195,7 +206,9 @@ Note(string.format("Auto open doors %s.", auto_open and "on" or "off"))
 <script>
 <![CDATA[
 require("mystdlib")
+XML_PARSER = "74834d3734b2c8a3a9da4d18"
 
+BROADCAST_NAME = 4
 DOOR_ACTIONS = {
 	["b"] = "bash",
 	["c"] = "close",
@@ -209,6 +222,13 @@ DOOR_ACTIONS = {
 
 auto_open = true
 door_name = ""
+room_doors = {}
+
+function OnPluginBroadcast (msg, id, name, text)
+	if id == XML_PARSER and name == "mume_xml_parser" and msg == BROADCAST_NAME then
+		table.clear(room_doors)
+	end
+end
 
 ]]>
 </script>
