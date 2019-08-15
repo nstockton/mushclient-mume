@@ -48,6 +48,7 @@ local function _get_latest_github()
 	local gh = json.decode(result, 1, nil)
 	handle:close()
 	local release_data = {}
+	release_data.status = "success"
 	if gh then
 		release_data.tag_name = gh.tag_name
 		for i, asset in ipairs(gh.assets) do
@@ -77,7 +78,8 @@ local function _get_latest_appveyor()
 	local av = json.decode(result, 1, nil)
 	handle:close()
 	local release_data = {}
-	if av and av.build.status == "success" then
+	release_data.status = av and av.build.status or nil
+	if release_data.status == "success" then
 		release_data.tag_name = string.gsub(string.match(av.build.version, "^[vV]([%w.-]+)$"), "-", "_")
 		release_data.updated_at = av.build.updated
 		for i, job in ipairs(av.build.jobs) do
@@ -223,7 +225,11 @@ if os.isDir("mapper_proxy") and not called_by_script() then
 	printf("Checking for updates to %s.", APP_NAME)
 end
 
-if not os.isDir("mapper_proxy") then
+if latest.status ~= "success" then
+	printf("Error: unable to update at this time. Please try again in a few minutes.")
+	printf("Build status returned by the server was (%s).", latest.status or "unknown")
+	os.exit(1)
+elseif not os.isDir("mapper_proxy") then
 	printf("%s not found. This is normal for new installations.", APP_NAME)
 	if do_download(latest) then
 		do_extract()
