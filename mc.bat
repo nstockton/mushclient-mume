@@ -22,5 +22,5 @@ if exist "mapper_proxy" (
 	pause
 )
 
-rem Reset the working directory to it's previous value, before this batch script was run.
+rem Reset the working directory to its previous value, before this batch script was run.
 popd
