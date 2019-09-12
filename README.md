@@ -163,10 +163,14 @@ Miscellaneous aliases and triggers that don't belong anywhere else.
 * align  --  Prints the character's alignment.
 * antidote [container]  --  Get the ingredients for the Antidote herblore from all containers, and put them in the specified container. If no container is specified, print a list of required ingredients instead.
 * arachnia [container]  --  Get the ingredients for the Arachnia herblore from all containers, and put them in the specified container. If no container is specified, print a list of required ingredients instead.
+* autobstaff  --  Toggle automatic using of a bless staff when bless goes down on or off (defaults to off).
 * autokick  --  Toggle automatic kicking when something is incapacitated on or off (defaults to off).
+* azu [player]  --  Get an azure scroll from all containers and recite it. If a player name is specified, recite it on him/her.
 * baker [container]  --  Get the ingredients for the Baker herblore from all containers, and put them in the specified container. If no container is specified, print a list of required ingredients instead.
 * bc[number]  --  Butcher number.corpse.
 * belt  --  Switch the belt the character is currently wearing with the one in the character's pack.
+* bla [player]  --  Get a black scroll from all containers and recite it. If a player name is specified, recite it on him/her.
+* blu [player]  --  Get a blue scroll from all containers and recite it. If a player name is specified, recite it on him/her.
 * bpack  --  Switch the boots that the character is currently wearing with the ones in the character's pack.
 * bpouch  --  Switch the boots that the character is currently wearing with the ones in the character's pouch.
 * ccring  --  Use the cure critic ring in the character's pack.
@@ -178,6 +182,7 @@ Miscellaneous aliases and triggers that don't belong anywhere else.
 * dg  --  Drink from the goblet in the character's pack.
 * dragall  --  Drag all corpses in the room.
 * draught [container]  --  Get the ingredients for the Orkish-draught herblore from all containers, and put them in the specified container. If no container is specified, print a list of required ingredients instead.
+* ebo [player]  --  Get an ebony scroll from all containers and recite it. If a player name is specified, recite it on him/her.
 * fbag  --  Get food from the character's elven bag and eat it.
 * fpack  --  Switch the cloak, fur, or mantle that the character is wearing with the fur in the character's pack.
 * fpouch  --  Switch the cloak, fur, or mantle that the character is wearing with the fur in the character's pouch.
@@ -196,6 +201,7 @@ Miscellaneous aliases and triggers that don't belong anywhere else.
 * pbs [player]  --  Get the PBS from the character's pack, wield it, and use it. If a player name is supplied, use the pbs on him/her instead of self.
 * pg  --  Pour water into the character's goblet stored in the character's pack.
 * pipe  --  Rest and use the pipe stored in the character's pack.
+* purp [player]  --  Get a purple scroll from all containers and recite it. If a player name is specified, recite it on him/her.
 * ra  --  Reveal all. Use this if you find someone hiding in a room to alert everyone else in the room to the player's presents.
 * rbag  --  Get a rope from the character's elven bag.
 * rq  --  Reveal quick.
@@ -207,6 +213,7 @@ Miscellaneous aliases and triggers that don't belong anywhere else.
 * st  --  Search thorough.
 * string  --  Use the strength ring in the character's pack.
 * travelling [container]  --  Get the ingredients for the Travelling herblore from all containers, and put them in the specified container. If no container is specified, print a list of required ingredients instead.
+* vel [player]  --  Get a vellum scroll from all containers and recite it. If a player name is specified, recite it on him/her.
 * venom [container]  --  Get the ingredients for the Venom herblore from all containers, and put them in the specified container. If no container is specified, print a list of required ingredients instead.
 * walking [container]  --  Get the ingredients for the Walking herblore from all containers, and put them in the specified container. If no container is specified, print a list of required ingredients instead.
 * wbag  --  Get water from the character's elven bag and drink it.

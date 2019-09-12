@@ -208,7 +208,7 @@ Note(string.format("Auto open doors %s.", auto_open and "on" or "off"))
 require("mystdlib")
 XML_PARSER = "74834d3734b2c8a3a9da4d18"
 
-BROADCAST_NAME = 4
+BROADCAST_MOVEMENT = 2
 DOOR_ACTIONS = {
 	["b"] = "bash",
 	["c"] = "close",
@@ -225,7 +225,7 @@ door_name = ""
 room_doors = {}
 
 function OnPluginBroadcast (msg, id, name, text)
-	if id == XML_PARSER and name == "mume_xml_parser" and msg == BROADCAST_NAME then
+	if id == XML_PARSER and name == "mume_xml_parser" and msg == BROADCAST_MOVEMENT then
 		table.clear(room_doors)
 	end
 end

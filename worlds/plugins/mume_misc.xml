@@ -46,6 +46,30 @@ using_mmapper = true
   <trigger
    enabled="y"
    group="mume_misc"
+   match="You raise your staff and call upon the Valar."
+   name="have_bless_staff"
+   send_to="12"
+   sequence="100"
+  >
+  <send>have_bless_staff = true</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="The light of Aman fades away from you."
+   name="auto_use_bless_staff"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+if have_bless_staff and auto_use_bless_staff then
+	Send("use staff")
+end
+  </send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
    match="^.+? is (?:incapacitated|mortally wounded|stunned) and will (?:slowly |probably )?die[,]? (?:soon[ ]?)?(?:if not aided)?\.$"
    name="auto_kick"
    regexp="y"
@@ -1049,6 +1073,15 @@ Note("Web removed!")
   <trigger
    enabled="y"
    group="mume_misc"
+   match="With a huge effort the ram is moved away from here."
+   name="gag_ram"
+   omit_from_output="y"
+   sequence="100"
+  >
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
    match="You feel a slight tremor in your blade."
    name="gag_claymore"
    omit_from_output="y"
@@ -1348,6 +1381,78 @@ Note(string.format("%s copied to clipboard.", new_id))
   </send>
   </alias>
   <alias
+   name="recite_azure_scroll"
+   match="^azu\s*?(?:\s+(?P&lt;player&gt;\w+))?$"
+   enabled="y"
+   group="mume_misc"
+   regexp="y"
+   send_to="0"
+   sequence="100"
+  >
+  <send>get azurescroll all
+recite azurescroll %&lt;player&gt;</send>
+  </alias>
+  <alias
+   name="recite_black_scroll"
+   match="^bla\s*?(?:\s+(?P&lt;player&gt;\w+))?$"
+   enabled="y"
+   group="mume_misc"
+   regexp="y"
+   send_to="0"
+   sequence="100"
+  >
+  <send>get blackscroll all
+recite blackscroll %&lt;player&gt;</send>
+  </alias>
+  <alias
+   name="recite_blue_scroll"
+   match="^blu\s*?(?:\s+(?P&lt;player&gt;\w+))?$"
+   enabled="y"
+   group="mume_misc"
+   regexp="y"
+   send_to="0"
+   sequence="100"
+  >
+  <send>get bluescroll all
+recite bluescroll %&lt;player&gt;</send>
+  </alias>
+  <alias
+   name="recite_ebony_scroll"
+   match="^ebo\s*?(?:\s+(?P&lt;player&gt;\w+))?$"
+   enabled="y"
+   group="mume_misc"
+   regexp="y"
+   send_to="0"
+   sequence="100"
+  >
+  <send>get ebonyscroll all
+recite ebonyscroll %&lt;player&gt;</send>
+  </alias>
+  <alias
+   name="recite_purple_scroll"
+   match="^purp\s*?(?:\s+(?P&lt;player&gt;\w+))?$"
+   enabled="y"
+   group="mume_misc"
+   regexp="y"
+   send_to="0"
+   sequence="100"
+  >
+  <send>get purplescroll all
+recite purplescroll %&lt;player&gt;</send>
+  </alias>
+  <alias
+   name="recite_vellum_scroll"
+   match="^vel\s*?(?:\s+(?P&lt;player&gt;\w+))?$"
+   enabled="y"
+   group="mume_misc"
+   regexp="y"
+   send_to="0"
+   sequence="100"
+  >
+  <send>get vellumscroll all
+recite vellumscroll %&lt;player&gt;</send>
+  </alias>
+  <alias
    name="antidote_lore"
    match="^antidote\s*?(?:\s+(?P&lt;container&gt;[\w\.]+))?$"
    enabled="y"
@@ -1635,6 +1740,20 @@ else
 	Send("get juniper all")
 	Send("put juniper %&lt;container&gt;")
 end
+  </send>
+  </alias>
+  <alias
+   name="toggle_auto_use_bless_staff"
+   match="autobstaff"
+   enabled="y"
+   group="mume_misc"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+auto_use_bless_staff = not auto_use_bless_staff
+CallPlugin(CONFIG, "set", "auto_use_bless_staff", auto_use_bless_staff)
+Note("Auto Use Bless Staff ", auto_use_bless_staff and "enabled." or "disabled.")
   </send>
   </alias>
   <alias
@@ -2156,6 +2275,9 @@ auto_drag = false
 auto_drag_counter = 1
 return_code, auto_kick = CallPlugin(CONFIG, "get", "auto_kick")
 auto_kick = auto_kick or false
+have_bless_staff = false
+return_code, auto_use_bless_staff = CallPlugin(CONFIG, "get", "auto_use_bless_staff")
+auto_use_bless_staff = auto_use_bless_staff or false
 hag_quest_me = false
 freuf_quest_me = false
 elf_camp_quest_me = false
@@ -2199,7 +2321,10 @@ function OnPluginInstall()
 end
 
 function OnPluginConnect()
-	DoCommand("FullScreenMode")
+	if not GetInfo(125) then
+		-- Client is not in full screen mode. Enable it.
+		DoCommand("FullScreenMode")
+	end
 end
 
 ]]>
