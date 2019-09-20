@@ -139,7 +139,7 @@ function process_text(data)
 end
 
 function OnPluginPacketReceived(packet)
-	last_packet = last_packet .. packet
+	last_packet = string.gsub(last_packet .. packet, IAC_GA, "\r\n")
 	if initial_packet then
 		-- This is necessary for displaying the log-in screen before the player types an account/character name.
 		if last_packet:findpos("By what name do you wish to be known?") then
@@ -147,17 +147,19 @@ function OnPluginPacketReceived(packet)
 			initial_packet = false
 		end
 		return packet .. IAC_GA
-	elseif last_packet:findpos(IAC_GA) then
-		-- Split the data on the last IAC-GA sequence (I.E. the Mume prompt) in case of data being broken over multiple packets.
-		packet, last_packet = last_packet:match(string.format("(.*%s)(.*)", IAC_GA))
+	elseif last_packet:endswith("\n") then
+		-- The buffer contains complete lines. Assume text has not been split over multiple packets.
+		packet = last_packet
+		last_packet = ""
 	elseif last_packet:findpos("\n") then
-		-- This is needed for instances in which Mume doesn't immediately return a prompt after command output, such as when a player attempts to backstab.
+		-- Data has been split over multiple packets. Handle the complete lines and add the incomplete date to the buffer.
 		packet, last_packet = last_packet:match("(.*\n)(.*)")
 	else
 		-- Data is definitely been broken up over multiple packets.
 		-- Return nothing and continue buffering until complete data has been received.
 		return ""
 	end
+	packet = string.gsub(packet, "&lt;/prompt&gt;\r\n", "&lt;/prompt&gt;" .. IAC_GA)
 	local character_buffer = {}
 	local tag_buffer = {}
 	local result = {}
