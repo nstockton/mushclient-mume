@@ -80,7 +80,12 @@ local function _get_latest_appveyor()
 	local release_data = {}
 	release_data.status = av and av.build.status or nil
 	if release_data.status == "success" then
-		release_data.tag_name = string.gsub(string.match(av.build.version, "^[vV]([%w.-]+)$"), "-", "_")
+		if av.build.isTag then
+			release_data.tag_name = string.match(av.build.version, "^[vV]([%d.]+[-]%w+)")
+		else
+			release_data.tag_name = string.match(av.build.version, "^[vV]([%w.-]+)")
+		end
+		release_data.tag_name = string.gsub(release_data.tag_name, "-", "_")
 		release_data.updated_at = av.build.updated
 		for i, job in ipairs(av.build.jobs) do
 			if job.status == "success" then
