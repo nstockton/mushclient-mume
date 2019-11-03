@@ -174,7 +174,7 @@ Miscellaneous aliases and triggers that don't belong anywhere else.
 * bpack  --  Switch the boots that the character is currently wearing with the ones in the character's pack.
 * bpouch  --  Switch the boots that the character is currently wearing with the ones in the character's pouch.
 * ccring  --  Use the cure critic ring in the character's pack.
-* cir  --  Remove the character's helm, and switch to using the character's circlet.
+* cir  --  Remove the character's helmet, and switch to using the character's circlet or crown.
 * citizen  --  Print the list of towns in which the character has citizenship.
 * clearthoughts [container]  --  Get the ingredients for the ClearThoughts herblore from all containers, and put them in the specified container. If no container is specified, print a list of required ingredients instead.
 * cpack  --  Switch the cloak, fur, or mantle that the character is currently wearing with the cloak in the character's pack.
@@ -188,7 +188,7 @@ Miscellaneous aliases and triggers that don't belong anywhere else.
 * fpouch  --  Switch the cloak, fur, or mantle that the character is wearing with the fur in the character's pouch.
 * gpack  --  Switch the gloves that the character is currently wearing with the ones in the character's pack.
 * healing [container]  --  Get the ingredients for the Healing herblore from all containers, and put them in the specified container. If no container is specified, print a list of required ingredients instead.
-* helm  --  Remove the character's circlet, and switch to using the character's helm.
+* helm  --  Remove the character's circlet or crown, and switch to using the character's helmet.
 * kbag  --  Get a butcher knife from the character's elven bag.
 * leafcake [container]  --  Get the ingredients for the Leaf-cake herblore from all containers, and put them in the specified container. If no container is specified, print a list of required ingredients instead.
 * lev  --  Prints the character's current level.
