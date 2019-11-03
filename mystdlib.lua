@@ -190,6 +190,10 @@ function table.clear(tbl)
 	end
 end
 
+function get_script_path()
+	return debug.getinfo(2, "S").short_src
+end
+
 local function _shasum_file(hasher, file_name, block_size)
 	local block_size = block_size or 2 ^ 16
 	local file = assert(io.open(file_name, "rb"))
