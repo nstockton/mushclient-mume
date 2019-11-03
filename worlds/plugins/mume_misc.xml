@@ -2102,9 +2102,11 @@ put gloves e.pack</send>
    sequence="100"
   >
   <send>remove circlet
-get helm e.pack
-wear helm
-put circlet e.pack</send>
+remove crown
+put circlet e.pack
+put crown e.pack
+get helmet e.pack
+wear helmet</send>
   </alias>
   <alias
    name="wear_circlet"
@@ -2113,10 +2115,12 @@ put circlet e.pack</send>
    group="mume_misc"
    sequence="100"
   >
-  <send>remove helm
+  <send>remove helmet
+put helmet e.pack
 get circlet e.pack
+get crown e.pack
 wear circlet
-put helm e.pack</send>
+wear crown</send>
   </alias>
   <alias
    name="use_str_ring"
