@@ -177,7 +177,7 @@ end
   <send></send>
   </trigger>
   <trigger
-   enabled="y"
+   enabled="n"
    group="mume_sounds"
    match="^(?:Your victim has disappeared|Alas\! There was no clear line of sight to \w+)\!$"
    name="no_line_of_sight"
@@ -185,7 +185,6 @@ end
    send_to="12"
    sequence="100"
   >
-  <send></send>
   </trigger>
   <trigger
    enabled="y"
@@ -216,11 +215,9 @@ end
    group="mume_sounds"
    match="Nothing seems to happen."
    name="nothing_happens"
-   omit_from_output="y"
    send_to="12"
    sequence="100"
   >
-  <send></send>
   </trigger>
   <trigger
    enabled="y"
@@ -527,6 +524,39 @@ end
    sequence="100"
   >
   <send>play(TYPE_ALERT, "misc_alert.wav")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
+   match="^(?:A relentless uruk of the Morgundul tribe is leading his soldiers here|An orkish expedition leader is standing here.*)\.$"
+   name="misc_alert25"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_ALERT, "misc_alert.wav")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
+   match="^A huge(?:\, massively muscled troll turns and advances towards you| ravenous troll has arrived from the \w+)\.$"
+   name="misc_alert26"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_ALERT, "misc_alert.wav")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
+   match="^A citizen mercenary(?: \(\w+\))? sits down and rests\.$"
+   name="alert_mercenary_resting"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_ALERT, "spells/sleep.wav")</send>
   </trigger>
   <trigger
    enabled="y"
