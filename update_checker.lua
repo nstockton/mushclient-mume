@@ -1,7 +1,9 @@
 require("mystdlib")
+local base64 = require("ee5_base64")
 local getch = require("getch")
 local json = require("dkjson")
 local lfs = require("lfs")
+
 
 local APP_NAME = "Mapper Proxy"
 local SCRIPT_VERSION = "1.0"
@@ -16,16 +18,18 @@ local HELP_TEXT = [[
 -release, -dev:	 Specify whether the latest stable release from GitHub should be used, or the latest development build from AppVeyor (defaults to release).
 ]]
 
+
 local function get_last_info()
 	-- Return the previously stored release information as a table.
 	local release_data = {}
 	if os.isFile(RELEASE_INFO_FILE) then
-		local fileObj = io.open(RELEASE_INFO_FILE, "rb")
-		release_data = json.decode(fileObj:read("*all"), 1, nil)
-		fileObj:close()
+		local handle = io.open(RELEASE_INFO_FILE, "rb")
+		release_data = json.decode(handle:read("*all"), 1, nil)
+		handle:close()
 	end
 	return release_data
 end
+
 
 local function save_last_info(tbl)
 	-- Encode the release information in tbl to JSon, and save it to a file.
@@ -39,6 +43,7 @@ local function save_last_info(tbl)
 	handle:write(data)
 	handle:close()
 end
+
 
 local function _get_latest_github()
 	local project_url = string.format("https://api.github.com/repos/%s/%s/releases/latest", GITHUB_USER, REPO)
@@ -69,6 +74,7 @@ local function _get_latest_github()
 	release_data.provider = "github"
 	return release_data
 end
+
 
 local function _get_latest_appveyor()
 	local project_url = string.format("https://ci.appveyor.com/api/projects/%s/%s", APPVEYOR_USER, REPO)
@@ -103,6 +109,7 @@ local function _get_latest_appveyor()
 	return release_data
 end
 
+
 local function prompt_for_update()
 	io.write("Update now? (Y to update, N to skip this release in future, Q to exit and do nothing) ")
 	local response = string.lower(string.strip(getch.getch()))
@@ -120,6 +127,7 @@ local function prompt_for_update()
 		return prompt_for_update()
 	end
 end
+
 
 local function do_download(release)
 	local hash
@@ -160,7 +168,8 @@ local function do_download(release)
 	return false
 end
 
-function do_extract()
+
+local function do_extract()
 	local pwd = lfs.currentdir()
 	printf("Extracting files.")
 	os.execute(string.format("unzip.exe -qq \"%s\" -d \"tempmapper\"", ZIP_FILE))
@@ -183,14 +192,53 @@ function do_extract()
 	printf("Done.")
 end
 
+
 local function called_by_script()
 	return get_flags(true)["calledbyscript"] or false
 end
+
 
 local function needs_help()
 	local flags = get_flags(true)
 	return flags["help"] or flags["h"] or flags["?"] or false
 end
+
+
+local function needs_script_update()
+	local flags = get_flags(true)
+	return flags["update"] or flags["u"] or false
+end
+
+
+local function script_update()
+	local project_url = string.format("https://api.github.com/repos/%s/mushclient-mume/contents/update_checker.lua?ref=master", GITHUB_USER)
+	local script_path = assert(get_script_path(), "Error: Unable to retrieve path of the updater script.")
+	assert(os.isFile(script_path), string.format("Error: '%s' is not a file.", script_path))
+	local script_size = assert(os.fileSize(script_path))
+	local handle = assert(io.open(script_path, "rb"))
+	local script_data = assert(handle:read("*all"), string.format("Error: Unable to read data from '%s'.", script_path))
+	handle:close()
+	local command = string.format("curl.exe --silent --location --retry 999 --retry-max-time 0 --continue-at - \"%s\"", project_url)
+	local handle = assert(io.popen(command))
+	local gh, pos, err = json.decode(handle:read("*all"), 1, nil)
+	handle:close()
+	assert(gh, err)
+	-- GitHub might return an error message if the path was invalid, ETC.
+	assert(gh.encoding and gh.content and gh.size, gh.message or "Error: unknown data returned.")
+	assert(gh.encoding == "base64", string.format("Error: unknown encoding '%s', should be 'base64'.", gh.encoding))
+	local content = base64.decode(gh.content)
+	assert(string.len(content) == gh.size, "Error: size of retrieved content and reported size by GitHub do not match.")
+	assert(gh.size > 0, "Error: reported size by GitHub is 0.")
+	if script_data ~= content then
+		local handle = assert(io.open(script_path, "wb"))
+		handle:write(content)
+		handle:close()
+		printf("The update script has been successfully updated.")
+	elseif not called_by_script() then
+		printf("The update script is up to date.")
+	end
+end
+
 
 local function get_latest_info(last_provider)
 	local flags = get_flags(true)
@@ -210,11 +258,16 @@ end
 
 local last = get_last_info()
 
+
 if needs_help() then
 	printf("%s Updater V%s.", APP_NAME, SCRIPT_VERSION)
 	printf(HELP_TEXT)
 	os.exit(0)
+elseif needs_script_update() then
+	script_update()
+	os.exit(0)
 end
+
 
 -- Clean up previously left junk.
 if os.isFile(ZIP_FILE) then
@@ -224,12 +277,13 @@ if os.isDir("tempmapper") then
 	os.execute("rd /S /Q \"tempmapper\"")
 end
 
+
 local latest = get_latest_info(last.provider)
+
 
 if os.isDir("mapper_proxy") and not called_by_script() then
 	printf("Checking for updates to %s.", APP_NAME)
 end
-
 if latest.status ~= "success" then
 	printf("Error: unable to update at this time. Please try again in a few minutes.")
 	printf("Build status returned by the server was (%s).", latest.status or "unknown")
@@ -262,6 +316,7 @@ else
 		save_last_info(last)
 	end
 end
+
 
 pause()
 os.exit(0)
