@@ -171,6 +171,16 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
+   match="A long-stemmed plant tipped with bright orange flowers is growing here."
+   omit_from_output="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 - [hawkweed]</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_herb_substitutions"
    match="A long-stemmed plant that branches into many bright yellow flowers grows here."
    omit_from_output="y"
    send_to="2"
