@@ -6,7 +6,7 @@ local lfs = require("lfs")
 
 
 local APP_NAME = "Mapper Proxy"
-local SCRIPT_VERSION = "1.0"
+local SCRIPT_VERSION = "1.1"
 local GITHUB_USER = "nstockton"
 local APPVEYOR_USER = "NickStockton"
 local REPO = "mapperproxy-mume"
@@ -21,13 +21,14 @@ local HELP_TEXT = [[
 
 local function get_last_info()
 	-- Return the previously stored release information as a table.
-	local release_data = {}
 	if os.isFile(RELEASE_INFO_FILE) then
-		local handle = io.open(RELEASE_INFO_FILE, "rb")
-		release_data = json.decode(handle:read("*all"), 1, nil)
+		local handle = assert(io.open(RELEASE_INFO_FILE, "rb"))
+		local release_data, pos, err = json.decode(handle:read("*all"), 1, nil)
 		handle:close()
+		return assert(release_data, err)
+	else
+		return {}
 	end
-	return release_data
 end
 
 
@@ -39,7 +40,7 @@ local function save_last_info(tbl)
 	end
 	table.sort(ordered_keys)
 	local data = string.gsub(json.encode(tbl, {indent=true, level=0, keyorder=ordered_keys}), "\r?\n", "\r\n")
-	local handle = io.open(RELEASE_INFO_FILE, "wb")
+	local handle = assert(io.open(RELEASE_INFO_FILE, "wb"))
 	handle:write(data)
 	handle:close()
 end
@@ -48,30 +49,25 @@ end
 local function _get_latest_github()
 	local project_url = string.format("https://api.github.com/repos/%s/%s/releases/latest", GITHUB_USER, REPO)
 	local command = string.format("curl.exe --silent --location --retry 999 --retry-max-time 0 --continue-at - \"%s\"", project_url)
-	local handle = io.popen(command)
-	local result = handle:read("*all")
-	local gh = json.decode(result, 1, nil)
+	local handle = assert(io.popen(command))
+	local gh, pos, err = json.decode(handle:read("*all"), 1, nil)
 	handle:close()
+	assert(gh, err)
 	local release_data = {}
+	release_data.provider = "github"
 	release_data.status = "success"
-	if gh then
-		release_data.tag_name = gh.tag_name
-		for i, asset in ipairs(gh.assets) do
-			if string.startswith(asset.name, "Mapper_Proxy_V") and string.endswith(asset.name, ".zip") then
-				release_data.download_url = asset.browser_download_url
-				release_data.size = asset.size
-				release_data.updated_at = asset.updated_at
-			elseif string.startswith(asset.name, "Mapper_Proxy_V") and string.endswith(asset.name, ".zip.sha256") then
-				release_data.sha256_url = asset.browser_download_url
-			end
+	release_data.tag_name = assert(gh.tag_name, "Error: 'tag_name' not in retrieved data.")
+	assert(gh.assets, "Error: 'assets' not in retrieved data.")
+	for i, asset in ipairs(gh.assets) do
+		assert(asset.name, "Error: 'name' not in 'asset'.")
+		if string.startswith(asset.name, "Mapper_Proxy_V") and string.endswith(asset.name, ".zip") then
+			release_data.download_url = assert(asset.browser_download_url, "Error: 'browser_download_url' not in 'asset'.")
+			release_data.size = assert(asset.size, "Error: 'size' not in 'asset'.")
+			release_data.updated_at = assert(asset.updated_at, "Error: 'updated_at' not in 'asset'.")
+		elseif string.startswith(asset.name, "Mapper_Proxy_V") and string.endswith(asset.name, ".zip.sha256") then
+			release_data.sha256_url = assert(asset.browser_download_url, "Error: 'browser_download_url' not in 'asset'.")
 		end
 	end
-	release_data.tag_name = release_data.tag_name or ""
-	release_data.download_url = release_data.download_url or ""
-	release_data.size = release_data.size or 0
-	release_data.updated_at = release_data.updated_at or ""
-	release_data.sha256_url = release_data.sha256_url or ""
-	release_data.provider = "github"
 	return release_data
 end
 
@@ -79,33 +75,35 @@ end
 local function _get_latest_appveyor()
 	local project_url = string.format("https://ci.appveyor.com/api/projects/%s/%s", APPVEYOR_USER, REPO)
 	local command = string.format("curl.exe --silent --location --retry 999 --retry-max-time 0 --continue-at - \"%s\"", project_url)
-	local handle = io.popen(command)
-	local result = handle:read("*all")
-	local av = json.decode(result, 1, nil)
+	local handle = assert(io.popen(command))
+	local av, pos, err = json.decode(handle:read("*all"), 1, nil)
 	handle:close()
+	assert(av, err)
 	local release_data = {}
-	release_data.status = av and av.build.status or nil
+	release_data.provider = "appveyor"
+	release_data.size = nil
+	assert(av.build, "Error: 'build' not in retrieved data.")
+	release_data.status = assert(av.build.status, "Error: 'status' not in 'build'.")
 	if release_data.status == "success" then
+		assert(type(av.build.isTag) ~= "nil", "Error: 'isTag' not in 'build'.")
+		assert(av.build.version, "Error: 'version' not in 'build'.")
 		if av.build.isTag then
 			release_data.tag_name = string.match(av.build.version, "^[vV]([%d.]+[-]%w+)")
 		else
 			release_data.tag_name = string.match(av.build.version, "^[vV]([%w.-]+)")
 		end
 		release_data.tag_name = string.gsub(release_data.tag_name, "-", "_")
-		release_data.updated_at = av.build.updated
+		release_data.updated_at = assert(av.build.updated, "Error: 'updated' not in 'build'.")
+		assert(av.build.jobs, "Error: 'jobs' not in 'build'.")
 		for i, job in ipairs(av.build.jobs) do
+			assert(job.status, "Error: 'status' not in job.")
 			if job.status == "success" then
+				assert(av.build.branch, "Error: 'branch' not in 'build'.")
 				release_data.download_url = string.format("%s/artifacts/Mapper_Proxy_V%s.zip?branch=%s", project_url, release_data.tag_name, av.build.branch)
 				release_data.sha256_url = string.format("%s/artifacts/Mapper_Proxy_V%s.zip.sha256?branch=%s", project_url, release_data.tag_name, av.build.branch)
 			end
 		end
 	end
-	release_data.tag_name = release_data.tag_name or ""
-	release_data.download_url = release_data.download_url or ""
-	release_data.size = nil
-	release_data.updated_at = release_data.updated_at or ""
-	release_data.sha256_url = release_data.sha256_url or ""
-	release_data.provider = "appveyor"
 	return release_data
 end
 
@@ -130,42 +128,28 @@ end
 
 
 local function do_download(release)
-	local hash
 	printf("Downloading %s %s (%s) from %s.", APP_NAME, release.tag_name, release.updated_at, release.provider == "github" and "GitHub" or release.provider == "appveyor" and "AppVeyor" or string.capitalize(release.provider))
-	if release.sha256_url ~= "" then
-		local handle = io.popen(string.format("curl.exe --silent --location --retry 999 --retry-max-time 0 --continue-at - \"%s\"", release.sha256_url))
-		hash = string.lower(string.strip(handle:read("*all")))
-		handle:close()
-		if not string.endswith(hash, ".zip") then
-			print(string.format("Invalid checksum '%s'", hash))
-			return false
-		end
-		hash = string.match(hash, "^%S+")
-	end
+	local handle = assert(io.popen(string.format("curl.exe --silent --location --retry 999 --retry-max-time 0 --continue-at - \"%s\"", release.sha256_url)))
+	local result = string.lower(string.strip(handle:read("*all")))
+	handle:close()
+	local hash = assert(string.match(result, "^([0-9a-f]+).+%.zip$"), string.format("Invalid checksum '%s'", result))
 	os.execute(string.format("curl.exe --silent --location --retry 999 --retry-max-time 0 --continue-at - --output %s \"%s\"", ZIP_FILE, release.download_url))
-	local downloaded_size , error = os.fileSize(ZIP_FILE)
+	local downloaded_size = assert(os.fileSize(ZIP_FILE))
 	-- release.size should be nil if the provider's API doesn't support retrieving file size.
 	-- If the provider does support retrieving file size, but for some reason did not send it, release.size should be 0.
-	if downloaded_size and downloaded_size > 0 and downloaded_size == release.size or not release.size then
-		printf("Verifying download.")
-		if not hash then
-			printf("Error: no checksum available. Aborting.")
-		elseif sha256sum_file(ZIP_FILE) == hash then
-			save_last_info(release)
-			printf("OK.")
-			return true
-		else
-			printf("Error: checksums do not match. Aborting.")
-		end
-	elseif error then
-		printf(error)
+	assert(not release.size or downloaded_size and downloaded_size > 0 and downloaded_size == release.size, "Error downloading release: Downloaded file size and reported size from provider API do not match.")
+	printf("Verifying download.")
+	if sha256sum_file(ZIP_FILE) == hash then
+		save_last_info(release)
+		printf("OK.")
+		return true
 	else
-		printf("Error downloading release: Downloaded file size and reported size from provider API do not match.")
+		printf("Error: checksums do not match. Aborting.")
+		if os.isFile(ZIP_FILE) then
+			os.remove(ZIP_FILE)
+		end
+		return false
 	end
-	if os.isFile(ZIP_FILE) then
-		os.remove(ZIP_FILE)
-	end
-	return false
 end
 
 
@@ -176,9 +160,7 @@ local function do_extract()
 	if os.isFile(ZIP_FILE) then
 		os.remove(ZIP_FILE)
 	end
-	if not lfs.chdir(pwd .. "\\tempmapper") then
-		return printf("Error: failed to change directory to '%s\\tempmapper'", pwd)
-	end
+	assert(lfs.chdir(pwd .. "\\tempmapper"))
 	local copy_from
 	for item in lfs.dir(lfs.currentdir()) do
 		if lfs.attributes(item, "mode") == "directory" and string.startswith(string.lower(item), "mapper_proxy_v") then
