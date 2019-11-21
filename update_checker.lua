@@ -92,9 +92,10 @@ local function _get_latest_appveyor()
 	release_data.provider = "appveyor"
 	release_data.size = nil
 	assert(av.build, "Error: 'build' not in retrieved data.")
-	release_data.status = assert(av.build.status, "Error: 'status' not in 'build'.")
+	assert(av.build.status, "Error: 'status' not in 'build'.")
 	assert(type(av.build.isTag) ~= "nil", "Error: 'isTag' not in 'build'.")
-	if release_data.status == "success" and av.build.isTag then
+	if av.build.status == "success" and av.build.isTag then
+		release_data.status = "success"
 		assert(av.build.version, "Error: 'version' not in 'build'.")
 		release_data.tag_name = string.match(av.build.version, "^[vV]([%d.]+[-]%w+)")
 		release_data.tag_name = string.gsub(release_data.tag_name, "-", "_")
@@ -109,7 +110,8 @@ local function _get_latest_appveyor()
 			end
 		end
 	else
-		release_data.updated_at = assert(av.build.updated, "Error: 'updated' not in 'build'.")
+		release_data.status = "success"
+		release_data.updated_at = "current"
 		release_data.tag_name = "master"
 		release_data.download_url = string.format("%s/artifacts/MapperProxy.zip?branch=master&pr=false", project_url)
 		release_data.sha256 = get_checksum(string.format("%s/artifacts/MapperProxy.zip.sha256?branch=master&pr=false", project_url))
