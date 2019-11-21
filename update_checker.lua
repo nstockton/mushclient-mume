@@ -46,6 +46,15 @@ local function save_last_info(tbl)
 end
 
 
+local function get_checksum(url)
+	local handle = assert(io.popen(string.format("curl.exe --silent --location --retry 999 --retry-max-time 0 --continue-at - \"%s\"", url)))
+	local result = string.lower(string.strip(handle:read("*all")))
+	handle:close()
+	local hash = assert(string.match(result, "^([0-9a-f]+).+%.zip$"), string.format("Invalid checksum '%s'", result))
+	return hash
+end
+
+
 local function _get_latest_github()
 	local project_url = string.format("https://api.github.com/repos/%s/%s/releases/latest", GITHUB_USER, REPO)
 	local command = string.format("curl.exe --silent --location --retry 999 --retry-max-time 0 --continue-at - \"%s\"", project_url)
@@ -65,7 +74,7 @@ local function _get_latest_github()
 			release_data.size = assert(asset.size, "Error: 'size' not in 'asset'.")
 			release_data.updated_at = assert(asset.updated_at, "Error: 'updated_at' not in 'asset'.")
 		elseif string.startswith(asset.name, "Mapper_Proxy_V") and string.endswith(asset.name, ".zip.sha256") then
-			release_data.sha256_url = assert(asset.browser_download_url, "Error: 'browser_download_url' not in 'asset'.")
+			release_data.sha256 = get_checksum(assert(asset.browser_download_url, "Error: 'browser_download_url' not in 'asset'."))
 		end
 	end
 	return release_data
@@ -84,14 +93,10 @@ local function _get_latest_appveyor()
 	release_data.size = nil
 	assert(av.build, "Error: 'build' not in retrieved data.")
 	release_data.status = assert(av.build.status, "Error: 'status' not in 'build'.")
-	if release_data.status == "success" then
-		assert(type(av.build.isTag) ~= "nil", "Error: 'isTag' not in 'build'.")
+	assert(type(av.build.isTag) ~= "nil", "Error: 'isTag' not in 'build'.")
+	if release_data.status == "success" and av.build.isTag then
 		assert(av.build.version, "Error: 'version' not in 'build'.")
-		if av.build.isTag then
-			release_data.tag_name = string.match(av.build.version, "^[vV]([%d.]+[-]%w+)")
-		else
-			release_data.tag_name = string.match(av.build.version, "^[vV]([%w.-]+)")
-		end
+		release_data.tag_name = string.match(av.build.version, "^[vV]([%d.]+[-]%w+)")
 		release_data.tag_name = string.gsub(release_data.tag_name, "-", "_")
 		release_data.updated_at = assert(av.build.updated, "Error: 'updated' not in 'build'.")
 		assert(av.build.jobs, "Error: 'jobs' not in 'build'.")
@@ -99,10 +104,15 @@ local function _get_latest_appveyor()
 			assert(job.status, "Error: 'status' not in job.")
 			if job.status == "success" then
 				assert(av.build.branch, "Error: 'branch' not in 'build'.")
-				release_data.download_url = string.format("%s/artifacts/Mapper_Proxy_V%s.zip?branch=%s", project_url, release_data.tag_name, av.build.branch)
-				release_data.sha256_url = string.format("%s/artifacts/Mapper_Proxy_V%s.zip.sha256?branch=%s", project_url, release_data.tag_name, av.build.branch)
+				release_data.download_url = string.format("%s/artifacts/Mapper_Proxy_V%s.zip?branch=master", project_url, release_data.tag_name)
+				release_data.sha256 = get_checksum(string.format("%s/artifacts/Mapper_Proxy_V%s.zip.sha256?branch=master", project_url, release_data.tag_name))
 			end
 		end
+	else
+		release_data.updated_at = assert(av.build.updated, "Error: 'updated' not in 'build'.")
+		release_data.tag_name = "master"
+		release_data.download_url = string.format("%s/artifacts/MapperProxy.zip?branch=master&pr=false", project_url)
+		release_data.sha256 = get_checksum(string.format("%s/artifacts/MapperProxy.zip.sha256?branch=master&pr=false", project_url))
 	end
 	return release_data
 end
@@ -129,17 +139,13 @@ end
 
 local function do_download(release)
 	printf("Downloading %s %s (%s) from %s.", APP_NAME, release.tag_name, release.updated_at, release.provider == "github" and "GitHub" or release.provider == "appveyor" and "AppVeyor" or string.capitalize(release.provider))
-	local handle = assert(io.popen(string.format("curl.exe --silent --location --retry 999 --retry-max-time 0 --continue-at - \"%s\"", release.sha256_url)))
-	local result = string.lower(string.strip(handle:read("*all")))
-	handle:close()
-	local hash = assert(string.match(result, "^([0-9a-f]+).+%.zip$"), string.format("Invalid checksum '%s'", result))
 	os.execute(string.format("curl.exe --silent --location --retry 999 --retry-max-time 0 --continue-at - --output %s \"%s\"", ZIP_FILE, release.download_url))
 	local downloaded_size = assert(os.fileSize(ZIP_FILE))
 	-- release.size should be nil if the provider's API doesn't support retrieving file size.
 	-- If the provider does support retrieving file size, but for some reason did not send it, release.size should be 0.
 	assert(not release.size or downloaded_size and downloaded_size > 0 and downloaded_size == release.size, "Error downloading release: Downloaded file size and reported size from provider API do not match.")
 	printf("Verifying download.")
-	if sha256sum_file(ZIP_FILE) == hash then
+	if sha256sum_file(ZIP_FILE) == release.sha256 then
 		save_last_info(release)
 		printf("OK.")
 		return true
@@ -275,12 +281,12 @@ elseif not os.isDir("mapper_proxy") then
 	if do_download(latest) then
 		do_extract()
 	end
-elseif last.skipped_release and last.skipped_release == latest.tag_name .. latest.updated_at then
+elseif last.skipped_release and last.skipped_release == latest.tag_name .. latest.sha256 then
 	printf("The update to %s (%s) dated %s from %s was previously skipped.", APP_NAME, latest.tag_name, latest.updated_at, latest.provider == "github" and "GitHub" or latest.provider == "appveyor" and "AppVeyor" or string.capitalize(latest.provider))
 	if called_by_script() then
 		os.exit(0)
 	end
-elseif last.tag_name and last.updated_at and last.tag_name .. last.updated_at == latest.tag_name .. latest.updated_at then
+elseif last.tag_name and last.sha256 and last.tag_name .. last.sha256 == latest.tag_name .. latest.sha256 then
 	printf("You are currently running the latest %s (%s) dated %s from %s.", APP_NAME, latest.tag_name, latest.updated_at, latest.provider == "github" and "GitHub" or latest.provider == "appveyor" and "AppVeyor" or string.capitalize(latest.provider))
 	if called_by_script() then
 		os.exit(0)
@@ -294,7 +300,7 @@ else
 		end
 	elseif user_choice == "n" then
 		printf("You will no longer be prompted to download this version of %s.", APP_NAME)
-		last.skipped_release = latest.tag_name .. latest.updated_at
+		last.skipped_release = latest.tag_name .. latest.sha256
 		save_last_info(last)
 	end
 end
