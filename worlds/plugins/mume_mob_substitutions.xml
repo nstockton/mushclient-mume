@@ -30,6 +30,17 @@
   <trigger
    enabled="y"
    group="mume_mob_substitutions"
+   match="^A cloaked man lurks here\, watching you silently(?: \(hidden\))?\.$"
+   omit_from_output="y"
+   regexp="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 - (Vairr the Assassin)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_mob_substitutions"
    match="A Dunadan ranger is crouched over the fire, cooking a meal."
    omit_from_output="y"
    send_to="2"
