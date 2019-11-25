@@ -105,8 +105,8 @@ local function _get_latest_appveyor()
 			assert(job.status, "Error: 'status' not in job.")
 			if job.status == "success" then
 				assert(av.build.branch, "Error: 'branch' not in 'build'.")
-				release_data.download_url = string.format("%s/artifacts/Mapper_Proxy_V%s.zip?branch=master", project_url, release_data.tag_name)
-				release_data.sha256 = get_checksum(string.format("%s/artifacts/Mapper_Proxy_V%s.zip.sha256?branch=master", project_url, release_data.tag_name))
+				release_data.download_url = string.format("%s/artifacts/Mapper_Proxy_V%s.zip?branch=%s", project_url, release_data.tag_name, av.build.branch)
+				release_data.sha256 = get_checksum(string.format("%s/artifacts/Mapper_Proxy_V%s.zip.sha256?branch=%s", project_url, release_data.tag_name, av.build.branch))
 			end
 		end
 	else
