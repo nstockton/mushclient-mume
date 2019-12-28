@@ -201,6 +201,7 @@ IGNORE_LIST = {
 	["Curifil"] = true,
 	["Curundil"] = true,
 	["Daegil"] = true,
+	["Dolion"] = true,
 	["Duinhir"] = true,
 	["Eonwe"] = true,
 	["Eblees"] = true,
