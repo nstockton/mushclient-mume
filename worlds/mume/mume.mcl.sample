@@ -461,6 +461,7 @@
 <include name="repeat_command.xml" plugin="y" />
 <include name="mume_grouping.xml" plugin="y" />
 <include name="mume_macros.xml" plugin="y" />
+<include name="mume_portal_wizard.xml" plugin="y" />
 <include name="omit_blank_lines.xml" plugin="y" />
 <include name="output_functions.xml" plugin="y" />
 </muclient>

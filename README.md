@@ -226,6 +226,22 @@ This plugin allows you to automatically walk along roads. It works by looking fo
 #### Aliases
 * p [direction]  --  Start walking along the road in direction.
 * pp  --  Stop auto walking along the road.
+### Portal Wizard
+Originally written by Elerrina, this plugin helps you store locate keys and perform actions with them, such as portaling. It also reformats the output of Find The Path to be more readable, as well as reformatting the output of Locate Life, sorting keys by distance, and grouping mobs with the same key on a single line.
+#### Aliases
+* cache [number name|clear|[rn|rename] old-name new-name|[rm|remove] names]  --  Manage cached keys.
+** If no arguments are given, print the list of cached keys, oldest to most recent.
+** If one or more pares of 'number name' pairs are given, add the temporary key matching number to the cache, assigning it name.
+** If 'clear' is given, clear the list.
+** If 'rn' or 'rename' is given, rename the key from old-name to new-name.
+** If 'rm' or 'remove' is given, remove the keys matching names.
+* ftp [name]  --  Cast 'find the path' on the cached key matching name.
+* keys [clear]  --  Print the most recent, temporary keys from the Locate Life spell. If 'clear' is passed as an argument, clear the list.
+* locl [name]  --  Cast 'locate life' on name.
+* port [name]  --  Cast 'portal' on the cached key matching name.
+* scry [name]  --  Cast 'scry' on the cached key matching name.
+* tele [name]  --  Cast 'teleport' on the cached key matching name.
+* wroom [name]  --  Cast 'watch room' on the cached key matching name.
 ### Reentering
 This plugin provides aliases for escaping and for returning from the direction the player fled from.
 #### Aliases
