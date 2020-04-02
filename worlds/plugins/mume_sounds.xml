@@ -550,7 +550,38 @@ end
   <trigger
    enabled="y"
    group="mume_sounds"
-   match="^A citizen mercenary(?: \(\w+\))? sits down and rests\.$"
+   match="^A (?:pony|dales-pony|horse|warhorse|pack horse|trained horse|horse of the Rohirrim|brown donkey|mountain mule|hungry warg|brown wolf)(?: \(\w+\))? steps on a trap and plunges down a hole\!$"
+   name="misc_alert27"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_ALERT, "misc_alert.wav")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
+   match="Rostam the Easterling creates a black, twirling cloud over a raven!"
+   name="misc_alert28"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_ALERT, "misc_alert.wav")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
+   match="Rostam pulls a lever, and door to the south opens!"
+   name="misc_alert29"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_ALERT, "misc_alert.wav")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
+   match="^A (?:great\, wild boar|citizen mercenary)(?: \(\w+\))? sits down and rests\.$"
    name="alert_mercenary_resting"
    regexp="y"
    send_to="12"

@@ -2312,7 +2312,7 @@ function connect_to_mapper()
 		if os.isFile(GetInfo (68) .. "mapper_proxy\\mapper_ready.ignore") then
 			Connect()
 		else
-			DoAfterSpecial (0.1, "connect_to_mapper()", sendto.script)
+			DoAfterSpecial(0.1, "connect_to_mapper()", sendto.script)
 		end
 	end
 end
