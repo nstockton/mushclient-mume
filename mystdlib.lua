@@ -111,6 +111,10 @@ function string.isdigit(str)
 	return string.match(str, "^%d+$") ~= nil
 end
 
+function table.isempty(tbl)
+	return next(tbl) == nil
+end
+
 function table.slice(tbl, first, last)
 	-- Like Python style list slicing, but inclusive.
 	local size = #tbl
@@ -192,6 +196,46 @@ end
 
 function get_script_path()
 	return debug.getinfo(2, "S").short_src
+end
+
+function spairs(t, order)
+	-- https://stackoverflow.com/questions/15706270/sort-a-table-in-lua
+	-- Collect the keys.
+	local keys = {}
+	for k in pairs(t) do
+		table.insert(keys, k)
+	end
+	-- If order function given, sort by it by passing the table and keys a, b, otherwise just sort the keys.
+	if order then
+		table.sort(keys, function(a, b) return order(t, a, b) end)
+	else
+		table.sort(keys)
+	end
+	-- return the iterator function
+	local i = 0
+	return function()
+		i = i + 1
+		if keys[i] then
+			return keys[i], t[keys[i]]
+		end
+	end
+end
+
+function int(number)
+	local integral, fractional = math.modf(number)
+	return integral
+end
+
+function len(item)
+	if type(item) == "string" then
+		return string.len(item)
+	elseif type(item) == "table" then
+		local keys = {}
+		for key, value in pairs(item) do
+			table.insert(keys, key)
+		end
+		return table.getn(keys)
+	end
 end
 
 local function _shasum_file(hasher, file_name, block_size)

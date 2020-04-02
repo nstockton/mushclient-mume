@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <!DOCTYPE muclient>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public -->
+<!-- License, v. 2.0. If a copy of the MPL was not distributed with this -->
+<!-- file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
 <!-- Saved on Sunday, March 03, 2019, 12:29 PM -->
 <!-- MuClient version 5.06 -->
 
@@ -12,7 +16,6 @@
    id="8ab101a978791d5d1f0a6f41"
    language="Lua"
    purpose="Making portalling convenient."
-   save_state="y"
    date_written="2019-03-03 12:25:46"
    requires="5.06"
    version="2.0"
@@ -24,254 +27,388 @@
 <!--  Get our standard constants -->
 
 <include name="constants.lua"/>
-<aliases>
 
-<alias
-   name="keys"
-   match="keys"
-   enabled="y"
-   expand_variables="y"
-   group="portal"
-   send_to="12"
-   sequence="100"
-  >
-  <send>
-  Note("\\nRecent Captures:\\n----------------")
-  for k,v in pairs(temp_keys) do
-    Note("[",k,"] ",v.label," - ",key_timer_status(v.time))
-	end
-  </send>
-  </alias>
-
-  <alias
-   name="portal"
-   match="^port(?:[ ]+(.*))?$"
-   enabled="y"
-   expand_variables="y"
-   regexp="y"
-   group="portal"
-   send_to="12"
-   sequence="100"
-  >
-  <send>
-  if type(%1) == "number" then
-    Send("cast \'portal\' up ", keys[%1].key)
-  else
-    Send("cast \'portal\' up ", keys["%1"].key)
-  end
-  </send>
-  </alias>
-
-  <alias
-   name="teleport"
-   match="^tele(?:[ ]+(.*))?$"
-   enabled="y"
-   expand_variables="y"
-   regexp="y"
-   group="portal"
-   send_to="12"
-   sequence="100"
-  >
-  <send>
-  if type(%1) == "number" then
-    Send("cast \'teleport\' ", keys[%1].key)
-  else
-    Send("cast \'teleport\' ", keys["%1"].key)
-  end
-  </send>
-  </alias>  
-  
-  <alias
-   name="cache"
-   match="^cache(?:[ ]+(?P&lt;args&gt;.*))?$"
-   enabled="y"
-   expand_variables="y"
-   regexp="y"
-   group="portal"
-   send_to="12"
-   sequence="100"
-   omit_from_output="n"
-  >
-  <send>
- debug("string capture: %&lt;args&gt;")
- args = utils.split("%&lt;args&gt;"," ")
- if args[1] == "name" then 
-   n = tonumber(args[2])
-   name = args[3]
-   keys[name]=keys[n]
-   table.remove(keys, n)
-   Note ("Key [",n,"] renamed to [",name,"]")
-   set(keys)
-   return
- elseif args[1] == "clear" then
-   table.clear(keys)
-   set(keys)
-   Note("Key cache cleared!")
-   return
- elseif args[1] == "remove" then
-     table.remove(args, 1)
-   for i, v in pairs(args) do
-   Note(i,v)
-     v = tonumber(v)
-	 table.remove(keys, args[v])
-	 Note("Key [",v,"] removed.")
-   end
-   set(keys)
-   return
- elseif "%&lt;args&gt;" == "" then
-    Note("\\nCached keys:\\n----------------\\n")
-    for k, v in pairs(keys) do
-	  if type(k) ~= "number" then
-	    Note("[",k,"] ",v.label," - ",key_timer_status(v.time))
-	  end
-	end
-	for k, v in ipairs(keys) do
-	    Note("[",k,"] ",v.label," - ",key_timer_status(v.time))		
-	end
-  else
-   for i, v in pairs(args) do
-     v = tonumber(v)
-	 table.insert(keys, temp_keys[v])
-	 table.remove(temp_keys, v)
-     set(keys)
-	 Note("Moved key ["..v.."] to cache!")
-   end
-   end
-
-  
-  </send>
-  </alias>
-<!--  	for k,v in pairs(keys) do
-	  if type(keys[k]) == string then
-	  Note("[",k,"] ",v.label," - ",key_timer_status(v.time))
-	  end
-	end
-    for k,v in pairs(keys) do
-    Note("[",k,"] ",v.label," - ",key_timer_status(v.time))
-	end  -->
-  <alias
-   name="locate_life"
-   match="locl(?:[ ]+(.*))?$"
-   enabled="y"
-   expand_variables="y"
-   group="portal"
-   send_to="12"
-   sequence="100"
-   regexp="y"
-  >  
-<send>
-debug("triggered")
-temp_keys = {}
-Send("cast 'locate life' %1")
-</send>
-</alias>
-</aliases>
 <!--  Triggers  -->
 
 <triggers>
   <trigger
    enabled="y"
-   expand_variables="y"
-   group="portal"
-   keep_evaluating="y"
-   match="^(?P&lt;label&gt;.*?)\s*\-\s*(?P&lt;terrain&gt;[A-Z].*?)\s*(?P&lt;distance&gt;[A-Z].*?)\s*key\:\s+'(?P&lt;key&gt;\w+)'$"
-   name="capture_keys"
+   group="mume_portal"
+   match="^(?P&lt;label&gt;.+?)\s*\-\s*(?P&lt;terrain&gt;(?:On a (?:hill|mountain|road)|In(?:doors| brush| some water| a (?:cavern|city|field|forest|swamp))))\s*(?P&lt;distance&gt;Very far|Very near|Far|Near)\s*key\:\s*&apos;(?P&lt;key&gt;\w+)&apos;$"
+   name="capture_locate_key"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
    omit_from_output="y"
   >
   <send>
-  debug("%&lt;label&gt;, %&lt;terrain&gt;, %&lt;distance&gt;, %&lt;key&gt;")
-  result = {["label"]="%&lt;label&gt;",["terrain"]="%&lt;terrain&gt;",["distance"]="%&lt;distance&gt;",["key"]="%&lt;key&gt;",["time"]=os.time()}
-  for k,v in pairs(result) do debug(k,": ", v) end
-  table.insert(temp_keys, result)
-  Note("[",#temp_keys,"] ",result.label,"\\t - ",result.terrain, "\\t", result.distance, "\\t", "key: '",result.key,"'")
-</send>
+if table.isempty(unprocessed_keys) then
+	table.clear(temp_keys)
+	DoAfterSpecial(0.1, "process_received()", sendto.scriptafteromit)
+end
+local result = {["label"] = "%&lt;label&gt;", ["terrain"] = "%&lt;terrain&gt;", ["distance"] = "%&lt;distance&gt;", ["key"] = "%&lt;key&gt;", ["time"] = os.time()}
+table.insert(unprocessed_keys, result)
+  </send>
   </trigger>
-  
-<!--   <trigger
+  <trigger
    enabled="y"
-   group="id_capture"
-   match="A slender plant grows here, a single cluster of flowers atop its narrow stem."
-   omit_from_output="n"
-   send_to="12"
-   sequence="100"
-   multi-line="y"
+   group="mume_portal"
+   match="^The world begins to reveal all its secrets and you try to find your way\.\.\.$"
+   name="gag_find_the_path_spam"
    regexp="y"
-  >   -->
-  
+   send_to="0"
+   sequence="100"
+   omit_from_output="y"
+  >
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_portal"
+   match="^\-&gt; (?P&lt;directions&gt;[NESWUD]+)$"
+   name="format_find_the_path"
+   regexp="y"
+   send_to="14"
+   sequence="100"
+   omit_from_output="y"
+  >
+  <send>Note(group_directions("%&lt;directions&gt;"))</send>
+  </trigger>
 </triggers>
 
-<script><![CDATA[
+<!--  Aliases  -->
 
-require "tprint"
+<aliases>
+  <alias
+   name="cache"
+   match="^cache\s*?(?:\s+(?P&lt;args&gt;.+))?$"
+   enabled="y"
+   regexp="y"
+   group="mume_portal"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+cached_clear_old()
+local args = string.lower(string.strip("%&lt;args&gt;"))
+if args == "" then
+	cached_list()
+elseif string.startswith(args, "rename") or string.startswith(args, "rn") then
+	local old = string.match(args, "^%S+%s+([%w_-]+)")
+	local new = string.match(args, "^%S+%s+%S+%s+([%w_-]+)")
+	cached_rename(old, new)
+elseif args == "clear" then
+	cached_clear()
+	Note("Cached keys cleared.")
+elseif string.startswith(args, "remove") or string.startswith(args, "rm") then
+	cached_remove(string.match(args, "^%S+%s+(.+)"))
+elseif string.match(args, "^%d+") then
+	cached_add(args)
+else
+	Note("Invalid input.")
+end
+  </send>
+  </alias>
+  <alias
+   name="find_the_path"
+   match="^ftp\s*?(?:\s+(?P&lt;name&gt;[\w-]+))?$"
+   enabled="y"
+   regexp="y"
+   group="mume_portal"
+   send_to="12"
+   sequence="100"
+  >
+  <send>cached_action("cast 'find the path'", "%&lt;name&gt;")</send>
+  </alias>
+  <alias
+   name="recent_locate_keys"
+   match="^keys\s*?(?:\s+(?P&lt;args&gt;.+))?$"
+   enabled="y"
+   regexp="y"
+   group="mume_portal"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+local args = string.lower(string.strip("%&lt;args&gt;"))
+if args == "clear" then
+	table.clear(temp_keys)
+	Note("Temporary keys cleared.")
+elseif table.isempty(temp_keys) then
+	Note("No temporary keys.")
+else
+	for i, result in ipairs(temp_keys) do
+		Note("[", i, "] ", result.label, " - ", result.terrain, " ", result.distance, " - ", elapsed_time(result.time))
+	end
+end
+  </send>
+  </alias>
+  <alias
+   name="locate_life"
+   match="^locl\s*?(?:\s+(?P&lt;name&gt;[\w-]+))?$"
+   enabled="y"
+   group="mume_portal"
+   send_to="0"
+   sequence="100"
+   regexp="y"
+  >  
+  <send>cast 'locate life' %&lt;name&gt;</send>
+  </alias>
+  <alias
+   name="portal"
+   match="^port\s*?(?:\s+(?P&lt;name&gt;[\w-]+))?$"
+   enabled="y"
+   regexp="y"
+   group="mume_portal"
+   send_to="12"
+   sequence="100"
+  >
+  <send>cached_action("cast 'portal' up", "%&lt;name&gt;")</send>
+  </alias>
+  <alias
+   name="teleport"
+   match="^tele\s*?(?:\s+(?P&lt;name&gt;[\w-]+))?$"
+   enabled="y"
+   regexp="y"
+   group="mume_portal"
+   send_to="12"
+   sequence="100"
+  >
+  <send>cached_action("cast 'teleport'", "%&lt;name&gt;")</send>
+  </alias>  
+  <alias
+   name="scry"
+   match="^scry\s*?(?:\s+(?P&lt;name&gt;[\w-]+))?$"
+   enabled="y"
+   regexp="y"
+   group="mume_portal"
+   send_to="12"
+   sequence="100"
+  >
+  <send>cached_action("cast 'scry'", "%&lt;name&gt;")</send>
+  </alias>
+  <alias
+   name="watch_room"
+   match="^wroom\s*?(?:\s+(?P&lt;name&gt;[\w-]+))?$"
+   enabled="y"
+   regexp="y"
+   group="mume_portal"
+   send_to="12"
+   sequence="100"
+  >
+  <send>cached_action("cast 'watch room'", "%&lt;name&gt;")</send>
+  </alias>
+</aliases>
+
+<script>
+<![CDATA[
 require("mystdlib")
 json = require("dkjson")
 
-DEBUG = "b495c8a7ee3c2a668c6d41ba"
+
+SECONDS_PER_MINUTE = 60
+MINUTES_PER_HOUR = 60
+SECONDS_PER_HOUR = SECONDS_PER_MINUTE * MINUTES_PER_HOUR
 PORT_KEYS_FILE = string.format("%sdatabases\\port_keys.json", GetInfo(67))
+DISTANCES = {
+	["Very near"] = 1,
+	["Near"] = 2,
+	["Far"] = 3,
+	["Very far"] = 4
+}
 
-keys={}
-temp_keys = {}
---player="rossiel"
 
+unprocessed_keys = {}  -- Keys from the game, before they are processed.
+temp_keys = {}  -- Temporary keys which have been processed.
 if os.isFile(PORT_KEYS_FILE) then
-	fileObj = io.open(PORT_KEYS_FILE, "rb")
-	keys_temp = json.decode(fileObj:read("*all"), 1, nil)
-	fileObj:close()
-	for key, value in pairs(keys_temp) do
-	  if tonumber(key) then table.insert(keys, value)
-	  else
-	  keys[key]=value
-	  end
-    end
+	local file_obj = io.open(PORT_KEYS_FILE, "rb")
+	-- Keys that the user has saved for later use.
+	cached_keys = json.decode(file_obj:read("*all"), 1, nil)
+	file_obj:close()
 else
-	keys = {}
-	Note("fail!")
+	-- The cached keys file doesn't exist.
+	cached_keys = {}
 end
 
 
-function set(key, value)
-	keys[key] = value
-	local orderedKeys = {}
-	for k, v in ipairs(keys) do
-		table.insert(orderedKeys, k)
+function elapsed_time(key_time)
+	-- Return the elapsed time since key_time in human readable format.
+	local result = {}
+	local elapsed = int(os.time() - key_time)
+	local hours = int(elapsed / SECONDS_PER_HOUR)
+	local minutes = int(elapsed % SECONDS_PER_HOUR / SECONDS_PER_MINUTE)
+	local seconds = int(elapsed % SECONDS_PER_MINUTE)
+	if hours > 0 then
+		table.insert(result, string.format("%d hour%s", hours, hours ~= 1 and "s" or ""))
 	end
-	table.sort(orderedKeys)
-	for k, v in pairs(keys) do
-    if type(keys[k]) == "string" then
-       table.insert(orderedKeys, k)
-	   end
-	 end
-	local fileObj = io.open(PORT_KEYS_FILE, "wb")
-	fileObj:write(json.encode(keys, {indent=true, level=0, keyorder=orderedKeys}))
-	fileObj:close()
+	if minutes > 0 then
+		table.insert(result, string.format("%d minute%s", minutes, minutes ~= 1 and "s" or ""))
+	end
+	table.insert(result, string.format("%d second%s ago", seconds, seconds ~= 1 and "s" or ""))
+	return table.concat(result, ", ")
 end
 
-function get(key)
-	return keys[key]
+function cached_clear()
+	-- Clear the cached keys from memory and disc.
+	table.clear(cached_keys)
+	cached_save()
 end
 
-function debug(...)
-  args = {...}
-  CallPlugin(DEBUG, "debug", ...)
+function cached_clear_old()
+	-- Remove keys older than 12 hours.
+	local current_time = os.time()
+	local original_length = len(cached_keys)
+	for name, result in pairs(cached_keys) do
+		local hours = int((current_time - result.time) / SECONDS_PER_HOUR)
+		if hours >= 12 then
+			cached_keys[name] = nil
+		end
+	end
+	if len(cached_keys) ~= original_length then
+		cached_save()
+	end
 end
 
-function key_timer_set(key)
-	key_timers[key] = os.time()
+function cached_save()
+	-- Save the cached keys to disc.
+	local ordered_keys = {}
+	for k, v in pairs(cached_keys) do
+		table.insert(ordered_keys, k)
+	end
+	table.sort(ordered_keys)
+	local file_obj = io.open(PORT_KEYS_FILE, "wb")
+	file_obj:write(json.encode(cached_keys, {indent = true, level = 0, keyorder = ordered_keys}))
+	file_obj:close()
 end
 
-function key_timer_status(keytime)
-		local current_time = os.time()
-		local hours 		 = math.floor((current_time - keytime) / 3600)
-		local hours_pretty   = hours   ~= 1 and "s" or ""
-		local minutes 		 = math.floor((current_time - keytime) % 3600) / 60
-		local minutes_pretty = minutes ~= 1 and "s" or ""
-		local seconds 		 = math.floor((current_time - keytime) % 60)
-		local seconds_pretty = seconds ~= 1 and "s" or ""
-		return string.format("%d hour%s, %d minute%s, %d second%s.", hours, hours_pretty, minutes, minutes_pretty, seconds, seconds_pretty)
+function cached_list()
+	-- Display the cached keys, oldest to newest.
+	if table.isempty(cached_keys) then
+		return Note("No cached keys.")
+	end
+	for name, result in spairs(cached_keys, function(t, a, b) return t[a].time < t[b].time end) do
+		Note("[", name, "] ", result.label, " - ", result.terrain, " - ", elapsed_time(result.time))
+	end
 end
-]]></script>
+
+function cached_rename(old, new)
+	-- Rename a cached key.
+	if not old or not new then
+		Note("Error: you must supply ", not old and "an old" or not new and "a new", " name.")
+	elseif cached_keys[old] then
+		cached_keys[new] = cached_keys[old]
+		cached_keys[old] = nil
+		cached_save()
+		Note("Key [", old, "] renamed to [", new, "]")
+	else
+		Note("Error: No such name [", old, "]")
+	end
+end
+
+function cached_remove(names)
+	-- Remove 1 ore more keys from the cache.
+	if not names then
+		return Note("Error: you must provide a name to be removed.")
+	end
+	for name in string.gmatch(names, "[%w_-]+") do
+		if cached_keys[name] then
+			cached_keys[name] = nil
+			Note("[", name, "] removed.")
+		else
+			Note("Error: [", name, "] not in cached keys.")
+		end
+	end
+	cached_save()
+end
+
+function cached_add(args)
+	-- Add 1 or more keys to the cache.
+	if not string.match(args, "%d+%s+[%w_-]+") then
+		return Note("Error: please provide a temporary key number and a name.")
+	end
+	for number, name in string.gmatch(args, "(%d+)%s+([%w_-]+)") do
+		local number = tonumber(number)
+		if temp_keys[number] then
+			Note(cached_keys[name] and "Updating" or "Saving", " [", name, "] from temporary key [", number, "] [", temp_keys[number].label, "].")
+			if cached_keys[name] and cached_keys[name].key == temp_keys[number].key then
+				Note("Key unchanged.")
+			end
+			cached_keys[name] = temp_keys[number]
+			cached_save()
+		else
+			Note("Error: [", number, "] not in temporary keys list.")
+		end
+	end
+end
+
+function cached_action(action, name)
+	-- Perform a game action on a cached key.
+	local name = string.lower(string.strip(name))
+	if name == "" then
+		Note("Error: no cached name given.")
+	elseif cached_keys[name] then
+		Send(action, " ", cached_keys[name].key, " ", string.endswith(action, "'watch room'") and name or "")
+	else
+		Note("Error: [", name, "] doesn't exist in the cache.")
+	end
+end
+
+function process_received()
+	-- Process keys from unprocessed_keys, and store them in temp_keys.
+	local processed = {}
+	-- Group mobs with the same key, and store how many occurrences of each mob.
+	for i, result in ipairs(unprocessed_keys) do
+		local key = result.key
+		if not processed[key] then
+			-- New key, new mob name.
+			processed[key] = result
+			processed[key].matches = {[result.label] = 1}
+		elseif not processed[key].matches[result.label] then
+			-- Existing key, different mob name.
+			processed[key].matches[result.label] = 1
+		else
+			-- Existing key, existing mob name.
+			processed[key].matches[result.label] = processed[key].matches[result.label] + 1
+		end
+	end
+	table.clear(unprocessed_keys)
+	-- Sort keys by distance in descending order (furthest first).
+	for key, result in spairs(processed, function(t, a, b) return DISTANCES[t[a].distance] > DISTANCES[t[b].distance] end) do
+		-- Specify how many mobs (if more than one) with the same name.
+		local labels = {}
+		for label, matches in pairs(result.matches) do
+			table.insert(labels, string.format("%s%s", matches > 1 and tostring(matches) .. "X " or "", label))
+		end
+		table.sort(labels)
+		result.label = table.concat(labels, ", ")
+		table.insert(temp_keys, result)
+		Note("[", table.getn(temp_keys), "] ", result.label, " - ", result.terrain, " ", result.distance)
+	end
+end
+
+function group_directions(directions)
+	-- Reformat a string of directions such as 'nnueee' into '2n, u, 3e'.
+	local directions = string.lower(directions)
+	local groups = {}
+	for direction in string.gmatch(directions, "[neswud]") do
+		local last_index = table.getn(groups)
+		if last_index == 0 or groups[last_index].direction ~= direction then
+			table.insert(groups, {["direction"] = direction, ["times"] = 1})
+		else
+			groups[last_index].times = groups[last_index].times + 1
+		end
+	end
+	local results = {}
+	for i, group in ipairs(groups) do
+		table.insert(results, string.format("%s%s", group.times > 1 and group.times or "", group.direction))
+	end
+	return table.concat(results, ", ")
+end
+
+function OnPluginInstall()
+	cached_clear_old()
+end
+
+]]>
+</script>
 
 </muclient>
