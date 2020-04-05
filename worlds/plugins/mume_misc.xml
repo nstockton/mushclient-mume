@@ -1139,7 +1139,7 @@ Note("Web removed!")
   <trigger
    enabled="y"
    group="mume_misc"
-   match="You don't see any more snow here."
+   match="You don&apos;t see any more snow here."
    name="gag_snow2"
    omit_from_output="y"
    sequence="100"
