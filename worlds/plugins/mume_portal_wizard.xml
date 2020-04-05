@@ -53,6 +53,29 @@ table.insert(unprocessed_keys, result)
   <trigger
    enabled="y"
    group="mume_portal"
+   match="^(?P&lt;preamble&gt;You sense a portal leading here from|There is a portal (?:north|east|south|west|up|down)\, leading to) &apos;(?P&lt;key&gt;\w+)&apos;\.$"
+   name="substitute_cached_names_in_portal"
+   regexp="y"
+   send_to="14"
+   sequence="100"
+   omit_from_output="y"
+  >
+  <send>
+local results = {}
+for name, result in pairs(cached_keys) do
+	if result.key == "%&lt;key&gt;" then
+		table.insert(results, name)
+	end
+end
+table.sort(results)
+local names = table.isempty(results) and "'%&lt;key&gt;'" or table.concat(results, ", ")
+local preamble = string.startswith("%&lt;preamble&gt;", "You sense a portal") and "Portal here from" or string.format("Portal %s to", string.match("%&lt;preamble&gt;", "portal (%w+)"))
+Note(preamble, " ", names, ".")
+  </send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_portal"
    match="^The world begins to reveal all its secrets and you try to find your way\.\.\.$"
    name="gag_find_the_path_spam"
    regexp="y"
