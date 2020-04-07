@@ -46,8 +46,7 @@ if table.isempty(unprocessed_keys) then
 	table.clear(temp_keys)
 	DoAfterSpecial(0.1, "process_received()", sendto.scriptafteromit)
 end
-local result = {["label"] = "%&lt;label&gt;", ["terrain"] = "%&lt;terrain&gt;", ["distance"] = "%&lt;distance&gt;", ["key"] = "%&lt;key&gt;", ["time"] = os.time()}
-table.insert(unprocessed_keys, result)
+table.insert(unprocessed_keys, {["label"] = "%&lt;label&gt;", ["terrain"] = "%&lt;terrain&gt;", ["distance"] = "%&lt;distance&gt;", ["key"] = "%&lt;key&gt;", ["time"] = os.time()})
   </send>
   </trigger>
   <trigger
@@ -61,17 +60,44 @@ table.insert(unprocessed_keys, result)
    omit_from_output="y"
   >
   <send>
+local outbound_direction = string.match("%&lt;preamble&gt;", "^There is a portal (%w+)")
 local results = {}
+-- Retrieve the names of cached keys which have the same key as portal.
 for name, result in pairs(cached_keys) do
 	if result.key == "%&lt;key&gt;" then
 		table.insert(results, name)
 	end
 end
 table.sort(results)
-local names = table.isempty(results) and "'%&lt;key&gt;'" or table.concat(results, ", ")
-local preamble = string.startswith("%&lt;preamble&gt;", "You sense a portal") and "Portal here from" or string.format("Portal %s to", string.match("%&lt;preamble&gt;", "portal (%w+)"))
-Note(preamble, " ", names, ".")
+if not table.isempty(results) then
+	-- Replace the key in the output with the associated cached key names.
+	Note(string.format("Portal %s %s %s.", outbound_direction or "here", outbound_direction and "to" or "from", table.concat(results, ", ")))
+else  -- No matching cached key names found.
+	-- Add the key to the temporary keys list if not added previously.
+	local already_added = false
+	for i, result in ipairs(temp_keys) do
+		if result.key == "%&lt;key&gt;" then
+			already_added = true
+			break
+		end
+	end
+	if not already_added then
+		table.insert(temp_keys, {["label"] = string.format("Recent %s portal", outbound_direction and "outbound" or "inbound"), ["terrain"] = "None", ["distance"] = "None", ["key"] = "%&lt;key&gt;", ["time"] = os.time()})
+	end
+	Note(string.format("Portal %s %s '%&lt;key&gt;'.", outbound_direction or "here", outbound_direction and "to" or "from"), not already_added and " Adding to temporary keys." or "")
+end
   </send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_portal"
+   match="^You let your inner eye find the area\.\.\. and you see\:$"
+   name="gag_scry_spam"
+   regexp="y"
+   send_to="0"
+   sequence="100"
+   omit_from_output="y"
+  >
   </trigger>
   <trigger
    enabled="y"
@@ -124,7 +150,7 @@ elseif args == "clear" then
 	Note("Cached keys cleared.")
 elseif string.startswith(args, "remove") or string.startswith(args, "rm") then
 	cached_remove(string.match(args, "^%S+%s+(.+)"))
-elseif string.match(args, "^%d+") then
+elseif string.match(args, "^[-]?%d+") then
 	cached_add(args)
 else
 	Note("Invalid input.")
@@ -345,17 +371,19 @@ end
 
 function cached_add(args)
 	-- Add 1 or more keys to the cache.
-	if not string.match(args, "%d+%s+[%w_-]+") then
+	if not string.match(args, "[-]?%d+%s+[%w_-]+") then
 		return Note("Error: please provide a temporary key number and a name.")
 	end
-	for number, name in string.gmatch(args, "(%d+)%s+([%w_-]+)") do
+	for number, name in string.gmatch(args, "([-]?%d+)%s+([%w_-]+)") do
 		local number = tonumber(number)
-		if temp_keys[number] then
-			Note(cached_keys[name] and "Updating" or "Saving", " [", name, "] from temporary key [", number, "] [", temp_keys[number].label, "].")
-			if cached_keys[name] and cached_keys[name].key == temp_keys[number].key then
+		-- The item from the temp_keys array. If number is a negative value, the index is counted from the end of the array.
+		local result = number ~= 0 and math.abs(number) <= table.getn(temp_keys) and table.slice(temp_keys, number)[1]
+		if result then
+			Note(cached_keys[name] and "Updating" or "Saving", " [", name, "] from temporary key [", number, "] [", result.label, "].")
+			if cached_keys[name] and cached_keys[name].key == result.key then
 				Note("Key unchanged.")
 			end
-			cached_keys[name] = temp_keys[number]
+			cached_keys[name] = result
 			cached_save()
 		else
 			Note("Error: [", number, "] not in temporary keys list.")
