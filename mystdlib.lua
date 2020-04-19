@@ -168,14 +168,11 @@ function table.uniqueItems(tbl)
 end
 
 function table.index(tbl, item)
-	local index = false
 	for i, value in ipairs(tbl) do
 		if value == item then
-			index = i
-			break
+			return i
 		end
 	end
-	return index or nil
 end
 
 function table.count(tbl, item)
@@ -192,6 +189,24 @@ function table.clear(tbl)
 	for key in pairs(tbl) do
 		tbl[key] = nil
 	end
+end
+
+function table.keys(tbl)
+	local keys = {}
+	for key in pairs(tbl) do
+		table.insert(keys, key)
+	end
+	table.sort(keys)
+	return keys
+end
+
+function table.values(tbl)
+	local values = {}
+	for _, value in pairs(tbl) do
+		table.insert(values, value)
+	end
+	table.sort(values)
+	return values
 end
 
 function get_script_path()
