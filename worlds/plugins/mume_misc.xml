@@ -797,6 +797,26 @@ search</send>
   <trigger
    enabled="y"
    group="mume_misc"
+   match="You wrap one end of the web around a large rock and tie a secure knot."
+   name="Auto_throw_web_gloom1"
+   send_to="0"
+   sequence="100"
+  >
+  <send>throw web</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="The web fails to cling to the other side of the chasm."
+   name="Auto_throw_web_gloom2"
+   send_to="0"
+   sequence="100"
+  >
+  <send>throw web</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
    match="^(?P&lt;player&gt;\w+) slips on the treacherous ground and falls (?P&lt;direction&gt;\w+)\.$"
    name="auto_tell_player_fell_gloom"
    regexp="y"
@@ -1355,7 +1375,7 @@ train all</send>
 if not using_mmapper then
 	SendPkt(string.char(255, 253, 1))
 end
-Send("change compact on")
+Send("change compact off")
 Send("change spam off")
 Send("change brief on")
 Send("change wordwrap off")
@@ -1379,6 +1399,18 @@ local new_id = GetUniqueID()
 SetClipboard(new_id)
 Note(string.format("%s copied to clipboard.", new_id))
   </send>
+  </alias>
+  <alias
+   name="loot_chest"
+   match="chest"
+   enabled="y"
+   group="mume_misc"
+   send_to="0"
+   sequence="100"
+  >
+  <send>unlock chest
+open chest
+get all chest</send>
   </alias>
   <alias
    name="recite_azure_scroll"
