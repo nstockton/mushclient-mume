@@ -47,6 +47,10 @@ Perform actions on doors.
 * autoopen  --  Turn on or off automatic opening of doors when the player runs into them (Defaults to on).
 * door [text|clear]  --  manually set the door name or clear the previously set value.
 * d[bcklopru][neswud]  --  Bash, close, block, lock, open, pick, break, unlock the door north, east, south, west, up, down. If the door name was manually set, use it. Otherwise, use the door name from the mapper.
+### GMCP Handler NJG
+Implement support for the Generic MUD Communication Protocol.
+#### Aliases
+* gmcpdebug  -  Toggle debug mode on or off.
 ### Grouping
 Makes you more useful in a group.
 #### Aliases
@@ -174,6 +178,7 @@ Miscellaneous aliases and triggers that don't belong anywhere else.
 * bpack  --  Switch the boots that the character is currently wearing with the ones in the character's pack.
 * bpouch  --  Switch the boots that the character is currently wearing with the ones in the character's pouch.
 * ccring  --  Use the cure critic ring in the character's pack.
+* chest  --  Unlock, open, and get all from chest.
 * cir  --  Remove the character's helmet, and switch to using the character's circlet or crown.
 * citizen  --  Print the list of towns in which the character has citizenship.
 * clearthoughts [container]  --  Get the ingredients for the ClearThoughts herblore from all containers, and put them in the specified container. If no container is specified, print a list of required ingredients instead.
