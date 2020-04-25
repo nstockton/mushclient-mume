@@ -30,7 +30,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="^A(?:n enhanced)? herbal kit contains a pinch of pale\-green\, crushed leaves\, a handful of clover\, several cloves and a cluster of hard\, round\, black berries\.$"
+   match="^A(?: crude\-looking bag|(?:n enhanced)? herbal kit) contains a pinch of pale\-green\, crushed leaves\, a handful of clover\, several cloves and a cluster of hard\, round\, black berries\.$"
    omit_from_output="y"
    regexp="y"
    send_to="2"
@@ -41,7 +41,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="^A(?:n enhanced)? herbal kit contains a bag of cinnamon\, several needlelike leaves and a rib\-bone of a skeleton\.$"
+   match="^A(?: crude\-looking bag|(?:n enhanced)? herbal kit) contains a bag of cinnamon\, several needlelike leaves and a rib\-bone of a skeleton\.$"
    omit_from_output="y"
    regexp="y"
    send_to="2"
@@ -52,7 +52,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="^A(?:n enhanced)? herbal kit contains some sweet\-smelling dried mauve petals\, some grey\-green leaves\, some scented crushed leaves and a cluster of hard\, round\, black berries\.$"
+   match="^A(?: crude\-looking bag|(?:n enhanced)? herbal kit) contains some sweet\-smelling dried mauve petals\, some grey\-green leaves\, some scented crushed leaves and a cluster of hard\, round\, black berries\.$"
    omit_from_output="y"
    regexp="y"
    send_to="2"
@@ -63,7 +63,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="^A(?:n enhanced)? herbal kit contains two piles of blackberries\, some long\, slender green leaves\, some white petals and some grey petals\.$"
+   match="^A(?: crude\-looking bag|(?:n enhanced)? herbal kit) contains two piles of blackberries\, some long\, slender green leaves\, some white petals and some grey petals\.$"
    omit_from_output="y"
    regexp="y"
    send_to="2"
@@ -74,7 +74,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="^A(?:n enhanced)? herbal kit contains some short\, black fur\, a short\, moist tail and a small fluid\-sack\.$"
+   match="^A(?: crude\-looking bag|(?:n enhanced)? herbal kit) contains some short\, black fur\, a short\, moist tail and a small fluid\-sack\.$"
    omit_from_output="y"
    regexp="y"
    send_to="2"
@@ -85,7 +85,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="^A(?:n enhanced)? herbal kit contains three eggs\, a sack of flour and a mashed honey\-wax mixture\.$"
+   match="^A(?: crude\-looking bag|(?:n enhanced)? herbal kit) contains three eggs\, a sack of flour and a mashed honey\-wax mixture\.$"
    omit_from_output="y"
    regexp="y"
    send_to="2"
@@ -96,7 +96,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="^A(?:n enhanced)? herbal kit contains a handful of narrow leaves\, a handful of clover and a man-like root\.$"
+   match="^A(?: crude\-looking bag|(?:n enhanced)? herbal kit) contains a handful of narrow leaves\, a handful of clover and a man-like root\.$"
    omit_from_output="y"
    regexp="y"
    send_to="2"
@@ -107,7 +107,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="^A(?:n enhanced)? herbal kit contains a handful of blackcurrant berries\, two piles of grey\-green leaves\, some long\, slender green leaves and some yellow petals\.$"
+   match="^A(?: crude\-looking bag|(?:n enhanced)? herbal kit) contains a handful of blackcurrant berries\, two piles of grey\-green leaves\, some long\, slender green leaves and some yellow petals\.$"
    omit_from_output="y"
    regexp="y"
    send_to="2"
@@ -118,7 +118,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="^A(?:n enhanced)? herbal kit contains a purple flower with a fluffy red center\, a mashed honey\-wax mixture\, some grey\-green leaves and some scented crushed leaves\.$"
+   match="^A(?: crude\-looking bag|(?:n enhanced)? herbal kit) contains a purple flower with a fluffy red center\, a mashed honey\-wax mixture\, some grey\-green leaves and some scented crushed leaves\.$"
    omit_from_output="y"
    regexp="y"
    send_to="2"
@@ -129,7 +129,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="^A(?:n enhanced)? herbal kit contains a bright red mushroom\, a hemlock plant\, a sticky mass of stems\, leaves and sap\, a foul\-smelling root\, some orange\-red flowers and some white\, egg\-shaped berries\.$"
+   match="^A(?: crude\-looking bag|(?:n enhanced)? herbal kit) contains a bright red mushroom\, a hemlock plant\, a sticky mass of stems\, leaves and sap\, a foul\-smelling root\, some orange\-red flowers and some white\, egg\-shaped berries\.$"
    omit_from_output="y"
    regexp="y"
    send_to="2"
@@ -140,7 +140,7 @@
   <trigger
    enabled="y"
    group="mume_herb_substitutions"
-   match="^A(?:n enhanced)? herbal kit contains a handful of narrow leaves\, a short\, moist tail\, some short\, black fur and a vial of preserved blood\.$"
+   match="^A(?: crude\-looking bag|(?:n enhanced)? herbal kit) contains a handful of narrow leaves\, a short\, moist tail\, some short\, black fur and a vial of preserved blood\.$"
    omit_from_output="y"
    regexp="y"
    send_to="2"
