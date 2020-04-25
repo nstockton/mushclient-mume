@@ -154,8 +154,12 @@ end
 <script>
 <![CDATA[
 require("mystdlib")
+json = require("dkjson")
+
+GMCP = "74f8c420df7d59ad5aa66246"
 MUME_SOUNDS = "32821ab3fa17b04a8ab4c420"
 XML_PARSER = "74834d3734b2c8a3a9da4d18"
+return_code, MMAPPER_GROUP_TELL = CallPlugin(GMCP, "package_from_message", "mmapper.grouptell")
 -- For sounds:
 TYPE_COMMUNICATION = 9
 -- Types of communications received by the XML parser:
@@ -349,6 +353,14 @@ function OnPluginBroadcast (msg, id, name, text)
 			file:write(text .. "\r\n")
 			file:close()
 		end
+	elseif id == GMCP and name == "GMCP_handler_NJG" and msg == MMAPPER_GROUP_TELL and text ~= "" then
+		local params = json.decode(text, 1, nil)
+		local data = StripANSI(params.text)
+		Note(data)
+		CallPlugin(MUME_SOUNDS, "play", TYPE_COMMUNICATION, "tells.wav")
+		local file = io.open(GetInfo(67) .. "communication/tell.txt", "ab")
+		file:write(data .. "\r\n")
+		file:close()
 	end
 end
 
