@@ -438,6 +438,7 @@
 
 <!-- plugins -->
 <include name="config_manager.xml" plugin="y" />
+<include name="GMCP_handler_NJG.xml" plugin="y" />
 <include name="remove_ctrl_g.xml" plugin="y" />
 <include name="mume_xml_parser.xml" plugin="y" />
 <include name="mume_auto_enchanting.xml" plugin="y" />
