@@ -98,7 +98,7 @@
    send_to="2"
    sequence="100"
   >
-  <send>%0 - (BN Scout guild)</send>
+  <send>%0 - (BN Scout guild) - 20</send>
   </trigger>
   <trigger
    enabled="y"
@@ -939,16 +939,6 @@
    sequence="100"
   >
   <send>%0 - [6]</send>
-  </trigger>
-  <trigger
-   enabled="y"
-   group="mume_mob_substitutions"
-   match="A man walks stealthily here, enshrouded in a grey woollen cloak."
-   omit_from_output="y"
-   send_to="2"
-   sequence="100"
-  >
-  <send>%0 - [20?]</send>
   </trigger>
   <trigger
    enabled="y"
