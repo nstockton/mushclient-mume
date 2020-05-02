@@ -70,6 +70,17 @@ end
   <trigger
    enabled="y"
    group="mume_misc"
+   match="^\-{5,5}$"
+   name="gag_compact_off_dashes"
+   omit_from_output="y"
+   regexp="y"
+   send_to="0"
+   sequence="100"
+  >
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
    match="^.+? is (?:incapacitated|mortally wounded|stunned) and will (?:slowly |probably )?die[,]? (?:soon[ ]?)?(?:if not aided)?\.$"
    name="auto_kick"
    regexp="y"
@@ -427,6 +438,36 @@ climb up</send>
    sequence="100"
   >
   <send>get all.gem all.pile</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="Aldereon says &apos;Tell me, do you agree to this?&apos;"
+   name="auto_quest_aldereon"
+   send_to="0"
+   sequence="100"
+  >
+  <send>nod Aldereon</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="Nordri the shopkeeper says &apos;But there is a price.&apos;"
+   name="auto_quest_nordri1"
+   send_to="0"
+   sequence="100"
+  >
+  <send>say price</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="Nordri the shopkeeper says &apos;Are we agreed, then?&apos;"
+   name="auto_quest_nordri2"
+   send_to="0"
+   sequence="100"
+  >
+  <send>nod Nordri</send>
   </trigger>
   <trigger
    enabled="y"
