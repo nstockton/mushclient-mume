@@ -140,7 +140,7 @@ end
 <aliases>
   <alias
    name="door_action"
-   match="^d(?P&lt;action&gt;[bcklopru])\s*(?P&lt;direction&gt;[neswud])?$"
+   match="^(?P&lt;use_door_name&gt;[d]{1,2})(?P&lt;action&gt;[bcklopru])\s*(?P&lt;direction&gt;[neswud])?$"
    enabled="y"
    group="mume_doors"
    regexp="y"
@@ -149,14 +149,19 @@ end
    sequence="100"
   >
   <send>
+local use_door_name = string.lower("%&lt;use_door_name&gt;") == "dd"
 local action = DOOR_ACTIONS[string.lower("%&lt;action&gt;")]
 local direction = string.lower("%&lt;direction&gt;")
-Send(string.format("%s %s %s", action, door_name ~= "" and door_name or room_doors[direction] or "exit", direction))
+if use_door_name and door_name == "" then
+	Note("Door name not set.")
+else
+	Send(string.format("%s %s %s", action, use_door_name and door_name or room_doors[direction] or "exit", direction))
+end
   </send>
   </alias>
   <alias
    name="door_set"
-   match="^door(?:\s+(?P&lt;name&gt;.*))?$"
+   match="^door(?:\s+(?P&lt;name&gt;\w*))?$"
    enabled="y"
    group="mume_doors"
    regexp="y"
@@ -165,7 +170,7 @@ Send(string.format("%s %s %s", action, door_name ~= "" and door_name or room_doo
    sequence="100"
   >
   <send>
-local text = string.lower(string.strip("%&lt;name&gt;"))
+local text = string.lower("%&lt;name&gt;")
 if text == "" then
 	if door_name == "" then
 		Note("Door undefined.")
@@ -173,7 +178,7 @@ if text == "" then
 		Note(door_name, " is set.")
 	end
 else
-	if text == "clear" then
+	if string.startswith("clear", text) then
 		door_name = ""
 		Note("Door cleared.")
 	else

@@ -46,7 +46,7 @@ Perform actions on doors.
 #### Aliases
 * autoopen  --  Turn on or off automatic opening of doors when the player runs into them (Defaults to on).
 * door [text|clear]  --  manually set the door name or clear the previously set value.
-* d[bcklopru][neswud]  --  Bash, close, block, lock, open, pick, break, unlock the door north, east, south, west, up, down. If the door name was manually set, use it. Otherwise, use the door name from the mapper.
+* d[d][bcklopru][neswud]  --  Bash, close, block, lock, open, pick, break, unlock the door north, east, south, west, up, down. If the command starts with 'dd', use the door name that was set by the 'door' alias. Otherwise, use the door name from the mapper.
 ### GMCP Handler NJG
 Implement support for the Generic MUD Communication Protocol.
 #### Aliases
@@ -270,10 +270,10 @@ Provides aliases for printing and reporting the character's current hit/mana/mov
 ### Secrets Database
 Provides a database of secret door names and commands to add/modify/view the data. This database is separate from the mapper's database.
 #### Aliases
-* dadd [name] [direction]  --  Add a door with name to direction. The current room name will be used as the key when searching.
-* ddel [name|all] [direction|all]  --  Delete a door with name to direction. The current room name will be used as the key when searching.
-* dinfo [text]  --  Print the secret exit information for all room names in the database that match text.
-* ddo  --  Open all secret exits that have a room name that matches the current room's name.
+* seca [name] [direction]  --  Add a door with name to direction. The current room name will be used as the key when searching.
+* secd [name|all] [direction|all]  --  Delete a door with name to direction. The current room name will be used as the key when searching.
+* seci [text]  --  Print the secret exit information for all room names in the database that match text.
+* seco  --  Open all secret exits that have a room name that matches the current room's name.
 ### Sounds
 Provides sound triggers for MUME. When you land an aggressive spell on someone else, the corresponding sound will be played on the left channel. When someone lands an aggressive spell on you, the corresponding sound will play on the right channel. Everything else will be played in both channels.
 #### Macros
