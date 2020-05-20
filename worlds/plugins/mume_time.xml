@@ -118,7 +118,7 @@ end
   <trigger
    enabled="y"
    group="mume_time"
-   match="^The current time is (?P&lt;hour&gt;[1-9]|1[0-2])\:(?P&lt;minutes&gt;[0-5]\d)(?P&lt;am_pm&gt;[ap]m)\.$"
+   match="^The current time is (?P&lt;hour&gt;[1-9]|1[0-2])\:(?P&lt;minutes&gt;[0-5]\d) (?P&lt;am_pm&gt;[ap]m)\.$"
    name="sync_from_clock"
    omit_from_output="y"
    send_to="14"
@@ -146,7 +146,7 @@ end
   <trigger
    enabled="y"
    group="mume_time"
-   match="^(?:(?:It is )?(?P&lt;hour&gt;[1-9]|1[0-2])(?P&lt;am_pm&gt;[ap]m)(?: on ))?\w+\, the (?P&lt;day&gt;\d+)(?:st|[nr]d|th) of (?P<month>\w+)\, [yY]ear (?P&lt;year&gt;\d{4}) of the Third Age\.$"
+   match="^(?:(?:It is )?(?P&lt;hour&gt;[1-9]|1[0-2]) (?P&lt;am_pm&gt;[ap]m)(?: on ))?\w+\, the (?P&lt;day&gt;\d+)(?:st|[nr]d|th) of (?P<month>\w+)\, [yY]ear (?P&lt;year&gt;\d{4}) of the Third Age\.$"
    name="parse_time"
    omit_from_output="y"
    send_to="14"
@@ -253,6 +253,8 @@ DAYS_PER_YEAR = DAYS_PER_MONTH * MONTHS_PER_YEAR
 MINUTES_PER_DAY = MINUTES_PER_HOUR * HOURS_PER_DAY
 MINUTES_PER_MONTH = MINUTES_PER_DAY * DAYS_PER_MONTH
 MINUTES_PER_YEAR = MINUTES_PER_DAY * DAYS_PER_YEAR
+DAYS_PER_MOON_CYCLE = 24
+HOURS_PER_MOON_CYCLE = HOURS_PER_DAY * DAYS_PER_MOON_CYCLE
 
 MONTHS = {
 	{["name"] = "January", ["sindarin"] = "Ninui", ["westron"] = "Solmath", ["dawn"] = 9, ["dusk"] = 17, ["season"] = "Winter"},
@@ -315,26 +317,26 @@ function time_check(action)
 	local weekday = WEEKDAYS[(day_of_year + (year - FIRST_YEAR) * DAYS_PER_YEAR) % 7 + 1].name
 	local state = ""
 	local next_state = ""
-	local till_next_state = 0
+	local until_next_state = 0
 	if hour < MONTHS[month].dawn then
 		state = "NIGHT"
 		next_state = "DAY"
-		till_next_state = MONTHS[month].dawn - hour + 1
+		until_next_state = MONTHS[month].dawn - hour + 1
 	elseif hour >= MONTHS[month].dusk then
 		state = "NIGHT"
 		next_state = "DAY"
-		till_next_state = 25 + MONTHS[month].dawn - hour
+		until_next_state = 25 + MONTHS[month].dawn - hour
 	elseif hour > MONTHS[month].dawn and hour < MONTHS[month].dusk then
 		state = "DAY"
 		next_state = "NIGHT"
-		till_next_state = MONTHS[month].dusk - hour
+		until_next_state = MONTHS[month].dusk - hour
 	elseif hour == MONTHS[month].dawn then
 		state = "DAWN"
 		next_state = "DAY"
-		till_next_state = 1
+		until_next_state = 1
 	end
 	Note(string.format("It is currently %s, on %s, %s %d (%s / %s), (%s), year %d of the third age.", state, weekday, MONTHS[month].name, day, MONTHS[month].westron, MONTHS[month].sindarin, MONTHS[month].season, year))
-	Note(string.format("Time left until %s is less than %d tick%s", next_state, till_next_state, till_next_state ~= 1 and "s" or "!"))
+	Note(string.format("Time left until %s is less than %d tick%s", next_state, until_next_state, until_next_state ~= 1 and "s" or "!"))
 	local next_season_in_mume_days = (((math.floor(month / 3) * 3 + 3) - month - 1) * DAYS_PER_MONTH) + (DAYS_PER_MONTH - day) + (1 - math.floor(hour / HOURS_PER_DAY))
 	local next_season_in_rl_hours = math.floor(next_season_in_mume_days * HOURS_PER_DAY / MINUTES_PER_HOUR)
 	Note(string.format("%s ends in %d mume day%s or %d real-life hour%s.", string.sub(MONTHS[month].season, -6), next_season_in_mume_days, next_season_in_mume_days ~= 1 and "s" or "", next_season_in_rl_hours, next_season_in_rl_hours ~= 1 and "s" or ""))
@@ -342,22 +344,20 @@ function time_check(action)
 	local next_winter_in_rl_days = math.floor(math.floor(next_winter_in_mume_days * HOURS_PER_DAY / MINUTES_PER_HOUR) / HOURS_PER_DAY)
 	local next_winter_in_rl_hours = math.floor(next_winter_in_mume_days * HOURS_PER_DAY / MINUTES_PER_HOUR) % HOURS_PER_DAY
 	Note(string.format("Next winter starts in %d real-life day%s and %d hour%s.", next_winter_in_rl_days, next_winter_in_rl_days ~= 1 and "s" or "", next_winter_in_rl_hours, next_winter_in_rl_hours ~= 1 and "s" or ""))
-	local moon_rise = (day_of_year + 11) % 24
+	local moonRiseOffset = 11
+	local moon_rise_hour = (day_of_year + moonRiseOffset) % 24
 	local moon_rise_day = ""
-	local moon_rise_ap = ""
-	if hour == moon_rise then
+	if hour == moon_rise_hour then
 		Note("Moon is up now!")
 	else
-		if hour > moon_rise then
-			moon_rise = (day_of_year + 12) % 24
+		if hour > moon_rise_hour then
+			moon_rise_hour = (day_of_year + moonRiseOffset + 1) % 24
 			moon_rise_day = "tomorrow"
 		else
 			moon_rise_day = "today"
 		end
-		moon_rise_ap = moon_rise < 12 and "am" or "pm"
-		Note(string.format("Next moon rise %s at %d:00 %s (game time).", moon_rise_day, moon_rise % 12 ~= 0 and moon_rise % 12 or 12, moon_rise_ap))
+		Note(string.format("Next moon rise %s at %d:00 %s (game time).", moon_rise_day, moon_rise_hour % 12 ~= 0 and moon_rise_hour % 12 or 12, moon_rise_hour < 12 and "am" or "pm"))
 	end
-	local full_moon_cycle = HOURS_PER_DAY * 24 -- Every 24 days
 	local moon_day = (day_of_year + DAYS_PER_MONTH + 12) % 24
 	local moon_hour = moon_day * 24 + hour % HOURS_PER_DAY
 	local next_dk_day = 1
@@ -371,7 +371,7 @@ function time_check(action)
 		ticks_until_dk = moon_hour <= HOURS_PER_DAY * 2 + 19 and HOURS_PER_DAY * 2 + 19 - moon_hour or 0
 		next_dk_day = 3
 	else
-		ticks_until_dk = full_moon_cycle - moon_hour + 17
+		ticks_until_dk = HOURS_PER_MOON_CYCLE - moon_hour + 17
 	end
 	local next_dk_in_rl_hours = math.floor(ticks_until_dk / MINUTES_PER_HOUR)
 	local next_dk_in_rl_minutes = ticks_until_dk % MINUTES_PER_HOUR
