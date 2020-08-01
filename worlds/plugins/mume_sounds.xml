@@ -447,8 +447,9 @@ end
   <trigger
    enabled="y"
    group="mume_sounds"
-   match="A darkly gnarled tree suddenly creaks and moves, slowly swaying back and forth."
+   match="A darkly gnarled tree (?:suddenly creaks and moves\, slowly swaying back and forth|leaves its hiding place)\."
    name="misc_alert17"
+   regexp="y"
    send_to="12"
    sequence="100"
   >
