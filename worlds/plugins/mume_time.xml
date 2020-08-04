@@ -344,34 +344,49 @@ function time_check(action)
 	local next_winter_in_rl_days = math.floor(math.floor(next_winter_in_mume_days * HOURS_PER_DAY / MINUTES_PER_HOUR) / HOURS_PER_DAY)
 	local next_winter_in_rl_hours = math.floor(next_winter_in_mume_days * HOURS_PER_DAY / MINUTES_PER_HOUR) % HOURS_PER_DAY
 	Note(string.format("Next winter starts in %d real-life day%s and %d hour%s.", next_winter_in_rl_days, next_winter_in_rl_days ~= 1 and "s" or "", next_winter_in_rl_hours, next_winter_in_rl_hours ~= 1 and "s" or ""))
-	local moonRiseOffset = 11
-	local moon_rise_hour = (day_of_year + moonRiseOffset) % 24
+	local moon_rise_offset = 11
+	local moon_rise_hour = (day_of_year + moon_rise_offset) % DAYS_PER_MOON_CYCLE
 	local moon_rise_day = ""
 	if hour == moon_rise_hour then
 		Note("Moon is up now!")
 	else
 		if hour > moon_rise_hour then
-			moon_rise_hour = (day_of_year + moonRiseOffset + 1) % 24
+			moon_rise_hour = (day_of_year + moon_rise_offset + 1) % DAYS_PER_MOON_CYCLE
 			moon_rise_day = "tomorrow"
 		else
 			moon_rise_day = "today"
 		end
 		Note(string.format("Next moon rise %s at %d:00 %s (game time).", moon_rise_day, moon_rise_hour % 12 ~= 0 and moon_rise_hour % 12 or 12, moon_rise_hour < 12 and "am" or "pm"))
 	end
-	local moon_day = (day_of_year + DAYS_PER_MONTH + 12) % 24
-	local moon_hour = moon_day * 24 + hour % HOURS_PER_DAY
+	local full_moon_offset = DAYS_PER_MOON_CYCLE - 7  -- First full moon rises on the 7th day of the year.
+	local full_moon_hour = (day_of_year + full_moon_offset) % DAYS_PER_MOON_CYCLE * HOURS_PER_DAY + hour
+	local ticks_until_full_moon = 0
+	if full_moon_hour < 31 then
+		ticks_until_full_moon = full_moon_hour <= 18 and 18 - full_moon_hour or 0
+	else
+		ticks_until_full_moon = HOURS_PER_MOON_CYCLE - full_moon_hour + 18
+	end
+	local next_full_moon_in_rl_hours = math.floor(ticks_until_full_moon / MINUTES_PER_HOUR)
+	local next_full_moon_in_rl_minutes = ticks_until_full_moon % MINUTES_PER_HOUR
+	if ticks_until_full_moon == 0 then
+		Note("Full moon is up now!")
+	else
+		Note("Next full moon rises in ", next_full_moon_in_rl_hours, " real-life hour", next_full_moon_in_rl_hours ~= 1 and "s" or "", " and ", next_full_moon_in_rl_minutes, " minute", next_full_moon_in_rl_minutes ~= 1 and "s" or "", ".")
+	end
+	local dk_moon_offset = DAYS_PER_MOON_CYCLE - 6  -- First DK moon rises on the 6th day of the year.
+	local dk_hour = (day_of_year + dk_moon_offset) % DAYS_PER_MOON_CYCLE * HOURS_PER_DAY + hour
 	local next_dk_day = 1
 	local ticks_until_dk = 0
-	if moon_hour < 20 then
-		ticks_until_dk = moon_hour <= 17 and 17 - moon_hour or 0
-	elseif moon_hour < HOURS_PER_DAY + 21 then
-		ticks_until_dk = moon_hour <= HOURS_PER_DAY + 18 and HOURS_PER_DAY + 18 - moon_hour or 0
+	if dk_hour < 20 then
+		ticks_until_dk = dk_hour <= 17 and 17 - dk_hour or 0
+	elseif dk_hour < HOURS_PER_DAY + 21 then
+		ticks_until_dk = dk_hour <= HOURS_PER_DAY + 18 and HOURS_PER_DAY + 18 - dk_hour or 0
 		next_dk_day = 2
-	elseif moon_hour < HOURS_PER_DAY * 2 + 22 then
-		ticks_until_dk = moon_hour <= HOURS_PER_DAY * 2 + 19 and HOURS_PER_DAY * 2 + 19 - moon_hour or 0
+	elseif dk_hour < HOURS_PER_DAY * 2 + 22 then
+		ticks_until_dk = dk_hour <= HOURS_PER_DAY * 2 + 19 and HOURS_PER_DAY * 2 + 19 - dk_hour or 0
 		next_dk_day = 3
 	else
-		ticks_until_dk = HOURS_PER_MOON_CYCLE - moon_hour + 17
+		ticks_until_dk = HOURS_PER_MOON_CYCLE - dk_hour + 17
 	end
 	local next_dk_in_rl_hours = math.floor(ticks_until_dk / MINUTES_PER_HOUR)
 	local next_dk_in_rl_minutes = ticks_until_dk % MINUTES_PER_HOUR
