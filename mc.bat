@@ -19,7 +19,7 @@ if exist "mapper_proxy" (
 	start MUSHclient.exe
 	cd mapper_proxy
 	echo Running the mapper.
-	"Mapper Proxy.exe" --interface hc --format raw
+	"Mapper Proxy.exe" --format raw
 ) else (
 	echo Error: failed to start because the mapper was not found.
 	pause
