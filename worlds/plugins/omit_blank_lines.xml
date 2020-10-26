@@ -30,7 +30,7 @@ Omits completely empty lines from output.
 <triggers>
   <trigger
    enabled="y"
-   match="^\s*$"
+   match="^[-\s]*$"
    omit_from_output="y"
    regexp="y"
    sequence="100"
