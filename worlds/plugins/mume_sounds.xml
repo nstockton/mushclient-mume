@@ -582,6 +582,28 @@ end
   <trigger
    enabled="y"
    group="mume_sounds"
+   match="A dark shadow, wreathed in flames and exuding malevolence, towers above you."
+   name="misc_alert30"
+   omit_from_output="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_ALERT, "misc_alert.wav")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
+   match="^The Balrog is here\, fighting [^\.]+\.$"
+   name="misc_alert31"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_ALERT, "misc_alert.wav")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
    match="^A (?:great\, wild boar|citizen mercenary)(?: \(\w+\))? sits down and rests\.$"
    name="alert_mercenary_resting"
    regexp="y"
@@ -1167,11 +1189,15 @@ require("mystdlib")
 
 CONFIG = "d19a2f0a604c96b7318aa67f"
 TTS = "925cdd0331023d9f0b8f05a7"
+XML_PARSER = "74834d3734b2c8a3a9da4d18"
+BROADCAST_PROMPT = 1
+PROMPT_REGEX = rex.new([[^(?P<light>[\@\*\!\)o])?(?P<terrain>[\#\(\[\+\.\%fO\~UW\:\=\<])?(?P<weather>[\*\'\"\~\=\-]{1,2})?(?P<movement_flags> [RrSsCcW]{1,4})?(?P<hp> HP\:\w+)?(?P<mp> Mana\:\w+)?(?P<mv> Move\:\w+)?(?P<mount> Mount\:\w+)?(?P<fighting> [^\:]+\:\w+)?(?P<buffer> [^\:]+\:\w+)?.*?>$]])
 TYPE_FREE_SLOT = 0
 TYPE_ALERT = 3
 TYPE_SPELL_ATTACK = 4
 TYPE_SPELL_STATUS = 5
 TYPE_COMBAT = 6
+TYPE_SPECIAL = 7
 TYPE_PK = 8
 TYPE_COMMUNICATION = 9
 
@@ -1180,6 +1206,7 @@ sound_volume = sound_volume or 0
 return_code, sound_mute = CallPlugin(CONFIG, "get", "sound_mute")
 sound_mute = sound_mute or false
 last_target_bashed = ""
+last_target_health = nil
 
 math.randomseed(os.time())
 
@@ -1215,6 +1242,19 @@ end
 
 function OnPluginInstall()
 	SetOption("play_sounds_in_background", 1)
+end
+
+function OnPluginBroadcast (msg, id, name, text)
+	if id == XML_PARSER and name == "mume_xml_parser" and msg == BROADCAST_PROMPT and text ~= "" then
+		local starting, ending, match = PROMPT_REGEX:match(text)
+		if match and match["fighting"] then
+			local target_name, target_health = unpack(string.split(match["fighting"], ":"))
+			if last_target_health ~= target_health then
+				play(TYPE_SPECIAL, string.format("health/%s.wav", target_health), -100)
+				last_target_health = target_health
+			end
+		end
+	end
 end
 
 ]]>
