@@ -70,17 +70,6 @@ end
   <trigger
    enabled="y"
    group="mume_misc"
-   match="^\-{5,5}$"
-   name="gag_compact_off_dashes"
-   omit_from_output="y"
-   regexp="y"
-   send_to="0"
-   sequence="100"
-  >
-  </trigger>
-  <trigger
-   enabled="y"
-   group="mume_misc"
    match="^.+? is (?:incapacitated|mortally wounded|stunned) and will (?:slowly |probably )?die[,]? (?:soon[ ]?)?(?:if not aided)?\.$"
    name="auto_kick"
    regexp="y"
@@ -1172,7 +1161,7 @@ Note("Web removed!")
   <trigger
    enabled="y"
    group="mume_misc"
-   match="^(?:There is an old street\-lamp on the border of the street|A finely crafted crystal lamp is (?:here|hanging from a tree branch))\.$"
+   match="^(?:There is a(?:n old| lit) street\-lamp on the border of the street(?:\, illuminating the area)?|A finely crafted crystal lamp is (?:here|hanging from a tree branch))\.$"
    name="gag_street_lamps"
    omit_from_output="y"
    regexp="y"
