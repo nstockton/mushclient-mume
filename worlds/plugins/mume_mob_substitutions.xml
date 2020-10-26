@@ -30,6 +30,16 @@
   <trigger
    enabled="y"
    group="mume_mob_substitutions"
+   match="A dark shadow, wreathed in flames and exuding malevolence, towers above you."
+   omit_from_output="y"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 - (Balrog)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_mob_substitutions"
    match="^A cloaked man lurks here\, watching you silently(?: \(hidden\))?\.$"
    omit_from_output="y"
    regexp="y"
