@@ -91,6 +91,7 @@ Adds information about which lock pick upgrades a set of lock picks has when the
 ### Macros
 Contains macros for performing different tasks. Some macros are different depending on whether the player is using the standard QWERTY keyboard layout or the [Dvorak](https://en.wikipedia.org/wiki/Dvorak_Simplified_Keyboard "Dvorak Entry On Wikipedia") layout.
 #### QWERTY And Dvorak Common Macros
+* Control+Space  --  Toggle paused scrollback in the output window.
 * Control+B  --  bash
 * Control+H  --  shoot
 * Control+M  --  assist
@@ -324,6 +325,10 @@ This plugin by Nick Gammon allows you to repeat a command multiple times.
 I (Nick Stockton) wrote this plugin to be a drop-in replacement for the Mush Reader plugin used by other projects. It wraps the various screen reader APIs directly using the FFI library built into LuaJit, rather than requiring a separate dll to wrap the APIs.
 #### Aliases
 * tts  --  Toggle automatic speech output via the screen reader on or off (defaults to on).
+### Timestamps
+This plugin by Nick Gammon allows you to toggle the display of timestamps in the output window.
+#### Aliases
+* timestamps  --  Toggle timestamps on or off (defaults to off).
 
 ## Mapper Proxy
 ### Auto Mapping Commands
