@@ -31,7 +31,7 @@
    terminal_identification="mushclient"
 
    arrows_change_history="y"
-   auto_pause="y"
+   auto_pause="n"
    auto_resize_minimum_lines="1"
    auto_resize_maximum_lines="20"
    auto_wrap_window_width="y"
@@ -101,7 +101,7 @@
    treeview_aliases="y"
    treeview_timers="y"
    underline_hyperlinks="y"
-   unpause_on_send="y"
+   unpause_on_send="n"
    use_custom_link_colour="y"
    use_default_input_font="y"
    use_default_output_font="y"
