@@ -34,7 +34,7 @@
   <trigger
    enabled="y"
    group="mume_portal"
-   match="^(?P&lt;label&gt;.+?)\s*\-\s*(?P&lt;terrain&gt;(?:On a (?:hill|mountain|road)|In(?:doors| brush| some water| a (?:cavern|city|field|forest|swamp))))\s*(?P&lt;distance&gt;Very far|Very near|Far|Near)\s*key\:\s*&apos;(?P&lt;key&gt;\w+)&apos;$"
+   match="^(?P&lt;label&gt;.+?)\s*\-\s*(?P&lt;terrain&gt;(?:On a (?:hill|mountain|road)|In(?:doors| brush| some water| a (?:cavern|city|field|forest|swamp|tunnel))))\s*(?P&lt;distance&gt;Very far|Very near|Far|Near)\s*key\:\s*&apos;(?P&lt;key&gt;\w+)&apos;$"
    name="capture_locate_key"
    regexp="y"
    send_to="14"
