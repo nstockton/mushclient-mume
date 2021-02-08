@@ -161,8 +161,6 @@ function process_tag(tag)
 			scouting = false
 			last_data.prompt = ""
 			xml_mode = XML_PROMPT
-		elseif tag == "exits" then
-			xml_mode = XML_EXITS
 		elseif tag == "room" then
 			if not scouting then
 				last_data.name = ""
@@ -184,6 +182,8 @@ function process_tag(tag)
 			xml_mode = XML_DESCRIPTION
 		elseif tag == "terrain" then
 			xml_mode = XML_TERRAIN
+		elseif tag == "exits" then
+			xml_mode = XML_EXITS
 		elseif tag == "gratuitous" then
 			in_gratuitous = true
 		elseif tag == "/gratuitous" then
@@ -197,7 +197,7 @@ function process_tag(tag)
 		xml_mode = XML_ROOM
 		BroadcastPlugin(BROADCAST_NAME, StripANSI(last_data.name))
 	elseif xml_mode == XML_EXITS and tag == "/exits" then
-		xml_mode = XML_NONE
+		xml_mode = XML_ROOM
 		BroadcastPlugin(BROADCAST_EXITS, StripANSI(last_data.exits))
 	elseif xml_mode == XML_TELL and tag == "/tell" then
 		xml_mode = XML_NONE
