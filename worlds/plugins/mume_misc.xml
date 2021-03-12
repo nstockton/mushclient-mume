@@ -2275,9 +2275,11 @@ Send("put bluestone e.pack")
    group="mume_misc"
    sequence="100"
   >
-  <send>get cup elven
+  <send>get elven-bag e.pack
+get cup i.elven-bag
 drink cup
-put cup elven</send>
+put cup i.elven-bag
+put elven-bag e.pack</send>
   </alias>
   <alias
    name="food_bag"
@@ -2286,8 +2288,10 @@ put cup elven</send>
    group="mume_misc"
    sequence="100"
   >
-  <send>get wafer elven
-eat wafer</send>
+  <send>get elven-bag e.pack
+get wafer i.elven-bag
+eat wafer
+put elven-bag e.pack</send>
   </alias>
   <alias
    name="rope_bag"
@@ -2296,7 +2300,9 @@ eat wafer</send>
    group="mume_misc"
    sequence="100"
   >
-  <send>get rope elven</send>
+  <send>get elven-bag e.pack
+get rope i.elven-bag
+put elven-bag e.pack</send>
   </alias>
   <alias
    name="knife_bag"
@@ -2305,7 +2311,9 @@ eat wafer</send>
    group="mume_misc"
    sequence="100"
   >
-  <send>get knife elven</send>
+  <send>get elven-bag e.pack
+get knife i.elven-bag
+put elven-bag e.pack</send>
   </alias>
 </aliases>
 
