@@ -604,6 +604,17 @@ end
   <trigger
    enabled="y"
    group="mume_sounds"
+   match="The magus wraps his dark robes about himself as his physical form fades out of existence."
+   name="misc_alert32"
+   omit_from_output="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_ALERT, "misc_alert.wav")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
    match="^A (?:great\, wild boar|citizen mercenary)(?: \(\w+\))? sits down and rests\.$"
    name="alert_mercenary_resting"
    regexp="y"
