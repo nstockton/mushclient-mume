@@ -189,13 +189,13 @@ Miscellaneous aliases and triggers that don't belong anywhere else.
 * dragall  --  Drag all corpses in the room.
 * draught [container]  --  Get the ingredients for the Orkish-draught herblore from all containers, and put them in the specified container. If no container is specified, print a list of required ingredients instead.
 * ebo [player]  --  Get an ebony scroll from all containers and recite it. If a player name is specified, recite it on him/her.
-* fbag  --  Get food from the character's elven bag and eat it.
+* fbag  --  Get food from the elven bag in the character's pack and eat it.
 * fpack  --  Switch the cloak, fur, or mantle that the character is wearing with the fur in the character's pack.
 * fpouch  --  Switch the cloak, fur, or mantle that the character is wearing with the fur in the character's pouch.
 * gpack  --  Switch the gloves that the character is currently wearing with the ones in the character's pack.
 * healing [container]  --  Get the ingredients for the Healing herblore from all containers, and put them in the specified container. If no container is specified, print a list of required ingredients instead.
 * helm  --  Remove the character's circlet or crown, and switch to using the character's helmet.
-* kbag  --  Get a butcher knife from the character's elven bag.
+* kbag  --  Get a butcher knife from the elven bag in the character's pack.
 * leafcake [container]  --  Get the ingredients for the Leaf-cake herblore from all containers, and put them in the specified container. If no container is specified, print a list of required ingredients instead.
 * lev  --  Prints the character's current level.
 * li [container]  --  Look in container.
@@ -209,7 +209,7 @@ Miscellaneous aliases and triggers that don't belong anywhere else.
 * pipe  --  Rest and use the pipe stored in the character's pack.
 * purp [player]  --  Get a purple scroll from all containers and recite it. If a player name is specified, recite it on him/her.
 * ra  --  Reveal all. Use this if you find someone hiding in a room to alert everyone else in the room to the player's presents.
-* rbag  --  Get a rope from the character's elven bag.
+* rbag  --  Get a rope from the elven bag in the character's pack.
 * rq  --  Reveal quick.
 * rr  --  Get all.arrow all.corpse, get all.arrow, put all.arrow quiver.
 * rt  --  reveal thorough.
@@ -222,7 +222,7 @@ Miscellaneous aliases and triggers that don't belong anywhere else.
 * vel [player]  --  Get a vellum scroll from all containers and recite it. If a player name is specified, recite it on him/her.
 * venom [container]  --  Get the ingredients for the Venom herblore from all containers, and put them in the specified container. If no container is specified, print a list of required ingredients instead.
 * walking [container]  --  Get the ingredients for the Walking herblore from all containers, and put them in the specified container. If no container is specified, print a list of required ingredients instead.
-* wbag  --  Get water from the character's elven bag and drink it.
+* wbag  --  Get water from the elven bag  in the character's pack and drink it.
 * weight  --  Print the weight of the character's equipment.
 * ws  --  Wake, stand.
 ### Mob Substitutions
