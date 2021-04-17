@@ -267,6 +267,7 @@ IGNORE_LIST = {
 	["Rushak"] = true,
 	["Sabb"] = true,
 	["Sarion"] = true,
+	["Saruman"] = true,
 	["Sauron"] = true,
 	["Scarred"] = true,
 	["Shaghosh"] = true,
