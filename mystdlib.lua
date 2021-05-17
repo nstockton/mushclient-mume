@@ -13,7 +13,6 @@ local stringy = require("stringy")
 string.count = stringy.count
 string.endswith = stringy.endswith
 string.findpos = stringy.find
-string.split = stringy.split
 string.startswith = stringy.startswith
 string.strip = stringy.strip
 
@@ -109,6 +108,26 @@ end
 function string.isdigit(str)
 	-- Like the isdigit method on Python string objects
 	return string.match(str, "^%d+$") ~= nil
+end
+
+function string.split(str, delimiter)
+	if delimiter == "" then
+		-- Calling stringy.split with an empty delimiter crashes the interpreter.
+		error("Empty delimiter.")
+	end
+	return stringy.split(str, delimiter)
+end
+
+function string.partition(str, delimiter)
+	local delim_pos = string.findpos(str, delimiter)
+	if not delim_pos then
+		return {[1] = str, [2] = "", [3] = ""}
+	end
+	return {
+		[1] = string.sub(str, 1, delim_pos - 1),
+		[2] = delimiter,
+		[3] = string.sub(str, delim_pos + string.len(delimiter))
+	}
 end
 
 function table.isempty(tbl)
