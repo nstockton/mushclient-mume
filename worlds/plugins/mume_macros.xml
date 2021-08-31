@@ -130,6 +130,10 @@ AcceleratorTo("ctrl+I", "CallPlugin(MUME_CASTOR_SPELL_TRANSLATOR, 'toggle_castin
 AcceleratorTo("F12", "CallPlugin(MUME_SOUNDS, 'adjust_volume', 1)", sendto.script)
 AcceleratorTo("shift+F12", "CallPlugin(MUME_SOUNDS, 'adjust_volume', -1)", sendto.script)
 AcceleratorTo("ctrl+shift+F12", "CallPlugin(MUME_SOUNDS, 'toggle_mute')", sendto.script)
+AcceleratorTo("PageUp", "--", sendto.script)
+AcceleratorTo("PageDown", "--", sendto.script)
+AcceleratorTo("ctrl+Up", "--", sendto.script)
+AcceleratorTo("ctrl+Down", "--", sendto.script)
 AcceleratorTo("ctrl+Space", "pause_toggle()", sendto.script)
 
 function pause_toggle()
