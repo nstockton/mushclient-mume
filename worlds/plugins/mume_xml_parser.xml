@@ -154,7 +154,12 @@ function toggle_show_prompt()
 end
 
 function escape_iac(data)
-	data = string.gsub(data, IAC, IAC_IAC)
+	local data, _ = string.gsub(data, IAC, IAC_IAC)
+	return data
+end
+
+function unescape_xml(data)
+	local data, _ = string.gsub(data, "&[^; ]+;", XML_REPLACEMENTS)
 	return data
 end
 
@@ -162,7 +167,7 @@ function process_text(data)
 	if data == "" then
 		return ""
 	end
-	data = string.gsub(data, "&[^; ]+;", XML_REPLACEMENTS)
+	data = unescape_xml(data)
 	if xml_mode == XML_NONE and data:findpos("You quietly scout ") then
 		scouting = true
 	elseif xml_mode == XML_PROMPT then
@@ -209,7 +214,7 @@ function process_tag(tag)
 			scouting = false
 			reset_prompt()
 			xml_mode = XML_PROMPT
-		elseif tag == "room" then
+		elseif string.startswith(tag, "room") then
 			if not scouting then
 				reset_room()
 			end
@@ -299,9 +304,8 @@ function OnPluginPacketReceived(packet)
 	end
 	-- Handle the complete packets, and add the remaining data to the buffer.
 	data_buffer = match["remaining"]
-	local data = string.gsub(match["complete"], IAC_GA, "\r\n")
 	local result = {}
-	for byte in string.gmatch(data, ".") do
+	for byte in string.gmatch(match["complete"], ".") do
 		if in_iac then
 			-- Telnet negotiation
 			if not NEGOTIATION_BYTES[byte] then
@@ -322,6 +326,14 @@ function OnPluginPacketReceived(packet)
 					table.insert(tag_buffer, byte)
 				else
 					table.insert(text_buffer, byte)
+				end
+			elseif byte == GA then
+				-- Convert IAC + GA to \r\n.
+				table.remove(result) -- Remove IAC from the end of result.
+				if reading_tag then
+					table.insert(result, "\r\n")
+				else
+					table.insert(text_buffer, "\r\n")
 				end
 			else
 				table.insert(result, byte)
@@ -352,7 +364,7 @@ function OnPluginPacketReceived(packet)
 			table.insert(text_buffer, byte)
 		end
 	end -- for
-	if not reading_tag and not table.isempty(text_buffer) then
+	if not table.isempty(text_buffer) then
 		table.insert(result, process_text(table.concat(text_buffer)))
 		table.clear(text_buffer)
 	end
