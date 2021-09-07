@@ -154,12 +154,20 @@ function toggle_show_prompt()
 end
 
 function escape_iac(data)
-	local data, _ = string.gsub(data, IAC, IAC_IAC)
+	data = string.gsub(data, IAC, IAC_IAC)
 	return data
 end
 
+function character_from_reference (value)
+	return (
+		string.startswith(value, "x") and string.char(tonumber(string.sub(value, 2), 16))
+		or string.char(tonumber(value))
+	)
+end
+
 function unescape_xml(data)
-	local data, _ = string.gsub(data, "&[^; ]+;", XML_REPLACEMENTS)
+	data = string.gsub(data, "&#([0-9a-zA-Z]+);", character_from_reference)
+	data = string.gsub(data, "&[a-zA-Z]+;", XML_REPLACEMENTS)
 	return data
 end
 
