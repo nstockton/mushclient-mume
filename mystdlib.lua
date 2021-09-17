@@ -251,6 +251,19 @@ function spairs(t, order)
 	end
 end
 
+function bool(item)
+	--[[
+	Behaves like the `bool` function in Python.
+
+	Args:
+		item (nil | boolean | number | string | table): The item to be evaluated.
+
+	Returns:
+		boolean: false if item is nil, false, 0, empty string, or empty table, true otherwise.
+	--]]
+	return item and item ~= 0 and item ~= "" and (type(item) ~= "table" or not table.isempty(item)) and true or false
+end
+
 function int(number)
 	local integral, fractional = math.modf(number)
 	return integral
