@@ -171,7 +171,7 @@ local function do_extract()
 	assert(lfs.chdir(pwd .. "\\tempmapper"))
 	local copy_from
 	for item in lfs.dir(lfs.currentdir()) do
-		if lfs.attributes(item, "mode") == "directory" and string.startswith(string.lower(item), "mapper_proxy_v") then
+		if lfs.attributes(item, "mode") == "directory" and string.startswith(string.lower(item), "mapper_proxy") then
 			copy_from = string.format("tempmapper\\%s", item)
 			break
 		end
