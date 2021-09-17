@@ -121,13 +121,9 @@ end
 function string.partition(str, delimiter)
 	local delim_pos = string.findpos(str, delimiter)
 	if not delim_pos then
-		return {[1] = str, [2] = "", [3] = ""}
+		return str, "", ""
 	end
-	return {
-		[1] = string.sub(str, 1, delim_pos - 1),
-		[2] = delimiter,
-		[3] = string.sub(str, delim_pos + string.len(delimiter))
-	}
+	return string.sub(str, 1, delim_pos - 1), delimiter, string.sub(str, delim_pos + string.len(delimiter))
 end
 
 function table.isempty(tbl)
