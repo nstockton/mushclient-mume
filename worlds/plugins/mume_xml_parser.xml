@@ -45,16 +45,10 @@
 <script>
 <![CDATA[
 require("mystdlib")
-CONFIG = "d19a2f0a604c96b7318aa67f"
+local Telnet = require("telnet")
 
-local DELIMITER_REGEX = rex.new([[^(?P<complete>.*(?:[\n]|[\r][\x00]|[\xff][\xfb\xfc\xfd\xfe]?.{1,1}))(?P<remaining>.*)$]], rex.flags().DOTALL)
-local NEGOTIATION_BYTES = {["\254"] = true, ["\253"] = true, ["\252"] = true, ["\251"] = true}
-local IAC = "\255"
-local IAC_IAC = IAC .. IAC
-local GA = "\249"
-local IAC_GA = IAC .. GA
-local SB = "\250"
-local SE = "\240"
+
+local CONFIG = "d19a2f0a604c96b7318aa67f"
 local XML_NONE = 0
 local XML_ROOM = 2
 local XML_NAME = 4
@@ -68,12 +62,11 @@ local XML_PRAY = 512
 local XML_SAY = 1024
 local XML_EMOTE = 2048
 local XML_REPLACEMENTS = {
-	["&amp;"] = "&",
 	["&lt;"] = "<",
 	["&gt;"] = ">",
-	["&#39;"] = "'",
 	["&apos;"] = "'",
 	["&quot;"] = '"',
+	["&amp;"] = "&",
 }
 local BROADCAST_PROMPT = 1
 local BROADCAST_MOVEMENT = 2
@@ -84,7 +77,7 @@ local BROADCAST_NARRATE = 6
 local BROADCAST_PRAY = 7
 local BROADCAST_SAY = 8
 local BROADCAST_EMOTE = 9
-local PROMPT_REGEX = rex.new([[^(?P<light>[\@\*\!\)o])?(?P<terrain>[\#\(\[\+\.\%fO\~UW\:\=\<])?(?P<weather>[\*\'\"\~\=\-]{1,2})?(?P<movement_flags> [RrSsCcW]{1,4})?(?P<hp> HP\:\w+)?(?P<mp> Mana\:\w+)?(?P<mv> Move\:\w+)?(?P<mount> Mount\:\w+)?(?P<fighting> [^\:]+\:\w+)?(?P<buffer> [^\:]+\:\w+)?.*?>$]])
+local PROMPT_REGEX = rex.new([[^(?P<light>[\@\*\!\)o])?(?P<terrain>[\#\(\[\+\.\%fO\~UW\:\=\<])?(?P<weather>[\*\'\"\~\=\-]{1,2})?(?P<movement_flags> [RrSsCcW]{1,4})?(?P<hp> HP\:\w+)?(?P<mp> Mana\:\w+)?(?P<mv> Move\:\w+)?(?P<mount> Mount\:\w+)?(?P<fighting> [^\:]+\:\w+)?(?P<buffer> [^\:]+\:\w+)?[^>]*\>$]])
 local TERRAIN_SYMBOLS = {
 	[":"] = "brush",
 	["O"] = "cavern",
@@ -92,49 +85,45 @@ local TERRAIN_SYMBOLS = {
 	["."] = "field",
 	["f"] = "forest",
 	["("] = "hills",
-	["["] = "indoors",
+	["["] = "building",
 	["<"] = "mountains",
 	["W"] = "rapids",
 	["+"] = "road",
-	["%"] = "shallow water",
+	["%"] = "shallows",
 	["="] = "tunnel",
-	["U"] = "under water",
-	["~"] = "water"
+	["U"] = "underwater",
+	["~"] = "water",
 }
 local LIGHT_SYMBOLS = {
 	["@"] = "lit at",
 	["*"] = "sun light",
 	["!"] = "artificial light",
 	[")"] = "moon light",
-	["o"] = "darkness"
+	["o"] = "darkness",
 }
 
+
+local telnet = Telnet()
 local text_buffer = {}
 local tag_buffer = {}
-local in_iac = false
-local in_sub_option = false
-local in_gratuitous = false
+local reading_tag = false
 local xml_mode = XML_NONE
+local in_gratuitous = false
+local ignore_next_room = false
+local last_communication = ""
 local last_data = {}
 last_data.fought = "Unknown last fought"
-local scouting = false
-local reading_tag = false
-local data_buffer = ""
 local return_code, show_prompt = CallPlugin(CONFIG, "get", "show_prompt")
-local last_communication = ""
 
-function get(key)
-	return StripANSI(last_data[key])
-end
 
-function reset_room()
+local function reset_room()
 	last_data.name = ""
 	last_data.description = ""
 	last_data.dynamic = ""
 	last_data.exits = ""
 end
 
-function reset_prompt()
+local function reset_prompt()
 	last_data.prompt = ""
 	last_data.light = ""
 	last_data.terrain = ""
@@ -147,63 +136,84 @@ function reset_prompt()
 	last_data.buffer = ""
 end
 
-function toggle_show_prompt()
-	show_prompt = not show_prompt
-	CallPlugin(CONFIG, "set", "show_prompt", show_prompt)
-	Note("Show prompt ", show_prompt and "on" or "off", ".")
-end
-
-function escape_iac(data)
-	data = string.gsub(data, IAC, IAC_IAC)
-	return data
-end
-
-function character_from_reference (value)
+local function character_from_reference (value)
 	return (
 		string.startswith(value, "x") and string.char(tonumber(string.sub(value, 2), 16))
 		or string.char(tonumber(value))
 	)
 end
 
-function unescape_xml(data)
+local function unescape_xml(data)
 	data = string.gsub(data, "&#([0-9a-zA-Z]+);", character_from_reference)
 	data = string.gsub(data, "&[a-zA-Z]+;", XML_REPLACEMENTS)
 	return data
 end
 
-function process_text(data)
+local function points_name(text, default)
+	--[[
+	Extracts the name of a points item from a prompt.
+
+	I.E. if passed 'hp:fine', would return 'hp'.
+
+	Args:
+		text (string): The text to be evaluated.
+		default (string): The default text to return if no match.
+
+	Returns:
+		string: The extracted value if found or default.
+	--]]
+	return bool(text) and string.match(string.strip(text), "^([^:]+):") or default
+end
+
+local function points_value(text, default)
+	--[[
+	Extracts the value of a points item from a prompt.
+
+	I.E. if passed 'hp:fine', would return 'fine'.
+
+	Args:
+		text (string): The text to be evaluated.
+		default (string): The default text to return if no match.
+
+	Returns:
+		string: The extracted value if found or default.
+	--]]
+	return bool(text) and string.match(string.strip(text), ":(%w+)$") or default
+end
+
+local function process_text(data)
 	if data == "" then
 		return ""
 	end
-	data = unescape_xml(data)
-	if xml_mode == XML_NONE and data:findpos("You quietly scout ") then
-		scouting = true
+	if xml_mode >= XML_TELL and xml_mode <= XML_EMOTE then
+		last_communication = last_communication .. data
+	elseif xml_mode == XML_NONE and (data:findpos("You quietly scout ") or data:findpos("You let your inner eye find the area... and you see:")) then
+		ignore_next_room = true
+	elseif ignore_next_room then
+		-- The next incoming room data should be ignored.
 	elseif xml_mode == XML_PROMPT then
 		last_data.prompt = last_data.prompt .. data
 		if not show_prompt then
 			return ""
 		end
-	elseif xml_mode >= XML_TELL and xml_mode <= XML_EMOTE then
-		last_communication = last_communication .. data
-	elseif scouting then
-		-- The next incoming room data should be ignored. For example if the player is scouting.
 	elseif xml_mode == XML_ROOM then
 		-- dynamic description
-		last_data.dynamic = string.format("%s%s\n", last_data.dynamic, data)
+		last_data.dynamic = last_data.dynamic .. data
 	elseif xml_mode == XML_NAME then
 		last_data.name = last_data.name .. data
 	elseif xml_mode == XML_DESCRIPTION then
-		last_data.description = string.format("%s%s\n", last_data.description, data)
+		last_data.description = last_data.description .. data
 	elseif xml_mode == XML_EXITS then
 		last_data.exits = last_data.exits .. data
 	end
 	if in_gratuitous then
 		return ""
 	end
-	return escape_iac(data)
+	return data
 end
 
-function process_tag(tag)
+local function process_tag(tag)
+	local output_buffer = {}
 	if xml_mode == XML_NONE then
 		if tag == "/xml" then
 			-- XML mode was turned off by the player.
@@ -219,17 +229,17 @@ function process_tag(tag)
 		elseif tag == "emote" then
 			xml_mode = XML_EMOTE
 		elseif tag == "prompt" then
-			scouting = false
+			ignore_next_room = false
 			reset_prompt()
 			xml_mode = XML_PROMPT
 		elseif string.startswith(tag, "room") then
-			if not scouting then
+			if not ignore_next_room then
 				reset_room()
 			end
 			xml_mode = XML_ROOM
 		elseif string.startswith(tag, "movement") then
-			scouting = false
-			BroadcastPlugin(BROADCAST_MOVEMENT, string.match(tag, "^movement dir=(%w+)/$") or "")
+			ignore_next_room = false
+			BroadcastPlugin(BROADCAST_MOVEMENT, string.sub(tag, 14, -2))
 		elseif tag == "status" then
 			xml_mode = XML_NONE
 		end
@@ -282,101 +292,79 @@ function process_tag(tag)
 		local prompt = StripANSI(last_data.prompt)
 		local starting, ending, match = PROMPT_REGEX:match(prompt)
 		if match then
-			last_data.light = match["light"] and LIGHT_SYMBOLS[match["light"]] or "Unknown light"
-			last_data.terrain = match["terrain"] and TERRAIN_SYMBOLS[match["terrain"]] or "Unknown terrain"
-			last_data.flags = match["movement_flags"] and string.strip(string.format("%s%s%s%s", string.match(match["movement_flags"], "[S]") and "Sneaking " or string.match(match["movement_flags"], "[s]") and "NoSneak " or "", string.match(match["movement_flags"], "[W]") and "Swimming " or "", string.match(match["movement_flags"], "[C]") and "Climbing " or string.match(match["movement_flags"], "[c]") and "Climbing safely " or "", string.match(match["movement_flags"], "[R]") and "Riding " or string.match(match["movement_flags"], "[r]") and "Ridden " or "")) or "No movement flags"
-			last_data.sneak = match["movement_flags"] and (string.match(match["movement_flags"], "[S]") and "Sneaking" or string.match(match["movement_flags"], "[s]") and "NoSneak") or "Off"
-			last_data.hp = match["hp"] and string.split(match["hp"], ":")[2] or "Healthy"
-			last_data.mp = match["mp"] and string.split(match["mp"], ":")[2] or "Full"
-			last_data.mv = string.format("%s %s", match["mv"] and string.split(match["mv"], ":")[2] or "Rested", match["movement_flags"] and string.match(match["movement_flags"], "[R]") and (match["mount"] and string.split(match["mount"], ":")[2] or "Rested") or "Not riding")
-			last_data.fighting = string.format("%s %s", match["fighting"] and string.split(match["fighting"], ":")[2] or "Unknown", match["fighting"] and string.strip(string.split(match["fighting"], ":")[1]) or "Not fighting")
-			last_data.buffer = string.format("%s %s", match["buffer"] and string.split(match["buffer"], ":")[2] or "Unknown", match["buffer"] and string.strip(string.split(match["buffer"], ":")[1]) or "No buffer")
-			if match["fighting"] then
+			last_data.light = LIGHT_SYMBOLS[match.light] or "Unknown light"
+			last_data.terrain = TERRAIN_SYMBOLS[match.terrain] or "Unknown terrain"
+			local movement_flags = match.movement_flags and string.format(
+				"%s%s%s%s",
+				string.findpos(match.movement_flags, "S") and "Sneaking " or string.findpos(match.movement_flags, "s") and "NoSneak " or "",
+				string.findpos(match.movement_flags, "W") and "Swimming " or "",
+				string.findpos(match.movement_flags, "C") and "Climbing " or string.findpos(match.movement_flags, "c") and "Climbing safely " or "",
+				string.findpos(match.movement_flags, "R") and "Riding " or string.findpos(match.movement_flags, "r") and "Ridden " or ""
+			) or "No movement flags"
+			last_data.flags = string.strip(movement_flags)
+			last_data.sneak = match.movement_flags and (string.findpos(match.movement_flags, "S") and "Sneaking" or string.findpos(match.movement_flags, "s") and "NoSneak") or "Off"
+			last_data.hp = points_value(match.hp, "Healthy")
+			last_data.mp = points_value(match.mp, "Full")
+			last_data.mv = string.format("%s %s", points_value(match.mv, "Rested"), match.movement_flags and string.findpos(match.movement_flags, "R") and points_value(match.mount, "Rested") or "Not riding")
+			last_data.fighting = string.format("%s %s", points_value(match.fighting, "Unknown"), points_name(match.fighting, "Not fighting"))
+			last_data.buffer = string.format("%s %s", points_value(match.buffer, "Unknown"), points_name(match.buffer, "No buffer"))
+			if match.fighting then
 				last_data.fought = string.format("%s last fought", last_data.fighting)
 			end
 		elseif not show_prompt then
 			-- Abnormal prompt, such as a log-in prompt.
-			table.insert(text_buffer, last_data.prompt)
+			table.insert(output_buffer, last_data.prompt)
 		end
 		BroadcastPlugin(BROADCAST_PROMPT, prompt)
 	end
+	return table.concat(output_buffer, "\n")
 end
 
-function OnPluginPacketReceived(packet)
-	data_buffer = data_buffer .. packet
-	packet = nil
-	local starting, ending, match = DELIMITER_REGEX:match(data_buffer)
-	if not match then
-		-- Return nothing and continue buffering until complete data has been received.
-		return ""
-	end
-	-- Handle the complete packets, and add the remaining data to the buffer.
-	data_buffer = match["remaining"]
-	local result = {}
-	for byte in string.gmatch(match["complete"], ".") do
-		if in_iac then
-			-- Telnet negotiation
-			if not NEGOTIATION_BYTES[byte] then
-				-- Byte is the last byte in a negotiation sequence.
-				in_iac = false
+local function parse_xml(data)
+	local output_buffer = {}
+	while data ~= "" do
+		local app_data, separator
+		if reading_tag then
+			-- A tag is being parsed.
+			app_data, separator, data = string.partition(data, ">")
+			table.insert(tag_buffer, app_data)
+			if separator == ">" then
+				-- End of XML tag.
+				table.insert(output_buffer, process_tag(unescape_xml(table.concat(tag_buffer))))
+				table.clear(tag_buffer)
+				reading_tag = false
 			end
-			if byte == SB then
-				-- Begin sub-negotiation.
-				in_sub_option = true
-			elseif byte == SE then
-				-- End sub-negotiation
-				in_sub_option = false
-			end
-			if byte == IAC then
-				-- Escaped IAC.
-				table.remove(result) -- Remove IAC from the end of result.
-				if reading_tag then
-					table.insert(tag_buffer, byte)
-				else
-					table.insert(text_buffer, byte)
-				end
-			elseif byte == GA then
-				-- Convert IAC + GA to \r\n.
-				table.remove(result) -- Remove IAC from the end of result.
-				if reading_tag then
-					table.insert(result, "\r\n")
-				else
-					table.insert(text_buffer, "\r\n")
-				end
-			else
-				table.insert(result, byte)
-			end
-		elseif byte == IAC then
-			-- unescaped IAC, start of Telnet negotiation.
-			in_iac = true
-			table.insert(result, byte)
-		elseif in_sub_option then
-			-- Pass these through.
-			table.insert(result, byte)
-		elseif byte == ">" and reading_tag then
-			-- End of XML tag.
-			process_tag(table.concat(tag_buffer))
-			table.clear(tag_buffer)
-			reading_tag = false
-		elseif reading_tag then
-			-- A tag is being parsed, and the end of the tag has *not* been reached yet.
-			table.insert(tag_buffer, byte)
-		elseif byte == "<" then
-			-- Start of tag.
-			-- Process the bytes in the text buffer, and write them to the result buffer.
-			table.insert(result, process_text(table.concat(text_buffer)))
-			table.clear(text_buffer)
-			reading_tag = true
 		else
-			-- Byte is out side of a tag, or in between opening and closing tags.
-			table.insert(text_buffer, byte)
+			app_data, separator, data = string.partition(data, "<")
+			table.insert(text_buffer, app_data)
+			if separator == "<" then
+				-- Start of tag.
+				-- Process the bytes in the text buffer, and write them to the output buffer.
+				table.insert(output_buffer, process_text(unescape_xml(table.concat(text_buffer))))
+				table.clear(text_buffer)
+				reading_tag = true
+			end
 		end
-	end -- for
+	end -- while
 	if not table.isempty(text_buffer) then
-		table.insert(result, process_text(table.concat(text_buffer)))
+		table.insert(output_buffer, process_text(unescape_xml(table.concat(text_buffer))))
 		table.clear(text_buffer)
 	end
-	return table.concat(result)
+	return table.concat(output_buffer)
+end
+
+function get(key)
+	return StripANSI(last_data[key])
+end
+
+function toggle_show_prompt()
+	show_prompt = not show_prompt
+	CallPlugin(CONFIG, "set", "show_prompt", show_prompt)
+	Note("Show prompt ", show_prompt and "on" or "off", ".")
+end
+
+function OnPluginPacketReceived(data)
+	return telnet:parse(data, parse_xml)
 end
 
 function OnPluginInstall()
