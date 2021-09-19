@@ -296,3 +296,7 @@ sha224sum_file = function (...) return _shasum_file(sha2.sha224_digest(), ...) e
 sha256sum_file = function (...) return _shasum_file(sha2.sha256_digest(), ...) end
 sha384sum_file = function (...) return _shasum_file(sha2.sha384_digest(), ...) end
 sha512sum_file = function (...) return _shasum_file(sha2.sha512_digest(), ...) end
+
+-- For compatibility with Lua >= 5.2.
+unpack = rawget(table, "unpack") or unpack
+pack = rawget(table, "pack") or function(...) return {n = select("#", ...), ...} end
