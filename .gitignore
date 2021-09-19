@@ -1,24 +1,34 @@
-# Compiled Lua sources
-luac.out
+# Binaries
+*.[dD][lL][lL]
+*.[eE][xX][eE]
+*.[hH][lL][pP]
+*.[iI][cC][oO]
+*.nvda-addon
+*.[lL][iI][bB]
+*.[gG][zZ]
+*.[wW][aA][vV]
+*.[zZ][iI][pP]
 
-# luarocks build files
-*.src.rock
-*.zip
-*.tar.gz
-
-# Object files
-*.o
-*.os
-*.ko
-*.obj
-*.elf
-
-# Precompiled Headers
-*.gch
-*.pch
+# MUSHClient Files
+docs/
+fonts/
+locale/
+mime/
+names/
+scripts/
+socket/
+sounds/
+spell/
+Dina.fon
+Example_filters.lua
+help.db
+mushclient.cnt
+MUSHclient.ini*
+mushclient_prefs.sqlite*
+names.txt
+spellchecker.lua
+tips.txt
 
 # Misc Files
-mushclient_prefs.sqlite
-MUSHclient.ini
 *.ignore
 mapper_proxy/
