@@ -4,7 +4,7 @@ rem Change the current working directory to the location of this batch script.
 pushd "%~dp0"
 
 for /F "delims=" %%i in ('dir /b /s "lua\tests\test_*.lua"') do (
-	echo "Running tests in %%~ni"
+	echo Running tests in %%~ni
 	luajit.exe "%%i" --failure --output text
 )
 
