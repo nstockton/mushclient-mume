@@ -41,17 +41,17 @@
 <![CDATA[
 require("mystdlib")
 
-local IAC, SB, SE = "\255", "\250", "\240"
+local IAC = "\255"
+local SB = "\250"
+local SE = "\240"
 local GMCP = "\201"
-local SUPPORTED_PACKAGES = {"mmapper.grouptell"}
+local SUPPORTED_PACKAGES = {
+	"mmapper.grouptell",
+	"mmapper.comm.grouptell",
+}
 
 
 local gmcp_debug_enabled = false
-
-
-function message_from_package(package)
-	return SUPPORTED_PACKAGES[package]
-end
 
 
 function package_from_message(message)
@@ -77,6 +77,11 @@ function send_gmcp_packet(data)
 end -- send_gmcp_packet
 
 
+function keep_alive()
+	send_gmcp_packet("Core.KeepAlive")
+end
+
+
 function OnPluginTelnetRequest(msg_type, data)
 	if msg_type == string.byte(GMCP) and data == "WILL" then
 		-- Server offers to handle GMCP.
@@ -85,9 +90,9 @@ function OnPluginTelnetRequest(msg_type, data)
 		Note("Enabling GMCP.")
 		-- This hard-coded block may need to be made into a config table as we add more message types.
 		send_gmcp_packet(string.format('Core.Hello { "client": "MUSHclient", "version": "%s" }', Version()))
-		send_gmcp_packet('Core.Supports.Set [ "Char 1", "Comm 1", "Room 1", "MMapper.GroupTell 1" ]')
+		send_gmcp_packet('Core.Supports.Set [ "Char 1", "MMapper.GroupTell 1", "MMapper.Comm 1" ]')
 		return true
-	end -- if GMCP login needed (just sent DO)
+	end
 	return false
 end -- function OnPluginTelnetRequest
 
@@ -101,7 +106,7 @@ function OnPluginTelnetSubnegotiation(msg_type, data)
 	if gmcp_debug_enabled then
 		Note(data)
 	end
-	local message, params = string.match(data, "^([%a.]+)%s+(.*)$")
+	local message, params = string.match(data, "^([%a.]+)%s*(.*)$")
 	-- if valid format, broadcast to all interested plugins
 	local package = package_from_message(message)
 	if package then
