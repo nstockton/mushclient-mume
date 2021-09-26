@@ -77,7 +77,7 @@ local BROADCAST_NARRATE = 6
 local BROADCAST_PRAY = 7
 local BROADCAST_SAY = 8
 local BROADCAST_EMOTE = 9
-local PROMPT_REGEX = rex.new([[^(?P<light>[\@\*\!\)o])?(?P<terrain>[\#\(\[\+\.\%fO\~UW\:\=\<])?(?P<weather>[\*\'\"\~\=\-]{1,2})?(?P<movement_flags> [RrSsCcW]{1,4})?(?P<hp> HP\:\w+)?(?P<mp> Mana\:\w+)?(?P<mv> Move\:\w+)?(?P<mount> Mount\:\w+)?(?P<fighting> [^\:]+\:\w+)?(?P<buffer> [^\:]+\:\w+)?[^>]*\>$]])
+local PROMPT_REGEX = rex.new([[^(?P<light>[\@\*\!\)o])?(?P<terrain>[\#\(\[\+\.\%fO\~UW\:\=\<])?(?P<weather>[\*\'\"\~\=\-]{1,2})?(?P<movement_flags> [RrSsCcW]{1,4})?(?P<xp> XP\:\d+)?(?P<tp> TP\:\d+)?(?P<hp> HP\:\w+)?(?P<mp> Mana\:\w+)?(?P<mv> Move\:\w+)?(?P<mount> Mount\:\w+)?(?P<fighting> [^\:]+\:\w+)?(?P<buffer> [^\:]+\:\w+)?[^>]*\>$]])
 local TERRAIN_SYMBOLS = {
 	[":"] = "brush",
 	["O"] = "cavern",
@@ -129,6 +129,8 @@ local function reset_prompt()
 	last_data.terrain = ""
 	last_data.flags = ""
 	last_data.sneak = ""
+	last_data.xp = ""
+	last_data.tp = ""
 	last_data.hp = ""
 	last_data.mp = ""
 	last_data.mv = ""
@@ -303,6 +305,8 @@ local function process_tag(tag)
 			) or "No movement flags"
 			last_data.flags = string.strip(movement_flags)
 			last_data.sneak = match.movement_flags and (string.findpos(match.movement_flags, "S") and "Sneaking" or string.findpos(match.movement_flags, "s") and "NoSneak") or "Off"
+			last_data.xp = points_value(match.xp, "Unknown")
+			last_data.tp = points_value(match.tp, "Unknown")
 			last_data.hp = points_value(match.hp, "Healthy")
 			last_data.mp = points_value(match.mp, "Full")
 			last_data.mv = string.format("%s %s", points_value(match.mv, "Rested"), match.movement_flags and string.findpos(match.movement_flags, "R") and points_value(match.mount, "Rested") or "Not riding")
