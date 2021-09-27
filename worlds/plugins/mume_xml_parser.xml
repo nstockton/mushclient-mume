@@ -64,8 +64,6 @@ local XML_EMOTE = 2048
 local XML_REPLACEMENTS = {
 	["&lt;"] = "<",
 	["&gt;"] = ">",
-	["&apos;"] = "'",
-	["&quot;"] = '"',
 	["&amp;"] = "&",
 }
 local BROADCAST_PROMPT = 1
