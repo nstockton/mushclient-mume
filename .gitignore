@@ -1,34 +1,36 @@
 # Binaries
-*.[dD][lL][lL]
-*.[eE][xX][eE]
-*.[hH][lL][pP]
-*.[iI][cC][oO]
+*.dll
+*.exe
+*.hlp
+*.ico
 *.nvda-addon
-*.[lL][iI][bB]
-*.[gG][zZ]
-*.[wW][aA][vV]
-*.[zZ][iI][pP]
+*.lib
+*.gz
+*.wav
+*.zip
 
 # MUSHClient Files
-docs/
-fonts/
-locale/
-mime/
-names/
-scripts/
-socket/
-sounds/
-spell/
-Dina.fon
-Example_filters.lua
-help.db
-mushclient.cnt
-MUSHclient.ini*
-mushclient_prefs.sqlite*
-names.txt
-spellchecker.lua
-tips.txt
+/docs/
+/fonts/
+/locale/
+/mime/
+/names/
+/scripts/
+/socket/
+/sounds/
+/spell/
+/Dina.fon
+/Example_filters.lua
+/help.db
+/mushclient.cnt
+/MUSHclient.ini*
+/mushclient_prefs.sqlite*
+/names.txt
+/spellchecker.lua
+/tips.txt
+
+# Mapper Proxy Files
+/mapper_proxy/
 
 # Misc Files
 *.ignore
-mapper_proxy/
