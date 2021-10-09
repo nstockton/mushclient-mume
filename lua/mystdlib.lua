@@ -330,6 +330,16 @@ function len(item)
 end
 
 
+function timeit(loops, func, ...)
+	-- Time execution of a function.
+	local start = os.clock()
+	for i = 1, loops do
+		func(...)
+	end
+	return os.clock() - start
+end
+
+
 local function _shasum_file(hasher, file_name, block_size)
 	local block_size = block_size or 2 ^ 16
 	local file = assert(io.open(file_name, "rb"))
