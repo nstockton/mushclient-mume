@@ -10,24 +10,37 @@ local lfs = require("lfs")
 local sha2 = require("sha2")
 local stringy = require("stringy")
 
+
+-- For compatibility with Lua >= 5.2.
+unpack = rawget(table, "unpack") or unpack
+pack = rawget(table, "pack") or function(...) return {n = select("#", ...), ...} end
+
+
 string.count = stringy.count
 string.endswith = stringy.endswith
 string.findpos = stringy.find
 string.startswith = stringy.startswith
 string.strip = stringy.strip
 
+
 function printf(...)
 	-- Prints a string formatted with format identifiers to standard output.
-	-- Arguments to this function are first parsed by string.format and the result then passed to io.write, along with a trailing new-line character.
+	-- Arguments to this function are first parsed by string.format and the result then passed to io.write,
+	-- along with a trailing new-line character.
 	io.output(io.stdout)
 	io.write(string.format(...), "\n")
 end
 
+
 function url_quote(url)
 	-- Replace non-supported characters in a string with their URL-encoded equivalents.
-	local byte2hex = function (c) return bit and "%" .. bit.tohex(string.byte(c), -2) or string.format("%%%02X", string.byte(c)) end
-	return string.gsub(url, "([^%w])", byte2hex)
+	local function byte2hex(char)
+		return bit and "%" .. bit.tohex(string.byte(char), -2) or string.format("%%%02X", string.byte(char))
+	end
+	local result = string.gsub(url, "([^%w])", byte2hex)
+	return result
 end
+
 
 function pause()
 	-- Like the pause command in Windows batch script.
@@ -36,10 +49,17 @@ function pause()
 	io.write("\n")
 end
 
+
 function os.type()
 	local library_ext = package.cpath:match("%p[\\|/]?%p(%a+)")
-	return library_ext == "dll" and "Windows" or library_ext == "so" and "Unix" or library_ext == "dylib" and "Darwin" or nil
+	return (
+		library_ext == "dll" and "Windows"
+		or library_ext == "so" and "Unix"
+		or library_ext == "dylib" and "Darwin"
+		or nil
+	)
 end
+
 
 function architecture()
 	-- Returns the processor architecture, as reported by Windows.
@@ -55,6 +75,7 @@ function architecture()
 	end
 end
 
+
 function get_flags(as_set)
 	local flags = {}
 	for i, argument in ipairs(arg) do
@@ -69,9 +90,11 @@ function get_flags(as_set)
 	return flags
 end
 
+
 function os.fileSize(name)
 	return lfs.attributes(name, "size")
 end
+
 
 function os.isFile(name)
 	if type(name) ~= "string" then
@@ -83,12 +106,14 @@ function os.isFile(name)
 	return false
 end
 
+
 function os.isFileOrDir(name)
 	if type(name) ~= "string" then
 		return false
 	end
 	return os.rename(name, name) and true or false
 end
+
 
 function os.isDir(name)
 	if type(name) ~= "string" then
@@ -100,15 +125,18 @@ function os.isDir(name)
 	return is
 end
 
+
 function string.capitalize(str)
 	-- Like the capitalize method on Python string objects
 	return (string.lower(str):gsub("^%l", string.upper))
 end
 
+
 function string.isdigit(str)
 	-- Like the isdigit method on Python string objects
 	return string.match(str, "^%d+$") ~= nil
 end
+
 
 function string.split(str, delimiter)
 	if delimiter == "" then
@@ -118,6 +146,7 @@ function string.split(str, delimiter)
 	return stringy.split(str, delimiter)
 end
 
+
 function string.partition(str, delimiter)
 	local delim_pos = string.findpos(str, delimiter)
 	if not delim_pos then
@@ -126,9 +155,11 @@ function string.partition(str, delimiter)
 	return string.sub(str, 1, delim_pos - 1), delimiter, string.sub(str, delim_pos + string.len(delimiter))
 end
 
+
 function table.isempty(tbl)
 	return next(tbl) == nil
 end
+
 
 function table.slice(tbl, first, last)
 	-- Like Python style list slicing, but inclusive.
@@ -150,17 +181,21 @@ function table.slice(tbl, first, last)
 	return newTbl
 end
 
+
 function table.addToSet(set, key)
 	set[key] = true
 end
+
 
 function table.removeFromSet(set, key)
 	set[key] = nil
 end
 
+
 function table.setContains(set, key)
 	return set[key] ~= nil
 end
+
 
 function table.uniqueItems(tbl)
 	local uniqueSet = {}
@@ -182,6 +217,7 @@ function table.uniqueItems(tbl)
 	return outputTbl
 end
 
+
 function table.index(tbl, item)
 	for i, value in ipairs(tbl) do
 		if value == item then
@@ -189,6 +225,7 @@ function table.index(tbl, item)
 		end
 	end
 end
+
 
 function table.count(tbl, item)
 	local count = 0
@@ -200,11 +237,13 @@ function table.count(tbl, item)
 	return count
 end
 
+
 function table.clear(tbl)
 	for key in pairs(tbl) do
 		tbl[key] = nil
 	end
 end
+
 
 function table.keys(tbl)
 	local keys = {}
@@ -215,6 +254,7 @@ function table.keys(tbl)
 	return keys
 end
 
+
 function table.values(tbl)
 	local values = {}
 	for _, value in pairs(tbl) do
@@ -224,9 +264,11 @@ function table.values(tbl)
 	return values
 end
 
+
 function get_script_path()
 	return debug.getinfo(2, "S").short_src
 end
+
 
 function spairs(t, order)
 	-- https://stackoverflow.com/questions/15706270/sort-a-table-in-lua
@@ -251,6 +293,7 @@ function spairs(t, order)
 	end
 end
 
+
 function bool(item)
 	--[[
 	Behaves like the `bool` function in Python.
@@ -261,13 +304,18 @@ function bool(item)
 	Returns:
 		boolean: false if item is nil, false, 0, empty string, or empty table, true otherwise.
 	--]]
-	return item and item ~= 0 and item ~= "" and (type(item) ~= "table" or not table.isempty(item)) and true or false
+	return (
+		item and item ~= 0 and item ~= "" and (type(item) ~= "table" or not table.isempty(item)) and true
+		or false
+	)
 end
+
 
 function int(number)
 	local integral, fractional = math.modf(number)
 	return integral
 end
+
 
 function len(item)
 	if type(item) == "string" then
@@ -281,6 +329,7 @@ function len(item)
 	end
 end
 
+
 local function _shasum_file(hasher, file_name, block_size)
 	local block_size = block_size or 2 ^ 16
 	local file = assert(io.open(file_name, "rb"))
@@ -291,12 +340,9 @@ local function _shasum_file(hasher, file_name, block_size)
 	return string.gsub(hasher(), ".", function(c) return bit.tohex(string.byte(c), 2) end)
 end
 
+
 sha1sum_file = function (...) return _shasum_file(sha2.sha1_digest(), ...) end
 sha224sum_file = function (...) return _shasum_file(sha2.sha224_digest(), ...) end
 sha256sum_file = function (...) return _shasum_file(sha2.sha256_digest(), ...) end
 sha384sum_file = function (...) return _shasum_file(sha2.sha384_digest(), ...) end
 sha512sum_file = function (...) return _shasum_file(sha2.sha512_digest(), ...) end
-
--- For compatibility with Lua >= 5.2.
-unpack = rawget(table, "unpack") or unpack
-pack = rawget(table, "pack") or function(...) return {n = select("#", ...), ...} end
