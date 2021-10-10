@@ -71,7 +71,7 @@ end
   <trigger
    enabled="y"
    group="mume_report"
-   match="^(?P&lt;hp&gt;\d+)\/(?P&lt;max_hp&gt;\d+) hits(?:\, (?P&lt;mana&gt;\d+)\/(?P&lt;max_mana&gt;\d+) mana\,)? and (?P&lt;mv&gt;\d+)\/(?P&lt;max_mv&gt;\d+) moves\.$"
+   match="^(?P&lt;hp&gt;[-\d]+)\/(?P&lt;max_hp&gt;\d+) hits(?:\, (?P&lt;mana&gt;[-\d]+)\/(?P&lt;max_mana&gt;\d+) mana\,)? and (?P&lt;mv&gt;[-\d]+)\/(?P&lt;max_mv&gt;\d+) moves\.$"
    name="capture_score"
    omit_from_log="y"
    omit_from_output="y"
