@@ -615,7 +615,7 @@ end
   <trigger
    enabled="y"
    group="mume_sounds"
-   match="^A (?:great\, wild boar|citizen mercenary)(?: \(\w+\))? sits down and rests\.$"
+   match="^A (?:huge stone giant|great\, wild boar|citizen mercenary)(?: \(\w+\))? sits down and rests\.$"
    name="alert_mercenary_resting"
    regexp="y"
    send_to="12"
