@@ -75,7 +75,7 @@ local BROADCAST_NARRATE = 6
 local BROADCAST_PRAY = 7
 local BROADCAST_SAY = 8
 local BROADCAST_EMOTE = 9
-local PROMPT_REGEX = rex.new([[^(?P<light>[\@\*\!\)o])?(?P<terrain>[\#\(\[\+\.\%fO\~UW\:\=\<])?(?P<weather>[\*\'\"\~\=\-]{1,2})?(?P<movement_flags> [RrSsCcW]{1,4})?(?P<xp> XP\:\d+[k]?)?(?P<tp> TP\:\d+[k]?)?(?P<hp> HP\:\w+)?(?P<mp> Mana\:\w+)?(?P<mv> Move\:\w+)?(?P<mount> Mount\:\w+)?(?P<fighting> [^\:]+\:\w+)?(?P<buffer> [^\:]+\:\w+)?[^>]*\>$]])
+local PROMPT_REGEX = rex.new([[^(?P<light>[\@\*\!\)o])?(?P<terrain>[\#\(\[\+\.\%fO\~UW\:\=\<])?(?P<weather>[\*\'\"\~\=\-]{1,2})?(?P<movement_flags> [RrSsCcW]{1,4})?(?P<xp> XP\:[\d.]+[kM]?)?(?P<tp> TP\:[\d.]+[k]?)?(?P<hp> HP\:\w+)?(?P<mp> Mana\:\w+)?(?P<mv> Move\:\w+)?(?P<mount> Mount\:\w+)?(?P<fighting> [^\:]+\:\w+)?(?P<buffer> [^\:]+\:\w+)?[^>]*\>$]])
 local TERRAIN_SYMBOLS = {
 	[":"] = "brush",
 	["O"] = "cavern",

@@ -1202,7 +1202,7 @@ CONFIG = "d19a2f0a604c96b7318aa67f"
 TTS = "925cdd0331023d9f0b8f05a7"
 XML_PARSER = "74834d3734b2c8a3a9da4d18"
 BROADCAST_PROMPT = 1
-PROMPT_REGEX = rex.new([[^(?P<light>[\@\*\!\)o])?(?P<terrain>[\#\(\[\+\.\%fO\~UW\:\=\<])?(?P<weather>[\*\'\"\~\=\-]{1,2})?(?P<movement_flags> [RrSsCcW]{1,4})?(?P<xp> XP\:\d+[k]?)?(?P<tp> TP\:\d+[k]?)?(?P<hp> HP\:\w+)?(?P<mp> Mana\:\w+)?(?P<mv> Move\:\w+)?(?P<mount> Mount\:\w+)?(?P<fighting> [^\:]+\:\w+)?(?P<buffer> [^\:]+\:\w+)?[^>]*\>$]])
+PROMPT_REGEX = rex.new([[^(?P<light>[\@\*\!\)o])?(?P<terrain>[\#\(\[\+\.\%fO\~UW\:\=\<])?(?P<weather>[\*\'\"\~\=\-]{1,2})?(?P<movement_flags> [RrSsCcW]{1,4})?(?P<xp> XP\:[\d.]+[kM]?)?(?P<tp> TP\:[\d.]+[k]?)?(?P<hp> HP\:\w+)?(?P<mp> Mana\:\w+)?(?P<mv> Move\:\w+)?(?P<mount> Mount\:\w+)?(?P<fighting> [^\:]+\:\w+)?(?P<buffer> [^\:]+\:\w+)?[^>]*\>$]])
 TYPE_FREE_SLOT = 0
 TYPE_ALERT = 3
 TYPE_SPELL_ATTACK = 4
