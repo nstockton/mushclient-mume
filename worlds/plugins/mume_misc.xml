@@ -1301,7 +1301,7 @@ end
   <trigger
    enabled="y"
    group="mume_misc"
-   match="^(?:Last login (?:less than one|(?:(?:\d+ year[s]?\, )?[1]?\d month[s]? and [1-3]?\d day[s]?|(?:[1-3]?\d day[s]? and )?[1-2]?\d) hour[s]?) ago|Is (?:playing|disconnected)) from \*\.(?P&lt;alpha2&gt;[a-z]{2,2})\.$"
+   match="^(?:Is (?:playing|disconnected)|Last login .+? (?:year|month|day|hour)[s]? ago) from \*\.(?P&lt;code&gt;[a-z]{2,2})\.$"
    name="translate_country_codes"
    omit_from_output="y"
    regexp="y"
@@ -1309,8 +1309,8 @@ end
    sequence="100"
   >
   <send>
-if country_codes["%&lt;alpha2&gt;"] then
-	Note(string.format("%0 (%s)", country_codes["%&lt;alpha2&gt;"]))
+if country_codes["%&lt;code&gt;"] then
+	Note(string.format("%0 (%s)", country_codes["%&lt;code&gt;"]))
 else
 	Note("%0")
 end
