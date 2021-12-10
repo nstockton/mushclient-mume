@@ -41,6 +41,7 @@
    confirm_on_paste="y"
    confirm_on_send="y"
    convert_ga_to_newline="y"
+   ctrl_backspace_deletes_last_word="y"
    default_trigger_sequence="100"
    default_alias_sequence="100"
    detect_pueblo="y"
