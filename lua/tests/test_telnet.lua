@@ -96,6 +96,7 @@ function test_parse()
 	-- 'subnegotiation-escaped' state:
 	lu.assertEquals(parse(data .. IAC .. SB .. ECHO .. "something" .. IAC .. SE), {data .. IAC .. SB .. ECHO .. "something" .. IAC .. SE, data, "data"})
 	lu.assertEquals(parse(data .. IAC .. SB .. ECHO .. "something" .. IAC .. IAC .. IAC .. SE), {data .. IAC .. SB .. ECHO .. "something" .. IAC .. IAC .. IAC .. SE, data, "data"})
+	lu.assertEquals(parse(data .. IAC .. SB .. ECHO .. "something" .. CR .. NULL .. IAC .. SE), {data .. IAC .. SB .. ECHO .. "something" .. CR .. NULL .. IAC .. SE, data, "data"})
 	-- Invalid state: This should never happen.
 	lu.assertEquals(parse(data, "**junk**"), {data, data, "data"})
 end

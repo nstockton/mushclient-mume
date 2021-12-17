@@ -96,7 +96,7 @@ local Telnet = {} -- Class.
 						-- unhandled command.
 						state = "data"
 						if not table.isempty(app_data_buffer) then
-							table.insert(output_buffer, self:escape_iac(app_data_callback(table.concat(app_data_buffer))))
+							table.insert(output_buffer, self:encode_line_ends(self:escape_iac(app_data_callback(table.concat(app_data_buffer)))))
 							table.clear(app_data_buffer)
 						end
 						table.insert(output_buffer, IAC .. byte)
@@ -104,7 +104,7 @@ local Telnet = {} -- Class.
 				elseif state == "negotiation" then
 					state = "data"
 					if not table.isempty(app_data_buffer) then
-						table.insert(output_buffer, self:escape_iac(app_data_callback(table.concat(app_data_buffer))))
+						table.insert(output_buffer, self:encode_line_ends(self:escape_iac(app_data_callback(table.concat(app_data_buffer)))))
 						table.clear(app_data_buffer)
 					end
 					table.insert(output_buffer, IAC .. self.negotiation_command .. byte)
@@ -134,7 +134,7 @@ local Telnet = {} -- Class.
 						-- End of subnegotiation.
 						state = "data"
 						if not table.isempty(app_data_buffer) then
-							table.insert(output_buffer, self:escape_iac(app_data_callback(table.concat(app_data_buffer))))
+							table.insert(output_buffer, self:encode_line_ends(self:escape_iac(app_data_callback(table.concat(app_data_buffer)))))
 							table.clear(app_data_buffer)
 						end
 						table.insert(output_buffer, IAC .. SB .. self:escape_iac(table.concat(self.subnegotiation_data)) .. IAC .. SE)
@@ -151,11 +151,11 @@ local Telnet = {} -- Class.
 			end
 		end -- while
 		if not table.isempty(app_data_buffer) then
-			table.insert(output_buffer, self:escape_iac(app_data_callback(table.concat(app_data_buffer))))
+			table.insert(output_buffer, self:encode_line_ends(self:escape_iac(app_data_callback(table.concat(app_data_buffer)))))
 			table.clear(app_data_buffer)
 		end
 		self.state = state
-		return self:encode_line_ends(table.concat(output_buffer))
+		return table.concat(output_buffer)
 	end
 -- end class Telnet
 
