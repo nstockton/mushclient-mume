@@ -9,6 +9,7 @@ require("mystdlib")
 
 
 local IAC = "\255"
+local GA = "\249"
 local CR = "\r"
 local LF = "\n"
 local NULL = "\0"
@@ -83,6 +84,9 @@ local Telnet = {} -- Class.
 						-- Escaped IAC.
 						state = "data"
 						table.insert(app_data_buffer, byte)
+					elseif byte == GA then
+						state = "data"
+						table.insert(app_data_buffer, LF)
 					elseif byte == SB then
 						state = "subnegotiation"
 					elseif NEGOTIATION_BYTES[byte] then

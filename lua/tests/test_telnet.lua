@@ -10,6 +10,7 @@ local Telnet = require("telnet")
 
 
 local IAC = "\255"
+local GA = "\249"
 local CR = "\r"
 local LF = "\n"
 local NULL = "\0"
@@ -74,6 +75,7 @@ function test_parse()
 	lu.assertEquals(parse(data .. CR .. IAC), {data .. CR .. NULL, data .. CR, "command"})
 	-- 'command' and 'negotiation' states:
 	lu.assertEquals(parse(data .. IAC .. IAC), {data .. IAC .. IAC, data .. IAC, "data"})
+	lu.assertEquals(parse(data .. IAC .. GA), {data .. CR .. LF, data .. LF, "data"})
 	lu.assertEquals(parse(data .. IAC .. SE), {data .. IAC .. SE, data, "data"})
 	lu.assertEquals(parse(data .. IAC .. SB), {data, data, "subnegotiation"})
 	for byte in pairs(NEGOTIATION_BYTES) do
