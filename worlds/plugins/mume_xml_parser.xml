@@ -14,6 +14,7 @@
    name="mume_xml_parser"
    author="Nick Stockton"
    id="74834d3734b2c8a3a9da4d18"
+   sequence="20"
    language="Lua"
    purpose="Parse Mume's XML output."
    date_written="2015-12-09 18:22:34"

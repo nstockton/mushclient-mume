@@ -7,12 +7,12 @@
    name="GMCP_handler_NJG"
    author="Nick Gammon"
    id="74f8c420df7d59ad5aa66246"
+   sequence="30"
    language="Lua"
    purpose="Handle GMCP messages and broadcast data"
    date_written="2015-05-06"
    requires="4.59"
    version="1.0"
-   sequence="100"
 >
 <description trim="y">
 

@@ -14,6 +14,7 @@
    name="config_manager"
    author="Nick Stockton"
    id="d19a2f0a604c96b7318aa67f"
+   sequence="10"
    language="Lua"
    purpose="Configuration database manager for plugins"
    date_written="2015-10-15 14:12:30"
