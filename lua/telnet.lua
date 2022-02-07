@@ -9,6 +9,7 @@ require("mystdlib")
 
 
 local IAC = "\255"
+local EOR = "\239"
 local GA = "\249"
 local CR = "\r"
 local LF = "\n"
@@ -84,7 +85,7 @@ local Telnet = {} -- Class.
 						-- Escaped IAC.
 						state = "data"
 						table.insert(app_data_buffer, byte)
-					elseif byte == GA then
+					elseif byte == GA or byte == EOR then
 						state = "data"
 						table.insert(app_data_buffer, LF)
 					elseif byte == SB then
