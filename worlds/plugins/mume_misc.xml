@@ -876,6 +876,15 @@ open debris up</send>
   <trigger
    enabled="y"
    group="mume_misc"
+   match="Rocks and pebbles slide down from the walls, blocking the tunnel to the west."
+   send_to="0"
+   sequence="100"
+  >
+  <send>open exit west</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
    match="When you come to, you find yourself lying on a muddy floor, stripped of your gear. An overpowering smell of smoke fills your nostrils."
    send_to="0"
    sequence="100"
