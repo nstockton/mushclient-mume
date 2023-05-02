@@ -37,9 +37,9 @@
    match="^(?P&lt;label&gt;.+?)\s*\-\s*(?P&lt;terrain&gt;(?:On a (?:hill|mountain|road)|In(?:doors| brush| some water| a (?:cavern|city|field|forest|swamp|tunnel))))\s*(?P&lt;distance&gt;Very far|Very near|Far|Near)\s*key\:\s*&apos;(?P&lt;key&gt;\w+)&apos;$"
    name="capture_locate_key"
    regexp="y"
+   omit_from_output="y"
    send_to="14"
    sequence="100"
-   omit_from_output="y"
   >
   <send>
 if table.isempty(unprocessed_keys) then
@@ -55,9 +55,9 @@ table.insert(unprocessed_keys, {["label"] = "%&lt;label&gt;", ["terrain"] = "%&l
    match="^(?P&lt;preamble&gt;You sense a portal leading here from|There is a portal (?:north|east|south|west|up|down)\, leading to) &apos;(?P&lt;key&gt;\w+)&apos;\.$"
    name="substitute_cached_names_in_portal"
    regexp="y"
+   omit_from_output="y"
    send_to="14"
    sequence="100"
-   omit_from_output="y"
   >
   <send>
 local outbound_direction = string.match("%&lt;preamble&gt;", "^There is a portal (%w+)")
@@ -94,9 +94,8 @@ end
    match="^You let your inner eye find the area\.\.\. and you see\:$"
    name="gag_scry_spam"
    regexp="y"
-   send_to="0"
-   sequence="100"
    omit_from_output="y"
+   sequence="100"
   >
   </trigger>
   <trigger
@@ -105,9 +104,8 @@ end
    match="^The world begins to reveal all its secrets and you try to find your way\.\.\.$"
    name="gag_find_the_path_spam"
    regexp="y"
-   send_to="0"
-   sequence="100"
    omit_from_output="y"
+   sequence="100"
   >
   </trigger>
   <trigger
@@ -116,9 +114,9 @@ end
    match="^\-&gt; (?P&lt;directions&gt;[NESWUD]+)$"
    name="format_find_the_path"
    regexp="y"
+   omit_from_output="y"
    send_to="14"
    sequence="100"
-   omit_from_output="y"
   >
   <send>Note(group_directions("%&lt;directions&gt;"))</send>
   </trigger>
@@ -211,7 +209,7 @@ end
    send_to="12"
    sequence="100"
   >
-  <send>cached_action("cast 'portal' up", "%&lt;name&gt;")</send>
+  <send>cached_action("cast 'portal'", "%&lt;name&gt;")</send>
   </alias>
   <alias
    name="teleport"
@@ -251,8 +249,7 @@ end
 <script>
 <![CDATA[
 require("mystdlib")
-json = require("dkjson")
-
+json = require("dkjson").use_lpeg()
 
 SECONDS_PER_MINUTE = 60
 MINUTES_PER_HOUR = 60
@@ -265,22 +262,12 @@ DISTANCES = {
 	["Very far"] = 4
 }
 
-
 unprocessed_keys = {}  -- Keys from the game, before they are processed.
 temp_keys = {}  -- Temporary keys which have been processed.
-if os.isFile(PORT_KEYS_FILE) then
-	local file_obj = io.open(PORT_KEYS_FILE, "rb")
-	-- Keys that the user has saved for later use.
-	cached_keys = json.decode(file_obj:read("*all"), 1, nil)
-	file_obj:close()
-else
-	-- The cached keys file doesn't exist.
-	cached_keys = {}
-end
-
+cached_keys = {}  -- Keys that are stored to disk.
 
 function elapsed_time(key_time)
-	-- Return the elapsed time since key_time in human readable format.
+	-- Returns the elapsed time since key_time in human readable format.
 	local result = {}
 	local elapsed = int(os.time() - key_time)
 	local hours = int(elapsed / SECONDS_PER_HOUR)
@@ -296,14 +283,26 @@ function elapsed_time(key_time)
 	return table.concat(result, ", ")
 end
 
+function cached_load()
+	-- Loads the keys cache.
+	if os.isFile(PORT_KEYS_FILE) then
+		-- Load previously cached keys.
+		local handle = assert(io.open(PORT_KEYS_FILE, "rb"))
+		local data = handle:read("*all")
+		handle:close()
+		local keys = json.decode(data, 1, json.null)
+		table.update(cached_keys, json.null, keys)
+	end
+end
+
 function cached_clear()
-	-- Clear the cached keys from memory and disc.
+	-- Clears the keys cache.
 	table.clear(cached_keys)
 	cached_save()
 end
 
 function cached_clear_old()
-	-- Remove keys older than 12 hours.
+	-- Clears keys older than 12 hours from cache.
 	local current_time = os.time()
 	local original_length = len(cached_keys)
 	for name, result in pairs(cached_keys) do
@@ -318,7 +317,7 @@ function cached_clear_old()
 end
 
 function cached_save()
-	-- Save the cached keys to disc.
+	-- Saves cached keys to disk.
 	local ordered_keys = {}
 	for k, v in pairs(cached_keys) do
 		table.insert(ordered_keys, k)
@@ -330,7 +329,7 @@ function cached_save()
 end
 
 function cached_list()
-	-- Display the cached keys, oldest to newest.
+	-- Displays cached keys, oldest to newest.
 	if table.isempty(cached_keys) then
 		return Note("No cached keys.")
 	end
@@ -340,7 +339,7 @@ function cached_list()
 end
 
 function cached_rename(old, new)
-	-- Rename a cached key.
+	-- Renames previously cached key.
 	if not old or not new then
 		Note("Error: you must supply ", not old and "an old" or not new and "a new", " name.")
 	elseif cached_keys[old] then
@@ -354,7 +353,7 @@ function cached_rename(old, new)
 end
 
 function cached_remove(names)
-	-- Remove 1 ore more keys from the cache.
+	-- Removes 1 ore more keys from cache.
 	if not names then
 		return Note("Error: you must provide a name to be removed.")
 	end
@@ -370,7 +369,7 @@ function cached_remove(names)
 end
 
 function cached_add(args)
-	-- Add 1 or more keys to the cache.
+	-- Adds 1 or more keys to cache.
 	if not string.match(args, "[-]?%d+%s+[%w_-]+") then
 		return Note("Error: please provide a temporary key number and a name.")
 	end
@@ -392,7 +391,7 @@ function cached_add(args)
 end
 
 function cached_action(action, name)
-	-- Perform a game action on a cached key.
+	-- Performs a game action on cached key.
 	local name = string.lower(string.strip(name))
 	if name == "" then
 		Note("Error: no cached name given.")
@@ -404,7 +403,7 @@ function cached_action(action, name)
 end
 
 function process_received()
-	-- Process keys from unprocessed_keys, and store them in temp_keys.
+	-- Processes unprocessed keys, and stores them as temporary keys.
 	local processed = {}
 	-- Group mobs with the same key, and store how many occurrences of each mob.
 	for i, result in ipairs(unprocessed_keys) do
@@ -437,7 +436,7 @@ function process_received()
 end
 
 function group_directions(directions)
-	-- Reformat a string of directions such as 'nnueee' into '2n, u, 3e'.
+	-- Converts a string containing one or more single-letter directions to speed-walk format.
 	local directions = string.lower(directions)
 	local groups = {}
 	for direction in string.gmatch(directions, "[neswud]") do
@@ -456,7 +455,8 @@ function group_directions(directions)
 end
 
 function OnPluginInstall()
-	cached_clear_old()
+	cached_load()
+	cached_clear_old()  -- Also saves the cache to disk.
 end
 
 ]]>
