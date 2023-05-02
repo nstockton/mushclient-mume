@@ -150,7 +150,7 @@ end
 <![CDATA[
 require("mystdlib")
 gmcp = require("gmcp")
-json = require("dkjson")
+json = require("dkjson").use_lpeg()
 normalize = require("to_ascii").normalize
 
 MUME_SOUNDS = "32821ab3fa17b04a8ab4c420"

@@ -41,7 +41,7 @@
 <![CDATA[
 require("mystdlib")
 gmcp = require("gmcp")
-json = require("dkjson")
+json = require("dkjson").use_lpeg()
 
 local IAC = "\255"
 local SB = "\250"

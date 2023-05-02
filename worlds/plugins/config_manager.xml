@@ -30,7 +30,7 @@
 <script>
 <![CDATA[
 require("mystdlib")
-json = require("dkjson")
+json = require("dkjson").use_lpeg()
 
 CONFIG_FILE = string.format("%sdatabases\\config.json", GetInfo(67))
 SAMPLE_CONFIG_FILE = string.format("%sdatabases\\config.json.sample", GetInfo(67))
