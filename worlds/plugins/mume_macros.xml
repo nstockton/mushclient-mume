@@ -34,14 +34,31 @@
 <script>
 <![CDATA[
 require("mystdlib")
-TTS = "925cdd0331023d9f0b8f05a7"
+gmcp = require("gmcp")
+normalize = require("to_ascii").normalize
+
 CONFIG = "d19a2f0a604c96b7318aa67f"
 MUME_CASTOR_SPELL_TRANSLATOR = "8b4e5dd676d8477dc5f14376"
-MUME_SOUNDS = "32821ab3fa17b04a8ab4c420"
 MUME_HUNTING = "d54f37916d74ac326debe33f"
-XML_PARSER = "74834d3734b2c8a3a9da4d18"
+MUME_SOUNDS = "32821ab3fa17b04a8ab4c420"
+TTS = "925cdd0331023d9f0b8f05a7"
 
+GMCP_HANDLER_ID = gmcp.get_handler_id()
+GMCP_HANDLER_NAME = gmcp.get_handler_name()
+CHAR_VITALS = gmcp.name_to_id("char_vitals")
+ROOM_INFO = gmcp.name_to_id("room_info")
+
+LIGHT_SYMBOLS = {
+	["*"] = "sun light",
+	["!"] = "artificial light",
+	[")"] = "moon light",
+	["o"] = "darkness",
+}
+
+char_vitals_cache = {}
+room_info_cache = {}
 repeat_commands = {}
+last_opponent = "Unknown"
 local return_code, keyboard_layout = CallPlugin(CONFIG, "get", "keyboard_layout")
 
 
@@ -58,17 +75,17 @@ if keyboard_layout == "dvorak" then
 	Accelerator("Alt+shift+H", "scout west")
 	Accelerator("Alt+shift+G", "scout up")
 	Accelerator("Alt+shift+R", "scout down")
-	AcceleratorTo("alt+S", "speak_xml_event('name')", sendto.script)
-	AcceleratorTo("alt+I", "speak_xml_event('buffer')", sendto.script)
-	AcceleratorTo("alt+U", "speak_xml_event('fighting')", sendto.script)
-	AcceleratorTo("alt+E", "speak_xml_event('hp')", sendto.script)
-	AcceleratorTo("alt+O", "speak_xml_event('mp')", sendto.script)
-	AcceleratorTo("alt+A", "speak_xml_event('mv')", sendto.script)
-	AcceleratorTo("alt+;", "speak_xml_event('light')", sendto.script)
-	AcceleratorTo("alt+Q", "speak_xml_event('terrain')", sendto.script)
-	AcceleratorTo("alt+J", "speak_xml_event('fought')", sendto.script)
-	AcceleratorTo("alt+K", "speak_xml_event('flags')", sendto.script)
-	AcceleratorTo("alt+X", "speak_xml_event('sneak')", sendto.script)
+	AcceleratorTo("alt+S", "speak_gmcp_event('room_name')", sendto.script)
+	AcceleratorTo("alt+I", "speak_gmcp_event('buffer')", sendto.script)
+	AcceleratorTo("alt+U", "speak_gmcp_event('opponent')", sendto.script)
+	AcceleratorTo("alt+E", "speak_gmcp_event('hp-string')", sendto.script)
+	AcceleratorTo("alt+O", "speak_gmcp_event('mana-string')", sendto.script)
+	AcceleratorTo("alt+A", "speak_gmcp_event('mp-string')", sendto.script)
+	AcceleratorTo("alt+;", "speak_gmcp_event('light')", sendto.script)
+	AcceleratorTo("alt+Q", "speak_gmcp_event('room_environment')", sendto.script)
+	AcceleratorTo("alt+J", "speak_gmcp_event('last_opponent')", sendto.script)
+	AcceleratorTo("alt+K", "speak_gmcp_event('flags')", sendto.script)
+	AcceleratorTo("alt+X", "speak_gmcp_event('sneak')", sendto.script)
 	AcceleratorTo("alt+'", "repeat_command(1)", sendto.script)
 	AcceleratorTo("alt+shift+'", "set_repeat(1, GetCommand()); SelectCommand(); PasteCommand('')", sendto.script)
 	AcceleratorTo("alt+,", "repeat_command(2)", sendto.script)
@@ -90,17 +107,17 @@ else
 	Accelerator("Alt+shift+J", "scout west")
 	Accelerator("Alt+shift+U", "scout up")
 	Accelerator("Alt+shift+O", "scout down")
-	AcceleratorTo("alt+;", "speak_xml_event('name')", sendto.script)
-	AcceleratorTo("alt+G", "speak_xml_event('buffer')", sendto.script)
-	AcceleratorTo("alt+F", "speak_xml_event('fighting')", sendto.script)
-	AcceleratorTo("alt+D", "speak_xml_event('hp')", sendto.script)
-	AcceleratorTo("alt+S", "speak_xml_event('mp')", sendto.script)
-	AcceleratorTo("alt+A", "speak_xml_event('mv')", sendto.script)
-	AcceleratorTo("alt+Z", "speak_xml_event('light')", sendto.script)
-	AcceleratorTo("alt+X", "speak_xml_event('terrain')", sendto.script)
-	AcceleratorTo("alt+C", "speak_xml_event('fought')", sendto.script)
-	AcceleratorTo("alt+V", "speak_xml_event('flags')", sendto.script)
-	AcceleratorTo("alt+B", "speak_xml_event('sneak')", sendto.script)
+	AcceleratorTo("alt+;", "speak_gmcp_event('room_name')", sendto.script)
+	AcceleratorTo("alt+G", "speak_gmcp_event('buffer')", sendto.script)
+	AcceleratorTo("alt+F", "speak_gmcp_event('opponent')", sendto.script)
+	AcceleratorTo("alt+D", "speak_gmcp_event('hp-string')", sendto.script)
+	AcceleratorTo("alt+S", "speak_gmcp_event('mana-string')", sendto.script)
+	AcceleratorTo("alt+A", "speak_gmcp_event('mp-string')", sendto.script)
+	AcceleratorTo("alt+Z", "speak_gmcp_event('light')", sendto.script)
+	AcceleratorTo("alt+X", "speak_gmcp_event('room_environment')", sendto.script)
+	AcceleratorTo("alt+C", "speak_gmcp_event('last_opponent')", sendto.script)
+	AcceleratorTo("alt+V", "speak_gmcp_event('flags')", sendto.script)
+	AcceleratorTo("alt+B", "speak_gmcp_event('sneak')", sendto.script)
 	AcceleratorTo("alt+Q", "repeat_command(1)", sendto.script)
 	AcceleratorTo("alt+shift+Q", "set_repeat(1, GetCommand()); SelectCommand(); PasteCommand('')", sendto.script)
 	AcceleratorTo("alt+W", "repeat_command(2)", sendto.script)
@@ -142,8 +159,8 @@ function pause_toggle()
 	CallPlugin(TTS, "say", paused and "pause" or "unpause", true)
 	Pause(paused)
 	if not paused then
-		-- Scroll to end and leave scroll bar visibility unchanged.
-		SetScroll(-1, GetInfo(120))
+		-- Scroll to end (Emulate pressing the End key).
+		DoCommand("End")
 	end
 end
 
@@ -173,12 +190,84 @@ function repeat_command(number)
 	end
 end
 
-function speak_xml_event(key)
-	local return_code, value = CallPlugin(XML_PARSER, "get", key)
-	if not value or value == "" then
-		value = key == "name" and "No room name" or "Unknown"
+function get_cache_item(cache_name, value)
+	local cache = _G[cache_name]
+	assert(cache, string.format("Cache '%s' not in global table.", cache_name))
+	local item = cache[value]
+	if type(item) == "string" then
+		return normalize(item)
+	end
+	return item
+end
+
+function get_char_vitals(value)
+	return get_cache_item("char_vitals_cache", value)
+end
+
+function get_room_info(value)
+	return get_cache_item("room_info_cache", value)
+end
+
+function speak_gmcp_event(event)
+	local value
+	if event == "last_opponent" then
+		value = last_opponent .. " last fought"
+	elseif event == "sneak" then
+		local sneak = get_char_vitals("sneak")
+		value = sneak == "S" and "Sneaking" or sneak == "s" and "NoSneak" or "Off"
+	elseif event == "flags" then
+		local climb = get_char_vitals("climb")
+		local ride = get_char_vitals("ride")
+		local sneak = get_char_vitals("sneak")
+		local swim = get_char_vitals("swim")
+		local movement_flags = {
+			sneak == "S" and "Sneaking" or sneak == "s" and "NoSneak" or "",
+			swim and "Swimming" or "",
+			climb == "C" and "Climbing" or climb == "c" and "Climbing safely" or "",
+			ride and "Riding" or ride and "Ridden" or "",
+		}
+		value = string.simplify(table.concat(movement_flags, " "))
+		value = value ~= "" and value or "No movement flags"
+	elseif string.startswith(event, "room_") then
+		local room_event = string.match(event, "^room_(.*)")
+		value = get_room_info(room_event)
+		value = value or "No room " .. room_event
+	else
+		value = get_char_vitals(event)
+		if event == "light" then
+			value = LIGHT_SYMBOLS[value] or "Unknown light"
+		elseif event == "mp-string" then
+			local ride = get_char_vitals("ride")
+			local mount_moves = get_char_vitals("mount-moves")
+			value = string.format("%s %s", value or "Unknown", ride and mount_moves or "Not Riding")
+		elseif event == "opponent" then
+			local opponent_hits = get_char_vitals("opponent-hits")
+			value = string.format("%s %s", opponent_hits or "Unknown", value or "Not fighting")
+		elseif event == "buffer" then
+			local buffer_hits = get_char_vitals("buffer-hits")
+			value = string.format("%s %s", buffer_hits or "Unknown", value or "No buffer")
+		else
+			value = value ~= nil and tostring(value) or "Unknown"
+		end
 	end
 	CallPlugin(TTS, "say", value, true)
+end
+
+function OnPluginBroadcast (msg, id, name, text)
+	if id == GMCP_HANDLER_ID and name == GMCP_HANDLER_NAME then
+		if msg == CHAR_VITALS then
+			gmcp.parse(char_vitals_cache, msg, text)
+			local opponent = get_char_vitals("opponent")
+			opponent = opponent and normalize(opponent) or nil
+			local opponent_hits = get_char_vitals("opponent-hits")
+			opponent_hits = opponent_hits and normalize(opponent_hits) or nil
+			if opponent and opponent_hits then
+				last_opponent = string.strip(string.format("%s %s", opponent_hits, opponent))
+			end
+		elseif msg == ROOM_INFO then
+			gmcp.parse(room_info_cache, msg, text)
+		end
+	end
 end
 
 ]]>

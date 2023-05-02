@@ -53,55 +53,53 @@
 <script>
 <![CDATA[
 require("mystdlib")
+gmcp = require("gmcp")
+normalize = require("to_ascii").normalize
 
-XML_PARSER = "74834d3734b2c8a3a9da4d18"
-BROADCAST_EXITS = 3
-BROADCAST_NAME = 4
+GMCP_HANDLER_ID = gmcp.get_handler_id()
+GMCP_HANDLER_NAME = gmcp.get_handler_name()
+EVENT_MOVED = gmcp.name_to_id("event_moved")
+ROOM_INFO = gmcp.name_to_id("room_info")
+SUPPORTED_GMCP_PACKAGES = table.set_create({EVENT_MOVED, ROOM_INFO})
+
+EXPANDED_DIRECTIONS = {
+	["n"] = "north",
+	["e"] = "east",
+	["s"] = "south",
+	["w"] = "west",
+	["u"] = "up",
+	["d"] = "down",
+}
 REVERSE_DIRECTIONS = {
 	["north"] = "south",
 	["east"] = "west",
 	["south"] = "north",
 	["west"] = "east",
 	["up"] = "down",
-	["down"] = "up"
+	["down"] = "up",
 }
 
-room_name = nil
-came_from = nil
+room_name = ""
 walking = false
+last_moved = ""
+roads = table.set_create({})
 
-function OnPluginBroadcast (msg, id, name, text)
-	if walking and id == XML_PARSER and name == "mume_xml_parser" and text ~= "" then
-		if msg == BROADCAST_NAME then
-			room_name = text
-		elseif msg == BROADCAST_EXITS then
-			walk_next(text)
-		end
-	end
-end
-
-function walk_next(line)
-	line = string.gsub(line, "^", "")
+function walk_next()
 	local ways_forward = {}
-	local roads = {}
-	for direction, reversed in pairs(REVERSE_DIRECTIONS) do
-		if string.match(line, string.format("=%s=", direction)) then
-			if came_from ~= reversed then
-				table.insert(ways_forward, direction)
-			end -- if
-			table.addToSet(roads, direction)
+	for direction, _ in pairs(roads) do
+		if REVERSE_DIRECTIONS[direction] ~= last_moved then
+			table.insert(ways_forward, direction)
 		end -- if
 	end -- for
 	if table.getn(ways_forward) == 1 then
-		came_from = ways_forward[1]
-		Send(came_from)
+		Send(ways_forward[1])
 	elseif table.getn(ways_forward) == 0 then
 		if room_name == "The East Road" or room_name == "Inside the Small Village of Frogmorton" or room_name == "Michel Delving" or room_name == "Road to Grey Havens" or room_name == "A Ford on the Way to Tharbad" then
-			start_walking(came_from)
+			start_walking(last_moved)
 		elseif room_name == "Road to Tharbad" then
-			if came_from == "south" then
+			if last_moved == "south" then
 				start_walking("east")
-			elseif came_from == "west" then
+			elseif last_moved == "west" then
 				start_walking("west")
 			end
 		else
@@ -109,59 +107,59 @@ function walk_next(line)
 			Note("End of road reached.")
 		end
 	else
-		if (room_name == "A Fork" or room_name == "Greenholm Junction") and (came_from == "east" or came_from == "west") then
-			start_walking(came_from)
-		elseif room_name == "Waymeet" and (came_from == "west" or came_from == "north") then
-			if came_from == "west" then
+		if (room_name == "A Fork" or room_name == "Greenholm Junction") and (last_moved == "east" or last_moved == "west") then
+			start_walking(last_moved)
+		elseif room_name == "Waymeet" and (last_moved == "west" or last_moved == "north") then
+			if last_moved == "west" then
 				start_walking("south")
-			elseif came_from == "north" then
+			elseif last_moved == "north" then
 				start_walking("east")
 			end
-		elseif room_name == "The Crossroad" and (came_from == "south" or came_from == "west") then
-			if came_from == "south" then
+		elseif room_name == "The Crossroad" and (last_moved == "south" or last_moved == "west") then
+			if last_moved == "south" then
 				start_walking("east")
-			elseif came_from == "west" then
+			elseif last_moved == "west" then
 				start_walking("north")
 			end
 		elseif room_name == "Road to Tharbad" then
-			if table.setContains(roads, "north") and table.setContains(roads, "south") and table.setContains(roads, "west") and came_from ~= "south" and came_from ~= "west" then
-				if came_from == "east" then
+			if roads["north"] and roads["south"] and roads["west"] and last_moved ~= "south" and last_moved ~= "west" then
+				if last_moved == "east" then
 					start_walking("south")
-				elseif came_from == "north" then
+				elseif last_moved == "north" then
 					start_walking("west")
 				end
-			elseif table.setContains(roads, "north") and table.setContains(roads, "east") and table.setContains(roads, "south") and came_from ~= "north" then
-				if came_from == "south" then
+			elseif roads["north"] and roads["east"] and roads["south"] and last_moved ~= "north" then
+				if last_moved == "south" then
 					start_walking("east")
-				elseif came_from == "west" then
+				elseif last_moved == "west" then
 					start_walking("north")
 				end
-			elseif table.setContains(roads, "east") and table.setContains(roads, "west") and table.setContains(roads, "south") and came_from ~= "north" then
-				start_walking(came_from)
+			elseif roads["east"] and roads["west"] and roads["south"] and last_moved ~= "north" then
+				start_walking(last_moved)
 			end
 		elseif room_name == "Greenway" then
-			if table.setContains(roads, "north") and table.setContains(roads, "south") and table.setContains(roads, "west") and came_from ~= "east" then
-				start_walking(came_from)
-			elseif table.setContains(roads, "north") and table.setContains(roads, "east") and table.setContains(roads, "west") then
-				if came_from == "west" then
+			if roads["north"] and roads["south"] and roads["west"] and last_moved ~= "east" then
+				start_walking(last_moved)
+			elseif roads["north"] and roads["east"] and roads["west"] then
+				if last_moved == "west" then
 					start_walking("north")
-				elseif came_from == "east" or came_from == "south" then
+				elseif last_moved == "east" or last_moved == "south" then
 					start_walking("east")
 				end
 			end
 		elseif room_name == "The East Road" then
-			if table.setContains(roads, "east") and table.setContains(roads, "west") and table.setContains(roads, "south") and came_from ~= "north" then
-				start_walking(came_from)
-			elseif table.setContains(roads, "east") and table.setContains(roads, "south") and table.setContains(roads, "north") and came_from ~= "south" then
-				if came_from == "north" then
+			if roads["east"] and roads["west"] and roads["south"] and last_moved ~= "north" then
+				start_walking(last_moved)
+			elseif roads["east"] and roads["south"] and roads["north"] and last_moved ~= "south" then
+				if last_moved == "north" then
 					start_walking("east")
-				elseif came_from == "west" then
+				elseif last_moved == "west" then
 					start_walking("south")
 				end
-			elseif table.setContains(roads, "west") and table.setContains(roads, "north") and table.setContains(roads, "south") and came_from ~= "north" then
-				if came_from == "east" then
+			elseif roads["west"] and roads["north"] and roads["south"] and last_moved ~= "north" then
+				if last_moved == "east" then
 					start_walking("north")
-				elseif came_from == "south" then
+				elseif last_moved == "south" then
 					start_walking("west")
 				end
 			end
@@ -182,8 +180,7 @@ function start_walking(line)
 	end
 	if direction then
 		walking = true
-		came_from = direction
-		Send(came_from)
+		Send(direction)
 	else 
 		Note("Invalid starting direction")
 	end
@@ -192,6 +189,29 @@ end
 function stop_walking()
 	walking = false
 	Note("Path Walker Disabled.")
+end
+
+function OnPluginBroadcast (msg, id, name, text)
+	if walking and id == GMCP_HANDLER_ID and name == GMCP_HANDLER_NAME and SUPPORTED_GMCP_PACKAGES[msg] then
+		local tbl = {}
+		gmcp.parse(tbl, msg, text)
+		if msg == EVENT_MOVED then
+			table.clear(roads)
+			last_moved = tbl["dir"] or ""
+		elseif last_moved ~= "" and msg == ROOM_INFO then
+			room_name = tbl.name and normalize(tbl.name) or ""
+			for short_direction, long_direction in pairs(EXPANDED_DIRECTIONS) do
+				local room_exits = tbl["exits"]
+				local room_exit = room_exits and room_exits[short_direction] or nil
+				local exit_flags = room_exit and room_exit["flags"] or nil
+				if exit_flags and table.index(exit_flags, "road") then
+					table.set_add(roads, long_direction)
+				end
+			end
+			walk_next()
+			last_moved = ""
+		end
+	end
 end
 
 ]]>

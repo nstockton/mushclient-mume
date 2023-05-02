@@ -34,90 +34,6 @@
   <trigger
    enabled="y"
    group="mume_time"
-   match="^(?:It seems as if )?[Tt]he day has begun\.(?: You feel so weak under the cruel light\!)?$"
-   name="sync_event1"
-   send_to="12"
-   regexp="y"
-   sequence="100"
-  >
-  <send>
-if not synchronized and time_event == "" then
-	time_event = "dawn"
-	time_event_offset = 1
-	Send("time")
-end
-  </send>
-  </trigger>
-  <trigger
-   enabled="y"
-   group="mume_time"
-   match="^Light gradually filters in\, proclaiming a new sunrise(?: outside)?\.$"
-   name="sync_event2"
-   send_to="12"
-   regexp="y"
-   sequence="100"
-  >
-  <send>
-if not synchronized and time_event == "" then
-	time_event = "dawn"
-	time_event_offset = 0
-	Send("time")
-end
-  </send>
-  </trigger>
-  <trigger
-   enabled="y"
-   group="mume_time"
-   match="^(?:It seems as if )?[Tt]he night has begun\.(?: You feel stronger in the dark\!)?$"
-   name="sync_event3"
-   send_to="12"
-   regexp="y"
-   sequence="100"
-  >
-  <send>
-if not synchronized and time_event == "" then
-	time_event = "dusk"
-	time_event_offset = 1
-	Send("time")
-end
-  </send>
-  </trigger>
-  <trigger
-   enabled="y"
-   group="mume_time"
-   match="The last ray of light fades, and all is swallowed up in darkness."
-   name="sync_event4"
-   send_to="12"
-   sequence="100"
-  >
-  <send>
-if not synchronized and time_event == "" then
-	time_event = "dusk"
-	time_event_offset = 1
-	Send("time")
-end
-  </send>
-  </trigger>
-  <trigger
-   enabled="y"
-   group="mume_time"
-   match="^The deepening gloom announces another sunset(?: outside)?\.$"
-   name="sync_event5"
-   send_to="12"
-   regexp="y"
-   sequence="100"
-  >
-  <send>
-if not synchronized and time_event == "" then
-	time_event = "dusk"
-	time_event_offset = 0
-	Send("time")
-end
-  </send>
-  </trigger>
-  <trigger
-   enabled="y"
-   group="mume_time"
    match="^The current time is (?P&lt;hour&gt;[1-9]|1[0-2])\:(?P&lt;minutes&gt;[0-5]\d) (?P&lt;am_pm&gt;[ap]m)\.$"
    name="sync_from_clock"
    omit_from_output="y"
@@ -237,7 +153,14 @@ end
 
 <script>
 <![CDATA[
+require("mystdlib")
+gmcp = require("gmcp")
+
 CONFIG = "d19a2f0a604c96b7318aa67f"
+
+GMCP_HANDLER_ID = gmcp.get_handler_id()
+GMCP_HANDLER_NAME = gmcp.get_handler_name()
+EVENT_SUN = gmcp.name_to_id("event_sun")
 
 return_code, MUME_EPOCH = CallPlugin(CONFIG, "get", "mume_epoch")
 if not MUME_EPOCH then
@@ -394,6 +317,28 @@ function time_check(action)
 		Note("DK is open now!")
 	else
 		Note(string.format("DK opens in %d real-life hour%s and %d minute%s (day %d of 3).", next_dk_in_rl_hours, next_dk_in_rl_hours ~= 1 and "s" or "", next_dk_in_rl_minutes, next_dk_in_rl_minutes ~= 1 and "s" or "", next_dk_day))
+	end
+end
+
+function OnPluginBroadcast (msg, id, name, text)
+	if not synchronized and time_event == "" and id == GMCP_HANDLER_ID and name == GMCP_HANDLER_NAME and msg == EVENT_SUN then
+		local tbl = {}
+		gmcp.parse(tbl, msg, text)
+		local what = tbl.what
+		if what == "rise" then
+			time_event = "dawn"
+			time_event_offset = 0
+		elseif what == "light" then
+			time_event = "dawn"
+			time_event_offset = 1
+		elseif what == "set" then
+			time_event = "dusk"
+			time_event_offset = 0
+		elseif what == "dark" then
+			time_event = "dusk"
+			time_event_offset = 1
+		end
+		Send("time")
 	end
 end
 

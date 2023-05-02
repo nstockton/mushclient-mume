@@ -211,9 +211,12 @@ Note(string.format("Auto open doors %s.", auto_open and "on" or "off"))
 <script>
 <![CDATA[
 require("mystdlib")
-XML_PARSER = "74834d3734b2c8a3a9da4d18"
+gmcp = require("gmcp")
 
-BROADCAST_MOVEMENT = 2
+GMCP_HANDLER_ID = gmcp.get_handler_id()
+GMCP_HANDLER_NAME = gmcp.get_handler_name()
+EVENT_MOVED = gmcp.name_to_id("event_moved")
+
 DOOR_ACTIONS = {
 	["b"] = "bash",
 	["c"] = "close",
@@ -230,7 +233,7 @@ door_name = ""
 room_doors = {}
 
 function OnPluginBroadcast (msg, id, name, text)
-	if id == XML_PARSER and name == "mume_xml_parser" and msg == BROADCAST_MOVEMENT then
+	if id == GMCP_HANDLER_ID and name == GMCP_HANDLER_NAME and msg == EVENT_MOVED then
 		table.clear(room_doors)
 	end
 end

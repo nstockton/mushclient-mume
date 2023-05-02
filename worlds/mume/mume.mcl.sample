@@ -16,11 +16,11 @@
    chat_name="Name-not-set"
    command_stack_character=";"
    id="6c981ab925deb7bdf50f67e3"
-   input_font_name="Fixedsys"
+   input_font_name="Lucida Console"
    mapping_failure="Alas, you cannot go that way."
    name="mume"
    new_activity_sound="(No sound)"
-   output_font_name="FixedSys"
+   output_font_name="Lucida Console"
    script_editor="notepad"
    script_editor_argument="%file"
    script_language="Lua"
@@ -61,7 +61,7 @@
    hyperlink_colour="#0080FF"
    indent_paras="y"
    input_background_colour="white"
-   input_font_height="9"
+   input_font_height="10"
    input_font_weight="400"
    input_text_colour="black"
    keypad_enable="y"
@@ -75,7 +75,7 @@
    mud_can_change_options="y"
    naws="y"
    note_text_colour="#040000"
-   output_font_height="9"
+   output_font_height="10"
    output_font_weight="400"
    paste_delay_per_lines="1"
    play_sounds_in_background="y"
@@ -439,32 +439,31 @@
 
 <!-- plugins -->
 <include name="config_manager.xml" plugin="y" />
-<include name="GMCP_handler_NJG.xml" plugin="y" />
-<include name="remove_ctrl_g.xml" plugin="y" />
-<include name="mume_xml_parser.xml" plugin="y" />
+<include name="gmcp_handler.xml" plugin="y" />
+<include name="omit_blank_lines.xml" plugin="y" />
 <include name="mume_auto_enchanting.xml" plugin="y" />
-<include name="mume_path_walker.xml" plugin="y" />
-<include name="mume_time.xml" plugin="y" />
-<include name="mume_secrets_database.xml" plugin="y" />
+<include name="mume_castor_spell_translator.xml" plugin="y" />
 <include name="mume_communication.xml" plugin="y" />
-<include name="mume_sounds.xml" plugin="y" />
-<include name="mume_xp_counter.xml" plugin="y" />
-<include name="mume_hunting.xml" plugin="y" />
 <include name="mume_doors.xml" plugin="y" />
-<include name="mume_report.xml" plugin="y" />
+<include name="mume_grouping.xml" plugin="y" />
+<include name="mume_herb_substitutions.xml" plugin="y" />
+<include name="mume_hunting.xml" plugin="y" />
 <include name="mume_key_substitutions.xml" plugin="y" />
 <include name="mume_lock_pick_substitutions.xml" plugin="y" />
-<include name="mume_herb_substitutions.xml" plugin="y" />
-<include name="mume_mob_substitutions.xml" plugin="y" />
-<include name="mume_castor_spell_translator.xml" plugin="y" />
-<include name="mume_reentering.xml" plugin="y" />
-<include name="mume_misc.xml" plugin="y" />
-<include name="mume_spell_timers.xml" plugin="y" />
-<include name="repeat_command.xml" plugin="y" />
-<include name="mume_grouping.xml" plugin="y" />
 <include name="mume_macros.xml" plugin="y" />
+<include name="mume_misc.xml" plugin="y" />
+<include name="mume_mob_substitutions.xml" plugin="y" />
+<include name="mume_path_walker.xml" plugin="y" />
 <include name="mume_portal_wizard.xml" plugin="y" />
-<include name="omit_blank_lines.xml" plugin="y" />
+<include name="mume_reentering.xml" plugin="y" />
+<include name="mume_report.xml" plugin="y" />
+<include name="mume_secrets_database.xml" plugin="y" />
+<include name="mume_spell_timers.xml" plugin="y" />
+<include name="mume_sounds.xml" plugin="y" />
+<include name="mume_time.xml" plugin="y" />
+<include name="mume_xp_counter.xml" plugin="y" />
 <include name="output_functions.xml" plugin="y" />
+<include name="remove_ctrl_g.xml" plugin="y" />
+<include name="repeat_command.xml" plugin="y" />
 <include name="timestamps.xml" plugin="y" />
 </muclient>

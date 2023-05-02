@@ -32,20 +32,15 @@
 
 <triggers>
   <trigger
-   enabled="y"
+   enabled="n"
    group="mume_communication"
-   match="^(?P&lt;player&gt;[^\s]+) tells you \[GT\] (?P&lt;message&gt;&apos;.+)$"
+   match="^(?P&lt;player&gt;[^\s]+(?: \([^)]+\))?) tells you \[GT\] (?P&lt;message&gt;&apos;.+)$"
    name="capture_mmapper_group_tell"
    regexp="y"
    send_to="12"
    sequence="100"
   >
-  <send>
-CallPlugin(MUME_SOUNDS, "play", TYPE_COMMUNICATION, "tells.wav")
-local file = io.open(GetInfo(67) .. "communication/tell.txt", "ab")
-file:write("%0\\r\\n")
-file:close()
-  </send>
+  <send>handle_communication_text("tell", normalize("%0"))</send>
   </trigger>
 </triggers>
 
@@ -154,31 +149,29 @@ end
 <script>
 <![CDATA[
 require("mystdlib")
+gmcp = require("gmcp")
 json = require("dkjson")
+normalize = require("to_ascii").normalize
 
-GMCP = "74f8c420df7d59ad5aa66246"
 MUME_SOUNDS = "32821ab3fa17b04a8ab4c420"
-XML_PARSER = "74834d3734b2c8a3a9da4d18"
-return_code, MMAPPER_GROUP_TELL = CallPlugin(GMCP, "package_from_message", "mmapper.grouptell")
-return_code, MMAPPER_COMM_GROUP_TELL = CallPlugin(GMCP, "package_from_message", "mmapper.comm.grouptell")
--- For sounds:
-TYPE_COMMUNICATION = 9
--- Types of communications received by the XML parser:
-BROADCAST_TELL = 5
-BROADCAST_NARRATE = 6
-BROADCAST_PRAY = 7
-BROADCAST_SAY = 8
-BROADCAST_EMOTE = 9
-COMMUNICATION_REGEX = rex.new([[^(?:The voice of )?(?P<player>(-a Bear-|A White Eagle|A Mighty Horse|\w+))(?: \(\w+\))? (?:narrates|says|prays|tells you|tells the group|whispers to you[,]?|asks you) \'.+\'$]])
+
+GMCP_HANDLER_ID = gmcp.get_handler_id()
+GMCP_HANDLER_NAME = gmcp.get_handler_name()
+COMM_CHANNEL_LIST = gmcp.name_to_id("comm_channel_list")
+COMM_CHANNEL_TEXT = gmcp.name_to_id("comm_channel_text")
+MMAPPER_COMM_GROUPTELL = gmcp.name_to_id("mmapper_comm_grouptell")
+SUPPORTED_GMCP_PACKAGES = table.set_create({COMM_CHANNEL_LIST, COMM_CHANNEL_TEXT, MMAPPER_COMM_GROUPTELL})
+
 CHANNELS = {
-	[BROADCAST_TELL] = "tell",
-	[BROADCAST_NARRATE] = "narrate",
-	[BROADCAST_PRAY] = "pray",
-	[BROADCAST_SAY] = "say",
-	[BROADCAST_EMOTE] = "say" -- This is *not* a typo.
+	["tells"] = "tell",
+	["questions"] = "tell", -- This is *not* a typo.
+	["whispers"] = "tell", -- This is *not* a typo.
+	["tales"] = "narrate",
+	["prayers"] = "pray",
+	["says"] = "say",
+	["emotes"] = "say", -- This is *not* a typo.
 }
 IGNORE_LIST = {
-	["A"] = true, -- For mobs that emote.
 	["Aldereon"] = true,
 	["Amanrandil"] = true,
 	["Ammunk"] = true,
@@ -280,91 +273,129 @@ IGNORE_LIST = {
 	["Thurn"] = true,
 	["Umuk"] = true,
 	["Urgorl"] = true,
+	["Washmhurz"] = true,
 	["Wuda"] = true,
 	["Wyrdda"] = true,
-	["The"] = true -- For mobs that emote.
 }
 
 reply_to = ""
 
-function review(channel, text)
-	local text = string.strip(text:lower())
-	local output = {}
-	local channel_lines = {}
-	local file_name = string.format("%scommunication/%s.txt", GetInfo(67), channel)
-	if not os.isFile(file_name) then
-		return Note("The log file for channel '", channel, "' hasn't been created yet. It will be created when a message to the channel has been received.")
-	end
-	local file = io.open(file_name, "rb")
-	for line in file:read("*all"):gmatch("[^\r\n]+") do
-		line = string.strip(line)
-		if line ~= "" then
-			table.insert(channel_lines, line)
+communications = {
+	["narrate"] = {},
+	["pray"] = {},
+	["say"] = {},
+	["tell"] = {},
+}
+
+function load_communications()
+	for channel, tbl in pairs(communications) do
+		local file_name = string.format("%scommunication/%s.txt", GetInfo(67), channel)
+		if os.isFile(file_name) then
+			for line in io.lines(file_name) do
+				local line = string.strip(line)
+				if line ~= "" then
+					table.insert(tbl, line)
+				end
+			end
 		end
 	end
-	file:close()
-	if not next(channel_lines) then
+end
+
+function review(channel, text)
+	local text = string.strip(string.lower(text))
+	local output = {}
+	if table.isempty(communications[channel]) then
 		-- The channel log file is empty.
-		output = {string.capitalize(channel_name) .. " log is empty!"}
-	elseif string.isdigit(text) and tonumber(text) >= 1 and #channel_lines >= tonumber(text) then
+		table.insert(output, string.capitalize(channel_name) .. " log is empty!")
+	elseif string.isdigit(text) and tonumber(text) >= 1 and table.getn(communications[channel]) >= tonumber(text) then
 		-- The search string is a number, so output the last (N) lines.
-		output = table.slice(channel_lines, tonumber(text) * -1)
+		output = table.slice(communications[channel], tonumber(text) * -1)
 	elseif not string.isdigit(text) and text ~= "" then
 		-- Output lines that contain the search string.
-		output = {}
-		for _, line in ipairs(channel_lines) do
-			if string.findpos(line:lower(), text) then
+		for _, line in ipairs(communications[channel]) do
+			if string.findpos(string.lower(line), text) then
 				table.insert(output, line)
 			end
 		end
 	else
 		-- The search string is empty, so output the last 20 lines.
-		output = table.slice(channel_lines, -20, -1)
+		output = table.slice(communications[channel], -20, -1)
 	end
-	if not next(output) then
+	if table.isempty(output) then
 		-- A search string was specified, but no lines matched it.
 		table.insert(output, "Nothing found!")
-	elseif #output > 500 then
+	elseif table.getn(output) > 500 then
 		-- Truncate the output if it exceeds 500 lines.
 		output = table.slice(output, -500)
 	end
 	Note(table.concat(output, "\n"))
 end
 
-function OnPluginBroadcast (msg, id, name, text)
-	if id == XML_PARSER and name == "mume_xml_parser" and msg >= BROADCAST_TELL and msg <= BROADCAST_EMOTE and text ~= "" then
-		local player = ""
-		if msg == BROADCAST_EMOTE then
-			player = text:match("%S+")
-		else
-			local starting, ending, match = COMMUNICATION_REGEX:match(text)
-			player = match and match["player"] or ""
+function handle_communication_list(tbl)
+	for _, channel in ipairs(tbl) do
+		assert(channel.name, string.format("Channel name not found in: '%s'", json.encode(channel)))
+		if CHANNELS[channel.name] then
+			CallPlugin(GMCP_HANDLER_ID, "send_gmcp_packet", string.format("Comm.Channel.Enable %q", channel.name))
 		end
-		if player ~= "" and not IGNORE_LIST[player] then
-			local channel = CHANNELS[msg]
-			if channel == "say" then
-				CallPlugin(MUME_SOUNDS, "play", TYPE_COMMUNICATION, "says.wav")
-			elseif channel == "tell" then
-				if text:match("^.- tells the group '.+'$") then
-					reply_to = "group"
-				else
-					reply_to = player
-				end
-				CallPlugin(MUME_SOUNDS, "play", TYPE_COMMUNICATION, "tells.wav")
-			end
-			local file = io.open(GetInfo(67) .. "communication/" .. channel .. ".txt", "ab")
-			file:write(text .. "\r\n")
-			file:close()
-		end
-	elseif id == GMCP and name == "GMCP_handler_NJG" and (msg == MMAPPER_GROUP_TELL or msg == MMAPPER_COMM_GROUP_TELL) and text ~= "" then
-		local params = json.decode(text, 1, nil)
-		local data = StripANSI(params.text)
-		Note(data)
-		CallPlugin(MUME_SOUNDS, "play", TYPE_COMMUNICATION, "tells.wav")
-		local file = io.open(GetInfo(67) .. "communication/tell.txt", "ab")
-		file:write(data .. "\r\n")
-		file:close()
 	end
+end
+
+function handle_communication_text(channel_name, message, talker, destination)
+	if not message or message == "" then
+		return
+	end
+	if channel_name == "say" then
+		CallPlugin(MUME_SOUNDS, "play_communication", "says.wav")
+	elseif channel_name == "tell" then
+		if talker and string.match(message, "^.- tells the group '.+'$") then
+			reply_to = "group"
+		elseif talker then
+			reply_to = talker
+		end
+		CallPlugin(MUME_SOUNDS, "play_communication", "tells.wav")
+	end
+	table.insert(communications[channel_name], message)
+	local file = io.open(GetInfo(67) .. "communication/" .. channel_name .. ".txt", "ab")
+	file:write(message .. "\r\n")
+	file:close()
+end
+
+function OnPluginBroadcast (msg, id, name, text)
+	if id == GMCP_HANDLER_ID and name == GMCP_HANDLER_NAME and SUPPORTED_GMCP_PACKAGES[msg] then
+		local tbl = {}
+		gmcp.parse(tbl, msg, text)
+		if msg == COMM_CHANNEL_LIST then
+			handle_communication_list(tbl)
+		elseif msg == COMM_CHANNEL_TEXT then
+			local channel_name = CHANNELS[tbl.channel]
+			assert(channel_name, string.format("Invalid channel '%s'.", tbl.channel))
+			local message = tbl.text and normalize(tbl.text) or ""
+			local talker = tbl.talker and string.capitalize(normalize(tbl.talker)) or ""
+			assert(talker ~= "", string.format("Invalid talker '%s'.", tbl.talker))
+			-- If talker is "You", don't log it.
+			-- If talker contains a space or is in the list of single-word mob names, then it is a mob and should not be logged either.
+			if talker == "You" or string.findpos(talker, " ") or IGNORE_LIST[talker] then
+				return
+			end
+			local destination = tbl.destination and string.capitalize(normalize(tbl.destination)) or nil
+			handle_communication_text(channel_name, message, talker, destination)
+		elseif msg == MMAPPER_COMM_GROUPTELL then
+			local channel_name = "tell"
+			local message = tbl.text and normalize(tbl.text) or ""
+			-- The talker may contain spaces in this instance, for example "Dent (Nick)", so filter out everything after the first word.
+			-- todo: investigate if group manager tells can contain an empty talker name. The assumption for now is they can.
+			local talker = tbl.name and string.match(string.capitalize(normalize(tbl.name)), "^[^%s]*") or nil
+			if message ~= "" then
+				-- MMapper gags group manager tells in the client if they are handled by GMCP.
+				Note(message)
+			end
+			handle_communication_text(channel_name, message)  -- Don't use talker for now.
+		end
+	end
+end
+
+function OnPluginInstall()
+	load_communications()
 end
 
 ]]>

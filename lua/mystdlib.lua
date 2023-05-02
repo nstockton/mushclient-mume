@@ -23,12 +23,17 @@ string.startswith = stringy.startswith
 string.strip = stringy.strip
 
 
+function clamp(value, low, high)
+	-- Returns low if value < low, high if value > high, or value if value >= low and value <= high.
+	return value < low and low or high < value and high or value
+end
+
+
 function printf(...)
 	-- Prints a string formatted with format identifiers to standard output.
 	-- Arguments to this function are first parsed by string.format and the result then passed to io.write,
 	-- along with a trailing new-line character.
-	io.output(io.stdout)
-	io.write(string.format(...), "\n")
+	io.stdout:write(string.format(...), "\n")
 end
 
 
@@ -44,13 +49,14 @@ end
 
 function pause()
 	-- Like the pause command in Windows batch script.
-	io.write("Press any key to continue.")
+	io.stdout:write("Press any key to continue.")
 	getch.getch()
-	io.write("\n")
+	io.stdout:write("\n")
 end
 
 
 function os.type()
+	-- Returns the OS type ('Darwin', 'Unix', 'Windows').
 	local library_ext = package.cpath:match("%p[\\|/]?%p(%a+)")
 	return (
 		library_ext == "dll" and "Windows"
@@ -92,6 +98,7 @@ end
 
 
 function os.fileSize(name)
+	-- Returns the size of a file.
 	return lfs.attributes(name, "size")
 end
 
@@ -152,7 +159,12 @@ function string.partition(str, delimiter)
 	if not delim_pos then
 		return str, "", ""
 	end
-	return string.sub(str, 1, delim_pos - 1), delimiter, string.sub(str, delim_pos + string.len(delimiter))
+	return string.sub(str, 1, delim_pos - 1), delimiter, string.sub(str, delim_pos + #delimiter)
+end
+
+
+function string.simplify(str)
+	return string.strip (string.gsub(str, "%s+", " "))
 end
 
 
@@ -182,18 +194,49 @@ function table.slice(tbl, first, last)
 end
 
 
-function table.addToSet(set, key)
+function table.invert(tbl)
+	local result = {}
+	for key, value in pairs(tbl) do
+		result[value] = key
+	end
+	return result
+end
+
+
+function table.update(tbl, nil_value, ...)
+	-- Updates a table in-place with values from tables passed as variable arguments.
+	-- nil_value specifies an optional sentinel value that will be replaced with nil in the returned table (useful in conjunction with a json library or similar).
+	-- https://stackoverflow.com/questions/1283388/how-to-merge-two-tables-overwriting-the-elements-which-are-in-both
+	for _, new in ipairs(pack(...)) do
+		for key, value in pairs(new) do
+			if (type(value) == "table") and (type(tbl[key] or false) == "table") then
+				table.update(tbl[key], nil_value, new[key])
+			elseif value == nil_value then
+				tbl[key] = nil
+			else
+				tbl[key] = value
+			end
+		end
+	end
+end
+
+
+function table.set_create(tbl)
+	local result = {}
+	for _, item in ipairs(tbl) do
+		result[item] = true
+	end
+	return result
+end
+
+
+function table.set_add(set, key)
 	set[key] = true
 end
 
 
-function table.removeFromSet(set, key)
+function table.set_remove(set, key)
 	set[key] = nil
-end
-
-
-function table.setContains(set, key)
-	return set[key] ~= nil
 end
 
 

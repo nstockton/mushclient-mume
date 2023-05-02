@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE muclient>
+
+<muclient>
+
+<plugin
+   name="gmcp_handler"
+   author="Nick Gammon"
+   id="74f8c420df7d59ad5aa66246"
+   sequence="20"
+   language="Lua"
+   purpose="Handle GMCP messages and broadcast data"
+   date_written="2015-05-06"
+   requires="4.59"
+   version="1.0"
+>
+<description trim="y">
+
+  GMCP handler for Aardwolf and IRE MUDs.
+  
+  Type: 'gmcpdebug' to toggle debugging mode.
+
+</description>
+
+</plugin>
+
+<aliases>
+<alias
+   script="gmcp_debug"
+   match="^gmcpdebug\s*([1-3])?$"
+   enabled="y"
+   regexp="y"
+   sequence="100"
+   ignore_case="y"
+></alias>
+
+</aliases>
+
+
+<script>
+<![CDATA[
+require("mystdlib")
+gmcp = require("gmcp")
+json = require("dkjson")
+
+local IAC = "\255"
+local SB = "\250"
+local SE = "\240"
+local GMCP = "\201"
+local GMCP_ORDINAL = string.byte(GMCP)
+-- The packages we declare to support (name, version).
+local SUPPORTED_PACKAGES = {
+	["char"] = 1,
+	["comm.channel"] = 1,
+	["event"] = 1,
+	["mmapper.comm"] = 1,
+	["room"] = 1,
+}
+
+local gmcp_debug_enabled = false
+
+function escape_iac(data)
+	return (string.gsub(data, IAC, IAC .. IAC))
+end
+
+function DelayedNote(...)
+	-- Use to output debug text to the world from within `OnPluginTelnetSubnegotiation` (or similar).
+	-- The documentation for `OnPluginTelnetSubnegotiation` states that
+	-- it is not recommended that you use the `Note` function (or anything similar) when receiving telnet subnegotiation packets.
+	-- Using the `Note` function may switch the current line from "MUD output" to "Note line" in unexpected ways.
+	-- This function acts as a work-around, by deferring the call to `Note` until after the Telnet negotiation is complete.
+	local arguments = table.concat(pack(...))
+	DoAfterSpecial(0.1, string.format("Note(%q)", arguments), sendto.scriptafteromit)
+end
+
+function gmcp_debug(name, line, wildcards)
+	gmcp_debug_enabled = not gmcp_debug_enabled
+	Note("GMCP debugging ", gmcp_debug_enabled and "enabled" or "disabled", ".")
+end
+
+function send_gmcp_packet(data)
+	-- Helper function to send GMCP data.
+	assert(data, "send_gmcp_packet passed a nil message.")
+	if gmcp_debug_enabled then
+		DelayedNote("GMCPDebug: Sending '", data, "'")
+	end
+	SendPkt(IAC .. SB .. GMCP .. escape_iac(data) .. IAC .. SE)
+end
+
+function keep_alive()
+	send_gmcp_packet("Core.KeepAlive")
+end
+
+function OnPluginTelnetRequest(msg_type, data)
+	if msg_type == GMCP_ORDINAL then
+		if data == "WILL" then
+			-- Server offers to handle GMCP.
+			return true  -- Tell it yes.
+		elseif data == "SENT_DO" then
+			if gmcp_debug_enabled then
+				DelayedNote("GMCPDebug: Enabling GMCP.")
+			end
+			send_gmcp_packet(string.format('Core.Hello { "client": "MUSHclient", "version": "%s" }', Version()))
+			local packages = {}
+			for package_name, package_version in pairs(SUPPORTED_PACKAGES) do
+				table.insert(packages, string.format("%s %s", package_name, package_version))
+			end
+			send_gmcp_packet(string.format("Core.Supports.Set %s", json.encode(packages)))
+			return true
+		end
+	end
+	return false
+end
+
+function OnPluginTelnetSubnegotiation(msg_type, data)
+	-- Mushclient callback function when telnet SB data is received.
+	if msg_type ~= GMCP_ORDINAL then
+		return
+	end
+	if gmcp_debug_enabled then
+		DelayedNote("GMCPDebug: Received '", data, "'")
+	end
+	local message_name, value = string.match(data, "^%s*([%w._-]+)%s*(.-)%s*$")
+	assert(message_name, "Empty or malformed GMCP message from server.")
+	message_name = string.gsub(message_name, "[.-]", "_")
+	local message_id = gmcp.name_to_id(message_name)
+	if message_id then
+		BroadcastPlugin(message_id, value)
+	end
+end
+
+function OnPluginDisable()
+	EnablePlugin(GetPluginID(), true)
+	Note("You are not allowed to disable the ", GetPluginInfo(GetPluginID(), 1), " plugin. It is necessary for other plugins.")
+end
+
+]]>
+</script>
+</muclient>
