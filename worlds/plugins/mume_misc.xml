@@ -1331,13 +1331,14 @@ train all</send>
   <trigger
    enabled="y"
    group="mume_misc"
-   match="^ACK\! .+? didn&apos;t follow you\, you lost (him|her|it)\.$"
+   match="^ACK\! (?:A |The )(.+?) didn&apos;t follow you\, you lost (?:him|her|it)\.$"
    name="beep_on_ack"
    regexp="y"
-   send_to="12"
+   omit_from_output="y"
+   send_to="2"
    sequence="100"
   >
-  <send>Tell("\a")</send>
+  <send>\aLost %1!</send>
   </trigger>
   <trigger
    enabled="y"

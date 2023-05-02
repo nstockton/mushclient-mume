@@ -116,14 +116,11 @@ end
    match="^(?P&lt;player&gt;\w+)(?: \(\w+\))? panics\, and attempts to flee\.$"
    name="leader_flees"
    regexp="y"
-   send_to="12"
+   omit_from_output="y"
+   send_to="14"
    sequence="100"
   >
-  <send>
-if "%&lt;player&gt;" == leader then
-	Tell("\a")
-end
-  </send>
+  <send>Note("%&lt;player&gt;" == leader and "\a" or "", "%0")</send>
   </trigger>
   <trigger
    enabled="y"
