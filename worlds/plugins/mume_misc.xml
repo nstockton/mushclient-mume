@@ -1362,21 +1362,12 @@ train all</send>
   <trigger
    enabled="y"
    group="mume_misc"
-   match="Prompt set to None."
-   name="always_show_prompt"
-   sequence="100"
-  >
-  <send>change prompt all</send>
-  </trigger>
-  <trigger
-   enabled="y"
-   group="mume_misc"
-   match="^(?:Prompt set to All|Your prompt will display twiddlers when you are busy)\.$"
+   match="^(?:All prompt fields enabled|Your prompt will display twiddlers when you are busy)\.$"
    name="keep_twiddlers_off"
    sequence="100"
    regexp="y"
   >
-  <send>change prompt twiddlers</send>
+  <send>change prompt twiddlers off</send>
   </trigger>
   <trigger
    enabled="y"
@@ -1388,10 +1379,9 @@ train all</send>
    sequence="100"
   >
   <send>change compact off
-change spam off
-change brief on
 change wordwrap off
-change prompt all</send>
+change prompt none
+change prompt twiddlers off</send>
   </trigger>
 </triggers>
 
