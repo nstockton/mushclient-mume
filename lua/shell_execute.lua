@@ -31,6 +31,7 @@ ffi.cdef[[
 	typedef HANDLE HWND, HINSTANCE;
 	typedef char CHAR;
 	typedef const CHAR *PCSTR, *LPCSTR;
+	HWND GetDesktopWindow();
 	HWND GetForegroundWindow();
 	HINSTANCE ShellExecuteA(HWND hwnd, LPCSTR lpOperation, LPCSTR lpFile, LPCSTR lpParameters, LPCSTR lpDirectory, int nShowCmd);
 	bool IsUserAnAdmin();
