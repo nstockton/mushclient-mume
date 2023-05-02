@@ -10,6 +10,7 @@
    name="Omit_Blank_Lines"
    author="Nick Gammon"
    id="87a0ec3649ab9a04d5ea618d"
+   sequence="30"
    language="Lua"
    purpose="Omits blank lines from output"
    date_written="2008-07-07 13:06:47"
@@ -31,6 +32,16 @@ Omits completely empty lines from output.
   <trigger
    enabled="y"
    match="^[-\s]*$"
+   name="gag_blank_and_only_dashes"
+   omit_from_output="y"
+   regexp="y"
+   sequence="100"
+  >
+  </trigger>
+  <trigger
+   enabled="y"
+   match="^[&gt;]$"
+   name="gag_blank_prompts"
    omit_from_output="y"
    regexp="y"
    sequence="100"
