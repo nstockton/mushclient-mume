@@ -83,7 +83,7 @@ Disable to hide them.
 </plugin>
 <aliases>
   <alias
-   script="timestamps_toggle"
+   script="toggle_timestamps"
    match="timestamps"
    enabled="y"
    group="timestamps"
@@ -115,35 +115,34 @@ TIMESTAMP_NOTES_BACK_COLOUR = ColourNameToRGB("#151515")
 
 return_code, timestamps_enabled = CallPlugin(CONFIG, "get", "timestamps_enabled")
 
-function enable_timestamps()
-	SetAlphaOption("timestamp_input", TIMESTAMP_INPUT)
-	SetAlphaOption("timestamp_output", TIMESTAMP_OUTPUT)
-	SetAlphaOption("timestamp_notes", TIMESTAMP_NOTES)
-	SetOption("timestamp_input_text_colour", TIMESTAMP_INPUT_TEXT_COLOUR)
-	SetOption("timestamp_output_text_colour", TIMESTAMP_OUTPUT_TEXT_COLOUR)
-	SetOption("timestamp_notes_text_colour", TIMESTAMP_NOTES_TEXT_COLOUR)
-	SetOption("timestamp_input_back_colour", TIMESTAMP_INPUT_BACK_COLOUR)
-	SetOption("timestamp_output_back_colour", TIMESTAMP_OUTPUT_BACK_COLOUR)
-	SetOption("timestamp_notes_back_colour", TIMESTAMP_NOTES_BACK_COLOUR)
-end
-
-function disable_timestamps()
-	SetAlphaOption("timestamp_input", "")
-	SetAlphaOption("timestamp_output", "")
-	SetAlphaOption("timestamp_notes", "")
-end
-
-function timestamps_toggle(name, line, wildcards)
-	timestamps_enabled = not timestamps_enabled
-	CallPlugin(CONFIG, "set", "timestamps_enabled", timestamps_enabled)
-	if timestamps_enabled then
-		enable_timestamps()
-		Note("Timestamps enabled.")
+function set_timestamps(value)
+	if value then
+		SetAlphaOption("timestamp_input", TIMESTAMP_INPUT)
+		SetAlphaOption("timestamp_output", TIMESTAMP_OUTPUT)
+		SetAlphaOption("timestamp_notes", TIMESTAMP_NOTES)
+		SetOption("timestamp_input_text_colour", TIMESTAMP_INPUT_TEXT_COLOUR)
+		SetOption("timestamp_output_text_colour", TIMESTAMP_OUTPUT_TEXT_COLOUR)
+		SetOption("timestamp_notes_text_colour", TIMESTAMP_NOTES_TEXT_COLOUR)
+		SetOption("timestamp_input_back_colour", TIMESTAMP_INPUT_BACK_COLOUR)
+		SetOption("timestamp_output_back_colour", TIMESTAMP_OUTPUT_BACK_COLOUR)
+		SetOption("timestamp_notes_back_colour", TIMESTAMP_NOTES_BACK_COLOUR)
 	else
-		disable_timestamps()
-		Note("Timestamps disabled.")
+		SetAlphaOption("timestamp_input", "")
+		SetAlphaOption("timestamp_output", "")
+		SetAlphaOption("timestamp_notes", "")
 	end
 	Redraw()
+end
+
+function toggle_timestamps(name, line, wildcards)
+	timestamps_enabled = not timestamps_enabled
+	CallPlugin(CONFIG, "set", "timestamps_enabled", timestamps_enabled)
+	set_timestamps(timestamps_enabled)
+	Note("Timestamps ", timestamps_enabled and "enabled" or "disabled", ".")
+end
+
+function OnPluginInstall()
+	set_timestamps(timestamps_enabled)
 end
 
 ]]>
