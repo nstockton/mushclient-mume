@@ -1301,7 +1301,7 @@ end
   <trigger
    enabled="y"
    group="mume_misc"
-   match="^(?:Is (?:playing|disconnected)|Last login .+? (?:year|month|day|hour)[s]? ago) from \*\.(?P&lt;code&gt;[a-z]{2,2})\.$"
+   match="^(?:Is (?:playing|disconnected)|Last login [^*]+ (?:year|month|day|hour)[s]? ago) from \*\.(?P&lt;code&gt;[^\W\d_]{2,2})\.$"
    name="translate_country_codes"
    omit_from_output="y"
    regexp="y"
@@ -1309,8 +1309,8 @@ end
    sequence="100"
   >
   <send>
-if country_codes["%&lt;code&gt;"] then
-	Note(string.format("%0 (%s)", country_codes["%&lt;code&gt;"]))
+if country_codes[string.lower("%&lt;code&gt;")] then
+	Note(string.format("%0 (%s)", country_codes[string.lower("%&lt;code&gt;")]))
 else
 	Note("%0")
 end
@@ -2303,7 +2303,7 @@ put elven-bag e.pack</send>
 <script>
 <![CDATA[
 require("mystdlib")
-json = require("dkjson")
+json = require("dkjson").use_lpeg()
 CONFIG = "d19a2f0a604c96b7318aa67f"
 TTS = "925cdd0331023d9f0b8f05a7"
 COUNTRY_CODES_FILE = string.format("%sdatabases\\country_codes.json", GetInfo(67))
