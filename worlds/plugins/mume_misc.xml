@@ -1381,16 +1381,6 @@ train all</send>
   <trigger
    enabled="y"
    group="mume_misc"
-   match="You can only gain one level at a time... Reduced experience."
-   name="beep_on_reduced_xp"
-   send_to="12"
-   sequence="100"
-  >
-  <send>Tell("\a")</send>
-  </trigger>
-  <trigger
-   enabled="y"
-   group="mume_misc"
    match="^(?:Welcome to the land of Middle\-earth\. May your visit here be\.\.\. interesting\.|Reconnecting\.)$"
    name="do_stuff_after_login"
    regexp="y"
