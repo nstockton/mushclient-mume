@@ -2292,9 +2292,17 @@ put elven-bag e.pack</send>
 <script>
 <![CDATA[
 require("mystdlib")
+gmcp = require("gmcp")
 json = require("dkjson").use_lpeg()
+
 CONFIG = "d19a2f0a604c96b7318aa67f"
 TTS = "925cdd0331023d9f0b8f05a7"
+
+GMCP_HANDLER_ID = gmcp.get_handler_id()
+GMCP_HANDLER_NAME = gmcp.get_handler_name()
+MPM_MESSAGE = gmcp.name_to_id("mpm_message")
+SUPPORTED_GMCP_PACKAGES = table.set_create({MPM_MESSAGE})
+
 COUNTRY_CODES_FILE = string.format("%sdatabases\\country_codes.json", GetInfo(67))
 
 if os.isFile(COUNTRY_CODES_FILE) then
@@ -2369,6 +2377,16 @@ function OnPluginConnect()
 	if not GetInfo(125) then
 		-- Client is not in full screen mode. Enable it.
 		DoCommand("FullScreenMode")
+	end
+end
+
+function OnPluginBroadcast (msg, id, name, text)
+	if id == GMCP_HANDLER_ID and name == GMCP_HANDLER_NAME and SUPPORTED_GMCP_PACKAGES[msg] then
+		local tbl = {}
+		gmcp.parse(tbl, msg, text)
+		if msg == MPM_MESSAGE and tbl.text then
+			Note(tbl.text)
+		end
 	end
 end
 

@@ -4,6 +4,16 @@ local json = require("dkjson").use_lpeg()
 
 local GMCP_HANDLER_ID = "74f8c420df7d59ad5aa66246"
 
+-- The packages we declare to support (name, version).
+local SUPPORTED_PACKAGES = {
+	["char"] = 1,
+	["comm.channel"] = 1,
+	["event"] = 1,
+	["mmapper.comm"] = 1,
+	["mpm"] = 1,
+	["room"] = 1,
+}
+
 local MESSAGE_SUBSCRIPTIONS = {
 	"char_name",
 	"char_statusvars",
@@ -15,6 +25,8 @@ local MESSAGE_SUBSCRIPTIONS = {
 	"event_moved",
 	"event_sun",
 	"mmapper_comm_grouptell",
+	"mpm_event",
+	"mpm_message",
 	"room_info",
 	"room_updateexits",
 }
@@ -29,6 +41,11 @@ end
 
 local function get_handler_name()
 	return GetPluginInfo (GMCP_HANDLER_ID, 1)
+end
+
+
+local function get_supported_packages()
+	return SUPPORTED_PACKAGES
 end
 
 
@@ -56,6 +73,7 @@ end
 local __all__ = {
 	["get_handler_id"] = get_handler_id,
 	["get_handler_name"] = get_handler_name,
+	["get_supported_packages"] = get_supported_packages,
 	["parse"] = parse,
 	["id_to_name"] = id_to_name,
 	["name_to_id"] = name_to_id,

@@ -48,14 +48,7 @@ local SB = "\250"
 local SE = "\240"
 local GMCP = "\201"
 local GMCP_ORDINAL = string.byte(GMCP)
--- The packages we declare to support (name, version).
-local SUPPORTED_PACKAGES = {
-	["char"] = 1,
-	["comm.channel"] = 1,
-	["event"] = 1,
-	["mmapper.comm"] = 1,
-	["room"] = 1,
-}
+local SUPPORTED_PACKAGES = gmcp.get_supported_packages()
 
 local gmcp_debug_enabled = false
 
