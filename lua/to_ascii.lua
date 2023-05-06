@@ -124,7 +124,6 @@ local LATIN_CHARACTER_REPLACEMENTS = {
 function from_utf8(data)
 	-- This function makes use of the MushClient API.
 	local length, err_col = utf8valid(data)
-	assert(not err_col, string.format("Invalid UTF-8 string '%s', (column %s)", data, err_col))
 	if length == #data then
 		-- Only ASCII characters were found, no need to convert.
 		return data
@@ -132,13 +131,14 @@ function from_utf8(data)
 	local char = char
 	local table_insert = table_insert
 	local invalid_character_replacement = 0x3f  -- "?"
-	result = {}
-	for _, ordinal in ipairs(utf8decode(data)) do
+	local decoded_bytes = not err_col and utf8decode(data) or pack(string.byte(data, 1, -1))
+	for i, ordinal in ipairs(decoded_bytes) do
 		-- Don't replace if ordinal < 128, otherwise replace with corresponding replacement, or with default replacement.
-		ordinal = ordinal < 128 and ordinal or LATIN_CHARACTER_REPLACEMENTS[ordinal] or invalid_character_replacement
-		table_insert(result, char(ordinal))
+		if ordinal >= 128 then
+			decoded_bytes[i] = LATIN_CHARACTER_REPLACEMENTS[ordinal] or invalid_character_replacement
+		end
 	end
-	return table_concat(result)
+	return string.char(unpack(decoded_bytes))
 end
 
 
