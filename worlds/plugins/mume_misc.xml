@@ -1276,7 +1276,7 @@ end
   <trigger
    enabled="y"
    group="mume_misc"
-   match="^(?:A[n]? |The )?(?P&lt;someone&gt;.+?)(?: \((?P&lt;someone_label&gt;\w+)\))? leaves (?P&lt;direction&gt;north|east|south|west|up|down)(?: (?P&lt;action&gt;sneaking|riding a (?P&lt;mount&gt;pony|dales-pony|horse|warhorse|pack horse|trained horse|horse of the Rohirrim|brown donkey|mountain mule|hungry warg|brown wolf)(?: \((?P&lt;mount_label&gt;\w+)\))?))?\.$"
+   match="^(?:A[n]? |The )?(?P&lt;someone&gt;.+?)(?: \((?P&lt;someone_label&gt;\w+)\))? leaves (?P&lt;direction&gt;north|east|south|west|up|down)(?: (?P&lt;action&gt;sneaking|riding a (?P&lt;mount&gt;pony|dales-pony|horse|warhorse|pack horse|trained horse|horse of the Rohirrim|brown donkey|mountain mule|hungry warg|brown wolf|slavering warg|black steed)(?: \((?P&lt;mount_label&gt;\w+)\))?))?\.$"
    name="shorten_leaves_message"
    omit_from_output="y"
    regexp="y"

@@ -549,7 +549,7 @@ end
   <trigger
    enabled="y"
    group="mume_sounds"
-   match="^A (?:pony|dales-pony|horse|warhorse|pack horse|trained horse|horse of the Rohirrim|brown donkey|mountain mule|hungry warg|brown wolf)(?: \(\w+\))? steps on a trap and plunges down a hole\!$"
+   match="^A (?:pony|dales-pony|horse|warhorse|pack horse|trained horse|horse of the Rohirrim|brown donkey|mountain mule|hungry warg|brown wolf|slavering warg|black steed)(?: \(\w+\))? steps on a trap and plunges down a hole\!$"
    name="misc_alert27"
    regexp="y"
    send_to="12"
