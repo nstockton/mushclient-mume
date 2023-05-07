@@ -101,24 +101,32 @@ end
   <trigger
    enabled="y"
    group="mume_portal"
-   match="^The world begins to reveal all its secrets and you try to find your way\.\.\.$"
+   match="The world begins to reveal all its secrets and you try to find your way..."
    name="gag_find_the_path_spam"
-   regexp="y"
    omit_from_output="y"
+   send_to="12"
    sequence="100"
   >
+  <send>EnableTrigger("format_find_the_path", true)</send>
   </trigger>
   <trigger
-   enabled="y"
+   enabled="n"
    group="mume_portal"
-   match="^\-&gt; (?P&lt;directions&gt;[NESWUD]+)$"
+   match="^\-&gt; (?P&lt;directions&gt;[NESWUD]*)$"
    name="format_find_the_path"
    regexp="y"
    omit_from_output="y"
    send_to="14"
    sequence="100"
   >
-  <send>Note(group_directions("%&lt;directions&gt;"))</send>
+  <send>
+if "%&lt;directions&gt;" == "" then
+	Note("You are already there.")
+else
+	Note(group_directions("%&lt;directions&gt;"))
+end
+EnableTrigger("format_find_the_path", false)
+  </send>
   </trigger>
 </triggers>
 
