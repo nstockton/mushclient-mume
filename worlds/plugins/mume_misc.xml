@@ -2366,6 +2366,16 @@ function connect_to_mapper()
 	end
 end
 
+function OnPluginScreendraw(line_type, log, line)
+	if not GetInfo(114) then  -- Output is not paused.
+		-- For some reason, the output window occasionally gets frozen, even when not paused. It will then unfreeze after some more lines are received from the game.
+		-- After several years observing this bug, I am still unable to reliably reproduce it. Perhaps it is caused by us always omitting the prompt line?
+		-- This callback will receive new lines, even if the output window is erroneously frozen.
+		-- Scroll to end (Emulate pressing the End key).
+		DoCommand("End")
+	end
+end
+
 function OnPluginInstall()
 	if not IsConnected() then
 		Note("Connecting to the mapper.")
