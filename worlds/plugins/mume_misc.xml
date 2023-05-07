@@ -1294,7 +1294,7 @@ if "%&lt;mount_label&gt;" ~= "" then
 	mount = "%&lt;mount_label&gt;"
 elseif mount == "horse" then
 	mount = "docile"
-elseif mount:startswith("brown") or mount:startswith("mountain") or mount:endswith("Rohirrim") then
+elseif mount:startswith("brown") or mount:startswith("mountain") or mount:endswith("Rohirrim") or mount:endswith("steed") then
 	-- Use the last word of the string.
 	mount = mount:match("%w+$")
 else
