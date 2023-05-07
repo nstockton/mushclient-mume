@@ -154,7 +154,7 @@ end
   </send>
   </trigger>
   <trigger
-   enabled="y"
+   enabled="n"
    group="mume_sounds"
    match="^(?:Struggling against the Yellow Face\, you try|You start) to concentrate\.\.\.$"
    name="you_casting"
