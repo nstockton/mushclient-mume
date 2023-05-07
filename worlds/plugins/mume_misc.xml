@@ -1362,12 +1362,24 @@ train all</send>
   <trigger
    enabled="y"
    group="mume_misc"
-   match="^(?:All prompt fields enabled|Your prompt will display twiddlers when you are busy)\.$"
+   match="^(?:Disabled all prompt fields|All prompt fields enabled|Your prompt will display twiddlers when you are busy)\.$"
    name="keep_twiddlers_off"
    sequence="100"
    regexp="y"
+   keep_evaluating="y"
   >
   <send>change prompt twiddlers off</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="^(?:Disabled all prompt fields|All prompt fields enabled|Your prompt will no longer show when you have pre-typed commands)\.$"
+   name="keep_pretype_on"
+   sequence="100"
+   regexp="y"
+   keep_evaluating="y"
+  >
+  <send>change prompt pretype on</send>
   </trigger>
   <trigger
    enabled="y"
@@ -1380,8 +1392,7 @@ train all</send>
   >
   <send>change compact off
 change wordwrap off
-change prompt none
-change prompt twiddlers off</send>
+change prompt none</send>
   </trigger>
 </triggers>
 
