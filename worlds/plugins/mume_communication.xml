@@ -213,6 +213,7 @@ IGNORE_LIST = {
 	["Fred"] = true,
 	["Frychra"] = true,
 	["Galadriel"] = true,
+	["Gandalf"] = true,
 	["Garfunkle"] = true,
 	["Gathrain"] = true,
 	["Githil"] = true,
