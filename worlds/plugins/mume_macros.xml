@@ -258,9 +258,7 @@ function OnPluginBroadcast (msg, id, name, text)
 		if msg == CHAR_VITALS then
 			gmcp.parse(char_vitals_cache, msg, text)
 			local opponent = get_char_vitals("opponent")
-			opponent = opponent and normalize(opponent) or nil
 			local opponent_hits = get_char_vitals("opponent-hits")
-			opponent_hits = opponent_hits and normalize(opponent_hits) or nil
 			if opponent and opponent_hits then
 				last_opponent = string.strip(string.format("%s %s", opponent_hits, opponent))
 			end
