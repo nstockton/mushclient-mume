@@ -204,16 +204,10 @@ end
    enabled="y"
    group="mume_grouping"
    regexp="y"
-   send_to="12"
+   send_to="0"
    sequence="100"
   >
-  <send>
-if auto_group then
-	Send("tell %&lt;player&gt; Auto-tell: You are in another group already. If you wish to join, please 'group self' and 'raise' again.")
-else
-	Send("tell %&lt;player&gt; Auto-tell: I was unable to add you to my group. If you wish to join, please 'group self'.")
-end
-  </send>
+  <send>tell %&lt;player&gt; Group self please.</send>
   </trigger>
   <trigger
    name="define_leader1"
