@@ -58,19 +58,6 @@ end
   <trigger
    enabled="y"
    group="mume_report"
-   match="^tnlreport\: (?P&lt;xp&gt;\d+) (?P&lt;tp&gt;\d+) (?P&lt;level&gt;\d+)$"
-   name="capture_tnl"
-   omit_from_log="y"
-   omit_from_output="y"
-   regexp="y"
-   send_to="14"
-   sequence="100"
-  >
-  <send>tnl("%&lt;xp&gt;", "%&lt;tp&gt;", "%&lt;level&gt;")</send>
-  </trigger>
-  <trigger
-   enabled="y"
-   group="mume_report"
    match="^(?P&lt;hp&gt;[-\d]+)\/(?P&lt;max_hp&gt;\d+) hits(?:\, (?P&lt;mana&gt;[-\d]+)\/(?P&lt;max_mana&gt;\d+) mana\,)? and (?P&lt;mv&gt;[-\d]+)\/(?P&lt;max_mv&gt;\d+) moves\.$"
    name="capture_score"
    omit_from_log="y"
@@ -136,25 +123,6 @@ rptnl
   >
   <send>score_report()</send>
   </alias>
-  <alias
-   name="report_tnl"
-   match="rptnl"
-   enabled="y"
-   group="mume_report"
-   send_to="12"
-   sequence="100"
-  >
-  <send>tnl_report()</send>
-  </alias>
-  <alias
-   name="display_tnl"
-   match="tnl"
-   enabled="y"
-   group="mume_report"
-   sequence="100"
-  >
-  <send>info tnlreport: %%X %%T %%l</send>
-  </alias>
 </aliases>
 
 <!--  Script  -->
@@ -165,16 +133,10 @@ rptnl
 TTS = "925cdd0331023d9f0b8f05a7"
 
 will_report_score = false
-will_report_tnl = false
 
 function score_report()
 	will_report_score = true
 	Send("score")
-end
-
-function tnl_report()
-	will_report_tnl = true
-	Send("info tnlreport: %X %T %l")
 end
 
 function score(hp, max_hp, mana, max_mana, mv, max_mv)
@@ -182,22 +144,13 @@ function score(hp, max_hp, mana, max_mana, mv, max_mv)
 	table.insert(points, string.format("HP: %s/%s [%.0f%%]", hp, max_hp, (hp >= 0 and hp or 0) / max_hp * 100))
 	if max_mana ~= "" and max_mana then
 		table.insert(points, string.format("Mana: %s/%s [%.0f%%]", mana, max_mana, (mana >= 0 and mana or 0) / max_mana * 100))
-end
+	end
 	table.insert(points, string.format("Moves: %s/%s [%.0f%%].", mv, max_mv, (mv >= 0 and mv or 0) / max_mv * 100))
 	local output = table.concat(points, ", ")
 	Note(output)
 	if will_report_score then
 		Send("emote reports: ", output)
 		will_report_score = false
-	end
-end
-
-function tnl(xp, tp, level)
-	local output = string.format("%.3f%s XP and %s TP to reach level %s.", string.len(xp) >= 7 and xp / 1000000 or xp / 1000, string.len(xp) >= 7 and "M" or "K", tp, level + 1)
-	Note(string.format("You need %s", output))
-	if will_report_tnl then
-		Send("emote needs ", output)
-		will_report_tnl = false
 	end
 end
 
