@@ -1381,19 +1381,6 @@ train all</send>
   >
   <send>change prompt pretype on</send>
   </trigger>
-  <trigger
-   enabled="y"
-   group="mume_misc"
-   match="^(?:Welcome to the land of Middle\-earth\. May your visit here be\.\.\. interesting\.|Reconnecting\.)$"
-   name="do_stuff_after_login"
-   regexp="y"
-   send_to="0"
-   sequence="100"
-  >
-  <send>change compact off
-change wordwrap off
-change prompt none</send>
-  </trigger>
 </triggers>
 
 <!--  Aliases  -->
@@ -2311,8 +2298,9 @@ TTS = "925cdd0331023d9f0b8f05a7"
 
 GMCP_HANDLER_ID = gmcp.get_handler_id()
 GMCP_HANDLER_NAME = gmcp.get_handler_name()
+CHAR_NAME = gmcp.name_to_id("char_name")
 MPM_MESSAGE = gmcp.name_to_id("mpm_message")
-SUPPORTED_GMCP_PACKAGES = table.set_create({MPM_MESSAGE})
+SUPPORTED_GMCP_PACKAGES = table.set_create({CHAR_NAME, MPM_MESSAGE})
 
 COUNTRY_CODES_FILE = string.format("%sdatabases\\country_codes.json", GetInfo(67))
 
@@ -2350,6 +2338,14 @@ anarwen_quest_me = false
 ithildir_quest_me = false
 mercenary_payment = "10"
 nobles_dead = 0
+is_playing_character = false  -- Set to true after player logs a character from the welcome screen or account menu.
+char_name = {}
+
+function on_character_logged_in()
+	Send("change compact off")
+	Send("change wordwrap off")
+	Send("change prompt none")
+end
 
 function move_stakes(direction)
 	local directions = {"N", "E", "SE", "SW", "W"}
@@ -2407,6 +2403,12 @@ function OnPluginBroadcast (msg, id, name, text)
 		gmcp.parse(tbl, msg, text)
 		if msg == MPM_MESSAGE and tbl.text then
 			Note(tbl.text)
+		elseif msg == CHAR_NAME then
+			gmcp.parse(char_name, msg, text)
+			if not is_playing_character then
+				on_character_logged_in()
+				is_playing_character = true
+			end
 		end
 	end
 end
