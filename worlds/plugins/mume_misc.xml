@@ -2162,11 +2162,11 @@ wear crown</send>
    sequence="100"
   >
   <send>remove ring
-get topaz-ring e.pack
-wear topaz-ring
-use ring
-remove topaz-ring
-put topaz-ring e.pack
+get golden-topaz-ring e.pack
+wear golden-topaz-ring
+use golden-topaz-ring
+remove golden-topaz-ring
+put golden-topaz-ring e.pack
 wear ring</send>
   </alias>
   <alias
@@ -2177,11 +2177,11 @@ wear ring</send>
    sequence="100"
   >
   <send>remove ring
-get garnet-ring e.pack
-wear garnet-ring
-use ring
-remove garnet-ring
-put garnet-ring e.pack
+get golden-garnet-ring e.pack
+wear golden-garnet-ring
+use golden-garnet-ring
+remove golden-garnet-ring
+put golden-garnet-ring e.pack
 wear ring</send>
   </alias>
   <alias
