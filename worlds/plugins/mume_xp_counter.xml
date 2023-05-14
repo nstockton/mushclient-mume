@@ -91,10 +91,17 @@ tp_display()
    name="received_kill_xp"
    regexp="y"
    omit_from_output="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
-  <send>received_experience = true</send>
+  <send>
+if not received_experience then
+	received_experience = true
+	if not mpm_gmcp_enabled then
+		DoAfterSpecial(0.1, "on_received_experience()", sendto.scriptafteromit)
+	end
+end
+  </send>
   </trigger>
 </triggers>
 
@@ -110,8 +117,10 @@ GMCP_HANDLER_ID = gmcp.get_handler_id()
 GMCP_HANDLER_NAME = gmcp.get_handler_name()
 CHAR_VITALS = gmcp.name_to_id("char_vitals")
 CHAR_STATUSVARS = gmcp.name_to_id("char_statusvars")
-SUPPORTED_GMCP_PACKAGES = table.set_create({CHAR_VITALS, CHAR_STATUSVARS})
+MPM_EVENT = gmcp.name_to_id("mpm_event")
+SUPPORTED_GMCP_PACKAGES = table.set_create({CHAR_VITALS, CHAR_STATUSVARS, MPM_EVENT})
 
+mpm_gmcp_enabled = false
 current_level = 0
 received_experience = false
 initial_xp = 0
@@ -157,11 +166,24 @@ function tnl_display(report)
 	end
 end
 
+function on_received_experience()
+	killed_xp = current_xp - previous_killed_xp
+	previous_killed_xp = current_xp
+	received_experience = false
+	xp_display()
+end
+
 function OnPluginBroadcast (msg, id, name, text)
 	if id == GMCP_HANDLER_ID and name == GMCP_HANDLER_NAME and SUPPORTED_GMCP_PACKAGES[msg] then
 		local tbl = {}
 		gmcp.parse(tbl, msg, text)
-		if msg == CHAR_VITALS then
+		if msg == MPM_EVENT then
+			if tbl.gmcp_enabled then
+				mpm_gmcp_enabled = true
+			elseif received_experience and mpm_gmcp_enabled and tbl.prompt then
+				on_received_experience()
+			end
+		elseif msg == CHAR_VITALS then
 			if tbl.xp then
 				current_xp = tbl.xp
 				if initial_xp == 0 or current_xp < previous_killed_xp then
@@ -172,11 +194,6 @@ function OnPluginBroadcast (msg, id, name, text)
 					previous_killed_xp = current_xp
 					killed_xp = 0
 					received_experience = false
-				elseif received_experience then
-					killed_xp = current_xp - previous_killed_xp
-					previous_killed_xp = current_xp
-					received_experience = false
-					xp_display()
 				end
 			end
 			if tbl.tp then
