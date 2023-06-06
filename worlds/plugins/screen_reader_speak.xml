@@ -57,12 +57,12 @@ ffi.cdef[[
 	typedef const CHAR *PCSTR, *LPCSTR, *LPCCH, *PCCH;
 	typedef WCHAR *PWSTR, *LPWSTR;
 	typedef const WCHAR *PCWSTR, *LPCWSTR;
+	typedef long BOOL;
+	typedef BOOL *LPBOOL;
 	int MultiByteToWideChar(UINT CodePage, DWORD dwFlags, LPCCH lpMultiByteStr, int cbMultiByte, LPWSTR lpWideCharStr, int cchWideChar);
+	int WideCharToMultiByte(UINT CodePage, DWORD dwFlags, LPCWSTR lpWideCharStr, int cchWideChar, LPSTR lpMultiByteStr, int cbMultiByte, LPCSTR lpDefaultChar, LPBOOL lpUsedDefaultChar);
 	HWND FindWindowA(LPCSTR lpClassName, LPCSTR lpWindowName);
 	size_t wcslen(const wchar_t *str);
-	void __stdcall DolAccess_Command(const wchar_t*, unsigned int, unsigned int);
-	void __stdcall DolAccess_Action(unsigned int);
-	int __stdcall DolAccess_GetSystem(void);
 	void __stdcall nvdaController_speakText(const wchar_t*);
 	void __stdcall nvdaController_cancelSpeech(void);
 	int __stdcall nvdaController_testIfRunning(void);
@@ -71,13 +71,10 @@ ffi.cdef[[
 	int __stdcall SA_IsRunning(void);
 ]]
 
-local DOLACCESS_NONE = 0
-local DOLACCESS_SPEAK = 1
-local DOLACCESS_MUTE = 141
-
-local CP_1252 = 1252  -- ANSI Latin-1.
-local CP_ASCII = 20127
-local CP_LATIN1 = 28591  -- ISO 8859-1
+local CP_1252 = 1252  -- Windows ANSI.
+local CP_ACP = 0  -- ANSI Code Page, the system locale as set in the Windows control panel, or in "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Nls\CodePage\ACP".
+local CP_ASCII = 20127  -- U.S ASCII.
+local CP_LATIN1 = 28591  -- ISO 8859-1.
 local CP_UTF8 = 65001
 
 local ERROR_NO_UNICODE_TRANSLATION = 1113
@@ -86,6 +83,7 @@ local IS_32_BIT = ffi.abi("32bit")
 
 local tts_enabled = true
 
+local utf8valid = utils.utf8valid
 local ffiC = ffi.C
 local ffiNew = ffi.new
 local NULL = ffiNew("void*")
@@ -93,7 +91,6 @@ local SIZE_OF_WCHAR = ffi.sizeof("wchar_t")
 
 local nvda_api = IS_32_BIT and ffi.load("screen_reader_dlls/nvdaControllerClient32.dll") or ffi.load("screen_reader_dlls/nvdaControllerClient64.dll")
 local sa_api = IS_32_BIT and ffi.load("screen_reader_dlls/SAAPI32.dll") or ffi.load("screen_reader_dlls/SAAPI64.dll")
-local dolphin_api = IS_32_BIT and ffi.load("screen_reader_dlls/dolapi32.dll")
 
 -- If you need the numeric value of a window handle, casting it to intptr_t and passing the result to tonumber should work.
 -- tonumber(ffi.cast("intptr_t", handle))
@@ -104,20 +101,34 @@ local function pointer(ptr)
 	return ptr ~= NULL and ptr or nil
 end
 
-local function dolphin_running()
-	return dolphin_api and dolphin_api.DolAccess_GetSystem() ~= DOLACCESS_NONE
+local function bytes(wstr, codepage)
+	local length = ffi.C.WideCharToMultiByte(codepage, 0, wstr, -1, nil, 0, nil, false)
+	local data = ffi.new("char[?]", length)
+	ffi.C.WideCharToMultiByte(codepage, 0, wstr, -1, data, length, nil, false)
+	return ffi.string(data)
 end
 
-local function dolphin_say(text, interrupt)
-	if interrupt and interrupt ~= 0 then
-		dolphin_api.DolAccess_Action(DOLACCESS_MUTE)
+local function unicode(data, codepage)
+	local length = ffi.C.MultiByteToWideChar(codepage, 0, data, -1, nil, 0)
+	local wstr = ffi.new("wchar_t[?]", length)
+	ffi.C.MultiByteToWideChar(codepage, 0, data, #data, wstr, length)
+	return wstr
+end
+
+local function decode_bytes(data)
+	local wstr
+	local length, err_col = utf8valid(data)
+	if not err_col then
+		wstr = unicode(data, CP_UTF8)
+	else
+		-- Not UTF-8, try Latin-1.
+		wstr = unicode(data, CP_LATIN1)
 	end
-	local length = (ffiC.wcslen(text) + 1) * SIZE_OF_WCHAR
-	dolphin_api.DolAccess_Command(text, length, DOLACCESS_SPEAK)
-end
-
-local function dolphin_silence()
-	dolphin_api.DolAccess_Action(DOLACCESS_MUTE)
+	if ffi.errno(0) == ERROR_NO_UNICODE_TRANSLATION then
+		-- User should hopefully never see this.
+		Note("Error in screen reader speak plugin: no unicode translation.")
+	end
+	return wstr
 end
 
 local function jfw_running()
@@ -126,11 +137,7 @@ end
 
 local function jfw_say(text, interrupt)
 	local jfw_api = assert (luacom.CreateObject ("FreedomSci.JawsApi"), "cannot open Jaws COM object")
-	if interrupt and interrupt ~= 0 then
-		jfw_api:SayString(text, 1)
-	else
-		jfw_api:SayString(text, 0)
-	end
+	jfw_api:SayString(text, interrupt and interrupt ~= 0 and 1 or 0)
 end
 
 local function jfw_silence()
@@ -146,7 +153,7 @@ local function nvda_say(text, interrupt)
 	if interrupt and interrupt ~= 0 then
 		nvda_api.nvdaController_cancelSpeech()
 	end
-	nvda_api.nvdaController_speakText(text)
+	nvda_api.nvdaController_speakText(decode_bytes(text))
 end
 
 local function nvda_silence()
@@ -161,56 +168,21 @@ local function sa_say(text, interrupt)
 	if interrupt and interrupt ~= 0 then
 		sa_api.SA_StopAudio()
 	end
-	sa_api.SA_SayW(text)
+	sa_api.SA_SayW(decode_bytes(text))
 end
 
 local function sa_silence()
 	sa_api.SA_StopAudio()
 end
 
-local function we_running()
-	return pointer(ffiC.FindWindowA("GWMExternalControl", "External Control")) and true or false
-end
-
-local function we_say(text, interrupt)
-	local we_api = assert (luacom.CreateObject ("GWSpeak.Speak"), "cannot open Win-Eyes COM object")
-	if interrupt and interrupt ~= 0 then
-		we_api:Silence()
-	end
-	we_api:SpeakString(text)
-end
-
-local function we_silence()
-	local we_api = assert (luacom.CreateObject ("GWSpeak.Speak"), "cannot open Win-Eyes COM object")
-	we_api:Silence()
-end
-
 function say(text, interrupt)
 	if not text or Trim(text) == "" then
 		return
 	end
-	local codepage = CP_UTF8
-	local length = utils.utf8valid(text)
-	if not length then
-		codepage = CP_LATIN1
-		length = ffiC.MultiByteToWideChar(codepage, 0, text, #text, nil, 0)
-	end
-	local widestr = ffiNew("wchar_t[?]", length + 1)
-	local chars_written = ffiC.MultiByteToWideChar(codepage, 0, text, #text, widestr, length)
-	if ffi.errno(0) == ERROR_NO_UNICODE_TRANSLATION then
-		-- User should hopefully never see this.
-		return Note("Error in screen reader speak plugin: no unicode translation.")
-	end
-	-- Null terminate the data.
-	widestr[chars_written] = 0
 	if nvda_running() then
-		nvda_say(widestr, interrupt)
+		nvda_say(text, interrupt)
 	elseif sa_running() then
-		sa_say(widestr, interrupt)
-	elseif dolphin_running() then
-		dolphin_say(widestr, interrupt)
-	elseif we_running() then
-		we_say(text, interrupt)
+		sa_say(text, interrupt)
 	elseif jfw_running() then
 		jfw_say(text, interrupt)
 	end
@@ -221,10 +193,6 @@ function silence()
 		nvda_silence()
 	elseif sa_running() then
 		sa_silence()
-	elseif dolphin_running() then
-		dolphin_silence()
-	elseif we_running() then
-		we_silence()
 	elseif jfw_running() then
 		jfw_silence()
 	end
