@@ -12,7 +12,7 @@ require("mystdlib")
 local char = string.char
 local ipairs = ipairs
 local StripANSI = StripANSI
-local strip = string.strip
+local Trim = Trim
 local table_concat = table.concat
 local table_insert = table.insert
 local utf8valid = utils.utf8valid
@@ -144,7 +144,7 @@ end
 
 function normalize(text)
 	-- This function makes use of the MushClient API.
-	return strip(StripANSI(from_utf8(text)))
+	return Trim(StripANSI(from_utf8(text)))
 end
 
 

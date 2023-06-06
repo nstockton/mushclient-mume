@@ -8,19 +8,28 @@
 local getch = require("getch")
 local lfs = require("lfs")
 local sha2 = require("sha2")
-local stringy = require("stringy")
+
+
+local PATTERN_ESCAPE_REPLACEMENTS = {
+	["%"] = "%%",
+	["("] = "%(",
+	[")"] = "%)",
+	["."] = "%.",
+	["+"] = "%+",
+	["-"] = "%-",
+	["*"] = "%*",
+	["?"] = "%?",
+	["["] = "%[",
+	["]"] = "%]",
+	["^"] = "%^",
+	["$"] = "%$",
+	["\0"] = "%z",
+}
 
 
 -- For compatibility with Lua >= 5.2.
 unpack = rawget(table, "unpack") or unpack
 pack = rawget(table, "pack") or function(...) return {n = select("#", ...), ...} end
-
-
-string.count = stringy.count
-string.endswith = stringy.endswith
-string.findpos = stringy.find
-string.startswith = stringy.startswith
-string.strip = stringy.strip
 
 
 function clamp(value, low, high)
@@ -133,38 +142,115 @@ function os.isDir(name)
 end
 
 
-function string.capitalize(str)
+function string:capitalize()
 	-- Like the capitalize method on Python string objects
-	return (string.lower(str):gsub("^%l", string.upper))
+	return (self:lower():gsub("^%l", string.upper))
 end
 
 
-function string.isdigit(str)
+function string:contains(pattern, is_plain)
+	return (self:find(pattern, nil, is_plain ~= false)) and true or false
+end
+
+
+function string:count(pattern, is_plain)
+	if is_plain ~= false then  -- Escape by default.
+		pattern = string.pattern_safe(pattern)
+	end
+	return select(2, self:gsub(pattern, ""))
+end
+
+
+function string:endswith(end_str)
+	return end_str == "" or self:sub(-string.len(end_str)) == end_str
+end
+
+
+function string:get_left(num)
+	return self:sub(1, num)
+end
+
+
+function string:get_right(num)
+	return self:sub(-num)
+end
+
+
+function string:isdigit()
 	-- Like the isdigit method on Python string objects
-	return string.match(str, "^%d+$") ~= nil
+	return self:match("^%d+$") ~= nil
 end
 
 
-function string.split(str, delimiter)
-	if delimiter == "" then
-		-- Calling stringy.split with an empty delimiter crashes the interpreter.
-		error("Empty delimiter.")
+function string:lstrip(pattern)
+	pattern = pattern and string.pattern_safe(pattern) or "%s"
+	return self:match("^" .. pattern .. "*(.+)$") or self
+end
+
+
+function string:partition(pattern, is_plain)
+	assert(pattern and pattern ~= "", "Empty pattern.")
+	local start_pos, end_pos = self:find(pattern, nil, is_plain ~= false)
+	if not start_pos then
+		return self, "", ""
 	end
-	return stringy.split(str, delimiter)
+	return self:sub(1, start_pos - 1), self:sub(start_pos, end_pos), self:sub(end_pos + 1)
 end
 
 
-function string.partition(str, delimiter)
-	local delim_pos = string.findpos(str, delimiter)
-	if not delim_pos then
-		return str, "", ""
+function string:pattern_safe()
+	return (self:gsub(".", PATTERN_ESCAPE_REPLACEMENTS))
+end
+
+
+function string:rstrip(pattern)
+	pattern = pattern and string.pattern_safe(pattern) or "%s"
+	return self:match("^(.-)" .. pattern .. "*$") or self
+end
+
+
+function string:simplify()
+	return (self:gsub("%s+", " ")):strip()
+end
+
+
+function string:split(pattern, limit, is_plain)
+	assert(pattern ~= "", "pattern must not be empty.")
+	assert(limit == nil or type(limit) == "number", "Limit must be number or nil.")
+	assert(is_plain == nil or type(is_plain) == "boolean", "is_plain must be boolean or nil.")
+	local result = {}
+	if self:len() > 0 then
+		limit = limit or -1
+		is_plain = is_plain ~= false  -- Default to true.
+		if not pattern then
+			-- Split words.
+			pattern = "%s"
+			is_plain = false
+		end
+		local field_start = 1
+		local field_end = 1
+		local found_start, found_end = self:find(pattern, field_start, is_plain)
+		while found_start and limit ~= 0 do
+			result[field_end] = self:sub(field_start, found_start - 1)
+			field_end = field_end + 1
+			field_start = found_end + 1
+			found_start, found_end = self:find(pattern, field_start, is_plain)
+			limit = limit - 1
+		end
+		result[field_end] = self:sub(field_start)
 	end
-	return string.sub(str, 1, delim_pos - 1), delimiter, string.sub(str, delim_pos + #delimiter)
+	return result
 end
 
 
-function string.simplify(str)
-	return string.strip (string.gsub(str, "%s+", " "))
+function string:startswith(start_str)
+	return self:sub(1, string.len(start_str)) == start_str
+end
+
+
+function string:strip(pattern)
+	pattern = pattern and string.pattern_safe(pattern) or "%s"
+	return self:match("^" .. pattern .. "*(.-)" .. pattern .. "*$") or self
 end
 
 

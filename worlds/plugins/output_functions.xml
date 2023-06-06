@@ -147,7 +147,7 @@ function prev_line()
 	else
 		current_line = current_line - 1
 		local line = GetLineInfo(current_line, 1) or ""
-		CallPlugin(TTS, "say", string.strip(line) ~= "" and line or "blank", true)
+		CallPlugin(TTS, "say", Trim(line) ~= "" and line or "blank", true)
 	end
 end
 
@@ -160,7 +160,7 @@ function cur_line()
 		current_line = count
 	end
 	local line = GetLineInfo(current_line, 1) or ""
-	CallPlugin(TTS, "say", string.strip(line) ~= "" and line or "blank", true)
+	CallPlugin(TTS, "say", Trim(line) ~= "" and line or "blank", true)
 end
 
 function next_line()
@@ -173,7 +173,7 @@ function next_line()
 	else
 		current_line = current_line + 1
 		local line = GetLineInfo(current_line, 1) or ""
-		CallPlugin(TTS, "say", string.strip(line) ~= "" and line or "blank", true)
+		CallPlugin(TTS, "say", Trim(line) ~= "" and line or "blank", true)
 	end
 end
 
@@ -185,7 +185,7 @@ function end_line()
 	end
 	current_line = count - 1
 	local line = GetLineInfo(current_line, 1) or ""
-	CallPlugin(TTS, "say", string.strip(line) ~= "" and line or "blank", true)
+	CallPlugin(TTS, "say", Trim(line) ~= "" and line or "blank", true)
 end
 
 function top_line()
@@ -196,7 +196,7 @@ function top_line()
 	end
 	current_line = 2
 	local line = GetLineInfo(current_line, 1) or ""
-	CallPlugin(TTS, "say", string.strip(line) ~= "" and line or "blank", true)
+	CallPlugin(TTS, "say", Trim(line) ~= "" and line or "blank", true)
 end
 
 ]]>

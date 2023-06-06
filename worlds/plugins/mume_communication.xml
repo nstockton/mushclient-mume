@@ -293,7 +293,7 @@ function load_communications()
 		local file_name = string.format("%scommunication/%s.txt", GetInfo(67), channel)
 		if os.isFile(file_name) then
 			for line in io.lines(file_name) do
-				local line = string.strip(line)
+				local line = Trim(line)
 				if line ~= "" then
 					table.insert(tbl, line)
 				end
@@ -303,7 +303,7 @@ function load_communications()
 end
 
 function review(channel, text)
-	local text = string.strip(string.lower(text))
+	local text = Trim(string.lower(text))
 	local output = {}
 	if table.isempty(communications[channel]) then
 		-- The channel log file is empty.
@@ -314,7 +314,7 @@ function review(channel, text)
 	elseif not string.isdigit(text) and text ~= "" then
 		-- Output lines that contain the search string.
 		for _, line in ipairs(communications[channel]) do
-			if string.findpos(string.lower(line), text) then
+			if string.contains(string.lower(line), text) then
 				table.insert(output, line)
 			end
 		end
@@ -375,7 +375,7 @@ function OnPluginBroadcast (msg, id, name, text)
 			assert(talker ~= "", string.format("Invalid talker '%s'.", tbl.talker))
 			-- If talker is "You", don't log it.
 			-- If talker contains a space or is in the list of single-word mob names, then it is a mob and should not be logged either.
-			if talker == "You" or string.findpos(talker, " ") or IGNORE_LIST[talker] then
+			if talker == "You" or string.contains(talker, " ") or IGNORE_LIST[talker] then
 				return
 			end
 			local destination = tbl.destination and string.capitalize(normalize(tbl.destination)) or nil

@@ -144,7 +144,7 @@ EnableTrigger("format_find_the_path", false)
   >
   <send>
 cached_clear_old()
-local args = string.lower(string.strip("%&lt;args&gt;"))
+local args = string.lower(Trim("%&lt;args&gt;"))
 if args == "" then
 	cached_list()
 elseif string.startswith(args, "rename") or string.startswith(args, "rn") then
@@ -184,7 +184,7 @@ end
    sequence="100"
   >
   <send>
-local args = string.lower(string.strip("%&lt;args&gt;"))
+local args = string.lower(Trim("%&lt;args&gt;"))
 if args == "clear" then
 	table.clear(temp_keys)
 	Note("Temporary keys cleared.")
@@ -400,7 +400,7 @@ end
 
 function cached_action(action, name)
 	-- Performs a game action on cached key.
-	local name = string.lower(string.strip(name))
+	local name = string.lower(Trim(name))
 	if name == "" then
 		Note("Error: no cached name given.")
 	elseif cached_keys[name] then

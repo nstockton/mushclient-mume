@@ -215,7 +215,7 @@ end
 
 function set_target(number, target)
 	local number = tonumber(number) or 1
-	local target = target and string.strip(target) or ""
+	local target = target and Trim(target) or ""
 	if target == "c" then
 		targets[number] = nil
 		Note("Target ", number, " cleared.")
@@ -231,7 +231,7 @@ end
 
 function set_action(number, action)
 	local number = tonumber(number) or 1
-	local action = action and string.strip(action) or ""
+	local action = action and Trim(action) or ""
 	if action == "c" then
 		actions[number] = nil
 		Note("Action ", number, " cleared.")

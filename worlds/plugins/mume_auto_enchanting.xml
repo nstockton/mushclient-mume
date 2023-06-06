@@ -221,10 +221,10 @@ ResetTimer("auto_enchant_mana_timer")
    sequence="100"
   >
   <send>
-if string.strip("%&lt;arrow&gt;") == "" then
+if Trim("%&lt;arrow&gt;") == "" then
 	Note(string.format("Arrow keyword set to %s.", arrow))
 else
-	arrow = string.strip("%&lt;arrow&gt;")
+	arrow = Trim("%&lt;arrow&gt;")
 	Note(string.format("Arrow keyword now set to %s.", arrow))
 end
   </send>
@@ -239,10 +239,10 @@ end
    sequence="100"
   >
   <send>
-if string.strip("%&lt;container&gt;") == "" then
+if Trim("%&lt;container&gt;") == "" then
 	Note(string.format("Unchanted container set to %s.", unchanted_container))
 else
-	unchanted_container = string.strip("%&lt;container&gt;")
+	unchanted_container = Trim("%&lt;container&gt;")
 	Note(string.format("Unchanted container now set to %s.", unchanted_container))
 end
   </send>
@@ -257,10 +257,10 @@ end
    sequence="100"
   >
   <send>
-if string.strip("%&lt;container&gt;") == "" then
+if Trim("%&lt;container&gt;") == "" then
 	Note(string.format("Chanted container set to %s.", chanted_container))
 else
-	chanted_container = string.strip("%&lt;container&gt;")
+	chanted_container = Trim("%&lt;container&gt;")
 	Note(string.format("Chanted container now set to %s.", chanted_container))
 end
   </send>

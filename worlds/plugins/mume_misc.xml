@@ -1039,7 +1039,7 @@ open debris up</send>
   >
   <send>
 if auto_move_stakes then
-	move_stakes(string.strip("%&lt;direction&gt;"))
+	move_stakes(Trim("%&lt;direction&gt;"))
 	auto_move_stakes = false
 end
   </send>
@@ -1303,7 +1303,7 @@ else
 	mount = mount:match("^%w+")
 end
 if "%&lt;someone&gt;" ~= "cockroach" then
-	Note(string.strip(string.format("%s %s %s", direction, someone, mount and mount or "%&lt;action&gt;")))
+	Note(Trim(string.format("%s %s %s", direction, someone, mount and mount or "%&lt;action&gt;")))
 end
   </send>
   </trigger>

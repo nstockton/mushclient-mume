@@ -165,7 +165,7 @@ function pause_toggle()
 end
 
 function set_repeat(number, command)
-	local command = string.strip(command)
+	local command = Trim(command)
 	if command == "" then
 		if repeat_commands[number] then
 			Note("'", repeat_commands[number], "' is repeated.")
@@ -260,7 +260,7 @@ function OnPluginBroadcast (msg, id, name, text)
 			local opponent = get_char_vitals("opponent")
 			local opponent_hits = get_char_vitals("opponent-hits")
 			if opponent and opponent_hits then
-				last_opponent = string.strip(string.format("%s %s", opponent_hits, opponent))
+				last_opponent = Trim(string.format("%s %s", opponent_hits, opponent))
 			end
 		elseif msg == ROOM_INFO then
 			gmcp.parse(room_info_cache, msg, text)

@@ -150,13 +150,13 @@ end
 local mount = "%&lt;mount&gt;"
 if "%&lt;label&gt;" ~= "" then
 	mount = "%&lt;label&gt;"
-elseif mount:findpos("Rohirrim") then
+elseif mount:contains("Rohirrim") then
 	mount = "rohirrim"
-elseif mount:findpos("donkey") then
+elseif mount:contains("donkey") then
 	mount = "donkey"
-elseif mount:findpos("mule") then
+elseif mount:contains("mule") then
 	mount = "mule"
-elseif mount:findpos("steed") then
+elseif mount:contains("steed") then
 	mount = "steed"
 else
 	-- Use the first word in the string (hungry for hungry warg, pack for pack horse, etc).
@@ -356,7 +356,7 @@ end
    sequence="100"
   >
   <send>
-local message = string.strip("%&lt;message&gt;")
+local message = Trim("%&lt;message&gt;")
 if not leader then
 	Note(NO_LEADER_MESSAGE)
 elseif not message then
