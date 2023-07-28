@@ -30,6 +30,7 @@ local PATTERN_ESCAPE_REPLACEMENTS = {
 -- For compatibility with Lua >= 5.2.
 unpack = rawget(table, "unpack") or unpack
 pack = rawget(table, "pack") or function(...) return {n = select("#", ...), ...} end
+unpack_packed = function(tbl) return unpack(tbl, 1, tbl.n) end
 
 
 function clamp(value, low, high)
@@ -182,9 +183,24 @@ function string:isdigit()
 end
 
 
-function string:lstrip(pattern)
-	pattern = pattern and string.pattern_safe(pattern) or "%s"
-	return self:match("^" .. pattern .. "*(.+)$") or self
+function string:join(...)
+	local result = {}
+	local value
+	for i = 1, select("#", ...) do
+		value = select(i, ...)
+		if value == nil then
+			table.insert(result, "")
+		else
+			table.insert(result, tostring(value))
+		end
+	end
+	return table.concat(result, self)
+end
+
+
+function string:lstrip(characters)
+	characters = characters and ("[" .. string.pattern_safe(characters) .. "]") or "%s"
+	return self:match("^" .. characters .. "*(.+)$") or self
 end
 
 
@@ -203,9 +219,9 @@ function string:pattern_safe()
 end
 
 
-function string:rstrip(pattern)
-	pattern = pattern and string.pattern_safe(pattern) or "%s"
-	return self:match("^(.-)" .. pattern .. "*$") or self
+function string:rstrip(characters)
+	characters = characters and ("[" .. string.pattern_safe(characters) .. "]") or "%s"
+	return self:match("^(.-)" .. characters .. "*$") or self
 end
 
 
@@ -243,14 +259,27 @@ function string:split(pattern, limit, is_plain)
 end
 
 
+function string:splitlines(keep_ends)
+	local lines = {}
+	for line, line_end in self:gmatch("([^\r\n]*)([\r]?[\n])") do
+		table.insert(lines, line .. (keep_ends and line_end or ""))
+	end
+	local unterminated = self:match("[^\r\n]+$")
+	if unterminated then
+		table.insert(lines, unterminated)
+	end
+	return lines
+end
+
+
 function string:startswith(start_str)
 	return self:sub(1, string.len(start_str)) == start_str
 end
 
 
-function string:strip(pattern)
-	pattern = pattern and string.pattern_safe(pattern) or "%s"
-	return self:match("^" .. pattern .. "*(.-)" .. pattern .. "*$") or self
+function string:strip(characters)
+	characters = characters and ("[" .. string.pattern_safe(characters) .. "]") or "%s"
+	return self:match("^" .. characters .. "*(.-)" .. characters .. "*$") or self
 end
 
 
@@ -293,7 +322,9 @@ function table.update(tbl, nil_value, ...)
 	-- Updates a table in-place with values from tables passed as variable arguments.
 	-- nil_value specifies an optional sentinel value that will be replaced with nil in the returned table (useful in conjunction with a json library or similar).
 	-- https://stackoverflow.com/questions/1283388/how-to-merge-two-tables-overwriting-the-elements-which-are-in-both
-	for _, new in ipairs(pack(...)) do
+	local new
+	for i = 1, select("#", ...) do
+		new = select(i, ...)
 		for key, value in pairs(new) do
 			if (type(value) == "table") and (type(tbl[key] or false) == "table") then
 				table.update(tbl[key], nil_value, new[key])
