@@ -181,7 +181,6 @@ IGNORE_LIST = {
 	["Angurboda"] = true,
 	["Arathorn"] = true,
 	["Ardan"] = true,
-	["Azra-Zaira"] = true,
 	["Barbaras"] = true,
 	["Barliman"] = true,
 	["Bart"] = true,
@@ -374,8 +373,8 @@ function OnPluginBroadcast (msg, id, name, text)
 			local talker = tbl.talker and string.capitalize(normalize(tbl.talker)) or ""
 			assert(talker ~= "", string.format("Invalid talker '%s'.", tbl.talker))
 			-- If talker is "You", don't log it.
-			-- If talker contains a space or is in the list of single-word mob names, then it is a mob and should not be logged either.
-			if talker == "You" or string.contains(talker, " ") or IGNORE_LIST[talker] then
+			-- If talker contains anything other than letters, it's a mob so don't log it either.
+			if talker == "You" or string.contains(talker, "%A", false) or IGNORE_LIST[talker] then
 				return
 			end
 			local destination = tbl.destination and string.capitalize(normalize(tbl.destination)) or nil
