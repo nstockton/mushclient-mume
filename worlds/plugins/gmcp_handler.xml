@@ -26,16 +26,50 @@
 
 <aliases>
 <alias
-   script="gmcp_debug"
-   match="^gmcpdebug\s*([1-3])?$"
+   name="gmcp_debug_toggle"
+   match="gmcpdebug"
    enabled="y"
-   regexp="y"
-   sequence="100"
+   group="gmcp_handler"
+   regexp="n"
+   script="gmcp_debug"
    ignore_case="y"
+   sequence="100"
 ></alias>
-
+  <alias
+   name="keep_alive_toggle"
+   match="keepalive"
+   enabled="y"
+   group="gmcp_handler"
+   regexp="n"
+   ignore_case="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>
+keep_alive = not keep_alive
+Note("Keep alive ", keep_alive and "enabled." or "disabled.")
+EnableTimer("keep_alive_timer", keep_alive)
+ResetTimer("keep_alive_timer")
+  </send>
+  </alias>
 </aliases>
 
+<!--  Timers  -->
+
+<timers>
+  <timer
+   name="keep_alive_timer"
+   enabled="n"
+   minute="1"
+   second="0.00"
+   offset_second="0.00"
+   send_to="14"
+  >
+  <send>
+CallPlugin(GMCP_HANDLER_ID, "keep_alive")
+  </send>
+  </timer>
+</timers>
 
 <script>
 <![CDATA[
@@ -50,7 +84,9 @@ local GMCP = "\201"
 local GMCP_ORDINAL = string.byte(GMCP)
 local SUPPORTED_PACKAGES = gmcp.get_supported_packages()
 
+local gmcp_enabled = false
 local gmcp_debug_enabled = false
+local keep_alive = true
 
 function escape_iac(data)
 	return (string.gsub(data, IAC, IAC .. IAC))
@@ -71,8 +107,11 @@ function gmcp_debug(name, line, wildcards)
 	Note("GMCP debugging ", gmcp_debug_enabled and "enabled" or "disabled", ".")
 end
 
-function send_gmcp_packet(data)
+function send_gmcp_packet(data, force_send)
 	-- Helper function to send GMCP data.
+	if not force_send and not gmcp_enabled then
+		return
+	end
 	assert(data, "send_gmcp_packet passed a nil message.")
 	if gmcp_debug_enabled then
 		DelayedNote("GMCPDebug: Sending '", data, "'")
@@ -93,12 +132,14 @@ function OnPluginTelnetRequest(msg_type, data)
 			if gmcp_debug_enabled then
 				DelayedNote("GMCPDebug: Enabling GMCP.")
 			end
-			send_gmcp_packet(string.format('Core.Hello { "client": "MUSHclient", "version": "%s" }', Version()))
+			local force_send = true
+			send_gmcp_packet(string.format('Core.Hello { "client": "MUSHclient", "version": "%s" }', Version()), force_send)
 			local packages = {}
 			for package_name, package_version in pairs(SUPPORTED_PACKAGES) do
 				table.insert(packages, string.format("%s %s", package_name, package_version))
 			end
-			send_gmcp_packet(string.format("Core.Supports.Set %s", json.encode(packages)))
+			send_gmcp_packet(string.format("Core.Supports.Set %s", json.encode(packages)), force_send)
+			gmcp_enabled = true
 			return true
 		end
 	end
@@ -125,6 +166,13 @@ end
 function OnPluginDisable()
 	EnablePlugin(GetPluginID(), true)
 	Note("You are not allowed to disable the ", GetPluginInfo(GetPluginID(), 1), " plugin. It is necessary for other plugins.")
+end
+
+function OnPluginConnect()
+	if keep_alive then
+		EnableTimer("keep_alive_timer", keep_alive)
+		ResetTimer("keep_alive_timer")
+	end
 end
 
 ]]>
