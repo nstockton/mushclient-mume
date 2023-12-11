@@ -1355,7 +1355,7 @@ train all</send>
   <trigger
    enabled="y"
    group="mume_misc"
-   match="^ACK\! (?:A |The )(.+?) didn&apos;t follow you\, you lost (?:him|her|it)\.$"
+   match="^ACK\! (?:A[n]? |The )?(.+?) didn&apos;t follow you\, you lost (?:him|her|it)\.$"
    name="beep_on_ack"
    regexp="y"
    omit_from_output="y"
