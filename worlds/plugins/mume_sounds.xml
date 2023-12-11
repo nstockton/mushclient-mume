@@ -413,7 +413,7 @@ end
   <trigger
    enabled="y"
    group="mume_sounds"
-   match="^\w+ get[s]? an ancient dwarven key from the corpse of a packrat\.$"
+   match="^\w+ get[s]? a[n]? (?:fragile stone|ancient dwarven) key from the corpse of [^.]+\.$"
    name="misc_alert14"
    regexp="y"
    send_to="12"
@@ -622,7 +622,47 @@ end
   <trigger
    enabled="y"
    group="mume_sounds"
-   match="^A (?:huge stone giant|great\, wild boar|citizen mercenary)(?: \(\w+\))? sits down and rests\.$"
+   match="You step on something of old, dry wood that breaks with a loud crack."
+   name="misc_alert34"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_ALERT, "misc_alert.wav")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
+   match="You bang against some junk on the floor, sending echoes through the cavern."
+   name="misc_alert35"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_ALERT, "misc_alert.wav")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
+   match="You trip over some debris on the floor, and the sound echoes through the cavern."
+   name="misc_alert36"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_ALERT, "misc_alert.wav")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
+   match="You stumble against a broken old shield that topples with a loud clang."
+   name="misc_alert37"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_ALERT, "misc_alert.wav")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
+   match="^A (?:mountain lion|huge stone giant|great\, wild boar|citizen mercenary)(?: \(\w+\))? sits down and rests\.$"
    name="alert_mercenary_resting"
    regexp="y"
    send_to="12"
