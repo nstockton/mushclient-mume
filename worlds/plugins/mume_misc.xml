@@ -34,6 +34,21 @@
   <trigger
    enabled="y"
    group="mume_misc"
+   match="^[ ]{12}[~]{3}$"
+   name="gag_ascii_art"
+   omit_from_output="y"
+   regexp="y"
+   send_to="14"
+   sequence="100"
+  >
+  <send>
+ascii_art_lines = 18
+EnableTrigger("gag_ascii_art", false)
+  </send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
    match="You raise your staff and call upon the Valar."
    name="have_bless_staff"
    send_to="12"
@@ -2340,6 +2355,7 @@ mercenary_payment = "10"
 nobles_dead = 0
 is_playing_character = false  -- Set to true after player logs a character from the welcome screen or account menu.
 char_name = {}
+ascii_art_lines = 0
 
 function on_character_logged_in()
 	Send("change compact off")
@@ -2395,6 +2411,14 @@ function OnPluginConnect()
 		-- Client is not in full screen mode. Enable it.
 		DoCommand("FullScreenMode")
 	end
+end
+
+function OnPluginLineReceived(text)
+	if ascii_art_lines > 0 then
+		ascii_art_lines = ascii_art_lines - 1
+		return false
+	end
+	return true
 end
 
 function OnPluginBroadcast (msg, id, name, text)
