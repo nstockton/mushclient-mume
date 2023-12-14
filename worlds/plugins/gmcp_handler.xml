@@ -66,7 +66,7 @@ ResetTimer("keep_alive_timer")
    send_to="14"
   >
   <send>
-CallPlugin(GMCP_HANDLER_ID, "keep_alive")
+send_keep_alive()
   </send>
   </timer>
 </timers>
@@ -119,7 +119,7 @@ function send_gmcp_packet(data, force_send)
 	SendPkt(IAC .. SB .. GMCP .. escape_iac(data) .. IAC .. SE)
 end
 
-function keep_alive()
+function send_keep_alive()
 	send_gmcp_packet("Core.KeepAlive")
 end
 
