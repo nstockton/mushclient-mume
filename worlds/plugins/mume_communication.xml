@@ -171,112 +171,6 @@ CHANNELS = {
 	["says"] = "say",
 	["emotes"] = "say", -- This is *not* a typo.
 }
-IGNORE_LIST = {
-	["Aldereon"] = true,
-	["Amanrandil"] = true,
-	["Ammunk"] = true,
-	["Anarwen"] = true,
-	["Angdil"] = true,
-	["Anghin"] = true,
-	["Angurboda"] = true,
-	["Arathorn"] = true,
-	["Ardan"] = true,
-	["Barbaras"] = true,
-	["Barliman"] = true,
-	["Bart"] = true,
-	["Beorn"] = true,
-	["Berel"] = true,
-	["Bombur"] = true,
-	["Bono"] = true,
-	["Bulgotha"] = true,
-	["Burgas"] = true,
-	["Celeborn"] = true,
-	["Celebrindal"] = true,
-	["Cerbus"] = true,
-	["Ciryariel"] = true,
-	["Clint"] = true,
-	["Curifil"] = true,
-	["Curundil"] = true,
-	["Daegil"] = true,
-	["Dolion"] = true,
-	["Duinhir"] = true,
-	["Eblees"] = true,
-	["Ecthelion"] = true,
-	["Elrohir"] = true,
-	["Elrond"] = true,
-	["Eoghha"] = true,
-	["Eonwe"] = true,
-	["Erestor"] = true,
-	["Erienal"] = true,
-	["Fardur"] = true,
-	["Fred"] = true,
-	["Frychra"] = true,
-	["Galadriel"] = true,
-	["Gandalf"] = true,
-	["Garfunkle"] = true,
-	["Gathrain"] = true,
-	["Githil"] = true,
-	["Gleored"] = true,
-	["Glithral"] = true,
-	["Goldberry"] = true,
-	["Gorkolung"] = true,
-	["Gramps"] = true,
-	["Grinder"] = true,
-	["Grobb"] = true,
-	["Haldir"] = true,
-	["Hrivesur"] = true,
-	["Huor"] = true,
-	["Ilyne"] = true,
-	["Isse"] = true,
-	["Janice"] = true,
-	["Joe"] = true,
-	["Karcarak"] = true,
-	["Katerine"] = true,
-	["Kementir"] = true,
-	["Kharak"] = true,
-	["Khoan"] = true,
-	["Kral"] = true,
-	["Lairesur"] = true,
-	["Lhanek"] = true,
-	["Loryen"] = true,
-	["Luanhir"] = true,
-	["Malardil"] = true,
-	["Maranwe"] = true,
-	["Mezagor"] = true,
-	["Mormaeg"] = true,
-	["Mughaer"] = true,
-	["Muranog"] = true,
-	["Nagrorh"] = true,
-	["Narag"] = true,
-	["Narv"] = true,
-	["Nob"] = true,
-	["Nordri"] = true,
-	["Olly"] = true,
-	["Orophin"] = true,
-	["Ortrun"] = true,
-	["Osof"] = true,
-	["Osantha"] = true,
-	["Quenaire"] = true,
-	["Randir"] = true,
-	["Rikurr"] = true,
-	["Rushak"] = true,
-	["Sabb"] = true,
-	["Sarion"] = true,
-	["Saruman"] = true,
-	["Sauron"] = true,
-	["Scarred"] = true,
-	["Shaghosh"] = true,
-	["Smaug"] = true,
-	["Squaretooth"] = true,
-	["Taurion"] = true,
-	["Tethel"] = true,
-	["Thurn"] = true,
-	["Umuk"] = true,
-	["Urgorl"] = true,
-	["Washmhurz"] = true,
-	["Wuda"] = true,
-	["Wyrdda"] = true,
-}
 
 reply_to = ""
 
@@ -287,7 +181,7 @@ communications = {
 	["tell"] = {},
 }
 
-function load_communications()
+function load_previous_communications()
 	for channel, tbl in pairs(communications) do
 		local file_name = string.format("%scommunication/%s.txt", GetInfo(67), channel)
 		if os.isFile(file_name) then
@@ -340,23 +234,23 @@ function handle_communication_list(tbl)
 	end
 end
 
-function handle_communication_text(channel_name, message, talker, destination)
-	if not message or message == "" then
+function handle_communication_text(channel_name, text, talker, talker_type, destination)
+	if talker == "you" or talker_type == "npc" then
 		return
 	end
 	if channel_name == "say" then
 		CallPlugin(MUME_SOUNDS, "play_communication", "says.wav")
 	elseif channel_name == "tell" then
-		if talker and string.match(message, "^.- tells the group '.+'$") then
+		if talker and string.match(text, "^.- tells the group '.+'$") then
 			reply_to = "group"
 		elseif talker then
 			reply_to = talker
 		end
 		CallPlugin(MUME_SOUNDS, "play_communication", "tells.wav")
 	end
-	table.insert(communications[channel_name], message)
+	table.insert(communications[channel_name], text)
 	local file = io.open(GetInfo(67) .. "communication/" .. channel_name .. ".txt", "ab")
-	file:write(message .. "\r\n")
+	file:write(text .. "\r\n")
 	file:close()
 end
 
@@ -368,34 +262,28 @@ function OnPluginBroadcast (msg, id, name, text)
 			handle_communication_list(tbl)
 		elseif msg == COMM_CHANNEL_TEXT then
 			local channel_name = CHANNELS[tbl.channel]
-			assert(channel_name, string.format("Invalid channel '%s'.", tbl.channel))
-			local message = tbl.text and normalize(tbl.text) or ""
-			local talker = tbl.talker and string.capitalize(normalize(tbl.talker)) or ""
-			assert(talker ~= "", string.format("Invalid talker '%s'.", tbl.talker))
-			-- If talker is "You", don't log it.
-			-- If talker contains anything other than letters, it's a mob so don't log it either.
-			if talker == "You" or string.contains(talker, "%A", false) or IGNORE_LIST[talker] then
-				return
-			end
-			local destination = tbl.destination and string.capitalize(normalize(tbl.destination)) or nil
-			handle_communication_text(channel_name, message, talker, destination)
+			assert(channel_name, string.format("Invalid channel '%s' in %s.", tbl.channel, text))
+			assert(tbl.text, string.format("No value for text in %s.", text))
+			assert(tbl.talker, string.format("No value for talker in %s.", text))
+			local body = normalize(tbl.text)
+			local talker = normalize(tbl.talker)
+			local talker_type = tbl["talker-type"]
+			local destination = tbl.destination and normalize(tbl.destination) or nil
+			handle_communication_text(channel_name, body, talker, talker_type, destination)
 		elseif msg == MMAPPER_COMM_GROUPTELL then
-			local channel_name = "tell"
-			local message = tbl.text and normalize(tbl.text) or ""
-			-- The talker may contain spaces in this instance, for example "Dent (Nick)", so filter out everything after the first word.
-			-- todo: investigate if group manager tells can contain an empty talker name. The assumption for now is they can.
+			assert(tbl.text, string.format("No value for text in %s.", text))
+			local body = normalize(tbl.text)
+			-- The talker may contain spaces in MMapper group tells, for example "Dent (Nick)", so filter out everything after the first word.
 			local talker = tbl.name and string.match(string.capitalize(normalize(tbl.name)), "^[^%s]*") or nil
-			if message ~= "" then
-				-- MMapper gags group manager tells in the client if they are handled by GMCP.
-				Note(message)
-			end
-			handle_communication_text(channel_name, message)  -- Don't use talker for now.
+			-- MMapper gags group manager tells in the client if they are handled by GMCP, so print the message manually.
+			Note(body)
+			handle_communication_text("tell", body)  -- Don't use talker for now.
 		end
 	end
 end
 
 function OnPluginInstall()
-	load_communications()
+	load_previous_communications()
 end
 
 ]]>
