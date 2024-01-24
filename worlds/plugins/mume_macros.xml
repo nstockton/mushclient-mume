@@ -217,11 +217,13 @@ function speak_gmcp_event(event)
 		value = sneak == "S" and "Sneaking" or sneak == "s" and "NoSneak" or "Off"
 	elseif event == "flags" then
 		local climb = get_char_vitals("climb")
+		local hidden = get_char_vitals("hidden")
 		local ride = get_char_vitals("ride")
 		local sneak = get_char_vitals("sneak")
 		local swim = get_char_vitals("swim")
 		local movement_flags = {
 			sneak == "S" and "Sneaking" or sneak == "s" and "NoSneak" or "",
+			hidden and "Hidden" or "",
 			swim and "Swimming" or "",
 			climb == "C" and "Climbing" or climb == "c" and "Climbing safely" or "",
 			ride and "Riding" or ride and "Ridden" or "",
