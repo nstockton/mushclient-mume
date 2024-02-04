@@ -87,7 +87,7 @@ tp_display()
   <trigger
    enabled="y"
    group="mume_xp_counter"
-   match="^You (?:feel more experienced|receive your share of experience)\."
+   match="^You (?:feel more experienced|receive your share of experience)\.$"
    name="received_kill_xp"
    regexp="y"
    omit_from_output="y"
@@ -146,20 +146,20 @@ end
 
 function xp_display()
 	local session_xp = current_xp - initial_xp
-	local needed_xp = current_xp <= total_next_level_xp and total_next_level_xp - current_xp or 0
+	local needed_xp = math.max(total_next_level_xp - current_xp, 0)
 	Note("XP: kill ", abbreviate(killed_xp), ", session ", abbreviate(session_xp), ", needed ", abbreviate(needed_xp))
 end
 
 function tp_display()
 	local session_tp = current_tp - initial_tp
-	local needed_tp = current_tp <= total_next_level_tp and total_next_level_tp - current_tp or 0
+	local needed_tp = math.max(total_next_level_tp - current_tp, 0)
 	Note("TP: gained ", abbreviate(gained_tp), ", session ", abbreviate(session_tp), ", needed ", abbreviate(needed_tp))
 end
 
 function tnl_display(report)
-	local needed_xp = current_xp <= total_next_level_xp and total_next_level_xp - current_xp or 0
-	local needed_tp = current_tp <= total_next_level_tp and total_next_level_tp - current_tp or 0
-	local output = string.format("%s XP and %s TP to reach level %s.", abbreviate(needed_xp), abbreviate(needed_tp), current_level == 100 and current_level or current_level + 1)
+	local needed_xp = math.max(total_next_level_xp - current_xp, 0)
+	local needed_tp = math.max(total_next_level_tp - current_tp, 0)
+	local output = string.format("%s XP and %s TP to reach level %s.", abbreviate(needed_xp), abbreviate(needed_tp), math.min(current_level + 1, 100))
 	Note("You need ", output)
 	if report then
 		Send("emote needs ", output)
