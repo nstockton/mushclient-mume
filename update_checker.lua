@@ -14,10 +14,17 @@ local ZIP_FILE = "mapper_proxy.zip"
 local SYSTEM32_PATH = os.path_join(os.getenv("WINDIR"), "System32")
 local CURL_PATH = os.path_join(SYSTEM32_PATH, "curl.exe")
 local TAR_PATH = os.path_join(SYSTEM32_PATH, "tar.exe")
+local XCOPY_PATH = os.path_join(SYSTEM32_PATH, "xcopy.exe")
 
 local HELP_TEXT = [[
 -h, --help:	Display this help.
 ]]
+
+
+assert(os.isDir(SYSTEM32_PATH))
+assert(os.isFile(CURL_PATH))
+assert(os.isFile(TAR_PATH))
+assert(os.isFile(XCOPY_PATH))
 
 
 local function rm_tree(directory_path)
@@ -151,7 +158,7 @@ local function do_extract()
 		end
 	end
 	lfs.chdir(pwd)
-	os.execute(string.format("xcopy \"%s\" \"mapper_proxy\" /E /V /I /Q /R /Y", copy_from))
+	os.execute(string.format('%s "%s" "mapper_proxy" /E /V /I /Q /R /Y', XCOPY_PATH, copy_from))
 	rm_tree("tempmapper")
 	printf("Done.")
 end

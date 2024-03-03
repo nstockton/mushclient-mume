@@ -115,32 +115,17 @@ end
 
 
 function os.isFile(name)
-	if type(name) ~= "string" then
-		return false
-	end
-	if not os.isDir(name) then
-		return os.rename(name, name) and true or false
-	end
-	return false
+	return type(name) == "string" and lfs.attributes(name, "mode") == "file" or false
 end
 
 
-function os.isFileOrDir(name)
-	if type(name) ~= "string" then
-		return false
-	end
-	return os.rename(name, name) and true or false
+function os.exists(name)
+	return type(name) == "string" and lfs.attributes(name, "mode") ~= nil or false
 end
 
 
 function os.isDir(name)
-	if type(name) ~= "string" then
-		return false
-	end
-	local cd = lfs.currentdir()
-	local is = lfs.chdir(name) and true or false
-	lfs.chdir(cd)
-	return is
+	return type(name) == "string" and lfs.attributes(name, "mode") == "directory" or false
 end
 
 
