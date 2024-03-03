@@ -6,9 +6,8 @@ local lfs = require("lfs")
 
 
 local APP_NAME = "Mapper Proxy"
-local SCRIPT_VERSION = "1.1"
+local SCRIPT_VERSION = "1.2"
 local GITHUB_USER = "nstockton"
-local APPVEYOR_USER = "NickStockton"
 local REPO = "mapperproxy-mume"
 local RELEASE_INFO_FILE = "update_info.ignore"
 local ZIP_FILE = "mapper_proxy.zip"
@@ -18,8 +17,21 @@ local TAR_PATH = os.path_join(SYSTEM32_PATH, "tar.exe")
 
 local HELP_TEXT = [[
 -h, --help:	Display this help.
--release, -dev:	 Specify whether the latest stable release from GitHub should be used, or the latest development build from AppVeyor (defaults to release).
 ]]
+
+
+local function rm_tree(directory_path)
+	if os.isDir(directory_path) then
+		os.execute(string.format('rd /S /Q "%s"', directory_path))
+	end
+end
+
+
+local function rm_file(file_path)
+	if os.isFile(file_path) then
+		os.remove(file_path)
+	end
+end
 
 
 local function get_url(url, output_path)
@@ -54,12 +66,7 @@ end
 
 local function save_last_info(tbl)
 	-- Encode the release information in tbl to JSon, and save it to a file.
-	local ordered_keys = {}
-	for k, v in pairs(tbl) do
-		table.insert(ordered_keys, k)
-	end
-	table.sort(ordered_keys)
-	local data = string.gsub(json.encode(tbl, {indent=true, level=0, keyorder=ordered_keys}), "\r?\n", "\r\n")
+	local data = string.gsub(json.encode(tbl, {indent=true, level=0, keyorder=table.keys(tbl)}), "\r?\n", "\r\n")
 	local handle = assert(io.open(RELEASE_INFO_FILE, "wb"))
 	handle:write(data)
 	handle:close()
@@ -73,7 +80,7 @@ local function get_checksum(url)
 end
 
 
-local function _get_latest_github()
+local function get_latest_github()
 	local project_url = string.format("https://api.github.com/repos/%s/%s/releases/latest", GITHUB_USER, REPO)
 	local gh, pos, err = json.decode(get_url(project_url), 1, nil)
 	assert(gh, err)
@@ -96,67 +103,25 @@ local function _get_latest_github()
 end
 
 
-local function _get_latest_appveyor()
-	local project_url = string.format("https://ci.appveyor.com/api/projects/%s/%s", APPVEYOR_USER, REPO)
-	local av, pos, err = json.decode(get_url(project_url), 1, nil)
-	assert(av, err)
-	local release_data = {}
-	release_data.provider = "appveyor"
-	release_data.size = nil
-	assert(av.build, "Error: 'build' not in retrieved data.")
-	assert(av.build.status, "Error: 'status' not in 'build'.")
-	assert(type(av.build.isTag) ~= "nil", "Error: 'isTag' not in 'build'.")
-	if av.build.status == "success" and av.build.isTag then
-		release_data.status = "success"
-		assert(av.build.version, "Error: 'version' not in 'build'.")
-		release_data.tag_name = string.match(av.build.version, "^[vV]([%d.]+[-]%w+)")
-		release_data.tag_name = string.gsub(release_data.tag_name, "-", "_")
-		release_data.updated_at = assert(av.build.updated, "Error: 'updated' not in 'build'.")
-		assert(av.build.jobs, "Error: 'jobs' not in 'build'.")
-		for i, job in ipairs(av.build.jobs) do
-			assert(job.status, "Error: 'status' not in job.")
-			if job.status == "success" then
-				assert(av.build.branch, "Error: 'branch' not in 'build'.")
-				release_data.download_url = string.format("%s/artifacts/Mapper_Proxy_V%s.zip?branch=%s", project_url, release_data.tag_name, av.build.branch)
-				release_data.sha256 = get_checksum(string.format("%s/artifacts/Mapper_Proxy_V%s.zip.sha256?branch=%s", project_url, release_data.tag_name, av.build.branch))
-			end
-		end
-	else
-		release_data.status = "success"
-		release_data.updated_at = "current"
-		release_data.tag_name = "master"
-		release_data.download_url = string.format("%s/artifacts/MapperProxy.zip?branch=master&pr=false", project_url)
-		release_data.sha256 = get_checksum(string.format("%s/artifacts/MapperProxy.zip.sha256?branch=master&pr=false", project_url))
-	end
-	return release_data
-end
-
-
 local function prompt_for_update()
 	io.write("Update now? (Y to update, N to skip this release in future, Q to exit and do nothing) ")
 	local response = string.lower(string.strip(getch.getch()))
 	io.write("\n")
-	if response == "" then
-		return prompt_for_update()
-	elseif response == "y" then
-		return "y"
-	elseif response == "n" then
-		return "n"
-	elseif response == "q" then
-		return "q"
-	else
+	local valid_responses = table.set("y", "n", "q")
+	if valid_responses[response] then
+		return response
+	elseif response ~= "" then
 		print("Invalid response. Please try again.")
-		return prompt_for_update()
 	end
+	return prompt_for_update()
 end
 
 
 local function do_download(release)
-	printf("Downloading %s %s (%s) from %s.", APP_NAME, release.tag_name, release.updated_at, release.provider == "github" and "GitHub" or release.provider == "appveyor" and "AppVeyor" or string.capitalize(release.provider))
+	printf("Downloading %s %s (%s) from GitHub.", APP_NAME, release.tag_name, release.updated_at)
 	local downloaded_size = assert(get_url(release.download_url, ZIP_FILE))
-	-- release.size should be nil if the provider's API doesn't support retrieving file size.
-	-- If the provider does support retrieving file size, but for some reason did not send it, release.size should be 0.
-	assert(not release.size or downloaded_size and downloaded_size > 0 and downloaded_size == release.size, "Error downloading release: Downloaded file size and reported size from provider API do not match.")
+	-- If GitHub for some reason did not send file size, release.size should be 0.
+	assert(release.size > 0 and release.size == downloaded_size, "Error downloading release: Downloaded file size and reported size from GitHub do not match.")
 	printf("Verifying download.")
 	if sha256sum_file(ZIP_FILE) == release.sha256 then
 		save_last_info(release)
@@ -164,9 +129,7 @@ local function do_download(release)
 		return true
 	else
 		printf("Error: checksums do not match. Aborting.")
-		if os.isFile(ZIP_FILE) then
-			os.remove(ZIP_FILE)
-		end
+		rm_file(ZIP_FILE)
 		return false
 	end
 end
@@ -175,14 +138,10 @@ end
 local function do_extract()
 	local pwd = lfs.currentdir()
 	printf("Extracting files.")
-	if os.isDir("tempmapper") then
-		os.execute('rd /S /Q "tempmapper"')
-	end
+	rm_tree("tempmapper")
 	lfs.mkdir(os.path_join(pwd, "tempmapper"))
 	os.execute(string.format('%s -xf "%s" --directory "tempmapper"', TAR_PATH, ZIP_FILE))
-	if os.isFile(ZIP_FILE) then
-		os.remove(ZIP_FILE)
-	end
+	rm_file(ZIP_FILE)
 	assert(lfs.chdir(os.path_join(pwd, "tempmapper")))
 	local copy_from
 	for item in lfs.dir(lfs.currentdir()) do
@@ -193,9 +152,7 @@ local function do_extract()
 	end
 	lfs.chdir(pwd)
 	os.execute(string.format("xcopy \"%s\" \"mapper_proxy\" /E /V /I /Q /R /Y", copy_from))
-	if os.isDir("tempmapper") then
-		os.execute('rd /S /Q "tempmapper"')
-	end
+	rm_tree("tempmapper")
 	printf("Done.")
 end
 
@@ -244,22 +201,6 @@ local function script_update()
 end
 
 
-local function get_latest_info(last_provider)
-	local flags = get_flags(true)
-	local use_github = flags["release"]
-	local use_appveyor = flags["dev"] or flags["devel"] or flags["development"]
-	assert(not (use_github and use_appveyor), "Error: release and development are mutually exclusive.")
-	local provider = use_github and "github" or use_appveyor and "appveyor" or last_provider or "github"
-	if provider == "github" then
-		return _get_latest_github()
-	elseif provider == "appveyor" then
-		return _get_latest_appveyor()
-	else
-		assert(nil, string.format("Invalid provider: '%s'.", provider))
-	end
-end
-
-
 local last = get_last_info()
 
 
@@ -274,15 +215,11 @@ end
 
 
 -- Clean up previously left junk.
-if os.isFile(ZIP_FILE) then
-	os.remove(ZIP_FILE)
-end
-if os.isDir("tempmapper") then
-	os.execute("rd /S /Q \"tempmapper\"")
-end
+rm_file(ZIP_FILE)
+rm_tree("tempmapper")
 
 
-local latest = get_latest_info(last.provider)
+local latest = get_latest_github()
 
 
 if os.isDir("mapper_proxy") and not called_by_script() then
@@ -298,17 +235,17 @@ elseif not os.isDir("mapper_proxy") then
 		do_extract()
 	end
 elseif last.skipped_release and last.skipped_release == latest.tag_name .. latest.sha256 then
-	printf("The update to %s (%s) dated %s from %s was previously skipped.", APP_NAME, latest.tag_name, latest.updated_at, latest.provider == "github" and "GitHub" or latest.provider == "appveyor" and "AppVeyor" or string.capitalize(latest.provider))
+	printf("The update to %s (%s) dated %s from GitHub was previously skipped.", APP_NAME, latest.tag_name, latest.updated_at)
 	if called_by_script() then
 		os.exit(0)
 	end
 elseif last.tag_name and last.sha256 and last.tag_name .. last.sha256 == latest.tag_name .. latest.sha256 then
-	printf("You are currently running the latest %s (%s) dated %s from %s.", APP_NAME, latest.tag_name, latest.updated_at, latest.provider == "github" and "GitHub" or latest.provider == "appveyor" and "AppVeyor" or string.capitalize(latest.provider))
+	printf("You are currently running the latest %s (%s) dated %s from GitHub.", APP_NAME, latest.tag_name, latest.updated_at)
 	if called_by_script() then
 		os.exit(0)
 	end
 else
-	printf("A new version of %s (%s) dated %s from %s was found.", APP_NAME, latest.tag_name, latest.updated_at, latest.provider == "github" and "GitHub" or latest.provider == "appveyor" and "AppVeyor" or string.capitalize(latest.provider))
+	printf("A new version of %s (%s) dated %s from GitHub was found.", APP_NAME, latest.tag_name, latest.updated_at)
 	local user_choice = prompt_for_update()
 	if user_choice == "y" then
 		if do_download(latest) then

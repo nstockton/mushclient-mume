@@ -348,6 +348,19 @@ function table.update(tbl, nil_value, ...)
 end
 
 
+function table.set(...)
+	local result = {}
+	local value
+	for i = 1, select("#", ...) do
+		value = select(i, ...)
+		if value ~= nil then
+			result[value] = true
+		end
+	end
+	return result
+end
+
+
 function table.set_create(tbl)
 	local result = {}
 	for _, item in ipairs(tbl) do
