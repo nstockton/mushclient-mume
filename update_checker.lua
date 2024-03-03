@@ -12,11 +12,31 @@ local APPVEYOR_USER = "NickStockton"
 local REPO = "mapperproxy-mume"
 local RELEASE_INFO_FILE = "update_info.ignore"
 local ZIP_FILE = "mapper_proxy.zip"
+local SYSTEM32_PATH = os.path_join(os.getenv("WINDIR"), "System32")
+local CURL_PATH = os.path_join(SYSTEM32_PATH, "curl.exe")
+local TAR_PATH = os.path_join(SYSTEM32_PATH, "tar.exe")
 
 local HELP_TEXT = [[
 -h, --help:	Display this help.
 -release, -dev:	 Specify whether the latest stable release from GitHub should be used, or the latest development build from AppVeyor (defaults to release).
 ]]
+
+
+local function get_url(url, output_path)
+	local command = {}
+	table.insert(command, string.format('%s --silent --location --retry 999 --retry-max-time 0 --continue-at -', CURL_PATH))
+	if output_path then
+		table.insert(command, string.format('--output "%s"', output_path))
+	end
+	table.insert(command, string.format('"%s"', url))
+	local handle = assert(io.popen(table.concat(command, " "), "rb"))
+	local result = handle:read("*all")
+	handle:close()
+	if output_path then
+		return os.fileSize(output_path)
+	end
+	return result
+end
 
 
 local function get_last_info()
@@ -47,9 +67,7 @@ end
 
 
 local function get_checksum(url)
-	local handle = assert(io.popen(string.format("curl.exe --silent --location --retry 999 --retry-max-time 0 --continue-at - \"%s\"", url)))
-	local result = string.lower(string.strip(handle:read("*all")))
-	handle:close()
+	local result = string.lower(string.strip(get_url(url)))
 	local hash = assert(string.match(result, "^([0-9a-f]+).+%.zip$"), string.format("Invalid checksum '%s'", result))
 	return hash
 end
@@ -57,10 +75,7 @@ end
 
 local function _get_latest_github()
 	local project_url = string.format("https://api.github.com/repos/%s/%s/releases/latest", GITHUB_USER, REPO)
-	local command = string.format("curl.exe --silent --location --retry 999 --retry-max-time 0 --continue-at - \"%s\"", project_url)
-	local handle = assert(io.popen(command))
-	local gh, pos, err = json.decode(handle:read("*all"), 1, nil)
-	handle:close()
+	local gh, pos, err = json.decode(get_url(project_url), 1, nil)
 	assert(gh, err)
 	local release_data = {}
 	release_data.provider = "github"
@@ -83,10 +98,7 @@ end
 
 local function _get_latest_appveyor()
 	local project_url = string.format("https://ci.appveyor.com/api/projects/%s/%s", APPVEYOR_USER, REPO)
-	local command = string.format("curl.exe --silent --location --retry 999 --retry-max-time 0 --continue-at - \"%s\"", project_url)
-	local handle = assert(io.popen(command))
-	local av, pos, err = json.decode(handle:read("*all"), 1, nil)
-	handle:close()
+	local av, pos, err = json.decode(get_url(project_url), 1, nil)
 	assert(av, err)
 	local release_data = {}
 	release_data.provider = "appveyor"
@@ -141,8 +153,7 @@ end
 
 local function do_download(release)
 	printf("Downloading %s %s (%s) from %s.", APP_NAME, release.tag_name, release.updated_at, release.provider == "github" and "GitHub" or release.provider == "appveyor" and "AppVeyor" or string.capitalize(release.provider))
-	os.execute(string.format("curl.exe --silent --location --retry 999 --retry-max-time 0 --continue-at - --output %s \"%s\"", ZIP_FILE, release.download_url))
-	local downloaded_size = assert(os.fileSize(ZIP_FILE))
+	local downloaded_size = assert(get_url(release.download_url, ZIP_FILE))
 	-- release.size should be nil if the provider's API doesn't support retrieving file size.
 	-- If the provider does support retrieving file size, but for some reason did not send it, release.size should be 0.
 	assert(not release.size or downloaded_size and downloaded_size > 0 and downloaded_size == release.size, "Error downloading release: Downloaded file size and reported size from provider API do not match.")
@@ -164,21 +175,27 @@ end
 local function do_extract()
 	local pwd = lfs.currentdir()
 	printf("Extracting files.")
-	os.execute(string.format("unzip.exe -qq \"%s\" -d \"tempmapper\"", ZIP_FILE))
+	if os.isDir("tempmapper") then
+		os.execute('rd /S /Q "tempmapper"')
+	end
+	lfs.mkdir(os.path_join(pwd, "tempmapper"))
+	os.execute(string.format('%s -xf "%s" --directory "tempmapper"', TAR_PATH, ZIP_FILE))
 	if os.isFile(ZIP_FILE) then
 		os.remove(ZIP_FILE)
 	end
-	assert(lfs.chdir(pwd .. "\\tempmapper"))
+	assert(lfs.chdir(os.path_join(pwd, "tempmapper")))
 	local copy_from
 	for item in lfs.dir(lfs.currentdir()) do
 		if lfs.attributes(item, "mode") == "directory" and string.startswith(string.lower(item), "mapper_proxy") then
-			copy_from = string.format("tempmapper\\%s", item)
+			copy_from = os.path_join("tempmapper", item)
 			break
 		end
 	end
 	lfs.chdir(pwd)
 	os.execute(string.format("xcopy \"%s\" \"mapper_proxy\" /E /V /I /Q /R /Y", copy_from))
-	os.execute("rd /S /Q \"tempmapper\"")
+	if os.isDir("tempmapper") then
+		os.execute('rd /S /Q "tempmapper"')
+	end
 	printf("Done.")
 end
 
@@ -208,10 +225,7 @@ local function script_update()
 	local handle = assert(io.open(script_path, "rb"))
 	local script_data = assert(handle:read("*all"), string.format("Error: Unable to read data from '%s'.", script_path))
 	handle:close()
-	local command = string.format("curl.exe --silent --location --retry 999 --retry-max-time 0 --continue-at - \"%s\"", project_url)
-	local handle = assert(io.popen(command))
-	local gh, pos, err = json.decode(handle:read("*all"), 1, nil)
-	handle:close()
+	local gh, pos, err = json.decode(get_url(project_url), 1, nil)
 	assert(gh, err)
 	-- GitHub might return an error message if the path was invalid, ETC.
 	assert(gh.encoding and gh.content and gh.size, gh.message or "Error: unknown data returned.")

@@ -10,6 +10,7 @@ local lfs = require("lfs")
 local sha2 = require("sha2")
 
 
+local PATH_SEPARATOR = string.sub(package.config, 1, 1)
 local PATTERN_ESCAPE_REPLACEMENTS = {
 	["%"] = "%%",
 	["("] = "%(",
@@ -140,6 +141,15 @@ function os.isDir(name)
 	local is = lfs.chdir(name) and true or false
 	lfs.chdir(cd)
 	return is
+end
+
+
+function os.path_join(...)
+	local result = {}
+	for i = 1, select("#", ...) do
+		table.insert(result, select(i, ...):strip(PATH_SEPARATOR))
+	end
+	return table.concat(result, PATH_SEPARATOR)
 end
 
 
