@@ -76,6 +76,20 @@ function test_string_pattern_safe()
 end
 
 
+function test_string_removeprefix()
+	lu.assertEquals(string.removeprefix("hello", "he"), "llo")
+	lu.assertEquals(string.removeprefix("hello", "xx"), "hello")
+	lu.assertEquals(string.removeprefix("hello", ""), "hello")
+end
+
+
+function test_string_removesuffix()
+	lu.assertEquals(string.removesuffix("hello", "lo"), "hel")
+	lu.assertEquals(string.removesuffix("hello", "xx"), "hello")
+	lu.assertEquals(string.removesuffix("hello", ""), "hello")
+end
+
+
 function test_string_rstrip()
 	lu.assertEquals(string.rstrip(" \thello\t "), " \thello")
 	lu.assertEquals(string.rstrip(" \thello\t ", " "), " \thello\t")

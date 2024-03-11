@@ -214,6 +214,24 @@ function string:pattern_safe()
 end
 
 
+function string:removeprefix(prefix)
+	-- Removes prefix from the beginning of a string if found.
+	if type(prefix) == "string" and prefix ~= "" and self:startswith(prefix) then
+		return self:sub(string.len(prefix) + 1)
+	end
+	return self
+end
+
+
+function string:removesuffix(suffix)
+	-- Removes suffix from the end of a string if found.
+	if type(suffix) == "string" and suffix ~= "" and self:endswith(suffix) then
+		return self:sub(1, -string.len(suffix) - 1)
+	end
+	return self
+end
+
+
 function string:rstrip(characters)
 	characters = characters and ("[" .. string.pattern_safe(characters) .. "]") or "%s"
 	return self:match("^(.-)" .. characters .. "*$") or self
