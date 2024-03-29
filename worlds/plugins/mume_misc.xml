@@ -872,6 +872,15 @@ search</send>
   <trigger
    enabled="y"
    group="mume_misc"
+   match="You lose your balance from all the shaking!"
+   send_to="0"
+   sequence="100"
+  >
+  <send>stand</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
    match="Suddenly, the ground drops beneath your feet!"
    send_to="0"
    sequence="100"
