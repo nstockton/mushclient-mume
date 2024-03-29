@@ -2359,7 +2359,11 @@ ascii_art_lines = 0
 
 function on_character_logged_in()
 	Send("change compact off")
-	Send("change wordwrap off")
+	Send("change pager off")
+	Send("change width default terminal")
+	Send("change width descriptions terminal")
+	Send("change width table max 80")
+	Send("change width text terminal")
 	Send("change prompt none")
 end
 
