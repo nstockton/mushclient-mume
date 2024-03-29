@@ -662,6 +662,17 @@ end
   <trigger
    enabled="y"
    group="mume_sounds"
+   match="^You hear a loud rumbling sound (?:from the \w+|all around you)!$"
+   name="misc_alert38"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>play(TYPE_ALERT, "misc_alert.wav")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_sounds"
    match="^A (?:mountain lion|huge stone giant|great\, wild boar|citizen mercenary)(?: \(\w+\))? sits down and rests\.$"
    name="alert_mercenary_resting"
    regexp="y"
