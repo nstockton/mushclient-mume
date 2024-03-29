@@ -1396,6 +1396,72 @@ train all</send>
   >
   <send>change prompt pretype on</send>
   </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="* is in an excellent condition."
+   omit_from_output="y"
+   regexp="n"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 (healthy 100%)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="* has some small bruises."
+   omit_from_output="y"
+   regexp="n"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 (fine 99%)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="* has several bruises."
+   omit_from_output="y"
+   regexp="n"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 (hurt 70%)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="* has some big nasty scratches."
+   omit_from_output="y"
+   regexp="n"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 (wounded 45%)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="* looks pretty hurt."
+   omit_from_output="y"
+   regexp="n"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 (bad 25%)</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_misc"
+   match="* is in very bad shape."
+   omit_from_output="y"
+   regexp="n"
+   send_to="2"
+   sequence="100"
+  >
+  <send>%0 (awful 10%)</send>
+  </trigger>
 </triggers>
 
 <!--  Aliases  -->
