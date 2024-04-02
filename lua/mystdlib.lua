@@ -5,9 +5,9 @@
 -- Copyright (C) 2019 Nick Stockton <https://github.com/nstockton>
 
 
+local checksum = require("checksum")
 local getch = require("getch")
 local lfs = require("lfs")
-local sha2 = require("sha2")
 
 
 local PATH_SEPARATOR = string.sub(package.config, 1, 1)
@@ -526,19 +526,7 @@ function timeit(loops, func, ...)
 end
 
 
-local function _shasum_file(hasher, file_name, block_size)
-	local block_size = block_size or 2 ^ 16
-	local file = assert(io.open(file_name, "rb"))
-	for block in file:lines(block_size) do
-		hasher(block)
-	end
-	file:close()
-	return string.gsub(hasher(), ".", function(c) return bit.tohex(string.byte(c), 2) end)
-end
-
-
-sha1sum_file = function (...) return _shasum_file(sha2.sha1_digest(), ...) end
-sha224sum_file = function (...) return _shasum_file(sha2.sha224_digest(), ...) end
-sha256sum_file = function (...) return _shasum_file(sha2.sha256_digest(), ...) end
-sha384sum_file = function (...) return _shasum_file(sha2.sha384_digest(), ...) end
-sha512sum_file = function (...) return _shasum_file(sha2.sha512_digest(), ...) end
+sha1sum_file = checksum.sha1sum_file
+sha256sum_file = checksum.sha256sum_file
+sha384sum_file = checksum.sha384sum_file
+sha512sum_file = checksum.sha512sum_file
