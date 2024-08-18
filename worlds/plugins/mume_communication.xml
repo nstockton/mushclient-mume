@@ -200,7 +200,7 @@ function review(channel, text)
 	local output = {}
 	if table.isempty(communications[channel]) then
 		-- The channel log file is empty.
-		table.insert(output, string.capitalize(channel_name) .. " log is empty!")
+		table.insert(output, string.capitalize(channel) .. " log is empty!")
 	elseif string.isdigit(text) and tonumber(text) >= 1 and table.getn(communications[channel]) >= tonumber(text) then
 		-- The search string is a number, so output the last (N) lines.
 		output = table.slice(communications[channel], tonumber(text) * -1)
