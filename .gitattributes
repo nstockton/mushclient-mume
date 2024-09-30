@@ -1,0 +1,16 @@
+* text=auto
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.json text eol=lf
+*.json.sample text eol=lf
+*.json.schema text eol=lf
+*.lua text eol=crlf
+*.mcl.sample text eol=crlf
+*.md text eol=crlf
+*.sha256 text eol=lf
+*.txt text eol=crlf
+*.xml text eol=crlf
+*.yaml text eol=crlf
+*.yml text eol=crlf
+.gitattributes text eol=crlf
+.gitignore text eol=crlf
