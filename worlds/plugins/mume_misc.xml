@@ -1587,9 +1587,10 @@ recite vellumscroll %&lt;player&gt;</send>
 if "%&lt;container&gt;" == "" then
 	Note("Antidote Lore: 2X blackberries, 1X long, slender green leaves (athelas), 1X white petals (lily), 1X grey petals (figwort)")
 else
+	Send("get all %&lt;container&gt;")
+	Send("get blackberries all")
 	Send("get blackberries all")
 	Send("put blackberries %&lt;container&gt;")
-	Send("get blackberries all")
 	Send("put blackberries %&lt;container&gt;")
 	Send("get athelas all")
 	Send("put athelas %&lt;container&gt;")
@@ -1613,6 +1614,7 @@ end
 if "%&lt;container&gt;" == "" then
 	Note("Arachnia Lore: 1X short, black fur (butcher from bats), 1X short, moist tail (butcher from salamander), 1X grey fluid-sack (butcher from grey spider)")
 else
+	Send("get all %&lt;container&gt;")
 	Send("get bat-fur all")
 	Send("put bat-fur %&lt;container&gt;")
 	Send("get salamander all")
@@ -1635,11 +1637,12 @@ end
 if "%&lt;container&gt;" == "" then
 	Note("Baker Lore: 3X eggs, 1X flour, 1X mashed honey-wax mixture (crushed honeycomb)")
 else
+	Send("get all %&lt;container&gt;")
+	Send("get egg all")
+	Send("get egg all")
 	Send("get egg all")
 	Send("put egg %&lt;container&gt;")
-	Send("get egg all")
 	Send("put egg %&lt;container&gt;")
-	Send("get egg all")
 	Send("put egg %&lt;container&gt;")
 	Send("get flour all")
 	Send("put flour %&lt;container&gt;")
@@ -1661,6 +1664,7 @@ end
 if "%&lt;container&gt;" == "" then
 	Note("ClearThoughts Lore: 1X mauve petals, 1X grey-green leaves (sage), 1X scented crushed leaves (thyme), 1X hard, round, black berries (juniper)")
 else
+	Send("get all %&lt;container&gt;")
 	Send("get mauve all")
 	Send("put mauve %&lt;container&gt;")
 	Send("get sage all")
@@ -1685,6 +1689,7 @@ end
 if "%&lt;container&gt;" == "" then
 	Note("Orkish Draught Lore: 1X narrow leaves (tarragon), 1X short, moist tail (butcher salamander), 1X short, black fur (butcher bat), 1X vial of preserved blood")
 else
+	Send("get all %&lt;container&gt;")
 	Send("get tarragon all")
 	Send("put tarragon %&lt;container&gt;")
 	Send("get salamander all")
@@ -1709,11 +1714,12 @@ end
 if "%&lt;container&gt;" == "" then
 	Note("Healing Lore: 1X blackcurrant berries, 2X grey-green leaves (sage), 1X long, slender green leaves (athelas), 1X yellow petals (foxtail)")
 else
+	Send("get all %&lt;container&gt;")
 	Send("get blackcurrant all")
 	Send("put blackcurrant %&lt;container&gt;")
 	Send("get sage all")
-	Send("put sage %&lt;container&gt;")
 	Send("get sage all")
+	Send("put sage %&lt;container&gt;")
 	Send("put sage %&lt;container&gt;")
 	Send("get athelas all")
 	Send("put athelas %&lt;container&gt;")
@@ -1735,6 +1741,7 @@ end
 if "%&lt;container&gt;" == "" then
 	Note("Leaf-cake Lore: 1X purple flower with a fluffy red center (coneflower), 1X mashed honey-wax mixture (crushed honeycomb), 1X grey-green leaves (sage), 1X scented crushed leaves (thyme)")
 else
+	Send("get all %&lt;container&gt;")
 	Send("get coneflower all")
 	Send("put coneflower %&lt;container&gt;")
 	Send("get honey-wax all")
@@ -1759,6 +1766,7 @@ end
 if "%&lt;container&gt;" == "" then
 	Note("Drake-slumber (Scaly) Lore: 1X red mushroom, 1X hemlock, 1X sticky mass of stems, leaves and sap (crushed milkweed), 1X foul-smelling root (valerian), 1X orange-red flowers (poppy), 1X white, egg-shaped berries (baneberries)")
 else
+	Send("get all %&lt;container&gt;")
 	Send("get red-mushroom all")
 	Send("put red-mushroom %&lt;container&gt;")
 	Send("get hemlock all")
@@ -1787,6 +1795,7 @@ end
 if "%&lt;container&gt;" == "" then
 	Note("Shadows Lore: 1X cinnamon, 1X needlelike leaves (rosemary), 1X rib-bone")
 else
+	Send("get all %&lt;container&gt;")
 	Send("get cinnamon all")
 	Send("put cinnamon %&lt;container&gt;")
 	Send("get rosemary all")
@@ -1809,6 +1818,7 @@ end
 if "%&lt;container&gt;" == "" then
 	Note("Travelling Lore: 1X narrow leaves (tarragon), 1X clover, 1X man-like root (ginseng)")
 else
+	Send("get all %&lt;container&gt;")
 	Send("get tarragon all")
 	Send("put tarragon %&lt;container&gt;")
 	Send("get clover all")
@@ -1831,6 +1841,7 @@ end
 if "%&lt;container&gt;" == "" then
 	Note("Venom Lore: 1X short, black fur (butcher from bats), 1X short, moist tail (butcher from salamander), 1X small fluid-sack (butcher from rattlesnake)")
 else
+	Send("get all %&lt;container&gt;")
 	Send("get bat-fur all")
 	Send("put bat-fur %&lt;container&gt;")
 	Send("get salamander all")
@@ -1853,6 +1864,7 @@ end
 if "%&lt;container&gt;" == "" then
 	Note("Walking Lore: 1X pale-green, crushed leaves (marjoram), 1X clover, 1X cloves, 1X hard, round, black berries (juniper)")
 else
+	Send("get all %&lt;container&gt;")
 	Send("get marjoram all")
 	Send("put marjoram %&lt;container&gt;")
 	Send("get clover all")
