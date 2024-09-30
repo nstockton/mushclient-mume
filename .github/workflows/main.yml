@@ -63,6 +63,7 @@ jobs:
           submodules: 'recursive' # All submodules.
       - name: Get Project Info
         id: project_info
+        shell: bash
         run: |
           NAME='MUSHclient MUME'
           VERSION=${GITHUB_REF#refs/tags/v} # Everything after the v.
