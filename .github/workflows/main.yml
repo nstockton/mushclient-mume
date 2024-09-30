@@ -101,6 +101,8 @@ jobs:
         env:
           ZIP_FILE: mushclient-mume-v${{ steps.project_info.outputs.version }}.zip
         run: |
+          rm -rf "mushclient-mume/.git*"
+          rm -f "mushclient-mume/mushclient-mume-binaries.zip.sha256"
           7z a -y -tzip "${ZIP_FILE}" "mushclient-mume"
           sha256sum "${ZIP_FILE}" >"${ZIP_FILE}.sha256"
           rm -rf "mushclient-mume"
