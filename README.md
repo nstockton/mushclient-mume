@@ -1,21 +1,12 @@
 # mushclient-mume
 A portable copy of [MUSHclient](http://mushclient.com/mushclient/mushclient.htm "MUSHclient Home Page") bundled with scripts for playing [MUME](http://mume.org "MUME Official Site") and a [mapper](https://github.com/nstockton/mapperproxy-mume "Mapper Proxy GitHub Page") for use by blind players.
 
-## License And Credits
-All of the MUSHclient plugins that I (Nick Stockton) wrote are licensed under the terms of the [Mozilla Public License, version 2.0.](https://www.mozilla.org/en-US/MPL/2.0/ "MPL2 official Site") MUSHclient is copyrighted by Nick Gammon, and licenses for MUSHclient and bundled third-party components can be found in the docs directory of this project.
-
 ## Installation
-### Screen Reader Specific Instructions.
-#### NVDA
-If you are an [NVDA](https://www.nvaccess.org "NV ACCESS Official Site") user, please first install the MUSHclient add-on for NVDA, located in the nvda_addon directory of this project.
-* If you are using a normal (not portable) installation of NVDA, you can begin the installation process by pressing enter on the add-on file.
-* If you are using a portable copy of NVDA, install the add-on through the add-ons manager (NVDA+N to bring up the NVDA menu, select Tools, select Manage add-ons).
-### If Running From Source
-Install the [Python interpreter](https://python.org "Python Home Page"), and make sure it's in your path before running this package.
+* Download the [latest release](https://github.com/nstockton/mushclient-mume/releases/latest "Latest Release on the Releases Page") of the package, and extract it somewhere on your computer.
+* If you are an [NVDA](https://www.nvaccess.org "NV ACCESS Official Site") user, you should also install the MUSHclient add-on for NVDA, located in the nvda_addon directory of the package folder. You can begin the add-on installation by selecting the .add-on file in Windows Explorer, and pressing enter.
 
-## Running MUSHclient With The Mapper
-You should start MUSHclient by pressing enter on the mc.bat file. Do *not* try to run it by running MUSHclient.exe. mc.bat will first start the mapper and then mushclient.
-Windows fire wall may prompt you to add an exception for the mapper. This is because the mapper acts as a proxy between MUSHclient and Mume. Add the exception if prompted.
+## Running the Package
+When ever you wish to play the game, you should start MUSHclient by pressing enter on the `mc.bat` file, located in the main `mushclient-mume` folder. Do *not* run MUSHclient.exe directly, as `mc.bat` is needed to run the mapper and MushClient in the proper sequence. mc.bat will first start the mapper and then mushclient.
 
 ## MUSHclient Plugins
 This project contains the following MUSHclient plugins and commands.
@@ -376,3 +367,6 @@ Auto mapping mode must be on for these commands to have any effect.
 * sync [vnum|label]  --  Manually sync the map to the room with vnum or label. If no vnum or label is given, mapper will be placed in an unsynced state, and will try to automatically sync to the current room.
 * tvnum  --  Tell the vnum of the current room to another player.
 * vnum  --  Print the vnum of the current room.
+
+## License And Credits
+All of the MUSHclient plugins that I (Nick Stockton) wrote are licensed under the terms of the [Mozilla Public License, version 2.0.](https://www.mozilla.org/en-US/MPL/2.0/ "MPL2 official Site") MUSHclient is copyrighted by Nick Gammon, and licenses for MUSHclient and bundled third-party components can be found in the docs directory of the package.
