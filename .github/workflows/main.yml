@@ -1,0 +1,85 @@
+name: Main
+
+on:
+  push:
+    branches:
+      - '**' # All branch names including slashes.
+      - '!gh-pages' # Except for gh-pages.
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+  pull_request:
+    branches:
+      - '**' # All branch names including slashes.
+      - '!gh-pages' # Except for gh-pages.
+  workflow_dispatch: # Allows you to run this workflow manually from the Actions tab.
+
+env:
+  MUSHCLIENT_BINARIES: ${{ secrets.MUSHCLIENT_BINARIES }}
+
+jobs:
+  build:
+    name: Build And Test
+    runs-on: windows-2022
+    defaults:
+      run:
+        shell: cmd
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # All history for all branches and tags.
+          submodules: 'recursive' # All submodules.
+      - name: Run Lua Tests
+        run: |
+          "%SystemRoot%\System32\curl.exe" --silent --output "mushclient-mume-binaries.zip" "%MUSHCLIENT_BINARIES%"
+          "%SystemRoot%\System32\tar.exe" -x -f "mushclient-mume-binaries.zip"
+          del /q /f "mushclient-mume-binaries.zip"
+          git archive --format zip --prefix "mushclient-mume/" HEAD | "%SystemRoot%\System32\tar.exe" -x
+          "mushclient-mume\test.bat"
+  deploy:
+    needs: build
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
+    name: Deploy Release
+    runs-on: windows-2022
+    permissions:
+      contents: write
+    defaults:
+      run:
+        shell: cmd
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # All history for all branches and tags.
+          submodules: 'recursive' # All submodules.
+      - name: Get Project Info
+        id: project_info
+        run: |
+          NAME='MUSHclient MUME'
+          VERSION=${GITHUB_REF#refs/tags/v} # Everything after the v.
+          echo "name=${NAME}" >> $GITHUB_OUTPUT
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+      - name: Download Mushclient Binaries
+        env:
+          ZIP_FILE: mushclient-mume-v${{ steps.project_info.outputs.version }}
+        run: |
+          "%SystemRoot%\System32\curl.exe" --silent --output "mushclient-mume-binaries.zip" "%MUSHCLIENT_BINARIES%"
+          "%SystemRoot%\System32\tar.exe" -x -f "mushclient-mume-binaries.zip"
+          del /q /f "mushclient-mume-binaries.zip"
+          git archive --format zip --prefix "mushclient-mume/" HEAD | "%SystemRoot%\System32\tar.exe" -x
+          "%SystemRoot%\System32\tar.exe" -a -c -f "%ZIP_FILE%" "mushclient-mume"
+          "mushclient-mume\luajit.exe" -l "mystdlib" -e "print(sha256sum_file('%ZIP_FILE%') .. '  %ZIP_FILE%')" >"%ZIP_FILE%.sha256"
+          rmdir /q /s "mushclient-mume"
+      - name: Create Release
+        id: create_release
+        uses: softprops/action-gh-release@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }} # Automatically provided by Actions.
+          name: ${{ steps.project_info.outputs.name }} Version ${{ steps.project_info.outputs.version }}
+          body: Auto-generated release.
+          draft: false
+          prerelease: false
+          fail_on_unmatched_files: true
+          files: |
+            mushclient-mume-v*.zip
+            mushclient-mume-v*.zip.sha256
