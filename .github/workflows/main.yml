@@ -29,17 +29,24 @@ jobs:
         with:
           fetch-depth: 0 # All history for all branches and tags.
           submodules: 'recursive' # All submodules.
-      - name: Download and Extract Binaries
+      - name: Cache Binary Archive
+        id: cache_binaries
+        uses: actions/cache@v4
+        with:
+          key: mushclient-bin-${{ env.ImageOS }}${{ runner.arch }}-${{ env.ImageVersion }}-${{ hashFiles('**/mushclient-mume-binaries.zip.sha256') }}
+          path: mushclient-mume-binaries.zip
+      - name: Download Binaries
+        if: steps.cache_binaries.outputs.cache-hit != 'true'
         shell: bash
         run: |
           curl --location --output "mushclient-mume-binaries.zip" "${MUSHCLIENT_BINARIES}"
           echo Verifying checksum.
           sha256sum -c "mushclient-mume-binaries.zip.sha256"
-          echo Extracting.
-          7z x -y -tzip "mushclient-mume-binaries.zip"
-          rm -f "mushclient-mume-binaries.zip"
-      - name: Merge Source Code
+      - name: Extract Binaries and Merge Source
         run: |
+          echo Extracting binaries.
+          7z x -y -tzip "mushclient-mume-binaries.zip"
+          echo Merging source code.
           git archive --format tar --prefix "mushclient-mume/" HEAD | 7z x -y -ttar -si
           if exist "pax_global_header" del /q /f "pax_global_header"
       - name: Run Lua Tests
@@ -69,17 +76,24 @@ jobs:
           VERSION=${GITHUB_REF#refs/tags/v} # Everything after the v.
           echo "name=${NAME}" >> $GITHUB_OUTPUT
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
-      - name: Download and Extract Binaries
+      - name: Cache Binary Archive
+        id: cache_binaries
+        uses: actions/cache@v4
+        with:
+          key: mushclient-bin-${{ env.ImageOS }}${{ runner.arch }}-${{ env.ImageVersion }}-${{ hashFiles('**/mushclient-mume-binaries.zip.sha256') }}
+          path: mushclient-mume-binaries.zip
+      - name: Download Binaries
+        if: steps.cache_binaries.outputs.cache-hit != 'true'
         shell: bash
         run: |
           curl --location --output "mushclient-mume-binaries.zip" "${MUSHCLIENT_BINARIES}"
           echo Verifying checksum.
           sha256sum -c "mushclient-mume-binaries.zip.sha256"
-          echo Extracting.
-          7z x -y -tzip "mushclient-mume-binaries.zip"
-          rm -f "mushclient-mume-binaries.zip"
-      - name: Merge Source Code
+      - name: Extract Binaries and Merge Source
         run: |
+          echo Extracting binaries.
+          7z x -y -tzip "mushclient-mume-binaries.zip"
+          echo Merging source code.
           git archive --format tar --prefix "mushclient-mume/" HEAD | 7z x -y -ttar -si
           if exist "pax_global_header" del /q /f "pax_global_header"
       - name: Create Bundle
