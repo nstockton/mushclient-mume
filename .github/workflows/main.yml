@@ -31,10 +31,12 @@ jobs:
           submodules: 'recursive' # All submodules.
       - name: Run Lua Tests
         run: |
-          "%SystemRoot%\System32\curl.exe" --silent --output "mushclient-mume-binaries.zip" "%MUSHCLIENT_BINARIES%"
-          "%SystemRoot%\System32\tar.exe" -x -f "mushclient-mume-binaries.zip"
+          curl --location --output "mushclient-mume-binaries.zip" "%MUSHCLIENT_BINARIES%"
+          if exist "mushclient-mume-binaries.zip" echo Binaries file downloaded.
+          7z x -y -tzip "mushclient-mume-binaries.zip"
           del /q /f "mushclient-mume-binaries.zip"
-          git archive --format zip --prefix "mushclient-mume/" HEAD | "%SystemRoot%\System32\tar.exe" -x
+          git archive --format tar --prefix "mushclient-mume/" HEAD | 7z x -y -ttar -si
+          del /q /f "pax_global_header"
           "mushclient-mume\test.bat"
   deploy:
     needs: build
@@ -63,11 +65,13 @@ jobs:
         env:
           ZIP_FILE: mushclient-mume-v${{ steps.project_info.outputs.version }}
         run: |
-          "%SystemRoot%\System32\curl.exe" --silent --output "mushclient-mume-binaries.zip" "%MUSHCLIENT_BINARIES%"
-          "%SystemRoot%\System32\tar.exe" -x -f "mushclient-mume-binaries.zip"
+          curl --location --output "mushclient-mume-binaries.zip" "%MUSHCLIENT_BINARIES%"
+          if exist "mushclient-mume-binaries.zip" echo Binaries file downloaded.
+          7z x -y -tzip "mushclient-mume-binaries.zip"
           del /q /f "mushclient-mume-binaries.zip"
-          git archive --format zip --prefix "mushclient-mume/" HEAD | "%SystemRoot%\System32\tar.exe" -x
-          "%SystemRoot%\System32\tar.exe" -a -c -f "%ZIP_FILE%" "mushclient-mume"
+          git archive --format tar --prefix "mushclient-mume/" HEAD | 7z x -y -ttar -si
+          del /q /f "pax_global_header"
+          7z a -y -tzip "%ZIP_FILE%" "mushclient-mume"
           "mushclient-mume\luajit.exe" -l "mystdlib" -e "print(sha256sum_file('%ZIP_FILE%') .. '  %ZIP_FILE%')" >"%ZIP_FILE%.sha256"
           rmdir /q /s "mushclient-mume"
       - name: Create Release
