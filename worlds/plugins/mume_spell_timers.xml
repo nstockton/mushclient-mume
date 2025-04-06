@@ -506,7 +506,68 @@
   <trigger
    enabled="y"
    group="mume_spell_timers"
-   match="^\- (?P&lt;spell&gt;armour|bless|shield|strength|shroud|sense life|breath of briskness|sanctuary|protection from evil|detect evil|detect magic|detect invisibility|night vision|tiredness|haggardness|lethargy|Spiritual fatigue|blindness|depression|battleglory|Orkish draught|sleep|poison \(type\: venom\))$"
+   match="You feel your Master's strength join your own."
+   name="shadow_veil_up"
+   send_to="12"
+   sequence="100"
+  >
+  <send>spell_timer_set("shadow veil")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_spell_timers"
+   match="Your Master's strength leaves you."
+   name="shadow_veil_down"
+   send_to="12"
+   sequence="100"
+  >
+  <send>spell_timer_unset("shadow veil")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_spell_timers"
+   match="^Your focus sharpens as you share"
+   name="shadow_link_up"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+  >
+  <send>spell_timer_set("shadow-link")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_spell_timers"
+   match="Your link to the wraith-world disappears."
+   name="shadow_link_down"
+   send_to="12"
+   sequence="100"
+  >
+  <send>spell_timer_unset("shadow-link")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_spell_timers"
+   match="A spectral energy courses through your veins."
+   name="spectral_health_up"
+   send_to="12"
+   sequence="100"
+  >
+  <send>spell_timer_set("spectral health")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_spell_timers"
+   match="The spectral energy sustaining your health wanes."
+   name="spectral_health_down"
+   send_to="12"
+   sequence="100"
+  >
+  <send>spell_timer_unset("spectral health")</send>
+  </trigger>
+  <trigger
+   enabled="y"
+   group="mume_spell_timers"
+   match="^\- (?P&lt;spell&gt;armour|bless|shield|strength|shroud|sense life|breath of briskness|sanctuary|protection from evil|detect evil|detect magic|detect invisibility|night vision|tiredness|haggardness|lethargy|Spiritual fatigue|blindness|depression|battleglory|Orkish draught|sleep|poison \(type\: venom\)|shadow veil|shadow\-link|spectral health)$"
    name="spell_status"
    omit_from_output="y"
    regexp="y"
