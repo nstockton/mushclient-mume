@@ -3422,7 +3422,7 @@ end
     end
 
     function M.LuaUnit:runSuite( ... )
-        testNames = self:initFromArguments(...)
+        local testNames = self:initFromArguments(...)
         self:registerSuite()
         self:internalRunSuiteByNames( testNames or M.LuaUnit.collectTests() )
         self:unregisterSuite()
@@ -3439,7 +3439,7 @@ end
         return the number of failures and errors, 0 meaning success
         ]]
         -- parse the command-line arguments
-        testNames = self:initFromArguments( commandLineArguments )
+        local testNames = self:initFromArguments( commandLineArguments )
         self:registerSuite()
         self:internalRunSuiteByInstances( listOfNameAndInst )
         self:unregisterSuite()
