@@ -1,5 +1,5 @@
 -- Downloaded from: https://github.com/sonoro1234/luafilesystem
--- Commit: e4dfc720c42a804bfa6c86485e62c65c81ea107e
+-- Commit: 3c51c3e91ef6ca12ef2f57d50dabcf98b5a0086a (HEAD -> unicode, origin/unicode, origin/HEAD
 
 --[[
 MIT License
@@ -71,7 +71,7 @@ local wchar_t
 local win_utf8_to_unicode
 local win_unicode_to_utf8
 if OS == 'Windows' then
-    MAXPATH = 260
+    MAXPATH = MAXPATH_UNC --260
     ffi.cdef([[
         typedef int mbstate_t;
         /*
@@ -470,45 +470,81 @@ if OS == "Windows" then
         findclose(dir._dentry)
         dir.closed = true
     end
-
+    
+    local dir_attrs = {
+        _A_ARCH = 0x20,
+        _A_HIDDEN = 0x02,
+        _A_NORMAL = 0x00,
+        _A_RDONLY = 0x01,
+        _A_SUBDIR = 0x10,
+        _A_SYSTEM = 0x04
+    }
+    
+    local function dir_attr(t,attr)
+        if not (type(attr)=="string") then --error("dir_attr must have a string") end
+			return {size = t.size, mode = (bit.band(t.attrib,dir_attrs._A_SUBDIR)~=0) and "directory" or "file"}
+		end
+        if attr=="mode" then
+            if bit.band(t.attrib,dir_attrs._A_SUBDIR)~=0 then
+                return "directory"
+            else
+                return "file"
+            end
+        elseif attr=="size" then
+            return t.size
+        end
+    end
+    
+    local dentry_type = ffi.metatype("_finddata_t",
+        {__index = {
+                attr = dir_attr
+            }
+        })
+        
     local function iterator(dir)
         if dir.closed ~= false then error("closed directory") end
-        local entry = ffi.new("_finddata_t")
         if not dir._dentry then
+            dir.entry = ffi.new(dentry_type)
             dir._dentry = ffi.new(dir_type)
-            dir._dentry.handle = findfirst(dir._pattern, entry)
+            dir._dentry.handle = findfirst(dir._pattern, dir.entry)
             if dir._dentry.handle == -1 then
                 dir.closed = true
                 return nil, errno()
             end
-            return ffi_str(entry.name)
+            return ffi_str(dir.entry.name), dir.entry
         end
 
-        if findnext(dir._dentry.handle, entry) == 0 then
-            return ffi_str(entry.name)
+        if findnext(dir._dentry.handle, dir.entry) == 0 then
+            return ffi_str(dir.entry.name), dir.entry
         end
         close(dir)
         return nil
     end
     
+    local wdentry_type = ffi.metatype("_wfinddata_t",
+        {__index = {
+                attr = dir_attr
+            },
+        })
+    
     local function witerator(dir)
         if dir.closed ~= false then error("closed directory") end
-        local entry = ffi.new("_wfinddata_t")
         if not dir._dentry then
+            dir.entry = ffi.new(wdentry_type)
             dir._dentry = ffi.new(dir_type)
             local szPattern = win_utf8_to_unicode(dir._pattern);
-            dir._dentry.handle = wfindfirst(szPattern, entry)
+            dir._dentry.handle = wfindfirst(szPattern, dir.entry)
             if dir._dentry.handle == -1 then
                 dir.closed = true
                 return nil, errno()
             end
-            local szName = win_unicode_to_utf8(entry.name)--, -1, szName, 512);
-            return ffi_str(szName)
+            local szName = win_unicode_to_utf8(dir.entry.name)--, -1, szName, 512);
+            return ffi_str(szName),dir.entry
         end
 
-        if wfindnext(dir._dentry.handle, entry) == 0 then
-            local szName = win_unicode_to_utf8(entry.name)--, -1, szName, 512);
-            return ffi_str(szName)
+        if wfindnext(dir._dentry.handle, dir.entry) == 0 then
+            local szName = win_unicode_to_utf8(dir.entry.name)--, -1, szName, 512);
+            return ffi_str(szName),dir.entry
         end
         close(dir)
         return nil
@@ -1110,7 +1146,50 @@ if OS == 'Linux' then
         lstat_syscall_num = IS_64_BIT and 4107 or 4214
     end
 
-    if stat_syscall_num then
+    if ARCH == 'arm64' then
+
+-- On arm64 stat and lstat do not exist as syscall but can be used like this
+
+        ffi.cdef([[
+            typedef struct lfs_stat {
+                unsigned long   st_dev;
+                unsigned long   st_ino;
+                unsigned int    st_mode;
+                unsigned int    st_nlink;
+                unsigned int    st_uid;
+                unsigned int    st_gid;
+                unsigned long   st_rdev;
+                unsigned long   __pad1;
+                long            st_size;
+                int             st_blksize;
+                int             __pad2;
+                long            st_blocks;
+                long            st_atime;
+                unsigned long   st_atime_nsec;
+                long            st_mtime;
+                unsigned long   st_mtime_nsec;
+                long            st_ctime;
+                unsigned long   st_ctime_nsec;
+                unsigned int    __unused4;
+                unsigned int    __unused5;
+            } lfs_stat;
+
+        int stat(const char *pathname,
+             struct lfs_stat *statbuf);
+
+        int lstat(const char *pathname,
+             struct lfs_stat *statbuf);
+
+        ]])
+
+        stat_func = function(filepath, buf)
+            return lib.stat(filepath, buf)
+        end
+        lstat_func = function(filepath, buf)
+            return lib.lstat(filepath, buf)
+        end
+
+    elseif stat_syscall_num then
         stat_func = function(filepath, buf)
             return lib.syscall(stat_syscall_num, filepath, buf)
         end
