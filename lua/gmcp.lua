@@ -9,6 +9,7 @@ local SUPPORTED_PACKAGES = {
 	["char"] = 1,
 	["comm.channel"] = 1,
 	["event"] = 1,
+	["group"] = 1,
 	["mmapper.comm"] = 1,
 	["mpm"] = 1,
 	["room"] = 1,
