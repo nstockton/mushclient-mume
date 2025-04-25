@@ -120,7 +120,7 @@ function send_gmcp_packet(data, force_send)
 end
 
 function send_keep_alive()
-	send_gmcp_packet("Core.KeepAlive")
+	send_gmcp_packet('Core.KeepAlive ""')
 end
 
 function OnPluginTelnetRequest(msg_type, data)
