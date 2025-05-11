@@ -104,7 +104,7 @@ end
    match="The world begins to reveal all its secrets and you try to find your way..."
    name="gag_find_the_path_spam"
    omit_from_output="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>EnableTrigger("format_find_the_path", true)</send>

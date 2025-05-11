@@ -38,7 +38,7 @@
    name="check_mana"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>

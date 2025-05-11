@@ -38,7 +38,7 @@
    name="bash_target"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>
@@ -53,7 +53,7 @@ play(TYPE_COMBAT, "combat/bash.wav", -100)
    name="bash_fail_target"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>play(TYPE_COMBAT, "combat/bash_fail.wav", -100)</send>
@@ -65,7 +65,7 @@ play(TYPE_COMBAT, "combat/bash.wav", -100)
    name="bash_fail_you"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>play(TYPE_COMBAT, "combat/bash_fail.wav", 100)</send>
@@ -76,7 +76,7 @@ play(TYPE_COMBAT, "combat/bash.wav", -100)
    match="Your head stops stinging."
    name="bash_recover_you"
    omit_from_output="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>play(TYPE_COMBAT, "combat/bash_recover.wav", 100)</send>
@@ -88,7 +88,7 @@ play(TYPE_COMBAT, "combat/bash.wav", -100)
    name="bash_someone"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>
@@ -113,7 +113,7 @@ end
    name="bash_fail_someone"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>
@@ -136,7 +136,7 @@ end
    name="bash_recover_someone"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>
@@ -191,7 +191,7 @@ end
    name="ok"
    ignore_case="y"
    omit_from_output="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>play(TYPE_ALERT, "ok.wav")</send>
@@ -583,7 +583,7 @@ end
    match="A dark shadow, wreathed in flames and exuding malevolence, towers above you."
    name="misc_alert30"
    omit_from_output="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>play(TYPE_ALERT, "misc_alert.wav")</send>
@@ -865,7 +865,7 @@ end
    name="dispel_evil_target"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>play(TYPE_SPELL_ATTACK, "spells/dispel_evil.wav", -100)</send>
@@ -877,7 +877,7 @@ end
    name="dispel_evil_you"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>play(TYPE_SPELL_ATTACK, "spells/dispel_evil.wav", 100)</send>
@@ -888,7 +888,7 @@ end
    match="You raise your hand and an icy wind starts to blow through the room."
    name="fear_target"
    omit_from_output="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>play(TYPE_SPELL_ATTACK, "spells/fear.wav", -100)</send>
@@ -899,7 +899,7 @@ end
    match="An icy wind starts to blow in the room. You panic!"
    name="fear_you"
    omit_from_output="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>play(TYPE_SPELL_ATTACK, "spells/fear.wav", 100)</send>
@@ -951,7 +951,7 @@ end
    name="colour_spray_target"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>play(TYPE_SPELL_ATTACK, "spells/colour_spray.wav", -100)</send>
@@ -963,7 +963,7 @@ end
    name="colour_spray_you"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>play(TYPE_SPELL_ATTACK, "spells/colour_spray.wav", 100)</send>
@@ -975,7 +975,7 @@ end
    name="burning_hands_target"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>play(TYPE_SPELL_ATTACK, "spells/burning_hands.wav", -100)</send>
@@ -987,7 +987,7 @@ end
    name="burning_hands_you"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>play(TYPE_SPELL_ATTACK, "spells/burning_hands.wav", 100)</send>
@@ -999,7 +999,7 @@ end
    name="fireball_target"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>play(TYPE_SPELL_ATTACK, "spells/fireball.wav", -100)</send>
@@ -1011,7 +1011,7 @@ end
    name="fireball_you"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>play(TYPE_SPELL_ATTACK, "spells/fireball.wav", 100)</send>
@@ -1023,7 +1023,7 @@ end
    name="lightning_bolt_target"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>play(TYPE_SPELL_ATTACK, "spells/lightning_bolt.wav", -100)</send>
@@ -1035,7 +1035,7 @@ end
    name="lightning_bolt_you"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>play(TYPE_SPELL_ATTACK, "spells/lightning_bolt.wav", 100)</send>
@@ -1046,7 +1046,7 @@ end
    match="The earth trembles beneath your feet!"
    name="earthquake_target"
    omit_from_output="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>play(TYPE_SPELL_ATTACK, "spells/earthquake.wav", -100)</send>
@@ -1057,7 +1057,7 @@ end
    match="^[^\.]+? makes the earth tremble and shiver\.$"
    name="earthquake_you"
    omit_from_output="y"
-   send_to="12"
+   send_to="14"
    regexp="y"
    sequence="100"
   >
@@ -1069,7 +1069,7 @@ end
    match="The earth trembles and shivers."
    name="earthquake_near1"
    omit_from_output="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>play(TYPE_SPELL_ATTACK, "spells/earthquake_near.wav")</send>
@@ -1081,7 +1081,7 @@ end
    name="earthquake_near2"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>play(TYPE_SPELL_ATTACK, "spells/earthquake_near.wav")</send>
@@ -1095,7 +1095,7 @@ end
    omit_from_output="y"
    multi_line="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="80"
   >
   <send>play(TYPE_SPELL_ATTACK, "spells/sleep.wav", -100)</send>
@@ -1109,7 +1109,7 @@ end
    omit_from_output="y"
    multi_line="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="80"
   >
   <send>play(TYPE_FREE_SLOT, "spells/sleep.wav")</send>
@@ -1123,7 +1123,7 @@ end
    omit_from_output="y"
    multi_line="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="80"
   >
   <send>play(TYPE_SPELL_ATTACK, "spells/blind.wav", -100)</send>
@@ -1135,7 +1135,7 @@ end
    name="blind_other"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>play(TYPE_FREE_SLOT, "spells/blind.wav")</send>
@@ -1146,7 +1146,7 @@ end
    match="Your victim is already blind."
    name="already_blind_target"
    omit_from_output="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>play(TYPE_SPELL_ATTACK, "spells/already_blind.wav", -100)</send>
@@ -1158,7 +1158,7 @@ end
    name="fail_shoot_target"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>play(TYPE_SPELL_ATTACK, "combat/fail_shoot.wav", -100)</send>
@@ -1170,7 +1170,7 @@ end
    name="fail_shoot_you"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>play(TYPE_SPELL_ATTACK, "combat/fail_shoot.wav", 100)</send>
@@ -1182,7 +1182,7 @@ end
    name="shoot_target"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>play(TYPE_SPELL_ATTACK, "combat/shoot.wav", -100)</send>
@@ -1194,7 +1194,7 @@ end
    name="shoot_you"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>play(TYPE_SPELL_ATTACK, "combat/shoot.wav", 100)</send>
@@ -1206,7 +1206,7 @@ end
    name="backstab_target"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>play(TYPE_SPELL_ATTACK, "skills/backstab/" .. math.random(1, 7) .. ".wav", -100)</send>
@@ -1218,7 +1218,7 @@ end
    name="backstab_you"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>play(TYPE_SPELL_ATTACK, "skills/backstab/" .. math.random(1, 7) .. ".wav", 100)</send>
@@ -1230,7 +1230,7 @@ end
    name="fail_backstab_target"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>play(TYPE_SPELL_ATTACK, "skills/backstab/fail_backstab.wav", -100)</send>
@@ -1242,7 +1242,7 @@ end
    name="fail_backstab_you"
    omit_from_output="y"
    regexp="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>play(TYPE_SPELL_ATTACK, "skills/backstab/fail_backstab.wav", 100)</send>

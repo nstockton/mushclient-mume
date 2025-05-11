@@ -97,7 +97,7 @@ Note("Failed!")
    match="You successfully escaped the fight!"
    name="successful_escape"
    omit_from_output="y"
-   send_to="12"
+   send_to="14"
    sequence="100"
   >
   <send>
