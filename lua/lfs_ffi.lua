@@ -1,5 +1,5 @@
 -- Downloaded from: https://github.com/sonoro1234/luafilesystem
--- Commit: 3c51c3e91ef6ca12ef2f57d50dabcf98b5a0086a (HEAD -> unicode, origin/unicode, origin/HEAD
+-- Commit: cce75c879c4514db1042cfc278b29a9e8f93629a (HEAD -> unicode, origin/unicode, origin/HEAD)
 
 --[[
 MIT License
@@ -134,7 +134,7 @@ if OS == "Windows" then
                 time_t modtime;
             };
             typedef struct __utimebuf32 utimebuf;
-            int _utime632(unsigned char *file, utimebuf *times);
+            int _utime32(unsigned char *file, utimebuf *times);
         ]]
     end
 
