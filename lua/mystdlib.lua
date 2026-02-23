@@ -8,7 +8,7 @@
 local checksum = require("checksum")
 local getch = require("getch")
 local lfs = require("lfs")
-
+local TABLE_CLEAR_LOADED = (pcall(require, "table.clear"))  -- Just need the status, not the return value.
 
 local PATH_SEPARATOR = string.sub(package.config, 1, 1)
 local PATTERN_ESCAPE_REPLACEMENTS = {
@@ -424,9 +424,12 @@ function table.count(tbl, item)
 end
 
 
-function table.clear(tbl)
-	for key in pairs(tbl) do
-		tbl[key] = nil
+if not TABLE_CLEAR_LOADED then
+	-- Unable to load LuaJit version of table.clear. Fall back to pure Lua version.
+	function table.clear(tbl)
+		for key in pairs(tbl) do
+			tbl[key] = nil
+		end
 	end
 end
 
